@@ -374,4 +374,3 @@ All IDs below are SoundCloud native IDs as persisted under the database uniquene
 - Final independent database/service verification passed at **`2026-10-02T16:29:51Z`** (19:59:51 Asia/Tehran). All three deployed services were healthy. No application commit, migration, administrator or server configuration change occurred.
 
 This pilot is complete and monitoring/publication remain disabled. Only `M6_OPERATIONS.md` and `STATUS.md` are changed for the documentation handoff. Remaining gates include broader verified-source coverage, backoff/rate-limit measurement, operator request execution, authenticated panel/recovery checks and later controlled activation.
-
