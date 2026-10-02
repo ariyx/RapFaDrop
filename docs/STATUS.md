@@ -1,10 +1,11 @@
 # Project status and handoff
 
-Updated: 2026-10-02. M2 identity/review/queue implementation is verified locally and will be pushed to `main`; no deployment was performed, per the M2 instruction. The final pushed SHA will be recorded after delivery.
+Updated: 2026-10-02. M2 implementation commit `b813109` (`b813109e974e911b3352492620c84df6fbb65565`) passed local verification and was pushed normally to `origin/main`. This status handoff will be pushed as a follow-up; its SHA is the final branch checkpoint. No deployment was performed, per the M2 instruction.
 
 ## Current state
 
 - Work began from clean `main` / `origin/main` at `ea8320b21fae97e2141e092ed76097187dbae257`, the M0 status handoff. M1 implementation/report commit `ea04651c8e61624d04d53d41323a60c19481c37e` and Persian-alias follow-up commit `5bf7aed9a4be40a98d3c25ead32e3eea8ffefc32` were pushed normally to `origin/main`; `git ls-remote origin refs/heads/main` confirmed the follow-up SHA. The untracked M1 task document is now included in Git.
+- M2 implementation commit `b813109e974e911b3352492620c84df6fbb65565` adds the canonical identity/review/queue app and includes `docs/M2_AGENT_TASK.md`; the Compose/Django/PostgreSQL fixture suite passed locally and the commit was pushed normally to `main`. M2 report: [`reports/M2_IDENTITY.md`](reports/M2_IDENTITY.md). No server deployment or M3 work occurred.
 - The M0 implementation commit is `0c4952d30fb5abd8f4c0718ca5c51eee7c37985b`; its provider and deployment observations remain in [`reports/M0_FEASIBILITY.md`](reports/M0_FEASIBILITY.md).
 - M1 adds durable artist/source/item/baseline/audit records, disabled/unverified seed data, separate SoundCloud and Spotify adapters, scheduled due-only polling, idempotent history snapshots, per-source backoff, admin screens and operator commands. No release queue, media download, Telegram integration or publication exists.
 - Local Compose build/start, migrations, migration drift check, Django check, all 17 automated tests, all five service health checks and `/health/` passed. Seed import observed 30 artists and 57 sources: 30 Spotify and 27 SoundCloud. Persian aliases from the UTF-8 product spec persist on all 30 artists and render in management/admin; the authenticated admin round-trip test passed. All sources remain disabled/unverified; missing SoundCloud sources remain blank for Fadaei, Ho3ein and Amir Tataloo. The local database has zero source items and zero baseline runs because no candidate was verified or activated.
