@@ -269,3 +269,109 @@ Every seeded artist alias and candidate URL/native Spotify ID was read back and 
 Two expected `seed_imported` audit records report creation counts 30/57 and 0/0. No additional queue/media/source-discovery or publication record was created. Runtime checks confirmed debug false, Telegram disabled, no bot/production-target configuration and publication worker disabled. No HTTP/provider/Telegram requests, baseline or source activation occurred in this task. Application/server configuration was unchanged, and no deployment or restart was performed.
 
 Final verification completed with exit 0 at **`2026-10-02T16:19:13Z`** (19:49:13 Asia/Tehran). Only this report and `STATUS.md` are changed for the documentation handoff. Sources remain disabled/unverified pending separate owner authorization and empirical verification.
+
+## Controlled Sijal SoundCloud baseline pilot
+
+The owner authorized one metadata-only baseline for the already verified Sijal SoundCloud source, with temporary enablement only if required, followed by disabling it. No application/configuration change or deployment occurred. The server remained clean at SHA **`44d0c62cd59eb8701d9599ccf8aae5aadb5b46d0`**.
+
+### Preconditions and execution
+
+Read-only inspection confirmed artist **Sijal**, artist ID **16**, SoundCloud source ID **32**, candidate URL **`https://soundcloud.com/sijalofficial`**, verification **`verified`**, source disabled and artist disabled. The verification and its existing `source_configured` audit event predated this task; no source was verified by the agent. All 57 sources were disabled, with no SourceItems or baseline runs. Telegram mode/live/publication worker were disabled and no bot or production-target configuration was present. Only web, PostgreSQL and Redis were running; worker/beat were absent.
+
+The documented flow is:
+
+```sh
+docker compose -p rapfadrop -f compose.internal.yaml exec -T web python manage.py baseline_source 32
+```
+
+The deployed management command and service require both artist and source to be enabled. To guarantee cleanup, the equivalent Django **`call_command("baseline_source", 32)`** was invoked inside one server-side Python process with a `try/finally` wrapper. Only Sijal's artist/source flags were temporarily enabled; the `finally` block immediately restored both to false after the baseline. The existing `verified` state was preserved. Scoped `pilot_temporarily_enabled` and `pilot_disabled` audit events record this operation.
+
+The provider was the deployed `SoundCloudAdapter.list_recent` using yt-dlp metadata extraction, **`skip_download=True`**, **`download=False`**, a **100-entry limit** and 30-second socket timeout. The wrapper imposed a 300-second overall bound, restricted adapter invocation to source 32, and sanitized any diagnostic URL before recording errors. Telegram's request method was guarded/instrumented to refuse calls, with an additional Telegram DNS guard. No provider/downloader/application source was edited.
+
+Observed command output:
+
+```text
+Baseline complete: 51 source items; no publication work created.
+```
+
+### Results and timestamps
+
+- **51** historical SourceItems stored, all `from_baseline=True`, belonging only to source 32.
+- Exactly **one** complete BaselineRun, ID **1**, item count **51**.
+- Stored baseline start/completion timestamp: **`2026-10-02T16:26:47.065255+00:00`** (19:56:47.065255 Asia/Tehran). The current service uses its initial `now` value for both fields, so the stored completion time is not a separately measured finish time.
+- Actual post-provider observation: **`2026-10-02T16:27:19.746594+00:00`**; elapsed **32.699 seconds**.
+- Provider errors: **none observed**. Captured warning/error lists were empty; the adapter's existing quiet/no-warning options remained in effect.
+- **41** items supplied release timestamps and matching release dates; **10** supplied no release date and use upload timestamps as the existing adapter's `source_release_at` fallback. Fallback dates must not be described as proven release dates.
+- Three records explicitly supplied `album_type=album` and album names **Solojal**, **Serotonin**, **OCD**. Type metadata was absent on the other 48; they were not reclassified as singles/LPs/EPs. Available source timestamps span 2022-07-26 through 2026-09-23.
+- This is one bounded profile snapshot. It does not establish full catalog/album-membership coverage, sustained polling reliability or safe polling intervals.
+
+### Stored stable IDs and source metadata
+
+All IDs below are SoundCloud native IDs as persisted under the database uniqueness constraint `(platform, native_item_id)`. Times are UTC. The basis column identifies the 10 upload-time fallbacks; the other 41 times are explicitly reported release times. Type values are provider metadata, not inferred canonical classifications.
+
+| Native ID | Source title | Stored source time (UTC) | Date basis | Reported type / album |
+| --- | --- | --- | --- | --- |
+| `1311063031` | Tavalod (with Behzad Leito, Alireza Jj & Sohrab Mj) | 2022-07-26T00:00:00Z | release timestamp | not supplied |
+| `1440235624` | Istanbul (feat. Sepehr Khalse & Hoomaan) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235651` | Koja Gomet Kardam? (feat. The Don) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235696` | Oui | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235720` | Zendegi (feat. Yasna) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235738` | Soulmate (feat. Yasna) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235753` | Faghat Vase Khodet (feat. Hoomaan) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235786` | Ket | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235840` | Hanooz Vaght Hast (feat. Yasna) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235861` | Almas (feat. Yasna) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235900` | Ta Al (feat. Behzad Leito) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235912` | Pas Ki Bood? (feat. Yasna) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235924` | Oh No (feat. Behzad Leito & Sepehr Khalse) | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1440235939` | Dobare Zaade Misham | 2023-02-05T00:00:00Z | release timestamp | not supplied |
+| `1443622339` | Sijal, Mehrad Hidden & Sepehr Khalse - Nakhla | 2023-02-10T00:00:00Z | release timestamp | not supplied |
+| `1561688443` | Ta Al (feat. Behzad Leito) [Shebi Remix] | 2023-07-11T08:09:07Z | upload timestamp fallback | not supplied |
+| `1565996071` | Solojal | 2023-02-05T00:00:00Z | release timestamp | album: Solojal |
+| `1754874489` | Amanati | 2024-02-23T00:00:00Z | release timestamp | not supplied |
+| `1781578662` | Open (feat. Behzad Leito & Sepehr Khalse) | 2024-03-22T00:00:00Z | release timestamp | not supplied |
+| `1800068251` | Bargard (feat. Sami Beigi & Behzad Leito) | 2024-04-13T00:00:00Z | release timestamp | not supplied |
+| `1802477865` | Bede Fuck (feat. Tahas) | 2024-04-18T00:18:20Z | upload timestamp fallback | not supplied |
+| `1802477904` | Bi Ghafiye | 2024-04-18T00:18:25Z | upload timestamp fallback | not supplied |
+| `1802477922` | Ey Jan (feat. Sami Beigi & Sepehr Khalse) | 2024-04-18T00:18:28Z | upload timestamp fallback | not supplied |
+| `1802477964` | Mama (feat. Mehrad Hidden & KAVIANO) | 2024-04-18T00:18:34Z | upload timestamp fallback | not supplied |
+| `1802477985` | Mara Beboos (feat. Dynatonic & parmida) | 2024-04-18T00:18:39Z | upload timestamp fallback | not supplied |
+| `1802478078` | Yebare Dige (feat. Isam) | 2024-04-18T00:18:48Z | upload timestamp fallback | not supplied |
+| `1802478126` | Yeki Dar Mioon (feat. Canis) | 2024-04-18T00:18:57Z | upload timestamp fallback | not supplied |
+| `1811428443` | Serotonin | 2024-04-18T00:00:00Z | release timestamp | album: Serotonin |
+| `1956318575` | Oon Nayumadesh | 2024-11-14T00:00:00Z | release timestamp | not supplied |
+| `2071557044` | Age Bargardi | 2025-04-12T00:00:00Z | release timestamp | not supplied |
+| `2090739858` | Refigha (with Behzad Leito & Sepehr Khalse) | 2025-05-08T00:00:00Z | release timestamp | not supplied |
+| `2098969191` | Cheshm Be Raah (with Sijal & Heliyom) | 2025-05-23T00:00:00Z | release timestamp | not supplied |
+| `2110845924` | Man Delam Mikhad (with Sijal & Tahas) | 2025-06-29T00:00:00Z | release timestamp | not supplied |
+| `2125248369` | Hofre (with Sijal & Sepehr Khalse) | 2025-07-11T00:00:00Z | release timestamp | not supplied |
+| `2147740733` | OCD | 2025-11-28T00:00:00Z | release timestamp | album: OCD |
+| `2155209837` | Eshghe Alaki (with Sohrab Mj & Heliyom) | 2025-08-22T00:00:00Z | release timestamp | not supplied |
+| `2208102152` | Dele Man (with Heliyom) | 2025-11-12T00:00:00Z | release timestamp | not supplied |
+| `2218317692` | Hichki Mese Man | 2025-11-28T00:00:00Z | release timestamp | not supplied |
+| `2218317695` | Azadi (with Milanium) | 2025-11-28T00:00:00Z | release timestamp | not supplied |
+| `2218317698` | 2 Ace (with Catchybeatz) | 2025-11-28T00:00:00Z | release timestamp | not supplied |
+| `2218317701` | Bekhatere To (with Heliyom) | 2025-11-28T00:00:00Z | release timestamp | not supplied |
+| `2218317704` | Kabol (with Maslak & Darab) | 2025-11-28T00:00:00Z | release timestamp | not supplied |
+| `2218317707` | Seda (with Milanium & AHU) | 2025-11-28T00:00:00Z | release timestamp | not supplied |
+| `2218317710` | Greece (with Heliyom) | 2025-11-28T00:00:00Z | release timestamp | not supplied |
+| `2255168765` | Be Pish Iran | 2026-01-27T16:24:38Z | upload timestamp fallback | not supplied |
+| `2318086613` | Leila | 2026-05-13T00:00:00Z | release timestamp | not supplied |
+| `2331470378` | Chi Mishe | 2026-06-05T00:00:00Z | release timestamp | not supplied |
+| `2339872610` | Miboosamet Are | 2026-06-19T00:00:00Z | release timestamp | not supplied |
+| `2368809320` | Vaghti Raft | 2026-07-27T15:51:54Z | upload timestamp fallback | not supplied |
+| `2390221908` | Bezar Bad Sham | 2026-09-01T00:00:00Z | release timestamp | not supplied |
+| `2399929902` | Shakheye Gol | 2026-09-23T00:00:00Z | release timestamp | not supplied |
+
+### Safety, isolation and idempotence
+
+- Media candidates, media attempts, processing queue items, publications, publication attempts and operator requests: **0 before and after**. No media or publication work was dispatched or queued.
+- Instrumented Telegram gateway calls: **0**; Telegram DNS attempts: **0**. No Telegram API request occurred in the pilot process; live/publication configuration remained disabled.
+- Adapter source-call IDs: **`[32]`**. Serialized before/after database row comparisons confirmed **all other 56 sources and 29 artists unchanged**. No other source has items or a baseline run.
+- A replay of all 51 stored normalized items through the same baseline `_upsert_items` step, inside a rolled-back transaction, reported **0 created**, preserving the item count. A database duplicate-ID query returned **0 duplicates**. This proves same-ID replay deduplication without a second live provider baseline or extra BaselineRun; newly discovered IDs on a later authorized run would be new rows.
+- Final counts: **30 artists, 57 sources, 51 SourceItems, 1 complete baseline**. **0 enabled artists and 0 enabled sources**. Sijal's source remains verified; the other 56 remain unverified.
+- Scheduled polling remains disabled: no worker/beat service was started, and both Sijal eligibility flags are false. The baseline's `next_poll_at=2026-10-02T16:28:17.065255+00:00` is retained but cannot make this disabled source eligible.
+- Final independent database/service verification passed at **`2026-10-02T16:29:51Z`** (19:59:51 Asia/Tehran). All three deployed services were healthy. No application commit, migration, administrator or server configuration change occurred.
+
+This pilot is complete and monitoring/publication remain disabled. Only `M6_OPERATIONS.md` and `STATUS.md` are changed for the documentation handoff. Remaining gates include broader verified-source coverage, backoff/rate-limit measurement, operator request execution, authenticated panel/recovery checks and later controlled activation.
+
