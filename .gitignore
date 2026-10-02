@@ -6,6 +6,7 @@ __pycache__/
 .coverage
 htmlcov/
 tmp/
+app/staticfiles/
 *.mp3
 *.m4a
 *.opus

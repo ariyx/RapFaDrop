@@ -196,3 +196,22 @@ Snapshots and the temporary fingerprint script remain in root-only `/var/lib/rap
 - Final verification completed with exit 0 at **`2026-10-02T15:31:28Z`** (**19:01:28 Asia/Tehran**).
 
 This authorized Phase 3 slice is complete. No administrator was created. Full M6 remains incomplete: accounts/authenticated panel verification, RapFaDrop HTTPS, scheduled/off-host backups, worker/beat recovery, actual media/publication-ID durability, source pilots and production activation remain deferred to later owner authorization.
+
+## Focused production static-file fix
+
+The owner authorized a local application fix and exact-SHA deployment for the unstyled admin at `http://91.107.178.12:8000/admin/`, without changing debug, Nginx, sources, baselines, Telegram or other M6 behavior.
+
+Before the fix, the server's `/admin/` redirected normally to `/admin/login/?next=/admin/` with final HTTP 200. Its HTML referenced admin assets, but `/static/admin/css/base.css`, `/static/admin/css/login.css`, `/static/admin/css/nav_sidebar.css` and `/static/admin/js/theme.js` each returned HTTP 404 with an HTML content type. Headless Chrome on the workstation visited the actual server-IP URL and displayed the unstyled login page: Times New Roman body font, transparent header background and failed assets. A before screenshot is in ignored local `tmp/admin-before.png`.
+
+Root cause: Gunicorn served Django with `DEBUG=false`, but no static-file handler or `STATIC_ROOT` collection existed in the Docker image. The focused fix follows [WhiteNoise's Django setup](https://whitenoise.readthedocs.io/en/stable/django.html):
+
+- Pin `whitenoise==6.12.0` in `requirements.txt`.
+- Insert `whitenoise.middleware.WhiteNoiseMiddleware` immediately after `SecurityMiddleware`.
+- Set `STATIC_URL="/static/"`, `STATIC_ROOT=BASE_DIR / "staticfiles"` (container `/app/app/staticfiles`).
+- Use `whitenoise.storage.CompressedManifestStaticFilesStorage` for static files and retain Django's default `FileSystemStorage` for media. Static and private media roots remain separate.
+- Run `DJANGO_DEBUG=false python manage.py collectstatic --noinput` in the Docker build after switching to the non-root application user. Assets are baked into the image; runtime does not require collection, database access or mutable static volumes. Ignore generated `app/staticfiles` in Git and Docker context.
+- Add a meaningful `SimpleTestCase` which collects real admin assets into a temporary directory and requests both the original and manifest-hashed CSS URLs through the complete Django middleware stack with debug false. It asserts HTTP 200, CSS content/body, cache headers and immutable caching on the hashed URL.
+
+Local checks observed before commit/deployment: Compose config passed; the image build collected **127 files, 381 post-processed**; Django check reported no issues; model drift check reported **No changes detected**; all **92 tests passed in 22.626 seconds**, including the production-static regression. Tests used the isolated local test database. Initial workstation Docker DNS resolution failed while fetching dependencies; retry through the already-configured local proxy succeeded using transient build arguments only, without committing proxy values. `git diff --check` passed. No browser tooling, screenshot, generated static asset or secret is included in the application commit.
+
+Exact-SHA deployment and final server/browser observations will be recorded after execution; the existing pre-fix server checkpoint is not evidence that the fix is deployed.
