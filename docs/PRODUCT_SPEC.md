@@ -158,3 +158,9 @@ Python 3.13; Django 5.2 LTS; PostgreSQL; Redis + Celery for background jobs and 
 5. Validate conditional template rendering, album caption overflow, links added after publication and edition/original linkage with realistic fixtures and Telegram samples.
 
 The owner will explicitly approve the final document before it is treated as a locked implementation reference. Detailed stage-by-stage acceptance is in `IMPLEMENTATION.md`.
+
+## 10. M5 private operator panel
+
+The private Django panel is available under `/admin/ops/` to members of the `RapFaDrop Operators` group (or Django superusers). Each administrator has a separate account with the same group permissions; credentials are bootstrapped interactively or from the process environment and are never shown in the UI. Password resets are initiated by another operator through the panel and are audited without storing the new password. Operator audit records include actor, UTC timestamp, object, action, before/after summaries and a correlation UUID, and are read-only in the ordinary panel.
+
+The panel uses the existing identity-review, media, queue and publication services. Source poll/baseline buttons persist an audited operator request and do not call providers in the web request; M5 has no request executor. Publication retry only makes a publication with a definite failed attempt due for the existing worker. Source verification is required before enablement; missing baseline state is called out before activation. Caption and tag settings are versioned, correction deletion defaults to 600 seconds, template input is limited to the documented literal/row fields, and previews escape all text. Notification mode/target are inert local placeholders; no Telegram notification send is exposed. The implementation and its open operational gates are recorded in [`reports/M5_ADMIN.md`](reports/reports/M5_ADMIN.md).

@@ -1,0 +1,2 @@
+{% extends "operations/base.html" %}{% block content %}<h1>Versioned operational settings</h1><p>Current version {{ obj.version }}; correction deletion delay is seconds (default 600). Only configured tag fields are selectable.</p>
+<form method="post">{% csrf_token %}{{ form.as_p }}<button>Save new version</button></form>{% endblock %}

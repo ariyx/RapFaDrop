@@ -56,7 +56,12 @@ def prepare_tagged_copy(source_path, prepared_path, metadata, artwork_path=None)
         raise TaggingError("Official title and at least one credited artist are required")
     album = str(metadata.get("album") or title).strip()
     channel = settings.MEDIA_CHANNEL_TAG
-    configured = set(settings.MEDIA_CHANNEL_TAG_FIELDS) & CHANNEL_FIELDS
+    try:
+        from operations.services import active_media_tag_fields
+        tag_fields = active_media_tag_fields(settings.MEDIA_CHANNEL_TAG_FIELDS)
+    except Exception:
+        tag_fields = settings.MEDIA_CHANNEL_TAG_FIELDS
+    configured = set(tag_fields) & CHANNEL_FIELDS
     album_with_tag = f"{album} | {channel}" if album and "album_suffix" in configured else album
     album_artist_with_tag = f"{artists[0]} | {channel}" if "album_artist_suffix" in configured else artists[0]
     unsupported = []

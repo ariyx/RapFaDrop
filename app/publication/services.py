@@ -31,6 +31,23 @@ def _audit(pub, action, *, attempt=None, actor=None, detail=None):
     return PublicationAuditEvent.objects.create(publication=pub, action=action, attempt=attempt, actor=actor, detail=detail or {})
 
 
+@transaction.atomic
+def schedule_publication_retry(publication, *, actor, now=None):
+    """Make a definitely failed retry-wait publication due; never send from an admin request."""
+    now = now or timezone.now()
+    pub = Publication.objects.select_for_update().get(pk=publication.pk)
+    if pub.state != Publication.State.RETRY_WAIT:
+        raise PublicationError("Only definitely failed retry-wait publications can be rescheduled")
+    attempt = pub.attempts.filter(state=PublicationAttempt.State.FAILED).order_by("-pk").first()
+    if attempt is None:
+        raise PublicationError("No definite failed attempt is available to retry")
+    old_due = pub.retry_due_at.isoformat() if pub.retry_due_at else None
+    pub.retry_due_at = now
+    pub.save(update_fields=("retry_due_at", "updated_at"))
+    _audit(pub, "operator_retry_scheduled", attempt=attempt, actor=actor, detail={"previous_due_at": old_due, "retry_due_at": now.isoformat()})
+    return pub
+
+
 def _path(value):
     root = Path(settings.MEDIA_ROOT).resolve()
     path = Path(value).resolve() if value else None
@@ -260,7 +277,9 @@ def _apply_success(pub, attempt, result, now):
     if "context" in attempt.payload:
         pub.context = attempt.payload["context"]
     if pub.kind == Publication.Kind.CORRECTION and attempt.operation == "reply":
-        pub.delete_due_at = now + timedelta(seconds=settings.PUBLICATION_CORRECTION_DELETE_SECONDS)
+        from operations.services import active_correction_delete_seconds
+        seconds = active_correction_delete_seconds(settings.PUBLICATION_CORRECTION_DELETE_SECONDS)
+        pub.delete_due_at = now + timedelta(seconds=seconds)
     pub.save()
     _audit(pub, "operation_succeeded", attempt=attempt, detail={"message_id": result.message_id})
 

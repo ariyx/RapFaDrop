@@ -13,6 +13,7 @@ from .models import (
     TrackCredit,
 )
 from .services import resolve_review
+from operations.services import audit, safe_audit_json
 
 
 class ReleaseCreditInline(admin.TabularInline):
@@ -66,8 +67,9 @@ class SourceMatchAdmin(admin.ModelAdmin):
 @admin.register(ReviewItem)
 class ReviewItemAdmin(admin.ModelAdmin):
     list_display = ("source_item", "category", "state", "reason", "actor", "reviewed_at", "created_at")
-    list_filter = ("category", "state")
-    search_fields = ("source_item__title", "source_item__native_item_id", "reason", "resolution")
+    list_filter = ("category", "state", "source_item__platform")
+    date_hierarchy = "created_at"
+    search_fields = ("source_item__title", "source_item__native_item_id", "reason", "resolution", "source_match__release__title", "source_match__track__official_title")
     readonly_fields = ("source_item", "source_match", "category", "reason", "evidence", "state", "actor", "reviewed_at", "created_at", "updated_at", "admin_action")
     fields = (*readonly_fields, "resolved_release", "resolved_track", "resolution")
     actions = ("approve_selected", "reject_selected", "correct_selected", "requeue_selected")
@@ -76,6 +78,7 @@ class ReviewItemAdmin(admin.ModelAdmin):
         changed = 0
         for review in queryset.select_related("source_match", "source_item"):
             try:
+                before = {"state": review.state, "action": review.admin_action}
                 resolve_review(
                     review,
                     action,
@@ -84,6 +87,8 @@ class ReviewItemAdmin(admin.ModelAdmin):
                     track=review.resolved_track,
                     resolution=review.resolution,
                 )
+                review.refresh_from_db()
+                audit(request.user, f"review_{action}", review, before, {"state": review.state, "action": review.admin_action})
                 changed += 1
             except (ValueError, ValidationError) as exc:
                 self.message_user(request, f"Review {review.pk}: {exc}", level=messages.WARNING)
@@ -130,7 +135,11 @@ class ProcessingQueueItemAdmin(admin.ModelAdmin):
 class IdentityAuditEventAdmin(admin.ModelAdmin):
     list_display = ("occurred_at", "action", "actor", "review_item", "source_item")
     list_filter = ("action",)
-    readonly_fields = tuple(field.name for field in IdentityAuditEvent._meta.fields)
+    readonly_fields = tuple(field.name for field in IdentityAuditEvent._meta.fields if field.name != "detail") + ("safe_detail",)
+
+    @admin.display(description="Redacted event detail")
+    def safe_detail(self, event):
+        return safe_audit_json(event.detail)
 
     def has_add_permission(self, request):
         return False

@@ -1,0 +1,3 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>RapFaDrop operations</title></head><body>
+<nav><a href="{% url 'operations:dashboard' %}">Dashboard</a> · <a href="{% url 'operations:reviews' %}">Reviews</a> · <a href="{% url 'operations:settings' %}">Settings</a> · <a href="{% url 'operations:template_preview' %}">Caption preview</a> · <a href="/admin/">Django admin</a></nav>
+{% for message in messages %}<p role="status">{{ message }}</p>{% endfor %}{% block content %}{% endblock %}</body></html>

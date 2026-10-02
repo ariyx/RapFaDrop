@@ -9,6 +9,8 @@ class CaptionTemplate(models.Model):
     version = models.PositiveIntegerField(default=1)
     config = models.JSONField(default=dict)
     enabled = models.BooleanField(default=True)
+    previewed_at = models.DateTimeField(null=True, blank=True)
+    previewed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="caption_templates_previewed")
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=("kind", "version"), name="caption_kind_version_uniq")]

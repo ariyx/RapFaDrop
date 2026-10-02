@@ -8,6 +8,9 @@ from django.utils.html import format_html
 from .forms import ManualMediaUploadForm, MediaCandidateAdminForm
 from .models import MediaAttempt, MediaAuditEvent, MediaCandidate
 from .services import MediaRequestError, process_manual_upload
+from .providers import redact_diagnostic
+import re
+from operations.services import audit, safe_audit_json
 
 
 @admin.register(MediaCandidate)
@@ -18,10 +21,10 @@ class MediaCandidateAdmin(admin.ModelAdmin):
     search_fields = ("track__official_title", "release__title", "source_match__source_item__native_item_id", "sha256")
     readonly_fields = (
         "track", "release", "state", "preparation_state", "artwork_state", "attempt_count",
-        "last_attempt_at", "retry_due_at", "last_outcome", "last_error", "candidate_path",
-        "prepared_path", "artwork_path", "sha256", "file_size_bytes", "expected_duration_seconds",
+        "last_attempt_at", "retry_due_at", "last_outcome", "safe_diagnostic", "candidate_stored",
+        "prepared_stored", "artwork_stored", "sha256", "file_size_bytes", "expected_duration_seconds",
         "observed_facts", "duration_comparison", "validation_report", "preparation_report",
-        "provenance", "quality_rank", "created_by", "created_at", "updated_at",
+        "quality_rank", "created_by", "created_at", "updated_at",
     )
     fields = ("source_match", "provider", *readonly_fields)
     change_form_template = "admin/media_pipeline/mediacandidate/change_form.html"
@@ -38,6 +41,21 @@ class MediaCandidateAdmin(admin.ModelAdmin):
         if not change:
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
+
+    @admin.display(description="Safe diagnostic")
+    def safe_diagnostic(self, obj):
+        value = redact_diagnostic(obj.last_error)
+        value = re.sub(r"(?:[A-Za-z]:\\[^\s]+|/(?:[^\s/]+/)*[^\s]*)", "[path omitted]", value)
+        return value
+
+    @admin.display(boolean=True, description="Candidate stored")
+    def candidate_stored(self, obj): return bool(obj.candidate_path)
+
+    @admin.display(boolean=True, description="Prepared copy stored")
+    def prepared_stored(self, obj): return bool(obj.prepared_path)
+
+    @admin.display(boolean=True, description="Artwork stored")
+    def artwork_stored(self, obj): return bool(obj.artwork_path)
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         candidate = get_object_or_404(MediaCandidate, pk=object_id)
@@ -64,6 +82,7 @@ class MediaCandidateAdmin(admin.ModelAdmin):
                 self.message_user(request, "Upload validated and prepared; no publication was attempted.", level=messages.SUCCESS)
             else:
                 self.message_user(request, f"Upload recorded as {result.get_state_display()}: {result.last_error}", level=messages.WARNING)
+            audit(request.user, "media_manual_upload", result, after={"state": result.state, "attempt_count": result.attempt_count, "outcome": result.last_outcome, "file_size_bytes": result.file_size_bytes})
             return HttpResponseRedirect(reverse("admin:media_pipeline_mediacandidate_change", args=(candidate.pk,)))
         return render(request, "admin/media_pipeline/mediacandidate/manual_upload.html", {**self.admin_site.each_context(request), "opts": self.model._meta, "candidate": candidate, "form": form}, status=400 if request.method == "POST" and form.errors else 200)
 
@@ -78,7 +97,13 @@ class MediaCandidateAdmin(admin.ModelAdmin):
 class MediaAttemptAdmin(admin.ModelAdmin):
     list_display = ("candidate", "provider", "state", "started_at", "finished_at", "outcome")
     list_filter = ("provider", "state")
-    readonly_fields = tuple(field.name for field in MediaAttempt._meta.fields)
+    readonly_fields = ("candidate", "provider", "state", "started_at", "finished_at", "outcome", "safe_diagnostic")
+    fields = readonly_fields
+
+    @admin.display(description="Safe diagnostic")
+    def safe_diagnostic(self, obj):
+        value = redact_diagnostic(obj.error)
+        return re.sub(r"(?:[A-Za-z]:\\[^\s]+|/(?:[^\s/]+/)*[^\s]*)", "[path omitted]", value)
 
     def has_add_permission(self, request):
         return False
@@ -91,7 +116,11 @@ class MediaAttemptAdmin(admin.ModelAdmin):
 class MediaAuditEventAdmin(admin.ModelAdmin):
     list_display = ("occurred_at", "candidate", "actor", "action")
     list_filter = ("action",)
-    readonly_fields = tuple(field.name for field in MediaAuditEvent._meta.fields)
+    readonly_fields = tuple(field.name for field in MediaAuditEvent._meta.fields if field.name != "detail") + ("safe_detail",)
+
+    @admin.display(description="Redacted event detail")
+    def safe_detail(self, event):
+        return safe_audit_json(event.detail)
 
     def has_add_permission(self, request):
         return False

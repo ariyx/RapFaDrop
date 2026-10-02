@@ -1,0 +1,29 @@
+# M5 administration, configuration and observability
+
+## Implemented
+
+- Added the private Django operations area at `/admin/ops/`. Login redirects use Django's local admin login; every operation view also requires an active superuser or a staff member of the `RapFaDrop Operators` group. Mutations use POST and Django CSRF middleware. The operator group grants equal add/view/change permissions across the product apps, excludes delete permissions, and can be configured by `manage.py manage_operator <username> [--email ...]`. Credentials come from a prompt or the `RAPFADROP_ADMIN_PASSWORD` process environment; existing names are rejected rather than overwritten.
+- Added a separate-admin password-reset screen. An operator can reset another member of the same group, never themselves. Django hashing and password validators apply; only the target ID is audited, never the password or reset token.
+- Added searchable Persian artist/alias and platform/verification/enabled filters; source status, baseline, last-success/error presence and due time are shown without exposing raw error strings. Verify/reject require operator evidence notes, enable is limited to verified profiles and visibly warns when no baseline is complete, and disable is audited.
+- Manual source poll/baseline controls create a durable, correlated operator request only. They do not dispatch provider adapters or background work in M5. Requests require an enabled artist/source and verified profile; baseline requests are SoundCloud-only. This kept this task's execution clear of real provider calls and baselines.
+- Added review browsing/filters and approve/reject/correct/requeue forms that call M2 `resolve_review`; queue retry uses M2's bounded retry service; manual audio upload keeps using M3's validated upload path, and candidate retry calls M3's retry service only after an explicit POST. Publication retry uses a new M4 service to make only a definitely failed retry-wait publication due; uncertain attempts remain reconciliation-only, and the HTTP request never calls the Telegram gateway.
+- Added publication, attempt, album-session and reconciliation links/metrics. Metrics show source outcomes, review backlog, queue counts, media provider outcomes, publication attempts/reconciliation/album states and discovery-to-ready/published averages where linked timestamps exist.
+- Added versioned tag/correction settings backed by PostgreSQL. Supported tag fields are limited to the configured M3 allowlist; correction deletion defaults to 600 seconds and is constrained to 60–86,400 seconds. The M3 tagger and M4 correction scheduler read the active stored value, falling back to environment defaults before an operator settings record exists. Notification mode/target are inert disabled/test-only placeholders; the M4 guard rejects production targets, and no send control was added.
+- Caption templates validate documented kinds, literal fields and known conditional-row keys; arbitrary template code and unknown fields are rejected. New admin-created versions start disabled and are immutable after creation. The fixture preview escapes rendered output, reports omitted optional rows/overflow, records preview actor/time, and is required before activation. Activation/deactivation is audited. Existing publications retain their stored template reference/version.
+- Redacted media/source/publication diagnostics omit filesystem paths, raw source payloads, provider provenance URLs and Telegram attempt payload/response JSON from ordinary admin pages. Audit models and attempts are read-only in Django admin.
+
+## Verification observed locally
+
+- `docker compose config --quiet` passed; `docker compose up --build -d` built and started web, worker, beat, PostgreSQL and Redis.
+- `docker compose exec -T web python manage.py migrate --noinput` reported no pending migrations after applying operations `0001/0002` and publication `0002` during implementation.
+- `docker compose exec -T web python manage.py makemigrations --check --dry-run` reported `No changes detected`.
+- `docker compose exec -T web python manage.py check` reported no issues.
+- `docker compose exec -T web python manage.py test` passed all 91 tests, including 13 operations-panel tests for access, CSRF, equal-role accounts, Persian alias search, source intent auditing without provider calls, M2 review decisions, M3 media retry fakes, M4 definite retry scheduling without a gateway call, template safety/preview/activation, settings guards, password audit hygiene and sensitive-path non-disclosure.
+- `docker compose ps` showed all five services healthy. `http://localhost:8000/health/` returned `{"status":"ok","database":"ok"}`.
+- Read-only database counts observed 30 artists, 57 source candidates, zero enabled sources, zero source items/baseline runs/reviews/queue/media candidates/publications/operator requests. `source_status` showed all 57 candidates disabled and unverified. No real source poll or baseline was run.
+- `probe_telegram --configuration-status` reported live integration disabled, mode not test and `live_probe: not_run`; bot-token and isolated-test-target presence flags were true, but their values were not displayed. Runtime settings reported `PUBLICATION_WORKER_ENABLED=False`, `TELEGRAM_LIVE_ENABLED=False`, `TELEGRAM_MODE=disabled`. No Telegram API call was made.
+- `git diff --check` passed (Git emitted only its Windows LF-to-CRLF working-copy notices). Server deployment was not performed as instructed.
+
+## Open gates / proposed later work
+
+The M5 source request records intentionally have no executor. A later owner-approved milestone can define request review/dispatch, limits and worker-side idempotency before connecting them to live providers. Live provider profile coverage, Spotify release polling, Telegram transport in an isolated channel, HTTPS and backup/restore remain unverified. No M6 work was started.
