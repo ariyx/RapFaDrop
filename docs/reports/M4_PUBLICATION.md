@@ -71,7 +71,11 @@ Tests verified complete omission of missing video/platform/feature/prior-single 
 
 ## Live test-channel gate
 
-`probe_telegram --configuration-status` observed `live_enabled=false`, `test_mode=false`, `bot_token_configured=false`, `isolated_test_target_configured=false`; the live probe was **not run**. A bot token and isolated test-channel ID are absent locally. No token/chat value was printed.
+At M4 implementation time, `probe_telegram --configuration-status` observed `live_enabled=false`, `test_mode=false`, `bot_token_configured=false`, and `isolated_test_target_configured=false`; the probe was not run then.
+
+On 2026-10-02, the owner-authorized local probe check observed `live_enabled=false`, `test_mode=false`, `bot_token_configured=true`, and `isolated_test_target_configured=true`. The exact attempted command was `docker compose exec -T web python manage.py probe_telegram --confirm-test-send`; it exited with `CommandError: Probe requires explicit confirmation, enabled test mode, local bot credentials and an isolated test target` before target resolution or any Telegram Bot API request. The safe status command was `docker compose exec -T web python manage.py probe_telegram --configuration-status`. No Telegram message was sent, so there are no resulting message IDs; same-audio edit success and correction-reply deletion were not exercised. The production target and `@RapFaDrop` were not used. No local environment settings were changed.
+
+The local verification stack built and started successfully; all five Compose services reported healthy. `manage.py check` reported no issues, `migrate --check` passed, and `/health/` returned `{"status": "ok", "database": "ok"}`. The explicit-send integration remains gated until the owner enables live test mode locally.
 
 The opt-in probe and real gateway are implemented, but actual sendAudio/editMessageMedia behavior, message ID preservation, player/tag presentation, reply deletion and Telegram limits remain empirical gates. Production `@RapFaDrop` is explicitly blocked; the configured numeric production ID and resolved target username/ID are checked before mutations. Normal tests and worker defaults cannot reach the real gateway. A test with a numeric target resolving to production's username was refused before a mutation.
 
