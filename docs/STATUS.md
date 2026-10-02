@@ -1,11 +1,12 @@
 # Project status and handoff
 
-Updated: 2026-10-02. M2 implementation commit `b813109` (`b813109e974e911b3352492620c84df6fbb65565`) passed local verification and was pushed normally to `origin/main`; its observed results are recorded in this handoff and [`reports/M2_IDENTITY.md`](reports/M2_IDENTITY.md). No deployment was performed, per the M2 instruction.
+Updated: 2026-10-02. M3 media acquisition and preparation implementation commit `bc7982e3798eb8725e9b3dc9f05bbe8c4d11a128` passed local verification and was pushed normally to `origin/main`; this status handoff was committed immediately afterward. No deployment was performed, per the M3 instruction.
 
 ## Current state
 
 - Work began from clean `main` / `origin/main` at `ea8320b21fae97e2141e092ed76097187dbae257`, the M0 status handoff. M1 implementation/report commit `ea04651c8e61624d04d53d41323a60c19481c37e` and Persian-alias follow-up commit `5bf7aed9a4be40a98d3c25ead32e3eea8ffefc32` were pushed normally to `origin/main`; `git ls-remote origin refs/heads/main` confirmed the follow-up SHA. The untracked M1 task document is now included in Git.
 - M2 implementation commit `b813109e974e911b3352492620c84df6fbb65565` adds the canonical identity/review/queue app and includes `docs/M2_AGENT_TASK.md`; the Compose/Django/PostgreSQL fixture suite passed locally and the commit was pushed normally to `main`. M2 report: [`reports/M2_IDENTITY.md`](reports/M2_IDENTITY.md). No server deployment or M3 work occurred.
+- M3 implementation commit `bc7982e3798eb8725e9b3dc9f05bbe8c4d11a128` is locally verified and pushed normally to `main`; details and measured one-track probe output are in [`reports/M3_MEDIA.md`](reports/M3_MEDIA.md). Media acquisition is explicit/manual, yt-dlp is SoundCloud-only, Spotify stays review-only, and no publication or Telegram API behavior was added. No server deployment occurred.
 - The M0 implementation commit is `0c4952d30fb5abd8f4c0718ca5c51eee7c37985b`; its provider and deployment observations remain in [`reports/M0_FEASIBILITY.md`](reports/M0_FEASIBILITY.md).
 - M1 adds durable artist/source/item/baseline/audit records, disabled/unverified seed data, separate SoundCloud and Spotify adapters, scheduled due-only polling, idempotent history snapshots, per-source backoff, admin screens and operator commands. No release queue, media download, Telegram integration or publication exists.
 - Local Compose build/start, migrations, migration drift check, Django check, all 17 automated tests, all five service health checks and `/health/` passed. Seed import observed 30 artists and 57 sources: 30 Spotify and 27 SoundCloud. Persian aliases from the UTF-8 product spec persist on all 30 artists and render in management/admin; the authenticated admin round-trip test passed. All sources remain disabled/unverified; missing SoundCloud sources remain blank for Fadaei, Ho3ein and Amir Tataloo. The local database has zero source items and zero baseline runs because no candidate was verified or activated.
@@ -53,9 +54,16 @@ Updated: 2026-10-02. M2 implementation commit `b813109` (`b813109e974e911b335249
 | Telegram | M0 contains no gateway or channel configuration. | Later live tests must use an isolated test channel; never use production for tests. |
 | Admin and deployment | M0 provides Django's built-in schema and health only. | Full admin/domain schema, HTTPS, backup/restore and Telegram behavior belong to later milestones. |
 
-## Next milestone after owner review: M3
+## M3 acceptance evidence
 
-M2 is complete and awaits owner review. Do not infer that sources are ready for activation: verify each candidate's profile identity/recent official works, measure SoundCloud profile-feed coverage, and resolve a bounded Spotify recent-release method first. Keep every seed disabled/unverified and Spotify polling unavailable until those empirical gates pass. M3 scope is not started or authorized by this handoff; wait for its task document and owner instruction. Media acquisition and Telegram publication remain later milestones.
+1. Added durable media candidate/attempt/audit records attached to M2 identity IDs, private persistent media storage, bounded SoundCloud yt-dlp acquisition, ffprobe completeness/duration checks, observed-property ranking, format-aware Mutagen tags/artwork, and an authenticated manual-upload path.
+2. The opt-in supplied SoundCloud probe passed end to end: 176.054-second AAC/M4A, 0.008-second duration delta, official 1080×1080 JPEG embedded, and title/artist/channel/artwork readback passed. Probe-only files were removed.
+3. The complete local suite passed 44 tests; migrations and drift check, Django check, Compose build/config, all five health checks, `/health/`, and repository secret/media review passed. Full evidence: [`reports/M3_MEDIA.md`](reports/M3_MEDIA.md).
+4. Spotify remains review-only with no full-audio provider; no independent fallback is claimed. The probe does not imply broader SoundCloud coverage. Sources remain disabled/unverified; no production baseline, Telegram call, publication, deployment, or M4 work occurred.
+
+## Next milestone after owner review: M4
+
+M3 is complete and awaits owner review. Do not infer that sources are ready for activation: verify each candidate's profile identity/recent official works, measure SoundCloud profile-feed coverage, and resolve a bounded Spotify recent-release method first. Keep every seed disabled/unverified and Spotify polling unavailable until those empirical gates pass. M4 publication behavior is not authorized by this handoff; await its task document and owner instruction. No Telegram publishing behavior is implemented by M3.
 
 ## Handoff record to maintain
 
