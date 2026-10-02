@@ -4,11 +4,11 @@ Updated: 2026-10-02. This records observed local M0 implementation and verificat
 
 ## Current state
 
-- Work began from clean `main` / `origin/main` at `dbad4e5519554b1939b89a2269d7cc9a44dcf4c2` (`docs: establish project baseline`). The delivery commit and server result are recorded after the normal push/deployment sequence.
+- Work began from clean `main` / `origin/main` at `dbad4e5519554b1939b89a2269d7cc9a44dcf4c2` (`docs: establish project baseline`). The locally verified M0 implementation commit is `0c4952d30fb5abd8f4c0718ca5c51eee7c37985b`; `git ls-remote` confirmed that exact SHA on `origin/main` after a normal push.
 - M0 now contains a Python 3.13/Django 5.2.17 foundation, PostgreSQL, Redis, non-root Celery worker/beat, database-backed `/health/`, pinned dependencies, placeholder-only `.env.example`, opt-in diagnostic commands and focused tests. No product release schema or Telegram publishing exists.
 - Local Compose build/start, built-in migrations, Django check, focused tests and all five service health checks passed. The health endpoint returned `{"status":"ok","database":"ok"}`. Detailed provider evidence is in [`reports/M0_FEASIBILITY.md`](reports/M0_FEASIBILITY.md).
 - SoundCloud is verified only for the supplied track/set. Spotify is partially verified for public oEmbed identity on three profiles; the sampled `spotipyFree` release path timed out, so recent-release coverage remains open. One `yt-dlp` SoundCloud download was completed, measured and deleted; no independent fallback was verified.
-- No Telegram API call or production channel post occurred. Server deployment is not claimed until it is observed.
+- No Telegram API call or production channel post occurred. Server deployment could not begin: `ssh -o BatchMode=yes -o ConnectTimeout=10 root@91.107.178.12` returned `Permission denied (publickey,password)`. No server checkout, configuration, data or service was changed.
 
 ## M0 acceptance evidence
 
@@ -16,7 +16,7 @@ Updated: 2026-10-02. This records observed local M0 implementation and verificat
 2. Passed for supplied examples: repeatable sanitized SoundCloud track/set output with IDs, metadata, ordering, album evidence and media variants.
 3. Partial: public Spotify identity works for three samples without Premium; recent releases/pagination failed to return and remain an open gate.
 4. Passed for one candidate: `yt-dlp` acquisition plus `ffprobe`; no fallback is claimed.
-5. Secret/media hygiene and no-production-post checks remain part of the pre-push review; push and server results are recorded after they occur.
+5. Passed locally/push: `.env` stayed ignored, only placeholders were committed, secret/media scans were clean, and `main` was pushed without force. Server verification is blocked by unavailable SSH authentication and is not marked passed.
 
 ## Decisions, assumptions and gates
 
