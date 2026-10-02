@@ -214,4 +214,58 @@ Root cause: Gunicorn served Django with `DEBUG=false`, but no static-file handle
 
 Local checks observed before commit/deployment: Compose config passed; the image build collected **127 files, 381 post-processed**; Django check reported no issues; model drift check reported **No changes detected**; all **92 tests passed in 22.626 seconds**, including the production-static regression. Tests used the isolated local test database. Initial workstation Docker DNS resolution failed while fetching dependencies; retry through the already-configured local proxy succeeded using transient build arguments only, without committing proxy values. `git diff --check` passed. No browser tooling, screenshot, generated static asset or secret is included in the application commit.
 
-Exact-SHA deployment and final server/browser observations will be recorded after execution; the existing pre-fix server checkpoint is not evidence that the fix is deployed.
+The fix was committed, pushed and confirmed remotely as **`44d0c62cd59eb8701d9599ccf8aae5aadb5b46d0`**, then fetched and checked out at that exact detached SHA in `/opt/rapfadrop`. The server build collected **127 files, 381 post-processed**; only web was recreated using `docker compose -p rapfadrop -f compose.internal.yaml up -d --no-deps --no-build --wait --wait-timeout 60 web`. No runtime collectstatic was needed because the collected assets were already in the image. Server Django and migration-state checks passed; no migrations ran.
+
+Server verification completed at **`2026-10-02T16:12:11Z`** (19:42:11 Asia/Tehran), exit 0:
+
+- `/admin/` redirected to the login page with final HTTP **200**. `/static/admin/css/base.css` returned **200**, CSS content type and `Cache-Control: max-age=60, public`.
+- The manifest URL `/static/admin/css/base.96c479cedf7a.css` and all seven CSS/JavaScript assets linked by the login page returned **200**. Hashed assets had `max-age=315360000, public, immutable` cache headers.
+- A fresh headless Chrome context visited the actual server-IP admin URL. All seven static responses were **200**, with no failed static requests; computed body font was Segoe UI/system sans-serif, header background `rgb(65, 118, 144)`, and five stylesheets had nonzero CSS rule counts. The screenshot was visually inspected and showed the styled, centered Django login panel. Screenshot: ignored local `tmp/admin-after.png`. No account was created or login submitted for this check; authenticated dashboard workflows were not exercised.
+- Runtime debug remained false; Telegram/publication safeguards passed. `/health/` returned HTTP **200** with database `ok`; all three services remained healthy.
+- All 37 database-table row-count/content fingerprints matched the pre-deployment snapshot. PostgreSQL/Redis container IDs were unchanged. `.env` checksum, firewall snapshots and Nginx configuration hashes were unchanged. Clean server checkout remained at the exact deployed SHA.
+
+The static-file fix and its requested browser/server checks are complete. This does not advance source verification, baselines, publication or the remaining M6 operational gates.
+
+## Server-only approved seed import
+
+The owner authorized the existing M1 idempotent seed command on the server only, with no manual artist/source creation, provider requests, verification, enablement, baselines, media or Telegram work. The server remained clean at **`44d0c62cd59eb8701d9599ccf8aae5aadb5b46d0`** in `/opt/rapfadrop`; web/PostgreSQL/Redis were healthy and worker/beat remained absent.
+
+Inspection confirmed `sources/management/commands/seed_sources.py` uses an atomic transaction and `get_or_create`, preserves existing aliases, inserts candidate URLs/IDs without contacting providers, and records a `seed_imported` source audit event. Model defaults are `Artist.enabled=False`, `ArtistSource.enabled=False`, and verification `unverified`. Explicit UTF-8 comparison against `PRODUCT_SPEC.md` confirmed all 30 names, Persian aliases and Spotify/SoundCloud candidate URLs, including the three intentionally missing SoundCloud profiles. No code change was necessary.
+
+Before import: **0 artists, 0 sources**. One user account already existed at task entry; no account was created by this task. The initial empty source tables were expected because deployment/migrations had not invoked the seed command.
+
+Command, run from `/opt/rapfadrop`:
+
+```sh
+docker compose -p rapfadrop -f compose.internal.yaml exec -T web python manage.py seed_sources
+```
+
+Observed first run:
+
+```text
+Seed verified: 30 artists; 57 sources (30 and 57 created this run).
+```
+
+The same command was repeated once to verify idempotence:
+
+```text
+Seed verified: 30 artists; 57 sources (0 and 0 created this run).
+```
+
+| Server database / admin observation | Count |
+| --- | --- |
+| Artists | 30 |
+| Artist sources | 57 |
+| Spotify candidates | 30 |
+| SoundCloud candidates | 27 |
+| Enabled artists / enabled sources | 0 / 0 |
+| Unverified sources | 57 |
+| Source items / baseline runs | 0 / 0 |
+| Processing queue / media candidates | 0 / 0 |
+| Publications / publication attempts / operator requests | 0 / 0 / 0 |
+
+Every seeded artist alias and candidate URL/native Spotify ID was read back and matched against the approved seed. Fadaei, Ho3ein and Amir Tataloo still have no SoundCloud row. The registered Django `ArtistAdmin` and `ArtistSourceAdmin` unfiltered querysets and actual `ChangeList` instances reported **30** and **57** respectively (`result_count` and `full_result_count` both matched). These admin checks were run in-process with a request factory; no HTTP request, browser login, account credential or authentication bypass endpoint was used.
+
+Two expected `seed_imported` audit records report creation counts 30/57 and 0/0. No additional queue/media/source-discovery or publication record was created. Runtime checks confirmed debug false, Telegram disabled, no bot/production-target configuration and publication worker disabled. No HTTP/provider/Telegram requests, baseline or source activation occurred in this task. Application/server configuration was unchanged, and no deployment or restart was performed.
+
+Final verification completed with exit 0 at **`2026-10-02T16:19:13Z`** (19:49:13 Asia/Tehran). Only this report and `STATUS.md` are changed for the documentation handoff. Sources remain disabled/unverified pending separate owner authorization and empirical verification.
