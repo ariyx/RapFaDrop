@@ -1,5 +1,7 @@
 # M5 administration, configuration and observability
 
+Verified implementation commit: `84e41865b068f6b259bb2449852a1a20097c5380`, pushed normally to `origin/main`; `git ls-remote` confirmed this exact SHA.
+
 ## Implemented
 
 - Added the private Django operations area at `/admin/ops/`. Login redirects use Django's local admin login; every operation view also requires an active superuser or a staff member of the `RapFaDrop Operators` group. Mutations use POST and Django CSRF middleware. The operator group grants equal add/view/change permissions across the product apps, excludes delete permissions, and can be configured by `manage.py manage_operator <username> [--email ...]`. Credentials come from a prompt or the `RAPFADROP_ADMIN_PASSWORD` process environment; existing names are rejected rather than overwritten.
