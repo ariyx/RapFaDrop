@@ -1,0 +1,141 @@
+from datetime import timedelta
+
+from django.db import transaction
+from django.db.models import Q
+from django.utils import timezone
+
+from .adapters import SoundCloudAdapter, SpotifyAdapter
+from .models import ArtistSource, BaselineRun, SourceAuditEvent, SourceItem
+
+
+def adapter_for(platform):
+    if platform == ArtistSource.Platform.SOUNDCLOUD:
+        return SoundCloudAdapter()
+    if platform == ArtistSource.Platform.SPOTIFY:
+        return SpotifyAdapter()
+    raise ValueError(f"Unsupported source platform: {platform}")
+
+
+def _upsert_items(source, items, observed_at, from_baseline):
+    count = 0
+    for item in items:
+        _, created = SourceItem.objects.get_or_create(
+            platform=source.platform,
+            native_item_id=item["native_item_id"],
+            defaults={
+                "source": source,
+                "title": item.get("title", ""),
+                "canonical_url": item.get("canonical_url", ""),
+                "source_release_at": item.get("source_release_at"),
+                "first_observed_at": observed_at,
+                "metadata": item.get("metadata", {}),
+                "sanitized_raw_data": item.get("sanitized_raw_data", {}),
+                "from_baseline": from_baseline,
+            },
+        )
+        count += int(created)
+    return count
+
+
+def baseline_source(source, adapter=None, now=None):
+    """Snapshot history atomically. Repeating after a crash is safe by stable IDs."""
+    if not source.artist.enabled or not source.enabled or source.verification != ArtistSource.Verification.VERIFIED:
+        raise ValueError("Baseline requires an enabled artist and enabled, verified source")
+    if source.platform != ArtistSource.Platform.SOUNDCLOUD:
+        raise ValueError("Release baselining is unavailable for this platform")
+    now = now or timezone.now()
+    adapter = adapter or adapter_for(source.platform)
+    run = BaselineRun.objects.filter(source=source, status=BaselineRun.Status.RUNNING).order_by("started_at").first()
+    if run is None:
+        run = BaselineRun.objects.create(source=source, started_at=now)
+    source.baseline_started_at = now
+    source.save(update_fields=("baseline_started_at", "updated_at"))
+    SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="baseline_started")
+    try:
+        items = adapter.list_recent(source)
+        with transaction.atomic():
+            created_count = _upsert_items(source, items, now, from_baseline=True)
+            run.status = BaselineRun.Status.COMPLETE
+            run.completed_at = now
+            run.item_count = len(items)
+            run.save(update_fields=("status", "completed_at", "item_count"))
+            source.baseline_completed_at = now
+            source.last_success_at = now
+            source.next_poll_at = now + timedelta(seconds=source.poll_interval_seconds)
+            source.consecutive_failures = 0
+            source.last_error = ""
+            source.last_error_at = None
+            source.save(update_fields=("baseline_completed_at", "last_success_at", "next_poll_at", "consecutive_failures", "last_error", "last_error_at", "updated_at"))
+            SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="baseline_completed", detail={"items": len(items), "created": created_count})
+        return run
+    except Exception as exc:
+        run.status = BaselineRun.Status.FAILED
+        run.error = f"{type(exc).__name__}: {exc}"[:1000]
+        run.save(update_fields=("status", "error"))
+        record_source_failure(source, exc, now=now)
+        raise
+
+
+def record_source_failure(source, error, now=None):
+    now = now or timezone.now()
+    source.consecutive_failures += 1
+    delay = min(source.poll_interval_seconds * (2 ** (source.consecutive_failures - 1)), 21600)
+    source.last_error = f"{type(error).__name__}: {error}"[:1000]
+    source.last_error_at = now
+    source.next_poll_at = now + timedelta(seconds=delay)
+    source.save(update_fields=("consecutive_failures", "last_error", "last_error_at", "next_poll_at", "updated_at"))
+    SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="poll_failed", detail={"error_type": type(error).__name__, "error": str(error)[:500], "retry_seconds": delay})
+
+
+def poll_source(source, adapter=None, now=None):
+    now = now or timezone.now()
+    if not source.enabled or source.verification != ArtistSource.Verification.VERIFIED:
+        return "skipped"
+    if not source.artist.enabled:
+        return "skipped"
+    if source.platform == ArtistSource.Platform.SPOTIFY:
+        source.next_poll_at = now + timedelta(seconds=source.poll_interval_seconds)
+        source.last_error = "Release polling unavailable: Spotify recent-release method is not verified"
+        source.save(update_fields=("next_poll_at", "last_error", "updated_at"))
+        SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="release_poll_unavailable", detail={"reason": "M0 sampled release method timed out; oEmbed has identity only"})
+        return "unavailable"
+    if source.platform != ArtistSource.Platform.SOUNDCLOUD:
+        return "unavailable"
+    adapter = adapter or adapter_for(source.platform)
+    if source.baseline_completed_at is None:
+        baseline_source(source, adapter=adapter, now=now)
+        return "baselined"
+    try:
+        items = adapter.list_recent(source)
+        with transaction.atomic():
+            _upsert_items(source, items, now, from_baseline=False)
+            source.last_success_at = now
+            source.next_poll_at = now + timedelta(seconds=source.poll_interval_seconds)
+            source.consecutive_failures = 0
+            source.last_error = ""
+            source.last_error_at = None
+            source.save(update_fields=("last_success_at", "next_poll_at", "consecutive_failures", "last_error", "last_error_at", "updated_at"))
+            SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="poll_succeeded", detail={"items": len(items)})
+        return "success"
+    except Exception as exc:
+        record_source_failure(source, exc, now=now)
+        return "failed"
+
+
+def poll_due_sources(now=None, adapters=None):
+    now = now or timezone.now()
+    results = {}
+    sources = ArtistSource.objects.select_related("artist").filter(
+        artist__enabled=True,
+        enabled=True,
+        verification=ArtistSource.Verification.VERIFIED,
+    ).filter(Q(next_poll_at__isnull=True) | Q(next_poll_at__lte=now)).order_by("next_poll_at", "pk")
+    for source in sources:
+        # Spotify rows are intentionally visible as unavailable, never sent to a release API.
+        adapter = (adapters or {}).get(source.platform) or adapter_for(source.platform)
+        try:
+            results[source.pk] = poll_source(source, adapter=adapter, now=now)
+        except Exception:
+            # A baseline's error is recorded at source level; keep later sources moving.
+            results[source.pk] = "failed"
+    return results

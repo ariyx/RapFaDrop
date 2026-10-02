@@ -1,12 +1,16 @@
 # Project status and handoff
 
-Updated: 2026-10-02. This records observed local M0 implementation and verification. Check Git and the actual environment before relying on it.
+Updated: 2026-10-02. M1 is implemented and verified locally; the implementation and final report commit SHAs are recorded below. No deployment was performed, per the M1 instruction.
 
 ## Current state
 
-- Work began from clean `main` / `origin/main` at `dbad4e5519554b1939b89a2269d7cc9a44dcf4c2` (`docs: establish project baseline`). The locally verified M0 implementation commit is `0c4952d30fb5abd8f4c0718ca5c51eee7c37985b`; `git ls-remote` confirmed that exact SHA on `origin/main` after a normal push.
-- M0 now contains a Python 3.13/Django 5.2.17 foundation, PostgreSQL, Redis, non-root Celery worker/beat, database-backed `/health/`, pinned dependencies, placeholder-only `.env.example`, opt-in diagnostic commands and focused tests. No product release schema or Telegram publishing exists.
-- Local Compose build/start, built-in migrations, Django check, focused tests and all five service health checks passed. The health endpoint returned `{"status":"ok","database":"ok"}`. Detailed provider evidence is in [`reports/M0_FEASIBILITY.md`](reports/M0_FEASIBILITY.md).
+- Work began from clean `main` / `origin/main` at `ea8320b21fae97e2141e092ed76097187dbae257`, the M0 status handoff. The M1 implementation commit and final pushed report commit are recorded in the M1 completion handoff after normal push verification.
+- The M0 implementation commit is `0c4952d30fb5abd8f4c0718ca5c51eee7c37985b`; its provider and deployment observations remain in [`reports/M0_FEASIBILITY.md`](reports/M0_FEASIBILITY.md).
+- M1 adds durable artist/source/item/baseline/audit records, disabled/unverified seed data, separate SoundCloud and Spotify adapters, scheduled due-only polling, idempotent history snapshots, per-source backoff, admin screens and operator commands. No release queue, media download, Telegram integration or publication exists.
+- Local Compose build/start, migrations, migration drift check, Django check, all 16 automated tests, all five service health checks and `/health/` passed. Seed import observed 30 artists and 57 sources: 30 Spotify and 27 SoundCloud. All are disabled/unverified; missing SoundCloud sources remain blank for Fadaei, Ho3ein and Amir Tataloo. The local database has zero source items and zero baseline runs because no candidate was verified or activated.
+- Baseline/poll behavior passed fake-backed tests: duplicate IDs persist once, interrupted writes roll back and retry, and a failing due source backs off without blocking a healthy source. The admin identifies SoundCloud profile polling as implemented but empirically unprobed; Spotify release polling is explicitly unavailable.
+- M1 did not run new provider probes because all profile candidates remain unverified. Existing M0 SoundCloud track/set evidence does not establish profile-feed coverage; Spotify's sampled release path timed out and oEmbed supplied identity only. Details and open gates are in [`reports/M1_DISCOVERY.md`](reports/M1_DISCOVERY.md).
+- No server deployment, Telegram call or production channel post occurred for M1. Local Compose services were stopped after verification; the PostgreSQL volume was preserved.
 - SoundCloud is verified only for the supplied track/set. Spotify is partially verified for public oEmbed identity on three profiles; the sampled `spotipyFree` release path timed out, so recent-release coverage remains open. One `yt-dlp` SoundCloud download was completed, measured and deleted; no independent fallback was verified.
 - No Telegram API call or production channel post occurred. Server deployment could not begin: `ssh -o BatchMode=yes -o ConnectTimeout=10 root@91.107.178.12` returned `Permission denied (publickey,password)`. No server checkout, configuration, data or service was changed.
 
@@ -17,6 +21,14 @@ Updated: 2026-10-02. This records observed local M0 implementation and verificat
 3. Partial: public Spotify identity works for three samples without Premium; recent releases/pagination failed to return and remain an open gate.
 4. Passed for one candidate: `yt-dlp` acquisition plus `ffprobe`; no fallback is claimed.
 5. Passed locally/push: `.env` stayed ignored, only placeholders were committed, secret/media scans were clean, and `main` was pushed without force. Server verification is blocked by unavailable SSH authentication and is not marked passed.
+
+## M1 acceptance evidence
+
+1. Passed locally: Compose config/build/start, migrations and migration drift check, Django system check, 16 tests, five healthy services and the database-backed health response.
+2. Seeded and observed: 30 artists, 57 disabled/unverified profile candidates (30 Spotify, 27 SoundCloud); no fan substitution for the three missing SoundCloud profiles.
+3. Passed with fakes: initial baseline snapshots, idempotent item IDs, simulated interruption/retry, sanitized remote metadata, inactive-source skipping, source-specific exponential backoff and independent source outcomes.
+4. Spotify: release polling remains unavailable; identity-only M0 evidence is partial.
+5. No M1 source profile probes, deployment, Telegram API call or publication occurred.
 
 ## Decisions, assumptions and gates
 
@@ -30,9 +42,9 @@ Updated: 2026-10-02. This records observed local M0 implementation and verificat
 | Telegram | M0 contains no gateway or channel configuration. | Later live tests must use an isolated test channel; never use production for tests. |
 | Admin and deployment | M0 provides Django's built-in schema and health only. | Full admin/domain schema, HTTPS, backup/restore and Telegram behavior belong to later milestones. |
 
-## Next implementation task after owner review: M1
+## Next milestone after owner review: M2 — identity and queue
 
-Do not begin M1 automatically. The proposed next slice is to resolve a bounded public Spotify recent-release method, then implement disabled/unverified source records and idempotent first baselines for the 30 seed profiles while keeping SoundCloud and Spotify failures isolated. Production Telegram publishing remains out of scope.
+M1 is complete. Before enabling any seed, verify its profile identity and recent official works; empirically test SoundCloud profile-feed coverage and resolve an explicitly bounded Spotify recent-release method. Keep Spotify unavailable until that gate passes. The proposed M2 scope is canonical release/track identity, cross-source matching, edition/album relationships, review states and a durable queue. Do not infer those behaviors from M1 source items; no M2 code has been started.
 
 ## Handoff record to maintain
 
