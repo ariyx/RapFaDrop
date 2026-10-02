@@ -1,0 +1,55 @@
+# Temporary IP/HTTP deployment: host networking avoids Docker firewall rules.
+# Database and Redis listen only on loopback. No worker or scheduler is started.
+services:
+  postgres:
+    image: postgres:17.6-alpine
+    restart: unless-stopped
+    network_mode: host
+    command: ["postgres", "-c", "listen_addresses=127.0.0.1", "-c", "port=55432"]
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rapfadrop}
+      POSTGRES_USER: ${POSTGRES_USER:-rapfadrop}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 55432 -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:8.2.1-alpine
+    restart: unless-stopped
+    network_mode: host
+    command: ["redis-server", "--bind", "127.0.0.1", "--port", "56379", "--protected-mode", "yes", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "127.0.0.1", "-p", "56379", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  web:
+    build:
+      context: .
+      network: host
+    restart: unless-stopped
+    network_mode: host
+    env_file: .env
+    command: ["gunicorn", "config.wsgi:application", "--bind", "${RAPFADROP_WEB_BIND_IP:?set RAPFADROP_WEB_BIND_IP in .env}:8000", "--workers", "2", "--timeout", "60"]
+    volumes:
+      - media_data:/var/lib/rapfadrop/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--noproxy", "*", "--fail", "--silent", "http://${RAPFADROP_WEB_BIND_IP}:8000/health/"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  postgres_data:
+  media_data:

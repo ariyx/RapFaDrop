@@ -26,6 +26,8 @@ Use only checks applicable to the milestone. Stop local services with `docker co
 
 ## Server deployment
 
+The 2026-10-02 M6 Phase 2 read-only preflight confirmed key-only SSH access, but found no RapFaDrop checkout in the searched deployment roots and no Docker/Compose runtime. `/opt` and `/srv` are empty; an intended deployment path and RapFaDrop domain remain unset. Existing Nginx occupies ports 80/443 for another application with working local HTTPS. Host firewall is inactive; provider firewall is unverified. Preserve those workloads when planning subsequent setup. No server configuration or deployment occurred. See [`reports/M6_OPERATIONS.md`](reports/M6_OPERATIONS.md) for commands, observed capacity and evidence limits.
+
 Connect to `root@91.107.178.12` using SSH authentication configured on the local machine. Do not put a password in a prompt, command argument, Git, logs or documentation. If SSH authentication is unavailable, complete the local commit and push, report the exact SSH key/setup blocker, and stop server work.
 
 Locate the existing RapFaDrop checkout or clone `https://github.com/ariyx/RapFaDrop.git` into the deployment directory. Before updating an existing checkout:
