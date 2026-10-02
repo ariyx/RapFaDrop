@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for source in ArtistSource.objects.select_related("artist"):
             self.stdout.write(" | ".join((
-                str(source.pk), source.artist.official_name, source.platform,
+                str(source.pk), source.artist.official_name, f"aliases={','.join(source.artist.aliases or [])}", source.platform,
                 f"artist_enabled={source.artist.enabled}", f"source_enabled={source.enabled}", f"verification={source.verification}",
                 f"baseline={source.baseline_completed_at or 'pending'}", f"next={source.next_poll_at or 'unscheduled'}",
                 f"failures={source.consecutive_failures}", f"error={source.last_error or '-'}",

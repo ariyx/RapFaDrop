@@ -5,13 +5,17 @@ from .models import Artist, ArtistSource, BaselineRun, SourceAuditEvent, SourceI
 
 @admin.register(Artist)
 class ArtistAdmin(admin.ModelAdmin):
-    list_display = ("official_name", "enabled", "source_count")
+    list_display = ("official_name", "aliases_display", "enabled", "source_count")
     search_fields = ("official_name",)
     list_filter = ("enabled",)
 
     @admin.display(description="Sources")
     def source_count(self, artist):
         return artist.sources.count()
+
+    @admin.display(description="Aliases")
+    def aliases_display(self, artist):
+        return ", ".join(artist.aliases or [])
 
     def save_model(self, request, obj, form, change):
         old_enabled = Artist.objects.filter(pk=obj.pk).values_list("enabled", flat=True).first() if change else None

@@ -1,8 +1,11 @@
+from io import StringIO
 from datetime import timedelta
 from unittest.mock import patch
 
+from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
 from .adapters import SpotifyAdapter, SourceUnavailable, normalize_soundcloud_item
@@ -40,9 +43,34 @@ class SeedTests(TestCase):
         self.assertFalse(Artist.objects.filter(enabled=True).exists())
         self.assertFalse(ArtistSource.objects.filter(enabled=True).exists())
         self.assertFalse(ArtistSource.objects.exclude(verification="unverified").exists())
+        self.assertEqual(Artist.objects.exclude(aliases=[]).count(), 30)
         call_command("seed_sources", verbosity=0)
         self.assertEqual(Artist.objects.count(), 30)
         self.assertEqual(ArtistSource.objects.count(), 57)
+
+    def test_persian_alias_round_trips_through_seed_model_management_and_admin(self):
+        expected = "حسین تی‌ام"
+        call_command("seed_sources", verbosity=0)
+        artist = Artist.objects.get(official_name="Hossein Tiem")
+        self.assertEqual(artist.aliases, [expected])
+
+        # Reseeding adds the authoritative alias without deleting owner-managed aliases.
+        artist.aliases.append("owner spelling")
+        artist.save(update_fields=("aliases", "updated_at"))
+        call_command("seed_sources", verbosity=0)
+        artist.refresh_from_db()
+        self.assertEqual(artist.aliases, [expected, "owner spelling"])
+
+        status_output = StringIO()
+        call_command("source_status", stdout=status_output)
+        self.assertIn(expected, status_output.getvalue())
+
+        user = get_user_model().objects.create_superuser("unicode-admin", "admin@example.test", "test-password")
+        self.client.force_login(user)
+        response = self.client.get(reverse("admin:sources_artist_changelist"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Hossein Tiem")
+        self.assertContains(response, expected)
 
     def test_unconfirmed_soundcloud_sources_stay_empty_without_fan_substitution(self):
         call_command("seed_sources", verbosity=0)
