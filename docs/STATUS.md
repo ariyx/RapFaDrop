@@ -1,9 +1,10 @@
 # Project status and handoff
 
-Updated: 2026-10-02. M3 media acquisition and preparation implementation commit `bc7982e3798eb8725e9b3dc9f05bbe8c4d11a128` passed local verification and was pushed normally to `origin/main`; this status handoff was committed immediately afterward. No deployment was performed, per the M3 instruction.
+Updated: 2026-10-02. M4 publication/caption implementation commit `7c66a64915490e7ae939b2a852b5fa4dcccccf7f` passed local verification and was pushed normally to `origin/main`; the remote SHA was confirmed with `git ls-remote`. This status handoff was committed afterward. No deployment was performed, per the M4 instruction.
 
 ## Current state
 
+- M4 implementation commit `7c66a64915490e7ae939b2a852b5fa4dcccccf7f` adds durable publication/attempt/reconciliation state, versioned safe captions, in-place upgrades and correction deletion, ordered album sessions/resume, and an opt-in Bot API test gateway. All 78 local tests passed. The live Telegram probe was not run: no bot token or isolated test-channel ID is configured. Publication workers/live integration remain disabled, and the local dev database has zero publications. Details: [`reports/M4_PUBLICATION.md`](reports/M4_PUBLICATION.md).
 - Work began from clean `main` / `origin/main` at `ea8320b21fae97e2141e092ed76097187dbae257`, the M0 status handoff. M1 implementation/report commit `ea04651c8e61624d04d53d41323a60c19481c37e` and Persian-alias follow-up commit `5bf7aed9a4be40a98d3c25ead32e3eea8ffefc32` were pushed normally to `origin/main`; `git ls-remote origin refs/heads/main` confirmed the follow-up SHA. The untracked M1 task document is now included in Git.
 - M2 implementation commit `b813109e974e911b3352492620c84df6fbb65565` adds the canonical identity/review/queue app and includes `docs/M2_AGENT_TASK.md`; the Compose/Django/PostgreSQL fixture suite passed locally and the commit was pushed normally to `main`. M2 report: [`reports/M2_IDENTITY.md`](reports/M2_IDENTITY.md). No server deployment or M3 work occurred.
 - M3 implementation commit `bc7982e3798eb8725e9b3dc9f05bbe8c4d11a128` is locally verified and pushed normally to `main`; details and measured one-track probe output are in [`reports/M3_MEDIA.md`](reports/M3_MEDIA.md). Media acquisition is explicit/manual, yt-dlp is SoundCloud-only, Spotify stays review-only, and no publication or Telegram API behavior was added. No server deployment occurred.
@@ -51,8 +52,8 @@ Updated: 2026-10-02. M3 media acquisition and preparation implementation commit 
 | Spotify | oEmbed confirms profile identity without Premium; `spotipyFree` timed out for all three samples. | Resolve a bounded recent-release method before scheduling Spotify polling. No full audio is available from this evidence. |
 | Audio providers | One SoundCloud candidate downloaded completely and measured as AAC ~160 kbps. | No independent fallback is verified. Test one only after demonstrating an independent failure path. |
 | Source monitoring | SoundCloud and Spotify must remain independent. Initial interval hypotheses remain unverified. | Measure reliability, rate limits and release latency before selecting intervals. |
-| Telegram | M0 contains no gateway or channel configuration. | Later live tests must use an isolated test channel; never use production for tests. |
-| Admin and deployment | M0 provides Django's built-in schema and health only. | Full admin/domain schema, HTTPS, backup/restore and Telegram behavior belong to later milestones. |
+| Telegram | M4 provides a fake-tested state machine and an opt-in Bot API gateway; production targets are blocked. | Actual send/edit/player/reply/delete behavior remains unverified until local test credentials and an isolated channel are supplied. |
+| Admin and deployment | Domain state, templates and reconciliation records are visible through Django admin; no full custom panel or deployment occurred. | Full M5 operator flows, HTTPS and verified backup/restore remain later milestones. |
 
 ## M3 acceptance evidence
 
@@ -61,9 +62,18 @@ Updated: 2026-10-02. M3 media acquisition and preparation implementation commit 
 3. The complete local suite passed 44 tests; migrations and drift check, Django check, Compose build/config, all five health checks, `/health/`, and repository secret/media review passed. Full evidence: [`reports/M3_MEDIA.md`](reports/M3_MEDIA.md).
 4. Spotify remains review-only with no full-audio provider; no independent fallback is claimed. The probe does not imply broader SoundCloud coverage. Sources remain disabled/unverified; no production baseline, Telegram call, publication, deployment, or M4 work occurred.
 
-## Next milestone after owner review: M4
+## M4 acceptance evidence
 
-M3 is complete and awaits owner review. Do not infer that sources are ready for activation: verify each candidate's profile identity/recent official works, measure SoundCloud profile-feed coverage, and resolve a bounded Spotify recent-release method first. Keep every seed disabled/unverified and Spotify polling unavailable until those empirical gates pass. M4 publication behavior is not authorized by this handoff; await its task document and owner instruction. No Telegram publishing behavior is implemented by M3.
+1. Durable publication identities and pending attempts are committed before gateway work. PostgreSQL tests observed one publication/send under concurrent requests. Lost response, worker lease expiry and interrupted response persistence produce reconciliation records and stop blind resend; staff decisions require observed evidence and retain an audit.
+2. Rendered Persian/Latin captions pass conditional rows, HTML escaping, title-only bold, guest-only italics, `›` prior-single links, template-version preservation and bounded overflow publication tests. PRODUCT_SPEC and IMPLEMENTATION prior-single examples now consistently use `›`.
+3. Fake media upgrades preserve message ID/URL, audit the old/new candidate, create one correction reply and delete it at the configured 10-minute deadline. Failed/uncertain edits never send a replacement audio post. Late source/video links edit the existing caption.
+4. Album fixtures verify complete pre-staging and album-specific official cover, prior-single skip/bidirectional links, original order, failure at track 3, a 15-minute general-queue release and exact resume without resending the intro or tracks 1–2. Overflow posts are durable; later-added tracks do not rewrite the frozen session.
+5. Local Compose config/build/start, migrations and migration drift, Django check, all 78 tests, all five service health checks, `/health/` and secret/media staging scans passed. The local dev database still has 30 artists/57 sources, all disabled/unverified, and zero source items, baseline runs and publications.
+6. `probe_telegram --configuration-status` reported absent bot credentials/test target and disabled integration; no live probe or real Bot API request occurred. Real transport behavior remains an open empirical gate. No production post, source enablement, baseline, server deployment or M5 work occurred.
+
+## Next milestone after owner review: M5
+
+M4 is complete for its local implementation and fake-gateway acceptance, with live Telegram integration explicitly unverified. Await the owner's M5 task before building the full administrator product. Live testing first needs secure local bot configuration and an isolated test channel; production remains blocked. Source activation still requires verified profile identity/recent works, measured SoundCloud profile coverage and a bounded Spotify release method. Keep seed sources disabled/unverified until those empirical gates pass.
 
 ## Handoff record to maintain
 
