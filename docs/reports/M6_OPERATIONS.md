@@ -374,3 +374,76 @@ All IDs below are SoundCloud native IDs as persisted under the database uniquene
 - Final independent database/service verification passed at **`2026-10-02T16:29:51Z`** (19:59:51 Asia/Tehran). All three deployed services were healthy. No application commit, migration, administrator or server configuration change occurred.
 
 This pilot is complete and monitoring/publication remain disabled. Only `M6_OPERATIONS.md` and `STATUS.md` are changed for the documentation handoff. Remaining gates include broader verified-source coverage, backoff/rate-limit measurement, operator request execution, authenticated panel/recovery checks and later controlled activation.
+
+## Controlled Sijal scheduled polling pilot — 2026-10-02
+
+The owner authorized scheduled metadata polling for **Sijal SoundCloud source 32 only**, including worker/beat restart, followed by disabling the source again. The application remained the clean deployed SHA **`44d0c62cd59eb8701d9599ccf8aae5aadb5b46d0`** at `/opt/rapfadrop`. No application commit, migration, administrator, baseline, source verification, media acquisition or Telegram configuration change was authorized or performed.
+
+### Server-only setup and commands
+
+Preflight confirmed source 32 was verified and disabled, artist 16 was disabled, and its one completed baseline contained 51 historical items. All other sources/artists were disabled. Existing web/PostgreSQL/Redis were retained. Temporary worker/beat services used the exact deployed image `sha256:54dfd5b3560d010b26bef7fc7a7b4e75f3db0e997aa0d82d6cfbec14dacf6470`, host networking and the existing server environment through a protected overlay outside the application checkout:
+
+```sh
+docker compose -p rapfadrop \
+  -f /opt/rapfadrop/compose.internal.yaml \
+  -f /var/lib/rapfadrop-operations/polling-pilot.compose.yaml \
+  up -d --no-deps --no-build --wait --wait-timeout 90 worker beat
+```
+
+The server-only `/var/lib/rapfadrop-operations/polling_pilot.py` loaded the deployed Celery app and instrumented its existing adapter; it did not replace polling/upsert/backoff logic. The corrected process-local Django/Celery configuration asserted that beat contained only `sijal-only-due-poll`, dispatching `sources.tasks.poll_due_artist_sources` every **60 seconds** to dedicated queue **`sijal-pilot`**. Source 32 retained its **90-second** interval; not-yet-due scheduler ticks returned an empty result without provider access. The deployed metadata-only yt-dlp options (`skip_download=True`, `download=False`, 100-entry bound) were retained. Provider instrumentation rejected any source ID other than 32, sanitized errors and guarded Telegram gateway/DNS access. Telegram mode/live/publication worker stayed disabled with no bot/production-target configuration.
+
+```sh
+celery -A polling_pilot:app worker -Q sijal-pilot --concurrency=1 \
+  --pool=solo --loglevel=INFO --without-gossip --without-mingle \
+  --hostname=sijal-pilot@%h
+celery -A polling_pilot:app beat --loglevel=INFO \
+  --schedule=/pilot-state/celerybeat-schedule --max-interval=5
+python3 /var/lib/rapfadrop-operations/poll_pilot_controller.py
+```
+
+The root-only controller temporarily enabled **only source 32 and its required artist 16**, recording scoped audit events. It sampled database counts and row fingerprints every 10 seconds, bounded each window to 600 seconds, and installed a 12-minute systemd cleanup watchdog. The beat schedule file persisted across restart. Cleanup disabled both eligibility flags, stopped beat then worker, removed their temporary containers and cancelled the watchdog. Operational scripts/logs/results remained outside Git in the protected operations directory; the wrapper file was readable only through its explicit read-only container bind.
+
+### Observer faults and publication-envelope cleanup
+
+The first window started services at `16:41:04.073054Z`. It observed a successful 51-item poll and then HTTP 403. At `16:43:50.112891Z` the observer incorrectly applied the success timestamp assertion to the failed poll; its `finally` cleanup disabled Sijal and stopped both services by `16:43:53.381335Z`. This was an observer error, not a polling transaction failure. The observer was corrected to check success and failure timestamps separately, including the deployed exponential backoff formula.
+
+Inspection also found that the initial process-local Celery schedule assignment had been overwritten by lazy loading of Django settings. That beat dispatched **six publication task envelopes** to the default Redis `celery` queue. The worker consumed only `sijal-pilot`, so none of those envelopes executed. All publication/attempt/database queue counts stayed zero and no Telegram call occurred. The six decoded envelopes were checked to contain only `publication.tasks.process_due_publications` and removed individually with Redis `LREM`; no unrelated broker data was purged. Default queue length was then zero. **Consequently, an absolute claim that no publication work was queued during the entire pilot would be false**, even though no publication worker ran and no durable publication work was created.
+
+The wrapper was corrected by setting process-local `settings.CELERY_BEAT_SCHEDULE`/`CELERY_TASK_ROUTES`, forcing `app.config_from_object(..., namespace="CELERY", force=True)` and asserting the single polling schedule before startup. A disposable startup/import check without provider requests passed at `16:45:36.475041Z`; corrected beat logs contained only the polling schedule. Corrected services started at `16:46:08.821669Z`. No project file or persisted `.env` was changed by these corrections.
+
+### Observed due polls and restart
+
+All times below are **UTC on 2026-10-02**. Successful polls each returned the existing **51 IDs** listed in the baseline section above. Failure audits contain `SourceUnavailable` wrapping yt-dlp's `DownloadError`: `Unable to download JSON metadata: HTTP Error 403: Forbidden`. A 403 does not prove rate limiting; there was no observed 429 or Retry-After response.
+
+| Window / audit ID | Poll start (stored success/error time) | Audit completion | Result / provider seconds | Stored next due | Failure count |
+| --- | --- | --- | --- | --- | --- |
+| Initial / 9 | 16:41:38.339832 | 16:42:07.169101 | 51 existing items / 28.769 s | 16:43:08.339832 | 0 |
+| Initial / 10 | 16:43:38.343342 | 16:43:38.699920 | HTTP 403 / 0.313 s | 16:45:08.343342 | 1 |
+| Corrected / 13 | 16:46:42.800338 | 16:47:13.247678 | 51 existing items / 30.362 s | 16:48:12.800338 | 0 |
+| Corrected / 14 | 16:48:42.795259 | 16:48:43.169942 | HTTP 403 / 0.350 s | 16:50:12.795259 | 1 |
+| Corrected, after restart / 15 | 16:50:42.791639 | 16:50:43.588396 | HTTP 403 / 0.770 s | 16:53:42.791639 | 2 |
+| Corrected, after restart / 16 | 16:53:42.800639 | 16:54:12.813316 | 51 existing items / 29.948 s | 16:55:12.800639 | 0 |
+
+The application stores its initial poll `now` in `last_success_at` or `last_error_at`; audit completion is measured separately. Success advances next due by exactly 90 seconds, resets failures and clears the error. Failure preserves last success and sets next due from error time using `min(90 * 2 ** (failures - 1), 21600)` seconds. The observed consecutive failures produced **90 then 180 seconds**, survived restart, and were cleared by the final success. The 60-second beat cadence explains approximately 30-second lateness on some due polls; no early provider retry was observed. Higher backoff steps, the six-hour cap and explicit 429 handling were not exercised.
+
+Restart began at **`16:48:45.826710Z`** and completed at **`16:49:15.379633Z`**. With both Compose files above, the controller executed:
+
+```sh
+docker compose ... stop -t 30 beat
+docker compose ... restart -t 90 worker
+docker compose ... up -d --no-deps --no-build --wait --wait-timeout 90 worker beat
+```
+
+Here `...` means the same project and two absolute `-f` paths shown above. The scheduler state directory was retained. Database fingerprints were identical before and immediately after restart, and remained identical through two further due polls, including the final successful 51-item upsert. Corrected logs show **8 polling task dispatches**: **4 due provider calls** and **4 empty/not-yet-due task results**, with **0 publication task dispatches**. The completed corrected window lasted **522.865 seconds**; the aborted initial window lasted **200.991 seconds**. These are bounded observations, not evidence that a 90-second source interval is sustainable: three of six provider calls returned 403.
+
+### Final safety and persisted state
+
+- SourceItem row/content fingerprint matched the pre-pilot value throughout both windows and restart: **51 rows**, all historical `from_baseline=True`, **0 new rows**, **0 duplicate `(platform, native_item_id)` groups**. One completed BaselineRun was unchanged; no new baseline ran.
+- ProcessingQueueItem, MediaCandidate, MediaAttempt, Publication, PublicationAttempt and OperatorActionRequest counts stayed **0**. No audio download, media task or publication execution occurred. The initial six discarded Redis publication envelopes are the exception documented above; the corrected window queued none.
+- Instrumented provider-call IDs were **`[32, 32, 32, 32, 32, 32]`**. Other **56 source rows**, **29 artist rows** and other-source audit fingerprints matched throughout and across both windows. Their enabled/verification state was unchanged.
+- Telegram gateway/DNS guard events: **0** across both windows. Telegram API calls: **0 observed**; bot/production target absent, Telegram and publication configuration disabled throughout, publication workers never consumed a queue.
+- Cleanup completed at **`16:54:19.448832Z`**; both stop commands returned 0. Final controller verification at **`16:54:21.586538Z`** confirmed source 32 and artist 16 disabled and temporary worker/beat containers removed. The watchdog is inactive. Server-only evidence remains in `/var/lib/rapfadrop-operations/polling-pilot.result.json`, `polling-pilot.logs` and their `.attempt1` copies.
+- Independent final readback at **`16:55:45Z`** confirmed **30 artists, 57 sources, 0 enabled artists/sources, 1 verified source, 51 historical items, 1 baseline and 0 duplicate IDs**. Redis `celery` and `sijal-pilot` queue lengths were **0**. Sijal retained `last_success_at=2026-10-02T16:53:42.800639+00:00`, `next_poll_at=2026-10-02T16:55:12.800639+00:00`, failure count 0 and an empty error; being disabled makes that timestamp ineligible for polling.
+- Only original web/PostgreSQL/Redis services remained, all healthy. Server-IP `/health/` returned HTTP 200 with `{"status":"ok","database":"ok"}`. DEBUG=false, persisted `.env` fingerprint, clean deployed SHA, Nginx hashes and normalized IPv4/IPv6/nftables firewall snapshots were unchanged. Timestamp comments from `iptables-save` were excluded when comparing rules.
+
+This controlled pilot is stopped. Polling, media/publication and Telegram remain disabled. Documentation-only delivery changes `M6_OPERATIONS.md` and `STATUS.md`; the server application SHA is unchanged. The stored-item/restart/isolation and observed error-backoff checks passed, but the initial publication-envelope scheduling requirement failed and was corrected. Further activation needs provider 403 diagnosis and a measured sustainable interval; permanent worker/beat operation, broader source coverage, explicit rate-limit behavior and media/publication recovery remain deferred.
