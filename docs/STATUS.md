@@ -1,6 +1,6 @@
 # Project status and handoff
 
-Updated: 2026-10-02. M2 implementation commit `b813109` (`b813109e974e911b3352492620c84df6fbb65565`) passed local verification and was pushed normally to `origin/main`. This status handoff will be pushed as a follow-up; its SHA is the final branch checkpoint. No deployment was performed, per the M2 instruction.
+Updated: 2026-10-02. M2 implementation commit `b813109` (`b813109e974e911b3352492620c84df6fbb65565`) passed local verification and was pushed normally to `origin/main`; its observed results are recorded in this handoff and [`reports/M2_IDENTITY.md`](reports/M2_IDENTITY.md). No deployment was performed, per the M2 instruction.
 
 ## Current state
 
