@@ -1,6 +1,6 @@
 # Project status and handoff
 
-Updated: 2026-10-02. M1 is implemented and verified locally; the pushed implementation SHA is recorded below. No deployment was performed, per the M1 instruction.
+Updated: 2026-10-02. M2 identity/review/queue implementation is verified locally and will be pushed to `main`; no deployment was performed, per the M2 instruction. The final pushed SHA will be recorded after delivery.
 
 ## Current state
 
@@ -31,6 +31,15 @@ Updated: 2026-10-02. M1 is implemented and verified locally; the pushed implemen
 5. No M1 source profile probes, deployment, Telegram API call or publication occurred.
 6. UTF-8 verified: product-spec Persian aliases were read explicitly as UTF-8, seeded, read back from PostgreSQL and displayed by `source_status` and the authenticated admin list test. All seed alias fields are populated; owner-added aliases survive reseeding.
 
+## M2 acceptance evidence
+
+1. Added the `releases` app and initial migration for canonical releases/tracks, credits, ordered release membership and prior-single relations, source matches, review/audit records, and a database-constrained inert future-work queue.
+2. Deterministic, transaction-safe ingestion of an already stored source item is idempotent. Comparison handles Persian/Arabic forms, نیم‌فاصله/whitespace, punctuation, case, zero-width formatting and feature separators without rewriting source or official display text. High-confidence matching reuses a candidate; uncertain or conflicting evidence routes to review.
+3. PostgreSQL fixtures verified same-artist SoundCloud/Spotify deduplication, isolation of same-title works by different artists, date/uploader/duration conflicts, all five named version classes, playlist/missing-duration review, single-before-album track reuse/order/prior-single linkage, and no second canonical-track queue item.
+4. Review approve/reject/correct/requeue decisions are actor-audited and idempotent; an authenticated Django admin test inspected and approved a review. Queue retry fixtures confirmed bounded exponential due-time updates with media/publication behavior absent.
+5. Local Compose config/build/start, migration and migration-drift checks, Django check, all 29 tests (including concurrent PostgreSQL ingestion), five healthy service checks, `/health/`, and source-only secret/media staging review passed. Full results are in [`reports/M2_IDENTITY.md`](reports/M2_IDENTITY.md).
+6. No provider request, source enablement, baseline run, media processing, Telegram call, server deployment, or M3 work occurred. The local M1 seed remains 30 artists/57 sources, all disabled/unverified; the source-item and baseline tables remain empty outside test fixtures.
+
 ## Decisions, assumptions and gates
 
 | Topic | Current rule or observation | Verification / remaining choice |
@@ -43,9 +52,9 @@ Updated: 2026-10-02. M1 is implemented and verified locally; the pushed implemen
 | Telegram | M0 contains no gateway or channel configuration. | Later live tests must use an isolated test channel; never use production for tests. |
 | Admin and deployment | M0 provides Django's built-in schema and health only. | Full admin/domain schema, HTTPS, backup/restore and Telegram behavior belong to later milestones. |
 
-## Next milestone after owner review: M2 — identity and queue
+## Next milestone after owner review: M3
 
-M1 is complete. Before enabling any seed, verify its profile identity and recent official works; empirically test SoundCloud profile-feed coverage and resolve an explicitly bounded Spotify recent-release method. Keep Spotify unavailable until that gate passes. The proposed M2 scope is canonical release/track identity, cross-source matching, edition/album relationships, review states and a durable queue. Do not infer those behaviors from M1 source items; no M2 code has been started.
+M2 is complete and awaits owner review. Do not infer that sources are ready for activation: verify each candidate's profile identity/recent official works, measure SoundCloud profile-feed coverage, and resolve a bounded Spotify recent-release method first. Keep every seed disabled/unverified and Spotify polling unavailable until those empirical gates pass. M3 scope is not started or authorized by this handoff; wait for its task document and owner instruction. Media acquisition and Telegram publication remain later milestones.
 
 ## Handoff record to maintain
 

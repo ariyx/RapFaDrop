@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     "core",
     "diagnostics",
     "sources",
+    "releases",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
