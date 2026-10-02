@@ -4,11 +4,11 @@ Updated: 2026-10-02. M1 is implemented and verified locally; the pushed implemen
 
 ## Current state
 
-- Work began from clean `main` / `origin/main` at `ea8320b21fae97e2141e092ed76097187dbae257`, the M0 status handoff. M1 code and discovery report commit `ea04651c8e61624d04d53d41323a60c19481c37e` was pushed normally to `origin/main`; `git ls-remote origin refs/heads/main` returned that exact SHA. The status-file update is a subsequent documentation-only commit.
+- Work began from clean `main` / `origin/main` at `ea8320b21fae97e2141e092ed76097187dbae257`, the M0 status handoff. M1 implementation/report commit `ea04651c8e61624d04d53d41323a60c19481c37e` and Persian-alias follow-up commit `5bf7aed9a4be40a98d3c25ead32e3eea8ffefc32` were pushed normally to `origin/main`; `git ls-remote origin refs/heads/main` confirmed the follow-up SHA. The untracked M1 task document is now included in Git.
 - The M0 implementation commit is `0c4952d30fb5abd8f4c0718ca5c51eee7c37985b`; its provider and deployment observations remain in [`reports/M0_FEASIBILITY.md`](reports/M0_FEASIBILITY.md).
 - M1 adds durable artist/source/item/baseline/audit records, disabled/unverified seed data, separate SoundCloud and Spotify adapters, scheduled due-only polling, idempotent history snapshots, per-source backoff, admin screens and operator commands. No release queue, media download, Telegram integration or publication exists.
-- Local Compose build/start, migrations, migration drift check, Django check, all 16 automated tests, all five service health checks and `/health/` passed. Seed import observed 30 artists and 57 sources: 30 Spotify and 27 SoundCloud. All are disabled/unverified; missing SoundCloud sources remain blank for Fadaei, Ho3ein and Amir Tataloo. The local database has zero source items and zero baseline runs because no candidate was verified or activated.
-- Baseline/poll behavior passed fake-backed tests: duplicate IDs persist once, interrupted writes roll back and retry, and a failing due source backs off without blocking a healthy source. The admin identifies SoundCloud profile polling as implemented but empirically unprobed; Spotify release polling is explicitly unavailable.
+- Local Compose build/start, migrations, migration drift check, Django check, all 17 automated tests, all five service health checks and `/health/` passed. Seed import observed 30 artists and 57 sources: 30 Spotify and 27 SoundCloud. Persian aliases from the UTF-8 product spec persist on all 30 artists and render in management/admin; the authenticated admin round-trip test passed. All sources remain disabled/unverified; missing SoundCloud sources remain blank for Fadaei, Ho3ein and Amir Tataloo. The local database has zero source items and zero baseline runs because no candidate was verified or activated.
+- Baseline/poll behavior passed fake-backed tests: duplicate IDs persist once, interrupted writes roll back and retry, and a failing due source backs off without blocking a healthy source. Persian aliases from the UTF-8 product specification are seeded and tested through persistence, management output and the Django admin list. The admin identifies SoundCloud profile polling as implemented but empirically unprobed; Spotify release polling is explicitly unavailable.
 - M1 did not run new provider probes because all profile candidates remain unverified. Existing M0 SoundCloud track/set evidence does not establish profile-feed coverage; Spotify's sampled release path timed out and oEmbed supplied identity only. Details and open gates are in [`reports/M1_DISCOVERY.md`](reports/M1_DISCOVERY.md).
 - No server deployment, Telegram call or production channel post occurred for M1. Local Compose services were stopped after verification; the PostgreSQL volume was preserved.
 - SoundCloud is verified only for the supplied track/set. Spotify is partially verified for public oEmbed identity on three profiles; the sampled `spotipyFree` release path timed out, so recent-release coverage remains open. One `yt-dlp` SoundCloud download was completed, measured and deleted; no independent fallback was verified.
@@ -24,11 +24,12 @@ Updated: 2026-10-02. M1 is implemented and verified locally; the pushed implemen
 
 ## M1 acceptance evidence
 
-1. Passed locally: Compose config/build/start, migrations and migration drift check, Django system check, 16 tests, five healthy services and the database-backed health response.
+1. Passed locally: Compose config/build/start, migrations and migration drift check, Django system check, 17 tests, five healthy services and the database-backed health response.
 2. Seeded and observed: 30 artists, 57 disabled/unverified profile candidates (30 Spotify, 27 SoundCloud); no fan substitution for the three missing SoundCloud profiles.
 3. Passed with fakes: initial baseline snapshots, idempotent item IDs, simulated interruption/retry, sanitized remote metadata, inactive-source skipping, source-specific exponential backoff and independent source outcomes.
 4. Spotify: release polling remains unavailable; identity-only M0 evidence is partial.
 5. No M1 source profile probes, deployment, Telegram API call or publication occurred.
+6. UTF-8 verified: product-spec Persian aliases were read explicitly as UTF-8, seeded, read back from PostgreSQL and displayed by `source_status` and the authenticated admin list test. All seed alias fields are populated; owner-added aliases survive reseeding.
 
 ## Decisions, assumptions and gates
 
