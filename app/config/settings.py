@@ -115,13 +115,9 @@ CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = None
 CELERY_TASK_IGNORE_RESULT = True
 CELERY_TIMEZONE = "UTC"
-CELERY_BEAT_SCHEDULE = {
-    "publication-recovery-and-correction-deletion": {
-        "task": "publication.tasks.process_due_publications",
-        "schedule": 30.0,
-    },
-    "poll-due-artist-sources": {
-        "task": "sources.tasks.poll_due_artist_sources",
-        "schedule": 60.0,
-    },
-}
+from .scheduling import beat_schedule
+
+CELERY_BEAT_SCHEDULE = beat_schedule(PUBLICATION_WORKER_ENABLED, TELEGRAM_LIVE_ENABLED, TELEGRAM_MODE)
+
+# No empirical public method has passed the repeatable recent-release gate.
+SPOTIFY_DISCOVERY_MODE = os.environ.get("RAPFADROP_SPOTIFY_DISCOVERY_MODE", "unavailable")

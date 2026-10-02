@@ -1,0 +1,1692 @@
+{
+  "observed_date": "2026-10-02",
+  "environment": "local Docker Python 3.13; unauthenticated metadata-only GETs",
+  "timeout_seconds": 12,
+  "overall_method_deadline_seconds": 26,
+  "max_response_bytes": 1048576,
+  "rounds": 2,
+  "no_adapter_selected": true,
+  "results": [
+    {
+      "artist": "Sijal",
+      "round": 1,
+      "artist_id": "5F0BGBdSL945Bzxrq8aGbn",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F5F0BGBdSL945Bzxrq8aGbn",
+      "observed_at": "2026-10-02T18:03:23.559745+00:00",
+      "items": [],
+      "identity_title": "Sijal",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 0.87,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "identity only; no release listing",
+      "pagination": {},
+      "elapsed_seconds": 0.87
+    },
+    {
+      "artist": "Sijal",
+      "round": 1,
+      "artist_id": "5F0BGBdSL945Bzxrq8aGbn",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/5F0BGBdSL945Bzxrq8aGbn",
+      "observed_at": "2026-10-02T18:03:25.430527+00:00",
+      "items": [],
+      "identity_title": "Sijal",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.744,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "public page subset; release chronology unproven",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.744
+    },
+    {
+      "artist": "Sijal",
+      "round": 1,
+      "artist_id": "5F0BGBdSL945Bzxrq8aGbn",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/5F0BGBdSL945Bzxrq8aGbn",
+      "observed_at": "2026-10-02T18:03:28.179859+00:00",
+      "items": [
+        {
+          "id": "4shGMwLxYjEHaGqoGgbpw5",
+          "title": "Fogholade",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4shGMwLxYjEHaGqoGgbpw5"
+        },
+        {
+          "id": "5XauDXikxxSnvMfAbjUKeZ",
+          "title": "Bargard",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5XauDXikxxSnvMfAbjUKeZ"
+        },
+        {
+          "id": "6yNVVGfGQWwJA2xPeUYJUx",
+          "title": "‌Nakhla",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6yNVVGfGQWwJA2xPeUYJUx"
+        },
+        {
+          "id": "75RUP3gK3c03V0W8kPkwyc",
+          "title": "Chikar Kardi",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/75RUP3gK3c03V0W8kPkwyc"
+        },
+        {
+          "id": "4Rm7c7rbuIU9M21b5i9ieq",
+          "title": "Extasy",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4Rm7c7rbuIU9M21b5i9ieq"
+        },
+        {
+          "id": "5y3FM8OQ6kEbULBRM6OCCs",
+          "title": "Berim Baham",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5y3FM8OQ6kEbULBRM6OCCs"
+        },
+        {
+          "id": "6wJdmfNVis1m4gvr2h6yek",
+          "title": "Mohem Ni",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6wJdmfNVis1m4gvr2h6yek"
+        },
+        {
+          "id": "3u2PNY5CIL01IyQ87UXO7H",
+          "title": "Ey Jan",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/3u2PNY5CIL01IyQ87UXO7H"
+        },
+        {
+          "id": "2vtvKj6xgVJ2DMOdUKFDvP",
+          "title": "Man Delam Mikhad",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/2vtvKj6xgVJ2DMOdUKFDvP"
+        },
+        {
+          "id": "6LMxAhRtBWlTJ2xY4vFJ03",
+          "title": "Hichki Mese Man",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6LMxAhRtBWlTJ2xY4vFJ03"
+        }
+      ],
+      "identity_title": "Sijal",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.016,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "embed trackList order; not a recent-release feed",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.016
+    },
+    {
+      "artist": "Sijal",
+      "round": 1,
+      "artist_id": "5F0BGBdSL945Bzxrq8aGbn",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/5F0BGBdSL945Bzxrq8aGbn/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:03:30.197678+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 0.7,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 0.7
+    },
+    {
+      "artist": "Fadaei",
+      "round": 1,
+      "artist_id": "5aWL79DpD45MzDMwCTZqsN",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F5aWL79DpD45MzDMwCTZqsN",
+      "observed_at": "2026-10-02T18:03:31.897879+00:00",
+      "items": [],
+      "identity_title": "Fadaei",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 2.398,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "identity only; no release listing",
+      "pagination": {},
+      "elapsed_seconds": 2.398
+    },
+    {
+      "artist": "Fadaei",
+      "round": 1,
+      "artist_id": "5aWL79DpD45MzDMwCTZqsN",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/5aWL79DpD45MzDMwCTZqsN",
+      "observed_at": "2026-10-02T18:03:35.297071+00:00",
+      "items": [],
+      "identity_title": "Fadaei",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.306,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "public page subset; release chronology unproven",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.306
+    },
+    {
+      "artist": "Fadaei",
+      "round": 1,
+      "artist_id": "5aWL79DpD45MzDMwCTZqsN",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/5aWL79DpD45MzDMwCTZqsN",
+      "observed_at": "2026-10-02T18:03:37.612876+00:00",
+      "items": [
+        {
+          "id": "4hykqiMBDqLk7Mtofe7l92",
+          "title": "Soghoot",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4hykqiMBDqLk7Mtofe7l92"
+        },
+        {
+          "id": "6EIjTnSFL2ATKXeBpULVYR",
+          "title": "Ma Yademoon Nemire",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6EIjTnSFL2ATKXeBpULVYR"
+        },
+        {
+          "id": "0B5uYA6iwxjF3cTYYMo6J0",
+          "title": "Bilit",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/0B5uYA6iwxjF3cTYYMo6J0"
+        },
+        {
+          "id": "4HAVPm3pCYKVXunhkLXFdy",
+          "title": "Khodafez",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4HAVPm3pCYKVXunhkLXFdy"
+        },
+        {
+          "id": "4IMTOwiW6M1fUo3TgmQzJy",
+          "title": "Menare",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4IMTOwiW6M1fUo3TgmQzJy"
+        },
+        {
+          "id": "14y8R9RkTjfMJK0XGrZDL3",
+          "title": "Fatehe",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/14y8R9RkTjfMJK0XGrZDL3"
+        },
+        {
+          "id": "3Y3dfANdwPcVruRp2HQNLy",
+          "title": "Timarestane Dahe 60",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/3Y3dfANdwPcVruRp2HQNLy"
+        },
+        {
+          "id": "5wQkPqqrrgZpWDdlleYK22",
+          "title": "Khaen",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5wQkPqqrrgZpWDdlleYK22"
+        },
+        {
+          "id": "1Z9RAL9hc6UmNiloW07Gp6",
+          "title": "Iran Iran 2",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1Z9RAL9hc6UmNiloW07Gp6"
+        },
+        {
+          "id": "1uZVuX2ZVGqqrylxdN1pSl",
+          "title": "Migiri",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1uZVuX2ZVGqqrylxdN1pSl"
+        }
+      ],
+      "identity_title": "Fadaei",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 2.569,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "embed trackList order; not a recent-release feed",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 2.569
+    },
+    {
+      "artist": "Fadaei",
+      "round": 1,
+      "artist_id": "5aWL79DpD45MzDMwCTZqsN",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/5aWL79DpD45MzDMwCTZqsN/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:03:41.184612+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 0.645,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 0.645
+    },
+    {
+      "artist": "Ho3ein",
+      "round": 1,
+      "artist_id": "5vVveQB8n4kETe67waTS3t",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F5vVveQB8n4kETe67waTS3t",
+      "observed_at": "2026-10-02T18:03:42.829872+00:00",
+      "items": [],
+      "identity_title": "Ho3ein",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.415,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "identity only; no release listing",
+      "pagination": {},
+      "elapsed_seconds": 1.415
+    },
+    {
+      "artist": "Ho3ein",
+      "round": 1,
+      "artist_id": "5vVveQB8n4kETe67waTS3t",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/5vVveQB8n4kETe67waTS3t",
+      "observed_at": "2026-10-02T18:03:45.245868+00:00",
+      "items": [],
+      "identity_title": "Ho3ein",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 5.329,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "public page subset; release chronology unproven",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 5.329
+    },
+    {
+      "artist": "Ho3ein",
+      "round": 1,
+      "artist_id": "5vVveQB8n4kETe67waTS3t",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/5vVveQB8n4kETe67waTS3t",
+      "observed_at": "2026-10-02T18:03:51.577994+00:00",
+      "items": [
+        {
+          "id": "0GjX7igOYf7jzPtQHDss87",
+          "title": "33",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/0GjX7igOYf7jzPtQHDss87"
+        },
+        {
+          "id": "22cRr8Qxt2Dy0lxAKcBJKl",
+          "title": "Be Mula",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/22cRr8Qxt2Dy0lxAKcBJKl"
+        },
+        {
+          "id": "7hVyV4bsKttmvPCPSRRTy1",
+          "title": "Goolle",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/7hVyV4bsKttmvPCPSRRTy1"
+        },
+        {
+          "id": "6sBKN9LisPxpSe60axcn3M",
+          "title": "Kabk",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6sBKN9LisPxpSe60axcn3M"
+        },
+        {
+          "id": "33vN48hKPbKhxcgKK2outP",
+          "title": "Hale",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/33vN48hKPbKhxcgKK2outP"
+        },
+        {
+          "id": "4IDb04m1mEmBa85AzkgrMN",
+          "title": "Jangale Tarik - Arash Mohseni Remix",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4IDb04m1mEmBa85AzkgrMN"
+        },
+        {
+          "id": "2eI5UQIxIVMXwM6Mii7WIg",
+          "title": "Jangale Tarik",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/2eI5UQIxIVMXwM6Mii7WIg"
+        },
+        {
+          "id": "5EHnG3svLYOPSNmBkDfDwC",
+          "title": "Hale - Arash Mohseni Remix",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5EHnG3svLYOPSNmBkDfDwC"
+        }
+      ],
+      "identity_title": "Ho3ein",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 0.85,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "embed trackList order; not a recent-release feed",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 0.85
+    },
+    {
+      "artist": "Ho3ein",
+      "round": 1,
+      "artist_id": "5vVveQB8n4kETe67waTS3t",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/5vVveQB8n4kETe67waTS3t/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:03:53.431004+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 0.546,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 0.546
+    },
+    {
+      "artist": "Yas",
+      "round": 1,
+      "artist_id": "7b8pXheEOc28fyFJnQzqmL",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F7b8pXheEOc28fyFJnQzqmL",
+      "observed_at": "2026-10-02T18:03:54.977489+00:00",
+      "items": [],
+      "identity_title": "Yas",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.659,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "identity only; no release listing",
+      "pagination": {},
+      "elapsed_seconds": 1.659
+    },
+    {
+      "artist": "Yas",
+      "round": 1,
+      "artist_id": "7b8pXheEOc28fyFJnQzqmL",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/7b8pXheEOc28fyFJnQzqmL",
+      "observed_at": "2026-10-02T18:03:57.637062+00:00",
+      "items": [],
+      "identity_title": "Yas",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 7.646,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "public page subset; release chronology unproven",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 7.646
+    },
+    {
+      "artist": "Yas",
+      "round": 1,
+      "artist_id": "7b8pXheEOc28fyFJnQzqmL",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/7b8pXheEOc28fyFJnQzqmL",
+      "observed_at": "2026-10-02T18:04:06.287440+00:00",
+      "items": [
+        {
+          "id": "0I4FDDNlSdZMqKLoimDiqe",
+          "title": "Esalat",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/0I4FDDNlSdZMqKLoimDiqe"
+        },
+        {
+          "id": "5P7Q1nGwx6xQQExAAH5OZP",
+          "title": "Sefareshi",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5P7Q1nGwx6xQQExAAH5OZP"
+        },
+        {
+          "id": "1gFaSN5y4A3j6w29ZtHqrc",
+          "title": "LaL",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1gFaSN5y4A3j6w29ZtHqrc"
+        },
+        {
+          "id": "1tbyxH9PyXNwtQLKkMnhSh",
+          "title": "Man Edame Midam (I'll Continue)",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1tbyxH9PyXNwtQLKkMnhSh"
+        },
+        {
+          "id": "3YeJZkiqBGunDI00quNy6e",
+          "title": "Sarkoob",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/3YeJZkiqBGunDI00quNy6e"
+        },
+        {
+          "id": "3j3upAlZKCOl2WmAlfmIXX",
+          "title": "Bad Shodam",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/3j3upAlZKCOl2WmAlfmIXX"
+        },
+        {
+          "id": "2dEIebIAX2OhEavrPpk3Pi",
+          "title": "Vasiat Nameh",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/2dEIebIAX2OhEavrPpk3Pi"
+        },
+        {
+          "id": "3i8eZtkbzUQSh3Ubyojnqq",
+          "title": "Boghz Yani",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/3i8eZtkbzUQSh3Ubyojnqq"
+        },
+        {
+          "id": "6RDfyMTR3n7auupr0YaQiW",
+          "title": "Sakhte",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6RDfyMTR3n7auupr0YaQiW"
+        },
+        {
+          "id": "0lwbUHpym90RNfmqSXPZp5",
+          "title": "BEEM / بیم",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/0lwbUHpym90RNfmqSXPZp5"
+        }
+      ],
+      "identity_title": "Yas",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.844,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "embed trackList order; not a recent-release feed",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.844
+    },
+    {
+      "artist": "Yas",
+      "round": 1,
+      "artist_id": "7b8pXheEOc28fyFJnQzqmL",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/7b8pXheEOc28fyFJnQzqmL/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:04:09.134482+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 0.471,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 0.471
+    },
+    {
+      "artist": "Hichkas",
+      "round": 1,
+      "artist_id": "2X90kCLyxyPeJ5nynJGbvT",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F2X90kCLyxyPeJ5nynJGbvT",
+      "observed_at": "2026-10-02T18:04:10.606507+00:00",
+      "items": [],
+      "identity_title": "Hichkas",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 0.792,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "identity only; no release listing",
+      "pagination": {},
+      "elapsed_seconds": 0.792
+    },
+    {
+      "artist": "Hichkas",
+      "round": 1,
+      "artist_id": "2X90kCLyxyPeJ5nynJGbvT",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/2X90kCLyxyPeJ5nynJGbvT",
+      "observed_at": "2026-10-02T18:04:12.399650+00:00",
+      "items": [],
+      "identity_title": "Hichkas",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.798,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "public page subset; release chronology unproven",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.798
+    },
+    {
+      "artist": "Hichkas",
+      "round": 1,
+      "artist_id": "2X90kCLyxyPeJ5nynJGbvT",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/2X90kCLyxyPeJ5nynJGbvT",
+      "observed_at": "2026-10-02T18:04:15.207600+00:00",
+      "items": [
+        {
+          "id": "7wpdZLPwob9OzQOFDDHNER",
+          "title": "Rooye Jenazat Miraghsam",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/7wpdZLPwob9OzQOFDDHNER"
+        },
+        {
+          "id": "2dQRmru5lr8BP9qvUSKoS9",
+          "title": "Yani Chi Nemishe",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/2dQRmru5lr8BP9qvUSKoS9"
+        },
+        {
+          "id": "4WQqlK29ELRU3DpdJzvlgF",
+          "title": "Har Ye Rooz",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4WQqlK29ELRU3DpdJzvlgF"
+        },
+        {
+          "id": "32NFgR05FxPQh6DIxbSwmP",
+          "title": "Hanoo Be Yadetam",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/32NFgR05FxPQh6DIxbSwmP"
+        },
+        {
+          "id": "61HBwIji5hb8YCFizrXz3k",
+          "title": "Ekhtelaf",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/61HBwIji5hb8YCFizrXz3k"
+        },
+        {
+          "id": "5jSOdSOPomeMRumvq82NHd",
+          "title": "Inyekiam Vase",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5jSOdSOPomeMRumvq82NHd"
+        },
+        {
+          "id": "1nRndb7YOCvmsCpDonLcdr",
+          "title": "Ma Edame Darim",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1nRndb7YOCvmsCpDonLcdr"
+        },
+        {
+          "id": "1o3v0Di8psoTW2wbRgHuXa",
+          "title": "Man Chizi Ke Mikham",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1o3v0Di8psoTW2wbRgHuXa"
+        },
+        {
+          "id": "2bltoykP2tNvs1VbYmVYlT",
+          "title": "Anjām Vazife",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/2bltoykP2tNvs1VbYmVYlT"
+        },
+        {
+          "id": "4rbCsMlhhExboVnhlKbCQv",
+          "title": "Bezan",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4rbCsMlhhExboVnhlKbCQv"
+        }
+      ],
+      "identity_title": "Hichkas",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.036,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "embed trackList order; not a recent-release feed",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.036
+    },
+    {
+      "artist": "Hichkas",
+      "round": 1,
+      "artist_id": "2X90kCLyxyPeJ5nynJGbvT",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/2X90kCLyxyPeJ5nynJGbvT/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:04:17.243296+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 0.904,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 0.904
+    },
+    {
+      "artist": "Sijal",
+      "round": 2,
+      "artist_id": "5F0BGBdSL945Bzxrq8aGbn",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F5F0BGBdSL945Bzxrq8aGbn",
+      "observed_at": "2026-10-02T18:04:19.147883+00:00",
+      "items": [],
+      "identity_title": "Sijal",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 0.76,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "identity only; no release listing",
+      "pagination": {},
+      "elapsed_seconds": 0.76
+    },
+    {
+      "artist": "Sijal",
+      "round": 2,
+      "artist_id": "5F0BGBdSL945Bzxrq8aGbn",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/5F0BGBdSL945Bzxrq8aGbn",
+      "observed_at": "2026-10-02T18:04:20.907921+00:00",
+      "items": [],
+      "identity_title": "Sijal",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.013,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "public page subset; release chronology unproven",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.013
+    },
+    {
+      "artist": "Sijal",
+      "round": 2,
+      "artist_id": "5F0BGBdSL945Bzxrq8aGbn",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/5F0BGBdSL945Bzxrq8aGbn",
+      "observed_at": "2026-10-02T18:04:22.933786+00:00",
+      "items": [
+        {
+          "id": "4shGMwLxYjEHaGqoGgbpw5",
+          "title": "Fogholade",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4shGMwLxYjEHaGqoGgbpw5"
+        },
+        {
+          "id": "5XauDXikxxSnvMfAbjUKeZ",
+          "title": "Bargard",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5XauDXikxxSnvMfAbjUKeZ"
+        },
+        {
+          "id": "6yNVVGfGQWwJA2xPeUYJUx",
+          "title": "‌Nakhla",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6yNVVGfGQWwJA2xPeUYJUx"
+        },
+        {
+          "id": "75RUP3gK3c03V0W8kPkwyc",
+          "title": "Chikar Kardi",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/75RUP3gK3c03V0W8kPkwyc"
+        },
+        {
+          "id": "4Rm7c7rbuIU9M21b5i9ieq",
+          "title": "Extasy",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4Rm7c7rbuIU9M21b5i9ieq"
+        },
+        {
+          "id": "5y3FM8OQ6kEbULBRM6OCCs",
+          "title": "Berim Baham",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5y3FM8OQ6kEbULBRM6OCCs"
+        },
+        {
+          "id": "6wJdmfNVis1m4gvr2h6yek",
+          "title": "Mohem Ni",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6wJdmfNVis1m4gvr2h6yek"
+        },
+        {
+          "id": "3u2PNY5CIL01IyQ87UXO7H",
+          "title": "Ey Jan",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/3u2PNY5CIL01IyQ87UXO7H"
+        },
+        {
+          "id": "2vtvKj6xgVJ2DMOdUKFDvP",
+          "title": "Man Delam Mikhad",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/2vtvKj6xgVJ2DMOdUKFDvP"
+        },
+        {
+          "id": "6LMxAhRtBWlTJ2xY4vFJ03",
+          "title": "Hichki Mese Man",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6LMxAhRtBWlTJ2xY4vFJ03"
+        }
+      ],
+      "identity_title": "Sijal",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 2.501,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "embed trackList order; not a recent-release feed",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 2.501
+    },
+    {
+      "artist": "Sijal",
+      "round": 2,
+      "artist_id": "5F0BGBdSL945Bzxrq8aGbn",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/5F0BGBdSL945Bzxrq8aGbn/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:04:26.436800+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 0.558,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 0.558
+    },
+    {
+      "artist": "Fadaei",
+      "round": 2,
+      "artist_id": "5aWL79DpD45MzDMwCTZqsN",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F5aWL79DpD45MzDMwCTZqsN",
+      "observed_at": "2026-10-02T18:04:27.995302+00:00",
+      "items": [],
+      "identity_title": "Fadaei",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.298,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "identity only; no release listing",
+      "pagination": {},
+      "elapsed_seconds": 1.298
+    },
+    {
+      "artist": "Fadaei",
+      "round": 2,
+      "artist_id": "5aWL79DpD45MzDMwCTZqsN",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/5aWL79DpD45MzDMwCTZqsN",
+      "observed_at": "2026-10-02T18:04:30.293887+00:00",
+      "items": [],
+      "identity_title": "Fadaei",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 11.123,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "public page subset; release chronology unproven",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 11.123
+    },
+    {
+      "artist": "Fadaei",
+      "round": 2,
+      "artist_id": "5aWL79DpD45MzDMwCTZqsN",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/5aWL79DpD45MzDMwCTZqsN",
+      "observed_at": "2026-10-02T18:04:42.422066+00:00",
+      "items": [
+        {
+          "id": "4hykqiMBDqLk7Mtofe7l92",
+          "title": "Soghoot",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4hykqiMBDqLk7Mtofe7l92"
+        },
+        {
+          "id": "6EIjTnSFL2ATKXeBpULVYR",
+          "title": "Ma Yademoon Nemire",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6EIjTnSFL2ATKXeBpULVYR"
+        },
+        {
+          "id": "0B5uYA6iwxjF3cTYYMo6J0",
+          "title": "Bilit",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/0B5uYA6iwxjF3cTYYMo6J0"
+        },
+        {
+          "id": "4HAVPm3pCYKVXunhkLXFdy",
+          "title": "Khodafez",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4HAVPm3pCYKVXunhkLXFdy"
+        },
+        {
+          "id": "4IMTOwiW6M1fUo3TgmQzJy",
+          "title": "Menare",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4IMTOwiW6M1fUo3TgmQzJy"
+        },
+        {
+          "id": "14y8R9RkTjfMJK0XGrZDL3",
+          "title": "Fatehe",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/14y8R9RkTjfMJK0XGrZDL3"
+        },
+        {
+          "id": "3Y3dfANdwPcVruRp2HQNLy",
+          "title": "Timarestane Dahe 60",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/3Y3dfANdwPcVruRp2HQNLy"
+        },
+        {
+          "id": "5wQkPqqrrgZpWDdlleYK22",
+          "title": "Khaen",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5wQkPqqrrgZpWDdlleYK22"
+        },
+        {
+          "id": "1Z9RAL9hc6UmNiloW07Gp6",
+          "title": "Iran Iran 2",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1Z9RAL9hc6UmNiloW07Gp6"
+        },
+        {
+          "id": "1uZVuX2ZVGqqrylxdN1pSl",
+          "title": "Migiri",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1uZVuX2ZVGqqrylxdN1pSl"
+        }
+      ],
+      "identity_title": "Fadaei",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.053,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "embed trackList order; not a recent-release feed",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.053
+    },
+    {
+      "artist": "Fadaei",
+      "round": 2,
+      "artist_id": "5aWL79DpD45MzDMwCTZqsN",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/5aWL79DpD45MzDMwCTZqsN/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:04:44.479918+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 2.09,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 2.09
+    },
+    {
+      "artist": "Ho3ein",
+      "round": 2,
+      "artist_id": "5vVveQB8n4kETe67waTS3t",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F5vVveQB8n4kETe67waTS3t",
+      "observed_at": "2026-10-02T18:04:47.569074+00:00",
+      "items": [],
+      "identity_title": "Ho3ein",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 4.657,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "identity only; no release listing",
+      "pagination": {},
+      "elapsed_seconds": 4.657
+    },
+    {
+      "artist": "Ho3ein",
+      "round": 2,
+      "artist_id": "5vVveQB8n4kETe67waTS3t",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/5vVveQB8n4kETe67waTS3t",
+      "observed_at": "2026-10-02T18:04:53.226655+00:00",
+      "items": [],
+      "identity_title": "Ho3ein",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 23.511,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "public page subset; release chronology unproven",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 23.511
+    },
+    {
+      "artist": "Ho3ein",
+      "round": 2,
+      "artist_id": "5vVveQB8n4kETe67waTS3t",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/5vVveQB8n4kETe67waTS3t",
+      "observed_at": "2026-10-02T18:05:17.740696+00:00",
+      "items": [
+        {
+          "id": "0GjX7igOYf7jzPtQHDss87",
+          "title": "33",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/0GjX7igOYf7jzPtQHDss87"
+        },
+        {
+          "id": "22cRr8Qxt2Dy0lxAKcBJKl",
+          "title": "Be Mula",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/22cRr8Qxt2Dy0lxAKcBJKl"
+        },
+        {
+          "id": "7hVyV4bsKttmvPCPSRRTy1",
+          "title": "Goolle",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/7hVyV4bsKttmvPCPSRRTy1"
+        },
+        {
+          "id": "6sBKN9LisPxpSe60axcn3M",
+          "title": "Kabk",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/6sBKN9LisPxpSe60axcn3M"
+        },
+        {
+          "id": "33vN48hKPbKhxcgKK2outP",
+          "title": "Hale",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/33vN48hKPbKhxcgKK2outP"
+        },
+        {
+          "id": "4IDb04m1mEmBa85AzkgrMN",
+          "title": "Jangale Tarik - Arash Mohseni Remix",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4IDb04m1mEmBa85AzkgrMN"
+        },
+        {
+          "id": "2eI5UQIxIVMXwM6Mii7WIg",
+          "title": "Jangale Tarik",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/2eI5UQIxIVMXwM6Mii7WIg"
+        },
+        {
+          "id": "5EHnG3svLYOPSNmBkDfDwC",
+          "title": "Hale - Arash Mohseni Remix",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5EHnG3svLYOPSNmBkDfDwC"
+        }
+      ],
+      "identity_title": "Ho3ein",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.243,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "embed trackList order; not a recent-release feed",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.243
+    },
+    {
+      "artist": "Ho3ein",
+      "round": 2,
+      "artist_id": "5vVveQB8n4kETe67waTS3t",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/5vVveQB8n4kETe67waTS3t/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:05:19.985982+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 0.669,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 0.669
+    },
+    {
+      "artist": "Yas",
+      "round": 2,
+      "artist_id": "7b8pXheEOc28fyFJnQzqmL",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F7b8pXheEOc28fyFJnQzqmL",
+      "observed_at": "2026-10-02T18:05:21.656319+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": null,
+          "elapsed_seconds": 12.024,
+          "rate_limit": {},
+          "error": "timeout"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 12.024
+    },
+    {
+      "artist": "Yas",
+      "round": 2,
+      "artist_id": "7b8pXheEOc28fyFJnQzqmL",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/7b8pXheEOc28fyFJnQzqmL",
+      "observed_at": "2026-10-02T18:05:34.680481+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": null,
+          "elapsed_seconds": 4.009,
+          "rate_limit": {},
+          "error": "network unavailable"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 4.009
+    },
+    {
+      "artist": "Yas",
+      "round": 2,
+      "artist_id": "7b8pXheEOc28fyFJnQzqmL",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/7b8pXheEOc28fyFJnQzqmL",
+      "observed_at": "2026-10-02T18:05:39.690403+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": null,
+          "elapsed_seconds": 4.01,
+          "rate_limit": {},
+          "error": "network unavailable"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 4.01
+    },
+    {
+      "artist": "Yas",
+      "round": 2,
+      "artist_id": "7b8pXheEOc28fyFJnQzqmL",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/7b8pXheEOc28fyFJnQzqmL/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:05:44.701162+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 0.711,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 0.711
+    },
+    {
+      "artist": "Hichkas",
+      "round": 2,
+      "artist_id": "2X90kCLyxyPeJ5nynJGbvT",
+      "method": "oembed",
+      "url": "https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fartist%2F2X90kCLyxyPeJ5nynJGbvT",
+      "observed_at": "2026-10-02T18:05:46.413219+00:00",
+      "items": [],
+      "identity_title": "Hichkas",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 3.064,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "identity only; no release listing",
+      "pagination": {},
+      "elapsed_seconds": 3.064
+    },
+    {
+      "artist": "Hichkas",
+      "round": 2,
+      "artist_id": "2X90kCLyxyPeJ5nynJGbvT",
+      "method": "artist-page",
+      "url": "https://open.spotify.com/artist/2X90kCLyxyPeJ5nynJGbvT",
+      "observed_at": "2026-10-02T18:05:50.476471+00:00",
+      "items": [],
+      "identity_title": "Hichkas",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 1.603,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "public page subset; release chronology unproven",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 1.603
+    },
+    {
+      "artist": "Hichkas",
+      "round": 2,
+      "artist_id": "2X90kCLyxyPeJ5nynJGbvT",
+      "method": "artist-embed",
+      "url": "https://open.spotify.com/embed/artist/2X90kCLyxyPeJ5nynJGbvT",
+      "observed_at": "2026-10-02T18:05:53.085520+00:00",
+      "items": [
+        {
+          "id": "7wpdZLPwob9OzQOFDDHNER",
+          "title": "Rooye Jenazat Miraghsam",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/7wpdZLPwob9OzQOFDDHNER"
+        },
+        {
+          "id": "2dQRmru5lr8BP9qvUSKoS9",
+          "title": "Yani Chi Nemishe",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/2dQRmru5lr8BP9qvUSKoS9"
+        },
+        {
+          "id": "4WQqlK29ELRU3DpdJzvlgF",
+          "title": "Har Ye Rooz",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4WQqlK29ELRU3DpdJzvlgF"
+        },
+        {
+          "id": "32NFgR05FxPQh6DIxbSwmP",
+          "title": "Hanoo Be Yadetam",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/32NFgR05FxPQh6DIxbSwmP"
+        },
+        {
+          "id": "61HBwIji5hb8YCFizrXz3k",
+          "title": "Ekhtelaf",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/61HBwIji5hb8YCFizrXz3k"
+        },
+        {
+          "id": "5jSOdSOPomeMRumvq82NHd",
+          "title": "Inyekiam Vase",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/5jSOdSOPomeMRumvq82NHd"
+        },
+        {
+          "id": "1nRndb7YOCvmsCpDonLcdr",
+          "title": "Ma Edame Darim",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1nRndb7YOCvmsCpDonLcdr"
+        },
+        {
+          "id": "1o3v0Di8psoTW2wbRgHuXa",
+          "title": "Man Chizi Ke Mikham",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/1o3v0Di8psoTW2wbRgHuXa"
+        },
+        {
+          "id": "2bltoykP2tNvs1VbYmVYlT",
+          "title": "Anjām Vazife",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/2bltoykP2tNvs1VbYmVYlT"
+        },
+        {
+          "id": "4rbCsMlhhExboVnhlKbCQv",
+          "title": "Bezan",
+          "object_type": "track",
+          "release_type": null,
+          "release_date": null,
+          "release_date_precision": null,
+          "url": "https://open.spotify.com/track/4rbCsMlhhExboVnhlKbCQv"
+        }
+      ],
+      "identity_title": "Hichkas",
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 200,
+          "elapsed_seconds": 0.91,
+          "rate_limit": {},
+          "error": null
+        }
+      ],
+      "order": "embed trackList order; not a recent-release feed",
+      "pagination": {},
+      "has_next": false,
+      "elapsed_seconds": 0.91
+    },
+    {
+      "artist": "Hichkas",
+      "round": 2,
+      "artist_id": "2X90kCLyxyPeJ5nynJGbvT",
+      "method": "web-api-no-auth",
+      "url": "https://api.spotify.com/v1/artists/2X90kCLyxyPeJ5nynJGbvT/albums?include_groups=album%2Csingle&market=US&limit=5&offset=0",
+      "observed_at": "2026-10-02T18:05:54.997695+00:00",
+      "items": [],
+      "identity_title": null,
+      "recent_release_listing": false,
+      "pages": [
+        {
+          "http_status": 401,
+          "elapsed_seconds": 0.569,
+          "rate_limit": {},
+          "error": "HTTP 401"
+        }
+      ],
+      "order": "unavailable",
+      "pagination": {},
+      "elapsed_seconds": 0.569
+    }
+  ]
+}

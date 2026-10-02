@@ -60,6 +60,15 @@ class OperatorPanelTests(TestCase):
         self.assertFalse(self.source.baseline_runs.exists())
         self.assertTrue(OperatorAuditEvent.objects.filter(action="source_baseline_requested", actor=self.admin_two).exists())
 
+    def test_spotify_unavailable_status_visible_without_marking_source_verified(self):
+        spotify = ArtistSource.objects.create(artist=self.source.artist, platform="spotify")
+        self.client.force_login(self.admin_one)
+        response = self.client.get(reverse("operations:dashboard"))
+        self.assertContains(response, "Spotify discovery: Unavailable:")
+        spotify.refresh_from_db()
+        self.assertFalse(spotify.enabled)
+        self.assertEqual(spotify.verification, "unverified")
+
     def test_enable_unverified_warns_without_changing_source(self):
         self.client.force_login(self.admin_one)
         response = self.client.post(reverse("operations:source_action", args=(self.source.pk, "enable")), follow=True)

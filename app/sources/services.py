@@ -1,11 +1,14 @@
 from datetime import timedelta
+import logging
 
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
 
-from .adapters import SoundCloudAdapter, SpotifyAdapter
+from .adapters import SoundCloudAdapter, SpotifyAdapter, SourceUnavailable
 from .models import ArtistSource, BaselineRun, SourceAuditEvent, SourceItem
+
+logger = logging.getLogger(__name__)
 
 
 def adapter_for(platform):
@@ -94,10 +97,10 @@ def poll_source(source, adapter=None, now=None):
     if not source.artist.enabled:
         return "skipped"
     if source.platform == ArtistSource.Platform.SPOTIFY:
-        source.next_poll_at = now + timedelta(seconds=source.poll_interval_seconds)
-        source.last_error = "Release polling unavailable: Spotify recent-release method is not verified"
-        source.save(update_fields=("next_poll_at", "last_error", "updated_at"))
-        SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="release_poll_unavailable", detail={"reason": "M0 sampled release method timed out; oEmbed has identity only"})
+        reason = SpotifyAdapter.status()
+        logger.warning("Spotify discovery unavailable for source_id=%s; no provider request", source.pk)
+        record_source_failure(source, SourceUnavailable(reason), now=now)
+        SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="release_poll_unavailable", detail={"reason": reason})
         return "unavailable"
     if source.platform != ArtistSource.Platform.SOUNDCLOUD:
         return "unavailable"

@@ -5,6 +5,7 @@ import re
 from media_pipeline.providers import redact_diagnostic
 
 from .models import Artist, ArtistSource, BaselineRun, SourceAuditEvent, SourceItem
+from .adapters import SpotifyAdapter
 from operations.services import audit, safe_audit_json
 
 
@@ -74,7 +75,7 @@ class ArtistSourceAdmin(admin.ModelAdmin):
 
     @admin.display(description="Release polling")
     def release_polling_available(self, source):
-        return "Implemented; candidate profile unprobed" if source.release_polling_available else "Unavailable (identity metadata only)"
+        return "Implemented; candidate profile unprobed" if source.release_polling_available else SpotifyAdapter.status()
 
     def save_model(self, request, obj, form, change):
         old = None

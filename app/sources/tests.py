@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
@@ -194,3 +194,35 @@ class PollingTests(TestCase):
         self.assertEqual(result[spotify.pk], "unavailable")
         self.assertFalse(spotify.release_polling_available)
         self.assertFalse(SourceItem.objects.filter(platform="spotify").exists())
+
+    @override_settings(SPOTIFY_DISCOVERY_MODE="public-page")
+    def test_unproven_config_mode_cannot_select_spotify_adapter(self):
+        self.assertIn("unsupported Spotify discovery mode", SpotifyAdapter.status())
+        with self.assertRaises(SourceUnavailable):
+            SpotifyAdapter().list_recent(self.source)
+
+    def test_unavailable_spotify_backs_off_without_blocking_soundcloud_or_changing_flags(self):
+        now = timezone.now()
+        self.source.baseline_completed_at = now - timedelta(days=1)
+        self.source.save()
+        spotify = ArtistSource.objects.create(artist=self.artist, platform="spotify", enabled=True,
+            verification="verified", poll_interval_seconds=60, next_poll_at=now - timedelta(seconds=1))
+        with patch("diagnostics.spotify_public.get_public", side_effect=AssertionError("No probe in polling")):
+            with self.assertLogs("sources.services", level="WARNING") as logs:
+                result = poll_due_sources(now=now, adapters={"soundcloud": FakeAdapter([item("healthy-sc")])})
+        self.assertEqual(result, {spotify.pk: "unavailable", self.source.pk: "success"})
+        spotify.refresh_from_db()
+        self.source.refresh_from_db()
+        self.assertEqual(spotify.consecutive_failures, 1)
+        self.assertEqual(spotify.next_poll_at, now + timedelta(seconds=60))
+        self.assertEqual(self.source.consecutive_failures, 0)
+        self.assertEqual(self.source.last_success_at, now)
+        self.assertTrue(spotify.enabled)
+        self.assertEqual(spotify.verification, "verified")
+        self.assertIn("Spotify discovery unavailable", logs.output[0])
+        self.assertFalse(SourceItem.objects.filter(platform="spotify").exists())
+        with self.assertLogs("sources.services", level="WARNING"):
+            poll_due_sources(now=now + timedelta(seconds=60), adapters={"soundcloud": FakeAdapter([])})
+        spotify.refresh_from_db()
+        self.assertEqual(spotify.consecutive_failures, 2)
+        self.assertEqual(spotify.next_poll_at, now + timedelta(seconds=180))

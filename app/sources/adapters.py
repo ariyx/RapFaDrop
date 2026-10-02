@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from urllib.parse import urlsplit, urlunsplit
 
 import yt_dlp
+from django.conf import settings
 
 
 class SourceUnavailable(RuntimeError):
@@ -27,8 +28,15 @@ class SpotifyAdapter:
     identity_capability = "public oEmbed identity only; sampled at M0"
     release_polling_available = False
 
+    @staticmethod
+    def status():
+        mode = settings.SPOTIFY_DISCOVERY_MODE
+        if mode != "unavailable":
+            return "Unavailable: unsupported Spotify discovery mode; no adapter selected"
+        return "Unavailable: public identity/embed subsets do not prove current release listing; authenticated API access unavailable"
+
     def list_recent(self, source):
-        raise SourceUnavailable("Spotify recent-release polling is unavailable: M0 method timed out and oEmbed has no releases")
+        raise SourceUnavailable(self.status())
 
 
 def _release_time(item):

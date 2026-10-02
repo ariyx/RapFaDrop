@@ -1,12 +1,14 @@
 from django.core.management.base import BaseCommand
 
 from sources.models import ArtistSource
+from sources.adapters import SpotifyAdapter
 
 
 class Command(BaseCommand):
     help = "List artist sources, verification, baseline, poll and error status."
 
     def handle(self, *args, **options):
+        self.stdout.write(f"Spotify discovery: {SpotifyAdapter.status()}")
         for source in ArtistSource.objects.select_related("artist"):
             self.stdout.write(" | ".join((
                 str(source.pk), source.artist.official_name, f"aliases={','.join(source.artist.aliases or [])}", source.platform,
