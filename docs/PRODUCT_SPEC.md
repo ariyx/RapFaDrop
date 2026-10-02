@@ -115,7 +115,7 @@ t.me/RapFaDrop
 
 ### Album/EP cover introduction
 
-This is illustrative text using the owner's edited example. The actual title, artist and guests come from verified official metadata. Only the title is bold and **only the guest names after `feat.` are italic**. The `•` precedes previously published single titles linked to their channel posts.
+This is illustrative text using the owner's edited example. The actual title, artist and guests come from verified official metadata. Only the title is bold and **only the guest names after `feat.` are italic**. The `›` precedes previously published single titles linked to their channel posts.
 
 ```text
 REFIGH                         [bold]
@@ -123,8 +123,8 @@ LP · Reza Pishro × Tohi
 feat. Ali Owj · Big Shaggy · Nassim  [guest names italic]
 
 پیش‌تر از این آلبوم منتشر شده:
-• CD
-• Raghse Andam 3
+› CD
+› Raghse Andam 3
 
 @RapFaDrop
 ```

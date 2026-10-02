@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "sources",
     "releases",
     "media_pipeline",
+    "publication",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -85,11 +86,27 @@ MEDIA_PROVIDER_ORDER = tuple(
     if value.strip()
 )
 
+TELEGRAM_MODE = os.environ.get("RAPFADROP_TELEGRAM_MODE", "disabled")
+TELEGRAM_LIVE_ENABLED = os.environ.get("RAPFADROP_TELEGRAM_LIVE_ENABLED", "false").lower() == "true"
+TELEGRAM_BOT_TOKEN = os.environ.get("RAPFADROP_TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_TEST_CHAT_ID = os.environ.get("RAPFADROP_TELEGRAM_TEST_CHAT_ID", "")
+TELEGRAM_REVIEW_CHAT_ID = os.environ.get("RAPFADROP_TELEGRAM_REVIEW_CHAT_ID", "")
+TELEGRAM_PRODUCTION_CHAT_ID = os.environ.get("RAPFADROP_TELEGRAM_PRODUCTION_CHAT_ID", "")
+TELEGRAM_TIMEOUT_SECONDS = int(os.environ.get("RAPFADROP_TELEGRAM_TIMEOUT_SECONDS", "60"))
+PUBLICATION_WORKER_ENABLED = os.environ.get("RAPFADROP_PUBLICATION_WORKER_ENABLED", "false").lower() == "true"
+PUBLICATION_ALBUM_HOLD_SECONDS = int(os.environ.get("RAPFADROP_PUBLICATION_ALBUM_HOLD_SECONDS", "900"))
+PUBLICATION_CORRECTION_DELETE_SECONDS = int(os.environ.get("RAPFADROP_PUBLICATION_CORRECTION_DELETE_SECONDS", "600"))
+PUBLICATION_CORRECTION_TEXT = os.environ.get("RAPFADROP_PUBLICATION_CORRECTION_TEXT", "Audio file updated.")
+
 CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = None
 CELERY_TASK_IGNORE_RESULT = True
 CELERY_TIMEZONE = "UTC"
 CELERY_BEAT_SCHEDULE = {
+    "publication-recovery-and-correction-deletion": {
+        "task": "publication.tasks.process_due_publications",
+        "schedule": 30.0,
+    },
     "poll-due-artist-sources": {
         "task": "sources.tasks.poll_due_artist_sources",
         "schedule": 60.0,

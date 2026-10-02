@@ -2,9 +2,9 @@
 
 Self-hosted Persian rap release monitor and Telegram archive for the owner's curated artist list.
 
-**Status:** M0 foundation. Provider feasibility is recorded from observed probes in `docs/reports/`; no Telegram publishing is implemented.
+**Status:** M4 publication orchestration and captions are implemented. Normal tests use a fake gateway; live Telegram integration remains unverified until an isolated test-channel probe passes. Observed evidence is in `docs/reports/`.
 
-## Local M0 setup
+## Local setup
 
 Requirements: Docker Engine with Compose. Copy `.env.example` to `.env` once, replace both placeholder secrets locally, and never commit `.env`.
 
@@ -42,6 +42,21 @@ docker compose exec -T web python manage.py probe_media `
 ```
 
 The media command downloads into an OS temporary directory, runs `ffprobe`, and removes the directory before returning. It does not publish or retain audio. A nonzero exit means the structured result contains a concrete error.
+
+## M4 test-channel commands
+
+Publication is disabled by default. Keep bot credentials in the ignored local `.env`. Live commands require `RAPFADROP_TELEGRAM_MODE=test`, `RAPFADROP_TELEGRAM_LIVE_ENABLED=true`, a bot token and an isolated `RAPFADROP_TELEGRAM_TEST_CHAT_ID`. Configure a separate review destination for notifications. Production username `@RapFaDrop` and its configured numeric ID are blocked, including target aliases resolved by `getChat`.
+
+```powershell
+docker compose exec -T web python manage.py probe_telegram --configuration-status
+# Explicit live probe: generated audio passes through M3, then send/edit/reply/delete.
+docker compose exec -T web python manage.py probe_telegram --confirm-test-send
+# Explicit publication of an existing ready candidate or fully staged canonical album.
+docker compose exec -T web python manage.py publish_ready --candidate-id <ID> --confirm-test-send
+docker compose exec -T web python manage.py publish_ready --album-id <ID> --confirm-test-send
+```
+
+The publication worker remains disabled unless `RAPFADROP_PUBLICATION_WORKER_ENABLED=true` is explicitly configured. It processes reserved work, definite-failure retries, album cursors and due correction deletions; it does not activate sources or discover new work. Uncertain outcomes appear in Django admin and require observed operator evidence through `reconcile_publication`; they are never blindly resent. Published media is retained for upgrades and safe recovery. The disposable live probe removes its confirmed test posts and generated media; an incomplete probe retains candidate files needed for reconciliation.
 
 ## Start here
 
