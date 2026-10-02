@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     "diagnostics",
     "sources",
     "releases",
+    "media_pipeline",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -58,6 +59,31 @@ USE_I18N = True
 USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+MEDIA_ROOT = Path(os.environ.get("RAPFADROP_MEDIA_ROOT", "/tmp/rapfadrop-media"))
+MEDIA_MAX_UPLOAD_BYTES = int(os.environ.get("RAPFADROP_MEDIA_MAX_UPLOAD_BYTES", "104857600"))
+MEDIA_DOWNLOAD_TIMEOUT_SECONDS = int(os.environ.get("RAPFADROP_MEDIA_DOWNLOAD_TIMEOUT_SECONDS", "240"))
+MEDIA_FFPROBE_TIMEOUT_SECONDS = int(os.environ.get("RAPFADROP_MEDIA_FFPROBE_TIMEOUT_SECONDS", "30"))
+MEDIA_EXPECTED_DURATION_TOLERANCE_SECONDS = float(os.environ.get("RAPFADROP_MEDIA_EXPECTED_DURATION_TOLERANCE_SECONDS", "5"))
+MEDIA_TRUNCATION_RATIO = float(os.environ.get("RAPFADROP_MEDIA_TRUNCATION_RATIO", "0.9"))
+MEDIA_CHANNEL_TAG = os.environ.get("RAPFADROP_MEDIA_CHANNEL_TAG", "@RapFaDrop")
+MEDIA_AUTHOR_URL = os.environ.get("RAPFADROP_MEDIA_AUTHOR_URL", "https://t.me/RapFaDrop")
+MEDIA_MAX_ARTWORK_BYTES = int(os.environ.get("RAPFADROP_MEDIA_MAX_ARTWORK_BYTES", str(8 * 1024 * 1024)))
+MEDIA_ALLOWED_AUDIO_EXTENSIONS = tuple(
+    value.strip().lower() if value.strip().startswith(".") else f".{value.strip().lower()}"
+    for value in os.environ.get("RAPFADROP_MEDIA_ALLOWED_AUDIO_EXTENSIONS", "mp3,m4a,mp4,aac,flac,ogg,opus,wav,aiff,aif").split(",")
+    if value.strip()
+)
+MEDIA_CHANNEL_TAG_FIELDS = frozenset(
+    value.strip().lower()
+    for value in os.environ.get("RAPFADROP_MEDIA_CHANNEL_TAG_FIELDS", "subtitle,comments,album_artist_suffix,album_suffix,publisher,encoded_by,author_url,copyright,composers,conductors,initial_key").split(",")
+    if value.strip()
+)
+MEDIA_PROVIDER_ORDER = tuple(
+    value.strip()
+    for value in os.environ.get("RAPFADROP_MEDIA_PROVIDER_ORDER", "yt-dlp").split(",")
+    if value.strip()
+)
 
 CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = None

@@ -28,6 +28,8 @@ services:
     build: .
     restart: unless-stopped
     env_file: .env
+    volumes:
+      - media_data:/var/lib/rapfadrop/media
     command: ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "60"]
     ports:
       - "127.0.0.1:8000:8000"
@@ -46,6 +48,8 @@ services:
     build: .
     restart: unless-stopped
     env_file: .env
+    volumes:
+      - media_data:/var/lib/rapfadrop/media
     command: ["celery", "-A", "config", "worker", "--loglevel=INFO", "--concurrency=2"]
     depends_on:
       postgres:
@@ -76,3 +80,4 @@ services:
 
 volumes:
   postgres_data:
+  media_data:

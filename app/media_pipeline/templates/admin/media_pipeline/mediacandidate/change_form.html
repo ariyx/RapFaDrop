@@ -1,0 +1,8 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+{% block object-tools-items %}
+  {{ block.super }}
+  {% if original and original.state != "ready" %}
+    <li><a href="{{ manual_upload_url }}">{% translate "Upload validated audio" %}</a></li>
+  {% endif %}
+{% endblock %}

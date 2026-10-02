@@ -5,3 +5,5 @@ psycopg[binary]==3.3.6
 spotipyFree==1.9.14
 websockets==17.1
 yt-dlp==2026.8.19
+mutagen==1.48.1
+Pillow==12.3.0

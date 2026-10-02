@@ -1,0 +1,10 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+{% block content %}
+  <p>{% blocktranslate with track=candidate.track release=candidate.release %}Upload audio for {{ track }} on {{ release }}. The original candidate is preserved; this path does not publish anything.{% endblocktranslate %}</p>
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="submit-row"><input type="submit" value="{% translate 'Validate and prepare' %}" class="default"></div>
+  </form>
+{% endblock %}
