@@ -1,0 +1,17 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+tmp/
+*.mp3
+*.m4a
+*.opus
+*.ogg
+*.wav
+*.webm
+*.part
+*.dump
+*.sql

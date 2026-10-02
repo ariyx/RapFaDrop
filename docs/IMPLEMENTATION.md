@@ -175,3 +175,9 @@ Credentials, channel admin privileges, host/domain and any test-channel details 
 - Sustainable polling intervals and end-to-end delay for 30 initial artists under rate limits.
 
 Record findings as observed data and adjust implementation choices; keep accepted product behavior intact unless the owner decides otherwise.
+
+## 10. M0 observed adapter findings
+
+The 2026-10-02 local M0 probes are recorded in [`reports/M0_FEASIBILITY.md`](reports/M0_FEASIBILITY.md). On the supplied SoundCloud examples, `yt-dlp 2026.08.19` resolved stable native IDs, explicit album evidence and ordered tracks, and acquired one complete AAC candidate measured by `ffprobe`. That evidence supports keeping `yt-dlp` as the first SoundCloud candidate, but does not establish a fallback or broad profile coverage.
+
+`spotipyFree 1.9.14` required an undeclared `websockets` dependency and then timed out on the three sampled artist/release requests. Spotify oEmbed independently confirmed public profile identity without login for Sijal, Fadaei and Ho3ein, but exposed no recent releases or pagination. Keep the Spotify release adapter gate open for M1; do not schedule this experimental method or represent oEmbed as release monitoring.

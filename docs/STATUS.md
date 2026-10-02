@@ -1,41 +1,39 @@
 # Project status and handoff
 
-Updated: 2026-10-02. This is a documentation checkpoint, not evidence of a running service. Check Git and the actual environment before relying on this date or status.
+Updated: 2026-10-02. This records observed local M0 implementation and verification. Check Git and the actual environment before relying on it.
 
 ## Current state
 
-- The observed `origin/main` at this checkpoint is `c39c40a` (`docs: add deployment and verification runbook`). It contains `AGENTS.md`, `README.md`, and the four documents under `docs/`; it contains no application, Compose configuration, migration, or test code.
-- No Docker boot, SoundCloud/Spotify probe, Telegram test, or server deployment has been observed in this documentation pass. All M0–M6 implementation and empirical gates remain open.
-- The product rules in `PRODUCT_SPEC.md` and the design in `IMPLEMENTATION.md` are the M0 working baseline. The owner requested complete documentation followed by M0. Later implementation choices still require empirical validation. A later owner instruction overrides a document.
-- The server has been identified by the owner, but no server access or deployment is claimed. Never store server credentials or a bot token in Git or a prompt.
+- Work began from clean `main` / `origin/main` at `dbad4e5519554b1939b89a2269d7cc9a44dcf4c2` (`docs: establish project baseline`). The delivery commit and server result are recorded after the normal push/deployment sequence.
+- M0 now contains a Python 3.13/Django 5.2.17 foundation, PostgreSQL, Redis, non-root Celery worker/beat, database-backed `/health/`, pinned dependencies, placeholder-only `.env.example`, opt-in diagnostic commands and focused tests. No product release schema or Telegram publishing exists.
+- Local Compose build/start, built-in migrations, Django check, focused tests and all five service health checks passed. The health endpoint returned `{"status":"ok","database":"ok"}`. Detailed provider evidence is in [`reports/M0_FEASIBILITY.md`](reports/M0_FEASIBILITY.md).
+- SoundCloud is verified only for the supplied track/set. Spotify is partially verified for public oEmbed identity on three profiles; the sampled `spotipyFree` release path timed out, so recent-release coverage remains open. One `yt-dlp` SoundCloud download was completed, measured and deleted; no independent fallback was verified.
+- No Telegram API call or production channel post occurred. Server deployment is not claimed until it is observed.
 
-## Next implementation task: M0
+## M0 acceptance evidence
 
-Implement only the M0 foundation and read-only feasibility probes in [`M0_AGENT_TASK.md`](M0_AGENT_TASK.md) and `IMPLEMENTATION.md`. Start with `git status`, current branch/remote/SHA, and all documents linked by the root `AGENTS.md`. Work locally, commit and push the verified changes, then follow `DEPLOYMENT.md` for server verification if SSH authentication and safe configuration are available. Use an isolated Telegram test channel for later publication tests; M0 does not send Telegram messages.
-
-M0 is complete when the following **observed** evidence is recorded in a milestone report, with the exact commit SHA:
-
-1. `docker compose config --quiet` and `docker compose up --build -d` succeed; web, worker, beat, PostgreSQL and Redis are running. Django health and check commands succeed. Record actual commands, outputs and environment limits.
-2. A repeatable read-only probe of the supplied SoundCloud track and set reports native IDs, title/artist, set classification evidence, original track order, available metadata and media options, with concrete errors where access fails. The probe must not post to Telegram.
-3. A read-only public Spotify probe against a small set of the seeded artist profiles reports what can and cannot be fetched without Premium, native IDs, recent releases, pagination or rate-limit behavior where observed, and failure cases. Do not claim a full 30-artist monitoring capability from a few probes.
-4. At least one candidate media acquisition method is assessed with real output or a recorded failure. A second method is described as an independent fallback only when its relevant failure path has actually been tested. No unverified downloader is described as working.
-5. `.env.example` contains placeholder names only; no secret, media file or production data is committed. No production channel post occurs. The local commit is pushed normally; if a server step is blocked, record the exact blocker rather than marking it passed.
-
-The detailed milestones and behavior acceptance criteria remain in `IMPLEMENTATION.md`. Avoid advancing to M1 automatically after M0; report observations and propose the next slice to the owner.
+1. Passed locally: Compose config/build/start, five healthy services, migrations, Django check/tests and database health.
+2. Passed for supplied examples: repeatable sanitized SoundCloud track/set output with IDs, metadata, ordering, album evidence and media variants.
+3. Partial: public Spotify identity works for three samples without Premium; recent releases/pagination failed to return and remain an open gate.
+4. Passed for one candidate: `yt-dlp` acquisition plus `ffprobe`; no fallback is claimed.
+5. Secret/media hygiene and no-production-post checks remain part of the pre-push review; push and server results are recorded after they occur.
 
 ## Decisions, assumptions and gates
 
-| Topic | Current rule or assumption | Verification / remaining choice |
+| Topic | Current rule or observation | Verification / remaining choice |
 | --- | --- | --- |
 | Artist list | Thirty selected artists and candidate Spotify/SoundCloud URLs are in `PRODUCT_SPEC.md`. | Verify identity and recent releases per profile before activation; three SoundCloud profiles are unconfirmed. |
-| Source monitoring | SoundCloud and Spotify poll independently. Initial interval hypotheses: roughly 1–2 and 2–5 minutes respectively. | Measure reliability, rate limits and release latency; tune intervals from observations. |
-| Spotify | Public metadata is a discovery candidate; the owner has no Premium. | Probe actual coverage and stability; no promise of free access or full audio. |
-| Audio providers | `yt-dlp` is an initial candidate; use a separately failing provider only after real testing. | Record true quality, complete audio and failure modes for each provider. |
-| Single speed | A verified complete single may publish before final tags/quality, then replace media in its original message. | Test Telegram edit behavior, actual upload latency, metadata rendering and uncertain sends in an isolated channel. |
-| Album block | Prepare and tag all new tracks before cover post; post in order. A 15-minute unresolved Telegram failure unlocks general sends and preserves a resume cursor. | Test order, failure recovery, message persistence and retry deduplication. |
-| Captions and tags | Conditional default templates, `•` for prior singles in the owner's edited album example, official title/artist, configurable `@RapFaDrop` fields. | Verify rendered Telegram entities, captions, file tags, collisions with official credits and panel previews. |
-| Admin and deployment | Separate equal-privilege accounts; HTTPS private panel; Docker Compose on owner's server. | Supply private configuration locally, test recovery/backup, health and test-channel permissions in their milestones. |
+| SoundCloud | The supplied Sijal track and set work through `yt-dlp 2026.08.19`; the set carries explicit album evidence. | Do not generalize from two URLs; measure profile coverage and sustainable polling in M1. |
+| Spotify | oEmbed confirms profile identity without Premium; `spotipyFree` timed out for all three samples. | Resolve a bounded recent-release method before scheduling Spotify polling. No full audio is available from this evidence. |
+| Audio providers | One SoundCloud candidate downloaded completely and measured as AAC ~160 kbps. | No independent fallback is verified. Test one only after demonstrating an independent failure path. |
+| Source monitoring | SoundCloud and Spotify must remain independent. Initial interval hypotheses remain unverified. | Measure reliability, rate limits and release latency before selecting intervals. |
+| Telegram | M0 contains no gateway or channel configuration. | Later live tests must use an isolated test channel; never use production for tests. |
+| Admin and deployment | M0 provides Django's built-in schema and health only. | Full admin/domain schema, HTTPS, backup/restore and Telegram behavior belong to later milestones. |
+
+## Next implementation task after owner review: M1
+
+Do not begin M1 automatically. The proposed next slice is to resolve a bounded public Spotify recent-release method, then implement disabled/unverified source records and idempotent first baselines for the 30 seed profiles while keeping SoundCloud and Spotify failures isolated. Production Telegram publishing remains out of scope.
 
 ## Handoff record to maintain
 
-After each milestone or material design change, update this file with the **observed** Git SHA, implemented scope, tests/probe outputs (or durable links to reports), unresolved failures, and exact next milestone. Keep planned work separate from observed results. Update `PRODUCT_SPEC.md` for a changed owner decision, `IMPLEMENTATION.md` for architecture/acceptance changes, and `DEPLOYMENT.md` for verified operational procedure changes. The milestone report format is in `DEPLOYMENT.md`.
+After each milestone or material design change, update this file with the observed Git SHA, implemented scope, tests/probe outputs (or durable links to reports), unresolved failures, server result and exact next milestone. Keep planned work separate from observed results. Update `PRODUCT_SPEC.md` for a changed owner decision, `IMPLEMENTATION.md` for architecture/acceptance changes, and `DEPLOYMENT.md` for verified operational procedure changes.
