@@ -63,6 +63,14 @@ Verify the health endpoint from the server and run the milestone-specific smoke 
 
 If a server test reveals an implementation defect, fix it in the local checkout, rerun local verification, commit and push the fix, then deploy and test that exact new SHA. Record environmental failures separately. Never patch the server copy to resolve an implementation failure.
 
+## Temporary internal IP/HTTP deployment (owner-authorized M6)
+
+The observed deployment lives at `/opt/rapfadrop`, exact SHA `e85ae5e248a55d29dfcdca6af9ccb4785a39ee0c`. Use **`docker compose -p rapfadrop -f compose.internal.yaml`** for this deployment; the default `compose.yaml` has a different networking/background-service configuration. The dedicated file starts only web, PostgreSQL and Redis with host networking. Django listens at `91.107.178.12:8000`; PostgreSQL and Redis bind only to `127.0.0.1:55432` and `127.0.0.1:56379`. Named database/media volumes persist state.
+
+Server-only `.env` is root-owned mode `0600`, with generated secrets, `DJANGO_DEBUG=false`, `DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,91.107.178.12`, `RAPFADROP_WEB_BIND_IP=91.107.178.12`, loopback database/broker endpoints, and all Telegram/publication switches disabled. Same-origin HTTP CSRF works without an added trusted origin. Docker was installed with bridge/firewall/forwarding management disabled before startup; exact daemon configuration and verification are in [`reports/M6_OPERATIONS.md`](reports/M6_OPERATIONS.md). Do not introduce bridge networks or change daemon settings without reviewing the firewall/network implications.
+
+Server-IP `/health/` returned HTTP 200 with database `ok`; all three services were healthy. Nginx configuration hashes and firewall snapshots were unchanged. No migrations, accounts, sources, baselines or Telegram work were run. Application schema/panel initialization and backup/restore are deferred. This temporary HTTP deployment is not the full production HTTPS milestone.
+
 ## Completion record
 
 For each milestone, report:
