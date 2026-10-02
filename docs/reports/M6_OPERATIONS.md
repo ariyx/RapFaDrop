@@ -1,6 +1,6 @@
 # M6 operations evidence
 
-Observed on 2026-10-02. Owner authorization for this run was **Phase 2 server preflight and reporting only**. All server commands were read-only; no application commit was deployed, migrations run, account created, source enabled, or Telegram request made. M6 is incomplete.
+Observed on 2026-10-02. The initial run was authorized for **Phase 2 server preflight and reporting only**; its server commands were read-only. Subsequent owner-authorized HTTP deployment and limited Phase 3 work are recorded separately below. M6 is incomplete.
 
 ## Server preflight
 
@@ -124,4 +124,75 @@ curl --noproxy '*' --fail --silent --show-error --max-time 10 -w '\nHTTP_STATUS=
 - PostgreSQL reported **zero public application tables**: no migrations, application accounts, seeds, source state or baselines were created. The application panel/schema is not yet ready for authenticated use. Worker/beat were not started, and no Telegram request was made.
 - Final verification completed with exit 0 at **`2026-10-02T15:21:04Z`** (18:51:04 Asia/Tehran). HTTP reachability was checked from the server through its own public IP, as requested; access from the owner's network/cloud ingress is not claimed.
 
-M6 remains incomplete: backup/restore, schema migrations, full panel readiness, HTTPS for RapFaDrop, accounts, restart/recovery and controlled source/publication activation remain later gates. This is an owner-authorized HTTP connectivity deployment only.
+At this connectivity checkpoint, backup/restore, migrations and restart recovery were deferred. The following owner-authorized Phase 3 checks supersede those deferrals. HTTPS, accounts, full panel readiness and controlled source/publication activation remain later gates.
+
+## Limited Phase 3: backup, migrations and restart durability
+
+Owner scope: continue on the deployed SHA, create and verify an initial backup before migrations, verify migration state, safely restart the deployed Compose services, and verify database/queue/audit persistence and server-IP health. No administrator creation, source enablement, baseline, production Telegram configuration or messages were authorized or performed.
+
+### Checkpoint and protected backups
+
+At entry, `/opt/rapfadrop` remained clean at detached SHA **`e85ae5e248a55d29dfcdca6af9ccb4785a39ee0c`**, with three healthy containers and zero public application tables. Runtime guards verified debug false, Telegram disabled, no bot/production-channel configuration, and publication worker disabled. Neither application source nor deployment configuration was changed, fetched, rebuilt or updated during this Phase 3 run.
+
+Backups are server-only in **`/var/backups/rapfadrop`**, root-owned mode **0700**. Both custom-format archives and their `.sha256` sidecars are root-owned mode **0600**, outside Git and disposable media storage. Files were written under `umask 077` with overwrite refusal.
+
+| Archive | Size | SHA-256 |
+| --- | --- | --- |
+| `initial_e85ae5e_20261002.dump` | 844 bytes | `7ee36aa89129e19e9495324bc38c49f67099bbc2588e828f51ac068094da55d0` |
+| `migrated_e85ae5e_20261002.dump` | 164,498 bytes | `4a59f81592b22a763ac40ddee943eea23169ca3ce5bddd283c64a799c6768d40` |
+
+The initial archive was created at `2026-10-02T15:26:31Z`. Its checksum passed, `pg_restore --list` parsed it, and restoration into the separately created `m6_initial_restore_20261002` database completed with `--exit-on-error --single-transaction`. `SELECT 1` succeeded and the restored database had zero public tables, matching the pre-migration source. **This restore validation completed before migrations.**
+
+After migrations, a second archive was restored into `m6_migrated_restore_20261002`. All 37 public-table row counts and canonical JSON row-content hashes matched the deployed database exactly; the restored database also passed `migrate --check`. The initial empty-database test alone is not being used as evidence for restoring a populated application schema.
+
+Commands used from `/opt/rapfadrop` (the same operations were repeated for the migrated archive and its distinct disposable database):
+
+```sh
+docker compose -p rapfadrop -f compose.internal.yaml exec -T postgres pg_dump -U rapfadrop -p 55432 -d rapfadrop --format=custom --no-owner --no-acl > /var/backups/rapfadrop/initial_e85ae5e_20261002.dump
+sha256sum /var/backups/rapfadrop/initial_e85ae5e_20261002.dump > /var/backups/rapfadrop/initial_e85ae5e_20261002.dump.sha256
+sha256sum --check /var/backups/rapfadrop/initial_e85ae5e_20261002.dump.sha256
+docker compose -p rapfadrop -f compose.internal.yaml exec -T postgres createdb -U rapfadrop -p 55432 -T template0 m6_initial_restore_20261002
+docker compose -p rapfadrop -f compose.internal.yaml exec -T postgres pg_restore -U rapfadrop -p 55432 --dbname=m6_initial_restore_20261002 --exit-on-error --single-transaction --no-owner --no-acl < /var/backups/rapfadrop/initial_e85ae5e_20261002.dump
+```
+
+These are manual, locally retained backups with observed restoration. Automatic schedule/retention, off-host copies and recovery under host/disk loss remain unverified.
+
+### Migrations
+
+```sh
+docker compose -p rapfadrop -f compose.internal.yaml exec -T web python manage.py migrate --noinput
+docker compose -p rapfadrop -f compose.internal.yaml exec -T web python manage.py migrate --check
+docker compose -p rapfadrop -f compose.internal.yaml exec -T web python manage.py showmigrations
+docker compose -p rapfadrop -f compose.internal.yaml exec -T web python manage.py makemigrations --check --dry-run
+docker compose -p rapfadrop -f compose.internal.yaml exec -T web python manage.py check
+```
+
+All **25 migrations** applied with `OK`; all `showmigrations` entries were `[X]`. `migrate --check` passed before and after restarts; model drift check reported **No changes detected**; Django check reported **no issues**. There are now **37 public tables**. Django content types/permissions were initialized by normal migration hooks; no user, operator account, artist/source seed or application work was created.
+
+### Restart and persistence evidence
+
+Production table counts and row-content SHA-256 digests were recorded before restarts. Because queue/audit tables were empty, a meaningful non-empty durability fixture was added **only to the disposable migrated restore database**: one track, one cancelled `ProcessingQueueItem`, and one `OperatorAuditEvent` with a null actor. No account or source was needed. The event's correlation UUID was `bb44f0aa-a00c-4f53-b0ed-fda3f6b85633`; its exact row and queue row were included in the fingerprint comparison. No fixture was inserted into the deployed database.
+
+| Stage | Safe action | Observed result after recovery |
+| --- | --- | --- |
+| Web | `restart -t 30 web`, then health-wait | Both databases' 37-table fingerprints unchanged; HTTP 200, PostgreSQL ready, Redis PONG |
+| Redis | `restart -t 30 redis`, then health-wait | Same fingerprint/health results |
+| PostgreSQL | Stop web gracefully, restart PostgreSQL, start web with dependency health-wait | Same fingerprint/health results, including non-empty disposable queue/audit rows |
+| Full deployed stack | Stop web first, stop Redis/PostgreSQL, then `up -d --no-build --wait --wait-timeout 60` | Same fingerprint/health results; all three containers healthy |
+
+All commands used `docker compose -p rapfadrop -f compose.internal.yaml`. Health waits used `up -d --no-build --wait --wait-timeout 60`, and graceful stops used `stop -t 30`. No `down -v`, volume removal, application rebuild or schema change occurred during restart tests. Web was paused for database/full-stack maintenance and resumed afterward. Worker and beat are absent from this deployment and were neither started nor tested. Redis is intentionally non-persistent; this verifies PostgreSQL-backed queue/audit durability, not survival of Redis transient messages.
+
+Snapshots and the temporary fingerprint script remain in root-only `/var/lib/rapfadrop-operations`, outside the application checkout; fingerprints contain only table names, row counts and hashes. Both disposable databases were explicitly dropped after verification. A final database-name check found no `m6_%` databases, and production fingerprints still matched their pre-restart values.
+
+### Final observed state
+
+- Production: **zero users, artists, sources, source items, baselines, queue items, operator audit/request rows and publications**. Non-empty queue/audit restart evidence comes from the disposable copy, not real release processing. No source was activated and no provider or Telegram request was made.
+- Both archive checksum checks still passed after restarts/cleanup; protected files were retained.
+- All three containers healthy; `pg_isready` accepted connections; Redis returned `PONG`. Recent service logs showed orderly shutdown/startup and readiness.
+- `ss` still observed Gunicorn at **`91.107.178.12:8000`**, PostgreSQL at **`127.0.0.1:55432`**, Redis at **`127.0.0.1:56379`**.
+- Final server request to **`http://91.107.178.12:8000/health/`** returned **HTTP 200** and **`{"status": "ok", "database": "ok"}`**.
+- Nginx configuration SHA-256 listings and normalized IPv4/IPv6 firewall/nftables snapshots still matched the original pre-installation evidence. No Nginx/firewall changes occurred.
+- `.env` remained root-owned mode 0600; clean deployed Git SHA remained **`e85ae5e248a55d29dfcdca6af9ccb4785a39ee0c`**.
+- Final verification completed with exit 0 at **`2026-10-02T15:31:28Z`** (**19:01:28 Asia/Tehran**).
+
+This authorized Phase 3 slice is complete. No administrator was created. Full M6 remains incomplete: accounts/authenticated panel verification, RapFaDrop HTTPS, scheduled/off-host backups, worker/beat recovery, actual media/publication-ID durability, source pilots and production activation remain deferred to later owner authorization.
