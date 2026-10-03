@@ -447,3 +447,43 @@ Here `...` means the same project and two absolute `-f` paths shown above. The s
 - Only original web/PostgreSQL/Redis services remained, all healthy. Server-IP `/health/` returned HTTP 200 with `{"status":"ok","database":"ok"}`. DEBUG=false, persisted `.env` fingerprint, clean deployed SHA, Nginx hashes and normalized IPv4/IPv6/nftables firewall snapshots were unchanged. Timestamp comments from `iptables-save` were excluded when comparing rules.
 
 This controlled pilot is stopped. Polling, media/publication and Telegram remain disabled. Documentation-only delivery changes `M6_OPERATIONS.md` and `STATUS.md`; the server application SHA is unchanged. The stored-item/restart/isolation and observed error-backoff checks passed, but the initial publication-envelope scheduling requirement failed and was corrected. Further activation needs provider 403 diagnosis and a measured sustainable interval; permanent worker/beat operation, broader source coverage, explicit rate-limit behavior and media/publication recovery remain deferred.
+
+## Controlled Spotify metadata pilot — 2026-10-03
+
+The owner authorized deployment of the already-pushed SpotifyScraper 3.9.2 implementation and metadata-only activation. Times in this section are server UTC on 2026-10-03; Tehran is UTC+03:30. The server checkout was clean at `44d0c62cd59eb8701d9599ccf8aae5aadb5b46d0` and `/health/` returned HTTP 200 before work. The final deployed SHA is **`af0819bfeabd9a19b7bbdb9d007a3adfff947f71`**. The five Spotify source IDs below are distinct from the earlier Sijal SoundCloud source 32, which remains disabled.
+
+### Interrupted-backup recovery and deployment
+
+The protected archive `/var/backups/rapfadrop/pre_spotify_20261003.dump` (171,999 bytes, mode 0600, root-only directory) and SHA-256 sidecar (mode 0600) passed `sha256sum --check`; `pg_restore --list` parsed the archive. The interrupted run had restored it into disposable `spotify_restore_20261003`. Production and restore each had **37 tables, 30 artists and 57 sources**. A canonical row-content hash across every table matched exactly: `b2386785c7b71a128d502c3fb88f0f3735218a0fec4651e58b19ad4965b7790f`, with zero table mismatches. Raw `pg_dump --data-only` byte hashes differed, so they were not used as proof of restored content. After the row comparison, only `spotify_restore_20261003` was dropped; `psql -lqt` confirmed it absent. The protected archive remains for recovery.
+
+Deployment used `git fetch origin main`, verified `origin/main` equals the exact SHA, `git checkout af0819bfeabd9a19b7bbdb9d007a3adfff947f71`, `docker compose -p rapfadrop -f compose.internal.yaml config --quiet`, and `build web`. The dedicated web image was recreated using `up -d --no-deps --no-build --wait --wait-timeout 90 web`. `migrate --noinput` applied **no migrations**; `migrate --check`, `makemigrations --check --dry-run`, and `manage.py check` passed. Web, PostgreSQL and Redis were healthy; `/health/` returned `{"status":"ok","database":"ok"}`. Server `.env` retained `TELEGRAM_MODE=disabled`, live/publication flags false, and no bot token. No application source was edited on the server.
+
+### Identity, baseline and scheduled polling
+
+The deployed read-only `probe_spotify_pilot --rounds 3` compared each stored source ID and live artist name with the database artist record before querying its full discography. All five matched; each of three complete polls per profile returned the same ID-set digest. The probe used **43 metadata HTTP requests**: two per artist identity plus three rounds of three requests for Sijal and two for each other artist. Each first/second/third discography call completed in seconds, with no reported error. A further read-only overlap check found no release IDs shared among the five profiles. No Premium, credentials, cookies, audio or Telegram access was used.
+
+| Artist | Identity lookup latency (s) | Three complete discography latencies (s) | Metadata requests per discography call |
+| --- | ---: | --- | ---: |
+| Sijal | 0.587 | 0.778, 0.239, 0.272 | 3 |
+| Fadaei | 0.428 | 0.290, 0.257, 0.224 | 2 |
+| Ho3ein | 0.877 | 0.451, 0.138, 0.154 | 2 |
+| Hichkas | 0.418 | 0.197, 0.195, 0.165 | 2 |
+| Yas | 0.683 | 0.197, 0.188, 0.293 | 2 |
+
+| Artist | Spotify source ID | Live identity | IDs per complete poll | Discography pages | Baseline time UTC | Final state |
+| --- | ---: | --- | ---: | ---: | --- | --- |
+| Sijal | 31 | exact | 89 | 2 | 13:10:42 | verified, enabled |
+| Fadaei | 39 | exact | 33 | 1 | 13:10:44 | verified, enabled |
+| Ho3ein | 48 | exact | 7 | 1 | 13:10:45 | verified, enabled |
+| Hichkas | 42 | exact | 11 | 1 | 13:10:45 | verified, enabled |
+| Yas | 44 | exact | 37 | 1 | 13:10:46 | verified, enabled |
+
+Each source was enabled only for its own baseline, then paused until all five succeeded. The five completed baselines stored **177 historical Spotify SourceItems**, all marked `from_baseline`, without review, processing, media or publication work. Their `poll_interval_seconds` is **180**. No source failed identity or page validation; all five were enabled for polling at `13:13:13Z` after baseline inspection. Audit events record identity verification, the baseline pause and polling enablement. All other sources remain unchanged.
+
+The server-only, protected `/var/lib/rapfadrop-operations/spotify-pilot.compose.yaml` layers onto `compose.internal.yaml`. It keeps host networking, the deployed `rapfadrop-web:latest` image, Spotify mode `spotifyscraper`, Telegram/publication switches disabled, and a single worker consuming only the `spotify-pilot` Redis queue. A read-only mounted `/var/lib/rapfadrop-operations/spotify_pilot.py` asserts those guards after Django/Celery lazy loading, installs only `spotify-pilot-poll` every **60 seconds**, and routes that task to the dedicated queue. This specifically avoids the stale publication-envelope fault seen in the earlier SoundCloud pilot. `docker compose ... config --quiet`, wrapper startup assertion, and web health passed before activation. Worker and beat started at approximately `13:11:58Z` and remained running. Their logs showed only `spotify-pilot-poll` dispatches; Redis default and pilot queues both measured zero after processing.
+
+Three scheduled provider cycles per source succeeded at approximately **13:13:58–14:00Z**, **13:16:58–17:00Z**, and **13:20:58–21:00Z**. Worker task durations were **1.801, 1.832 and 1.744 seconds** for each five-source due batch. Each batch made the expected 11 Spotify metadata requests (Sijal 3; four other artists 2 each) and returned 89/33/7/11/37 IDs again. Beat dispatched every 60 seconds; non-due ticks returned `{}`. The third provider batch occurred 240 seconds after the second because the 13:19:58 tick ran just before the stored due timestamp and correctly skipped, then the 13:20:58 tick polled. Thus the configured 180-second source interval was respected without an early request, while observed provider spacing was 180 then 240 seconds. A further five-source batch succeeded at 13:24:58–25:00Z while documentation was prepared.
+
+Final readback after the required three cycles found five enabled/verified Spotify sources, **177 Spotify SourceItems with 177 baseline flags**, no duplicate native Spotify IDs, three successful poll audits per source, zero poll-failure audits or consecutive failures, and zero reviews, matches, processing queue items, media candidates/attempts, publications/attempts and broker queue entries. No historical post, audio download or Telegram send was observed. Worker and beat were running, and web/PostgreSQL/Redis were healthy. Server-side `manage.py test sources.test_spotify_scraper` passed **10 tests** against a temporary test database, including a simulated 429 retry-after and independent SoundCloud progress. No live 401/403/429 or failure/backoff event occurred during this window; live failure independence remains unmeasured. No new release ID appeared, so detection latency cannot be inferred from these historical polls.
+
+Commands and server-only evidence scripts are retained under `/var/lib/rapfadrop-operations/spotify_*` and the protected Compose overlay. The operational command is `docker compose -p rapfadrop -f /opt/rapfadrop/compose.internal.yaml -f /var/lib/rapfadrop-operations/spotify-pilot.compose.yaml`; it must be used for future web/worker/beat management so the Spotify mode and disabled-publication guards persist. The project checkout remained clean at the exact deployed SHA after verification. Production publication remains disabled.
