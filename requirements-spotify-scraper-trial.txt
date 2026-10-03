@@ -1,0 +1,2 @@
+# Reproducible package audit only. Not installed by Dockerfile or app services.
+spotifyscraper==3.9.2

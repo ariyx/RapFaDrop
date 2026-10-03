@@ -1,5 +1,7 @@
 # Project status and handoff
 
+Updated: 2026-10-03. The local `spotifyscraper` 3.9.2 trial was stopped at the package method gate: its discography method calls Spotify's internal Pathfinder endpoint, prohibited by the trial task, and its `AlbumRef` return type omits release date and type. No artist-specific package network probe was permissible, so the five planned seed probes and repeatability/performance gates remain unobserved. No runtime dependency or adapter was added; Spotify remains unavailable with all source flags unchanged. Local Compose build, migrations/drift, Django check, all 106 tests, five health checks and HTTP health passed after Docker Desktop was started. See [`reports/SPOTIFY_SCRAPER_TRIAL.md`](reports/SPOTIFY_SCRAPER_TRIAL.md). This trial involved no deployment or source activation; historical server SHA remains `44d0c62cd59eb8701d9599ccf8aae5aadb5b46d0`.
+
 Updated: 2026-10-02. Local Spotify discovery feasibility is complete: two rounds/five seed artists did not establish a reliable no-Premium current-release feed. Spotify remains unavailable; SoundCloud/Spotify remain parallel first-observation sources. Local status/backoff and disabled-publication beat safeguards passed all 106 tests and Docker/check/health verification. No deployment or source activation occurred. Last recorded server SHA remains `44d0c62cd59eb8701d9599ccf8aae5aadb5b46d0`, with all sources and polling disabled after the M6 pilot. Historical milestone checkpoints follow below.
 
 ## Current state
