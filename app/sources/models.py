@@ -52,7 +52,10 @@ class ArtistSource(models.Model):
 
     @property
     def release_polling_available(self):
-        return self.platform == self.Platform.SOUNDCLOUD
+        from django.conf import settings
+        return self.platform == self.Platform.SOUNDCLOUD or (
+            self.platform == self.Platform.SPOTIFY and settings.SPOTIFY_DISCOVERY_MODE == "spotifyscraper"
+        )
 
 
 class SourceItem(models.Model):

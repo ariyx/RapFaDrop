@@ -42,12 +42,23 @@ def _upsert_items(source, items, observed_at, from_baseline):
 
 def baseline_source(source, adapter=None, now=None):
     """Snapshot history atomically. Repeating after a crash is safe by stable IDs."""
+    if source.baseline_completed_at is not None:
+        completed = BaselineRun.objects.filter(source=source, status=BaselineRun.Status.COMPLETE).order_by("-completed_at").first()
+        if completed is None:
+            raise ValueError("Completed baseline has no successful run record")
+        return completed
     if not source.artist.enabled or not source.enabled or source.verification != ArtistSource.Verification.VERIFIED:
         raise ValueError("Baseline requires an enabled artist and enabled, verified source")
-    if source.platform != ArtistSource.Platform.SOUNDCLOUD:
+    if not source.release_polling_available:
         raise ValueError("Release baselining is unavailable for this platform")
     now = now or timezone.now()
     adapter = adapter or adapter_for(source.platform)
+    try:
+        # Provider integrity is checked before a baseline run or cursor is written.
+        items = adapter.list_recent(source)
+    except Exception as exc:
+        record_source_failure(source, exc, now=now)
+        raise
     run = BaselineRun.objects.filter(source=source, status=BaselineRun.Status.RUNNING).order_by("started_at").first()
     if run is None:
         run = BaselineRun.objects.create(source=source, started_at=now)
@@ -55,7 +66,6 @@ def baseline_source(source, adapter=None, now=None):
     source.save(update_fields=("baseline_started_at", "updated_at"))
     SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="baseline_started")
     try:
-        items = adapter.list_recent(source)
         with transaction.atomic():
             created_count = _upsert_items(source, items, now, from_baseline=True)
             run.status = BaselineRun.Status.COMPLETE
@@ -83,6 +93,9 @@ def record_source_failure(source, error, now=None):
     now = now or timezone.now()
     source.consecutive_failures += 1
     delay = min(source.poll_interval_seconds * (2 ** (source.consecutive_failures - 1)), 21600)
+    retry_after = getattr(error, "retry_after", None)
+    if isinstance(retry_after, (int, float)) and 0 <= retry_after <= 86400:
+        delay = max(delay, retry_after)
     source.last_error = f"{type(error).__name__}: {error}"[:1000]
     source.last_error_at = now
     source.next_poll_at = now + timedelta(seconds=delay)
@@ -96,13 +109,13 @@ def poll_source(source, adapter=None, now=None):
         return "skipped"
     if not source.artist.enabled:
         return "skipped"
-    if source.platform == ArtistSource.Platform.SPOTIFY:
+    if source.platform == ArtistSource.Platform.SPOTIFY and not source.release_polling_available:
         reason = SpotifyAdapter.status()
         logger.warning("Spotify discovery unavailable for source_id=%s; no provider request", source.pk)
         record_source_failure(source, SourceUnavailable(reason), now=now)
         SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="release_poll_unavailable", detail={"reason": reason})
         return "unavailable"
-    if source.platform != ArtistSource.Platform.SOUNDCLOUD:
+    if not source.release_polling_available:
         return "unavailable"
     adapter = adapter or adapter_for(source.platform)
     if source.baseline_completed_at is None:
@@ -110,8 +123,22 @@ def poll_source(source, adapter=None, now=None):
         return "baselined"
     try:
         items = adapter.list_recent(source)
+        new_ids = set()
+        if source.platform == ArtistSource.Platform.SPOTIFY:
+            observed_ids = {item["native_item_id"] for item in items}
+            known_ids = set(SourceItem.objects.filter(platform=source.platform, native_item_id__in=observed_ids).values_list("native_item_id", flat=True))
+            new_ids = observed_ids - known_ids
+            if len(new_ids) > 10:
+                raise ValueError("Spotify poll found more than ten unknown IDs; inspect possible regional catalog backfill")
+            for item in items:
+                if item["native_item_id"] in new_ids:
+                    adapter.fetch_item(source, item)
         with transaction.atomic():
             _upsert_items(source, items, now, from_baseline=False)
+            if new_ids:
+                from releases.services import ingest_source_item
+                for source_item in SourceItem.objects.filter(platform=source.platform, native_item_id__in=new_ids):
+                    ingest_source_item(source_item, now=now)
             source.last_success_at = now
             source.next_poll_at = now + timedelta(seconds=source.poll_interval_seconds)
             source.consecutive_failures = 0
@@ -134,7 +161,7 @@ def poll_due_sources(now=None, adapters=None):
         verification=ArtistSource.Verification.VERIFIED,
     ).filter(Q(next_poll_at__isnull=True) | Q(next_poll_at__lte=now)).order_by("next_poll_at", "pk")
     for source in sources:
-        # Spotify rows are intentionally visible as unavailable, never sent to a release API.
+        # Each provider is isolated; one failed source cannot stop another.
         adapter = (adapters or {}).get(source.platform) or adapter_for(source.platform)
         try:
             results[source.pk] = poll_source(source, adapter=adapter, now=now)

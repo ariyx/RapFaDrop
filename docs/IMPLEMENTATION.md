@@ -3,6 +3,10 @@
 Status: **M4 publication orchestration and captions implemented; live Telegram behavior remains gated on an isolated test-channel probe.**
 Repository: `https://github.com/ariyx/RapFaDrop.git` (documentation-only at the checkpoint in [`STATUS.md`](STATUS.md); verify current Git state).
 Product source of truth: [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md).  
+
+## Controlled Spotify metadata discovery (2026-10-03)
+
+The owner authorized SpotifyScraper 3.9.2 and its Spotify web-player/Pathfinder dependency without Premium. This supersedes the older trial's endpoint and release-date restrictions. `RAPFADROP_SPOTIFY_DISCOVERY_MODE=spotifyscraper` selects the replaceable metadata-only adapter; `unavailable` remains the default. Identity is checked against each stored artist/source record before verification. The adapter fetches all album and single groups with strict page/total/ID validation; a failed or partial response cannot become an empty baseline or advance a successful poll cursor. The baseline stores historical IDs only. Later complete polls enrich unseen IDs with optional date/type/credits/tracks, then use `SourceItem` and the existing review/matching tables. A new regional catalog ID is reviewed rather than assumed newly published. Spotify metadata creates no audio or publication work, even when a review is approved. SoundCloud remains a separate polling path and independent discovery source. Operational risks and measured results are in [`reports/SPOTIFY_PILOT.md`](reports/SPOTIFY_PILOT.md).
 Reference for documentation organization: `https://github.com/ariyx/flow`; reuse its separation of agent instructions, product decisions and milestone plans, not its technology or product rules.
 
 ## 1. Outcome and scope

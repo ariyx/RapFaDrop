@@ -226,6 +226,24 @@ def ingest_source_item(source_item, now=None):
         return _review(source_item, ReviewItem.Category.INVALID_SOURCE, "Source item has no usable title", {"source_title": title})[0]
     if not source_item.source.enabled or source_item.source.verification != ArtistSource.Verification.VERIFIED or not artist.enabled:
         return _review(source_item, ReviewItem.Category.INVALID_SOURCE, "Source or artist is not enabled and verified", {"artist": artist.official_name, "source_enabled": source_item.source.enabled, "verification": source_item.source.verification, "artist_enabled": artist.enabled})[0]
+    if source_item.source.platform == ArtistSource.Platform.SPOTIFY and metadata.get("spotify_discovery"):
+        # A newly visible regional catalog ID need not be a newly published work.
+        # Keep this release fact in the existing review/match workflow without
+        # creating a media or publication queue item.
+        credits = [normalize_text(name) for name in metadata.get("artist_credits") or []]
+        accepted = {normalize_text(artist.official_name), *[normalize_text(alias) for alias in artist.aliases or []]}
+        if credits and not accepted.intersection(credits):
+            return _review(source_item, ReviewItem.Category.ARTIST_MISMATCH, "Spotify release credits omit the verified artist", {"artist": artist.official_name, "credits": metadata.get("artist_credits")})[0]
+        candidates = [release for release in CanonicalRelease.objects.filter(credited_artists=artist).distinct() if normalize_text(release.title) == normalized]
+        candidate = candidates[0] if len(candidates) == 1 else None
+        evidence = {"spotify_release_id": source_item.native_item_id, "artist": artist.official_name,
+                    "title": title, "release_type": metadata.get("album_type") or None,
+                    "release_date": source_item.source_release_at.date().isoformat() if source_item.source_release_at else None,
+                    "candidate_release_id": candidate.pk if candidate else None,
+                    "regional_backfill_possible": True}
+        return _review(source_item, ReviewItem.Category.POSSIBLE_DUPLICATE if candidate else ReviewItem.Category.LOW_CONFIDENCE,
+                       "New Spotify ID requires release-time and cross-platform identity review", evidence,
+                       release=candidate, confidence=65 if candidate else 0, method="spotify_release_id_review")[0]
     mismatched_uploader = _uploader_mismatch(source_item)
     if mismatched_uploader:
         return _review(source_item, ReviewItem.Category.ARTIST_MISMATCH, "Provider uploader does not match the verified artist/source identity", {"uploader": metadata.get("uploader"), "artist": artist.official_name, "accepted_names": [artist.official_name, *artist.aliases, *_profile_names(source_item.source)]})[0]
@@ -394,7 +412,7 @@ def resolve_review(review_item, action, actor=None, *, release=None, track=None,
         review.resolved_track = track
     review.save(update_fields=("state", "admin_action", "actor", "reviewed_at", "resolution", "resolved_release", "resolved_track", "updated_at"))
     queue = None
-    if action in {"approve", "correct"}:
+    if action in {"approve", "correct"} and not review.source_item.metadata.get("spotify_discovery"):
         queue, _ = _queue_item(release=match.release, track=match.track, now=now)
     audit_action = {"approve": "review_approved", "reject": "review_rejected", "correct": "review_corrected"}[action]
     IdentityAuditEvent.objects.create(review_item=review, source_match=match, source_item=review.source_item, actor=actor, action=audit_action, detail={"release_id": match.release_id, "track_id": match.track_id, "resolution": resolution, "queue_id": queue.pk if queue else None})

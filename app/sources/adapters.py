@@ -25,18 +25,34 @@ class SoundCloudAdapter:
 
 class SpotifyAdapter:
     platform = "spotify"
-    identity_capability = "public oEmbed identity only; sampled at M0"
-    release_polling_available = False
+    identity_capability = "SpotifyScraper artist identity; requires explicit verification"
 
     @staticmethod
     def status():
         mode = settings.SPOTIFY_DISCOVERY_MODE
-        if mode != "unavailable":
-            return "Unavailable: unsupported Spotify discovery mode; no adapter selected"
-        return "Unavailable: public identity/embed subsets do not prove current release listing; authenticated API access unavailable"
+        if mode == "spotifyscraper":
+            return "SpotifyScraper 3.9.2 discovery enabled; individual sources still require identity verification and baseline"
+        if mode == "unavailable":
+            return "Unavailable: Spotify discovery is disabled by configuration"
+        return "Unavailable: unsupported Spotify discovery mode; no adapter selected"
 
     def list_recent(self, source):
-        raise SourceUnavailable(self.status())
+        if settings.SPOTIFY_DISCOVERY_MODE != "spotifyscraper":
+            raise SourceUnavailable(self.status())
+        from .spotify_scraper import SpotifyScraperDiscovery
+        return SpotifyScraperDiscovery().list_recent(source)
+
+    def resolve_profile(self, source):
+        if settings.SPOTIFY_DISCOVERY_MODE != "spotifyscraper":
+            raise SourceUnavailable(self.status())
+        from .spotify_scraper import SpotifyScraperDiscovery
+        return SpotifyScraperDiscovery().resolve_profile(source)
+
+    def fetch_item(self, source, item):
+        if settings.SPOTIFY_DISCOVERY_MODE != "spotifyscraper":
+            raise SourceUnavailable(self.status())
+        from .spotify_scraper import SpotifyScraperDiscovery
+        return SpotifyScraperDiscovery().fetch_item(source, item)
 
 
 def _release_time(item):

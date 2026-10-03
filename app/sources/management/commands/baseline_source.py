@@ -18,8 +18,8 @@ class Command(BaseCommand):
             raise CommandError("Source not found") from exc
         if not source.artist.enabled or not source.enabled or source.verification != ArtistSource.Verification.VERIFIED:
             raise CommandError("Baseline requires an enabled artist and enabled, verified source")
-        if source.platform != ArtistSource.Platform.SOUNDCLOUD:
-            raise CommandError("Spotify release baselining is unavailable until a bounded release method is proven")
+        if not source.release_polling_available:
+            raise CommandError("Release baselining is unavailable for this source configuration")
         try:
             run = baseline_source(source)
         except SourceUnavailable as exc:

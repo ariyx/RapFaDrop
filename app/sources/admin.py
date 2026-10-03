@@ -75,7 +75,7 @@ class ArtistSourceAdmin(admin.ModelAdmin):
 
     @admin.display(description="Release polling")
     def release_polling_available(self, source):
-        return "Implemented; candidate profile unprobed" if source.release_polling_available else SpotifyAdapter.status()
+        return "Implemented; requires verified identity and complete baseline" if source.release_polling_available else SpotifyAdapter.status()
 
     def save_model(self, request, obj, form, change):
         old = None

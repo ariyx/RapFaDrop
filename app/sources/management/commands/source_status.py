@@ -15,5 +15,5 @@ class Command(BaseCommand):
                 f"artist_enabled={source.artist.enabled}", f"source_enabled={source.enabled}", f"verification={source.verification}",
                 f"baseline={source.baseline_completed_at or 'pending'}", f"next={source.next_poll_at or 'unscheduled'}",
                 f"failures={source.consecutive_failures}", f"error={source.last_error or '-'}",
-                f"release_polling={'implemented/profile-unprobed' if source.release_polling_available else 'unavailable/identity-only'}",
+                f"release_polling={'implemented/verification-required' if source.release_polling_available else 'unavailable'}",
             )))

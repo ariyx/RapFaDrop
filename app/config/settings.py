@@ -119,5 +119,5 @@ from .scheduling import beat_schedule
 
 CELERY_BEAT_SCHEDULE = beat_schedule(PUBLICATION_WORKER_ENABLED, TELEGRAM_LIVE_ENABLED, TELEGRAM_MODE)
 
-# No empirical public method has passed the repeatable recent-release gate.
+# The adapter is selected explicitly; existing installations stay unavailable.
 SPOTIFY_DISCOVERY_MODE = os.environ.get("RAPFADROP_SPOTIFY_DISCOVERY_MODE", "unavailable")
