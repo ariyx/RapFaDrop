@@ -98,6 +98,7 @@ MEDIA_PROVIDER_ORDER = tuple(
     for value in os.environ.get("RAPFADROP_MEDIA_PROVIDER_ORDER", "yt-dlp").split(",")
     if value.strip()
 )
+SPOTIFY_MEDIA_BRIDGE_ENABLED = os.environ.get("RAPFADROP_SPOTIFY_MEDIA_BRIDGE_ENABLED", "false").lower() == "true"
 
 TELEGRAM_MODE = os.environ.get("RAPFADROP_TELEGRAM_MODE", "disabled")
 TELEGRAM_LIVE_ENABLED = os.environ.get("RAPFADROP_TELEGRAM_LIVE_ENABLED", "false").lower() == "true"
@@ -117,7 +118,7 @@ CELERY_TASK_IGNORE_RESULT = True
 CELERY_TIMEZONE = "UTC"
 from .scheduling import beat_schedule
 
-CELERY_BEAT_SCHEDULE = beat_schedule(PUBLICATION_WORKER_ENABLED, TELEGRAM_LIVE_ENABLED, TELEGRAM_MODE)
+CELERY_BEAT_SCHEDULE = beat_schedule(PUBLICATION_WORKER_ENABLED, TELEGRAM_LIVE_ENABLED, TELEGRAM_MODE, SPOTIFY_MEDIA_BRIDGE_ENABLED)
 
 # The adapter is selected explicitly; existing installations stay unavailable.
 SPOTIFY_DISCOVERY_MODE = os.environ.get("RAPFADROP_SPOTIFY_DISCOVERY_MODE", "unavailable")

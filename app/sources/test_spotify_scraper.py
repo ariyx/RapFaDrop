@@ -1,6 +1,7 @@
 import json
 from datetime import timedelta
 from unittest.mock import Mock
+from types import SimpleNamespace
 
 import httpx
 from django.test import SimpleTestCase, TestCase, override_settings
@@ -11,7 +12,7 @@ from releases.services import ingest_source_item, resolve_review
 
 from .models import Artist, ArtistSource, BaselineRun, SourceItem
 from .services import baseline_source, poll_due_sources, poll_source
-from .spotify_scraper import SpotifyMetadataError, ValidatedTransport
+from .spotify_scraper import SpotifyMetadataError, SpotifyScraperDiscovery, ValidatedTransport
 
 
 ARTIST_ID = "5F0BGBdSL945Bzxrq8aGbn"
@@ -30,6 +31,27 @@ def request_url(offset):
 
 
 class DiscographyIntegrityTests(SimpleTestCase):
+    def test_release_detail_requires_complete_track_list(self):
+        album_id = "3" * 22
+        artist = SimpleNamespace(name="Sijal")
+        track = SimpleNamespace(id="4" * 22, name="Full work", duration_ms=180000, artists=[artist])
+        album = SimpleNamespace(id=album_id, album_type="single", artists=[artist], total_tracks=2,
+                                tracks=[track], release_date=None, name="Full work")
+        client = Mock()
+        client.get_album.return_value = album
+        context = Mock()
+        context.__enter__ = Mock(return_value=client)
+        context.__exit__ = Mock(return_value=False)
+        discovery = SpotifyScraperDiscovery(client_factory=lambda **kwargs: context,
+                                            transport_factory=lambda: Mock())
+        item = spotify_item(album_id)
+        with self.assertRaisesRegex(SpotifyMetadataError, "incomplete"):
+            discovery.fetch_item(None, item)
+        album.total_tracks = 1
+        result = discovery.fetch_item(None, item)
+        self.assertEqual(result["metadata"]["track_count"], 1)
+        self.assertEqual(result["metadata"]["tracks"][0]["duration_seconds"], 180)
+
     def test_complete_two_pages_and_exact_group_total(self):
         base = Mock()
         base.get.side_effect = [page(51, 0, 50), page(51, 50, 1)]

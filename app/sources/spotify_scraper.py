@@ -188,8 +188,16 @@ class SpotifyScraperDiscovery:
             if album_type not in {"single", "album", "ep"}:
                 album_type = ""
             artists = [str(artist.name)[:200] for artist in album.artists]
-            tracks = [{"id": track.id, "title": str(track.name)[:500]}
-                      for track in list(album.tracks)[:100] if SPOTIFY_ID.fullmatch(track.id or "")]
+            if (not isinstance(album.total_tracks, int) or album.total_tracks < 1 or
+                    album.total_tracks > 100 or len(album.tracks) != album.total_tracks):
+                raise SpotifyMetadataError("Spotify release track list is incomplete or exceeds the pilot limit")
+            tracks = []
+            for position, track in enumerate(album.tracks, 1):
+                if not SPOTIFY_ID.fullmatch(track.id or "") or not track.name or track.duration_ms <= 0:
+                    raise SpotifyMetadataError("Spotify release track lacks stable ID, title, or duration")
+                tracks.append({"id": track.id, "title": str(track.name)[:500],
+                               "position": position, "duration_seconds": round(track.duration_ms / 1000, 3),
+                               "artist_credits": [str(credit.name)[:200] for credit in track.artists]})
             item["source_release_at"] = album.release_date
             item["metadata"].update({"album_type": album_type, "album": album.name if album_type in {"album", "ep"} else "", "artist_credits": artists, "track_count": len(album.tracks), "tracks": tracks})
             item["sanitized_raw_data"].update({"album_type": album_type or None, "release_date": album.release_date.isoformat() if album.release_date else None, "artist_credits": artists, "track_count": len(album.tracks), "tracks": tracks})

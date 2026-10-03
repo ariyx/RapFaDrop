@@ -1,6 +1,7 @@
 import hashlib
 from datetime import timedelta
 
+from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 
@@ -234,13 +235,20 @@ def ingest_source_item(source_item, now=None):
         accepted = {normalize_text(artist.official_name), *[normalize_text(alias) for alias in artist.aliases or []]}
         if credits and not accepted.intersection(credits):
             return _review(source_item, ReviewItem.Category.ARTIST_MISMATCH, "Spotify release credits omit the verified artist", {"artist": artist.official_name, "credits": metadata.get("artist_credits")})[0]
+        bridge_reason = ""
+        bridge_release = None
+        if settings.SPOTIFY_MEDIA_BRIDGE_ENABLED:
+            from .spotify_bridge import try_auto_bridge
+            result, bridge_reason, bridge_release = try_auto_bridge(source_item, now=now)
+            if result:
+                return result
         candidates = [release for release in CanonicalRelease.objects.filter(credited_artists=artist).distinct() if normalize_text(release.title) == normalized]
-        candidate = candidates[0] if len(candidates) == 1 else None
+        candidate = bridge_release or (candidates[0] if len(candidates) == 1 else None)
         evidence = {"spotify_release_id": source_item.native_item_id, "artist": artist.official_name,
                     "title": title, "release_type": metadata.get("album_type") or None,
                     "release_date": source_item.source_release_at.date().isoformat() if source_item.source_release_at else None,
                     "candidate_release_id": candidate.pk if candidate else None,
-                    "regional_backfill_possible": True}
+                    "regional_backfill_possible": True, "bridge_reason": bridge_reason or None}
         return _review(source_item, ReviewItem.Category.POSSIBLE_DUPLICATE if candidate else ReviewItem.Category.LOW_CONFIDENCE,
                        "New Spotify ID requires release-time and cross-platform identity review", evidence,
                        release=candidate, confidence=65 if candidate else 0, method="spotify_release_id_review")[0]
@@ -395,7 +403,9 @@ def resolve_review(review_item, action, actor=None, *, release=None, track=None,
         match.release = release
         match.track = track
         match.confidence = 100
-    elif action == "approve" and match.release_id is None:
+    elif action == "approve" and match.release_id is None and not (
+        settings.SPOTIFY_MEDIA_BRIDGE_ENABLED and review.source_item.metadata.get("spotify_discovery")
+    ):
         raise ValueError("Review needs a corrected canonical release before approval")
     match.state = {"approve": SourceMatch.State.APPROVED, "reject": SourceMatch.State.REJECTED, "correct": SourceMatch.State.CORRECTED}[action]
     match.admin_decision = action
@@ -412,10 +422,16 @@ def resolve_review(review_item, action, actor=None, *, release=None, track=None,
         review.resolved_track = track
     review.save(update_fields=("state", "admin_action", "actor", "reviewed_at", "resolution", "resolved_release", "resolved_track", "updated_at"))
     queue = None
-    if action in {"approve", "correct"} and not review.source_item.metadata.get("spotify_discovery"):
-        queue, _ = _queue_item(release=match.release, track=match.track, now=now)
+    queue_ids = []
+    if action in {"approve", "correct"}:
+        if review.source_item.metadata.get("spotify_discovery"):
+            if settings.SPOTIFY_MEDIA_BRIDGE_ENABLED:
+                from .spotify_bridge import bridge_approved_review
+                queue_ids = bridge_approved_review(review, match, resolution=resolution, now=now)
+        else:
+            queue, _ = _queue_item(release=match.release, track=match.track, now=now)
     audit_action = {"approve": "review_approved", "reject": "review_rejected", "correct": "review_corrected"}[action]
-    IdentityAuditEvent.objects.create(review_item=review, source_match=match, source_item=review.source_item, actor=actor, action=audit_action, detail={"release_id": match.release_id, "track_id": match.track_id, "resolution": resolution, "queue_id": queue.pk if queue else None})
+    IdentityAuditEvent.objects.create(review_item=review, source_match=match, source_item=review.source_item, actor=actor, action=audit_action, detail={"release_id": match.release_id, "track_id": match.track_id, "resolution": resolution, "queue_id": queue.pk if queue else None, "queue_ids": queue_ids})
     return review
 
 
