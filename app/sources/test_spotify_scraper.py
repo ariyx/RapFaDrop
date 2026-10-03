@@ -10,7 +10,7 @@ from releases.models import CanonicalRelease, ProcessingQueueItem, ReviewItem, S
 from releases.services import ingest_source_item, resolve_review
 
 from .models import Artist, ArtistSource, BaselineRun, SourceItem
-from .services import baseline_source, poll_source
+from .services import baseline_source, poll_due_sources, poll_source
 from .spotify_scraper import SpotifyMetadataError, ValidatedTransport
 
 
@@ -99,6 +99,11 @@ class FakeSpotify:
         return item
 
 
+class FakeSoundCloud:
+    def list_recent(self, source):
+        return []
+
+
 @override_settings(SPOTIFY_DISCOVERY_MODE="spotifyscraper")
 class SpotifyPollingTests(TestCase):
     def setUp(self):
@@ -145,6 +150,21 @@ class SpotifyPollingTests(TestCase):
         self.assertEqual(self.source.last_success_at, success)
         self.assertEqual(SourceItem.objects.count(), count)
         self.assertEqual(self.source.consecutive_failures, 1)
+
+    def test_rate_limit_backoff_does_not_block_soundcloud(self):
+        class LimitedSpotify(FakeSpotify):
+            def list_recent(self, source):
+                raise SpotifyMetadataError("Spotify metadata HTTP 429", retry_after=600)
+
+        soundcloud = ArtistSource.objects.create(artist=self.artist, platform="soundcloud", enabled=True,
+            verification="verified", next_poll_at=timezone.now() - timedelta(seconds=1))
+        start = timezone.now()
+        results = poll_due_sources(now=start, adapters={"spotify": LimitedSpotify([]), "soundcloud": FakeSoundCloud()})
+        self.assertEqual(results[self.source.pk], "failed")
+        self.assertEqual(results[soundcloud.pk], "baselined")
+        self.source.refresh_from_db()
+        self.assertIsNone(self.source.baseline_completed_at)
+        self.assertGreaterEqual(self.source.next_poll_at, start + timedelta(seconds=600))
 
     def test_new_id_is_enriched_once_and_reviewed_without_publication_work(self):
         baseline_source(self.source, adapter=FakeSpotify([self.first]))
