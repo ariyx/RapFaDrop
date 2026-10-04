@@ -1,5 +1,9 @@
 # M6 operations evidence
 
+## Roster expansion completion, 2026-10-04
+
+Application SHA `2a439a67ce5251c2004a4bce93c2ad770be11f8c` is tested and deployed. Production expanded 30/57 to 83 artists/130 sources, reusing every existing record and adding 53 disabled artists/73 disabled sources. All 143 exact-SHA server tests and 19 focused import/source tests passed. A protected 201480-byte pre-import backup passed checksum/list and 37-table restore comparison; the disposable restore database was dropped. The guarded dry-run/import/repeat preserved every existing source field, original artist flags and baseline/item hashes; repeat created zero rows. Five original sources remain active, the 177 historical Spotify IDs and 51 older SoundCloud items remain, bridge ON and publication OFF. Production health/admin counts passed, downstream/media counts stayed zero, and test resources were removed. `.env`, pilot overlays, firewall and Nginx were preserved. Commands and safe comparisons are retained in `/var/lib/rapfadrop-operations/roster-20261004/`; details and unresolved profiles: [roster expansion report](ARTIST_ROSTER_EXPANSION.md). All sections below are historical checkpoints.
+
 ## Server-only Spotify E2E completion, 2026-10-04
 
 The owner-authorized isolated test is complete at tested/deployed application SHA `26afd28da5e20bbca37975b5a4512ea871dd6f72`. See [the full evidence report](SPOTIFY_E2E.md) for exact test-channel message IDs/deletion results, acquisition quality, stage timings, fixes, backup restore digests and limitations. The final full server suite passed 135 tests, and post-deployment publication checks passed 35 tests. A real reviewed single and nine-track LP passed through actual application acquisition/tagging/publication, retry/restart and replay. No live-release latency is claimed.

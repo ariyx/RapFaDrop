@@ -2,7 +2,7 @@
 
 Self-hosted Persian rap release monitor and Telegram archive for the owner's curated artist list.
 
-**Status:** M4 publication orchestration and captions are implemented. Normal tests use a fake gateway; live Telegram integration remains unverified until an isolated test-channel probe passes. Observed evidence is in `docs/reports/`.
+**Status:** The isolated server Spotify-to-Telegram path passed, and the approved 83-artist roster is deployed with new records disabled. Production Telegram publication remains OFF. Current SHAs, verification limits and operational evidence are in [`docs/STATUS.md`](docs/STATUS.md) and `docs/reports/`.
 
 ## Local setup
 

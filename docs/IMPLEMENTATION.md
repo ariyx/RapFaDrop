@@ -1,6 +1,6 @@
 # RapFaDrop — implementation guide for coding agents
 
-Status: **M4 publication orchestration and captions implemented; live Telegram behavior remains gated on an isolated test-channel probe.**
+Status: **isolated server Spotify-to-Telegram verification and the 83-identity roster expansion complete; production Telegram publication remains OFF.** Current evidence and SHAs are in `STATUS.md`; historical milestone sections below retain their original observations.
 Repository: `https://github.com/ariyx/RapFaDrop.git` (documentation-only at the checkpoint in [`STATUS.md`](STATUS.md); verify current Git state).
 Product source of truth: [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md).  
 
