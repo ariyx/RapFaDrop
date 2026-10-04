@@ -167,7 +167,7 @@ def _mark_uncertain(attempt, message):
     _audit(pub, "reconciliation_required", attempt=attempt)
 
 
-def perform(pub, operation, operation_key, payload, *, gateway, candidate=None, now=None, session_id=None):
+def perform(pub, operation, operation_key, payload, *, gateway, candidate=None, now=None, session_id=None, correction_notice=True):
     """Commit an attempt and channel lease BEFORE a network operation; never blind-resend."""
     now = now or timezone.now()
     if getattr(gateway, "collection_id", None) is not None:
@@ -264,7 +264,7 @@ def perform(pub, operation, operation_key, payload, *, gateway, candidate=None, 
             channel.save(update_fields=("in_flight", "lease_until"))
     if error and operation != "notify":
         _notify_failure(pub, attempt, gateway=gateway, now=now)
-    if not error and operation == "edit_media":
+    if not error and operation == "edit_media" and correction_notice:
         ensure_correction(pub, attempt, gateway=gateway, now=now)
     return pub
 
@@ -299,7 +299,7 @@ def _notify_failure(pub, attempt, *, gateway, now):
     perform(notice, "notify", "initial", {"caption_html": notice.caption_html}, gateway=gateway, now=now)
 
 
-def upgrade_single(pub, candidate, *, gateway, now=None):
+def upgrade_single(pub, candidate, *, gateway, now=None, correction_notice=True):
     candidate = require_ready(candidate)
     pub.refresh_from_db()
     if not pub.message_id or candidate.track_id != pub.track_id:
@@ -313,7 +313,7 @@ def upgrade_single(pub, candidate, *, gateway, now=None):
     tagging_changed = candidate.preparation_report != old.preparation_report
     if not better and not tagging_changed:
         raise PublicationError("Candidate does not provide a measured quality or recorded tag improvement")
-    return perform(pub, "edit_media", f"upgrade:{candidate.pk}", _audio_payload(pub, candidate), gateway=gateway, candidate=candidate, now=now)
+    return perform(pub, "edit_media", f"upgrade:{candidate.pk}", _audio_payload(pub, candidate), gateway=gateway, candidate=candidate, now=now, correction_notice=correction_notice)
 
 
 def ensure_correction(pub, attempt, *, gateway, now=None):

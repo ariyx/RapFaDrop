@@ -2,7 +2,7 @@ from io import StringIO
 from django.core.management import call_command
 from django.test import SimpleTestCase, TestCase
 from operations.models import OperatorSettings
-from operations.management.commands.refresh_owner_defaults import OLD_ROWS, OLD_TAGS
+from operations.management.commands.refresh_owner_defaults import OLD_ROWS, OLD_TAGS, NEW_TAGS
 from .captions import DEFAULT_CONFIG, render_caption
 from .models import CaptionTemplate
 
@@ -21,6 +21,7 @@ class OwnerCaptionTests(SimpleTestCase):
 
     def test_intro_related_links_then_platforms_then_footer(self):
         html = render_caption('album_intro', {'title': 'Album', 'artists': ['Artist'], 'original_album_post_url': 'https://t.me/RapFaDrop/1', 'spotify_url': 'https://open.spotify.com/album/a', 'previous_singles': [{'title': 'Single', 'url': 'https://t.me/RapFaDrop/2'}]}).html
+        self.assertIn('Previously released from this album:', html)
         self.assertLess(html.index('Single</a>'), html.index('Original Album</a>'))
         self.assertLess(html.index('Original Album</a>'), html.index('Spotify</a>'))
         self.assertTrue(html.endswith('Spotify</a>\n\nt.me/RapFaDrop'))
@@ -28,9 +29,9 @@ class OwnerCaptionTests(SimpleTestCase):
 
 class DefaultMigrationTests(TestCase):
     def test_known_defaults_versioned_custom_preserved_and_idempotent(self):
-        old = {**DEFAULT_CONFIG, 'rows': OLD_ROWS, 'intro_footer': '@RapFaDrop'}
+        old = {**DEFAULT_CONFIG, 'rows': OLD_ROWS, 'intro_footer': '@RapFaDrop', 'prior_heading': 'پیش‌تر از این آلبوم منتشر شده:'}
         legacy = CaptionTemplate.objects.create(kind='single_audio', version=1, config=old)
-        custom = CaptionTemplate.objects.create(kind='edition', version=1, config={**old, 'header': 'Owner custom'})
+        custom = CaptionTemplate.objects.create(kind='edition', version=1, config={**old, 'header': 'Owner custom', 'prior_heading': 'Owner custom heading'})
         setting = OperatorSettings.objects.create(pk=1, tag_fields=list(OLD_TAGS))
         out = StringIO()
         call_command('refresh_owner_defaults', stdout=out)
@@ -41,4 +42,4 @@ class DefaultMigrationTests(TestCase):
         self.assertEqual(custom.config['header'], 'Owner custom')
         self.assertTrue(custom.enabled)
         self.assertIn('Customized template retained', out.getvalue())
-        self.assertEqual(set(setting.tag_fields), {'comments', 'encoded_by', 'author_url'})
+        self.assertEqual(set(setting.tag_fields), set(NEW_TAGS))

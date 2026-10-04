@@ -4,7 +4,7 @@ from pathlib import Path
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
 from archive_collection.models import Collection
-from archive_collection.services import freeze, run, status
+from archive_collection.services import freeze, run, status, link_confirmed_publications, refresh_published, retag_published
 from archive_collection.gateway import CollectionGateway
 from archive_collection.export import export
 
@@ -13,7 +13,7 @@ class Command(BaseCommand):
     help = "Explicit frozen archive only; no automatic scheduler."
 
     def add_arguments(self, parser):
-        parser.add_argument("action", choices=("freeze", "status", "pause", "resume", "run", "export", "verify", "cleanup"))
+        parser.add_argument("action", choices=("freeze", "status", "pause", "resume", "run", "export", "verify", "cleanup", "repair-links", "refresh-published", "retag-published"))
         parser.add_argument("--name", default="initial-popular-20261004")
         parser.add_argument("--sha", default="")
         parser.add_argument("--credentials", help="Protected JSON file containing token_file and expected_bot_id")
@@ -22,7 +22,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         action = options["action"]
-        locked = action in {"freeze", "run"}
+        locked = action in {"freeze", "run", "repair-links", "refresh-published", "retag-published"}
         with connection.cursor() as cursor:
             if locked:
                 cursor.execute("SELECT pg_try_advisory_lock(728319430)")
@@ -38,7 +38,7 @@ class Command(BaseCommand):
             if action in {"pause", "resume"}:
                 collection.paused = action == "pause"
                 collection.save(update_fields=("paused",))
-            elif action in {"run", "verify"}:
+            elif action in {"run", "verify", "refresh-published", "retag-published"}:
                 if not options["credentials"]:
                     raise CommandError("Protected collection credentials file required")
                 path = Path(options["credentials"])
@@ -57,8 +57,14 @@ class Command(BaseCommand):
                 gateway._guard_live(collection.target)
                 if action == "run":
                     run(collection, gateway, limit=max(1, min(options["limit"], 166)))
+                elif action == "refresh-published":
+                    self.stdout.write(json.dumps(refresh_published(collection, gateway)))
+                elif action == "retag-published":
+                    self.stdout.write(json.dumps(retag_published(collection, gateway)))
+            elif action == "repair-links":
+                self.stdout.write(json.dumps(link_confirmed_publications(collection)))
             if action == "export":
-                export(collection, options["output"])
+                export(collection, options["output"], processing_sha=options["sha"])
             if action == "cleanup":
                 from archive_collection.services import cleanup_confirmed
                 self.stdout.write(json.dumps(cleanup_confirmed(collection)))

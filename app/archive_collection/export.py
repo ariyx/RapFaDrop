@@ -5,7 +5,7 @@ from django.utils import timezone
 from .services import status
 
 
-def export(collection, directory):
+def export(collection, directory, *, processing_sha=""):
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
     generated = timezone.now().isoformat()
@@ -22,7 +22,7 @@ def export(collection, directory):
                 "reason": r.reason if r else selection.error, "message_id": r.publication.message_id if r and r.publication_id else "",
                 "observed_at": selection.evidence.get("observed_at", str(selection.observed_at)),
                 "endpoint": selection.evidence.get("endpoint", ""), "market": selection.evidence.get("market", ""),
-                "generated_at": generated, "application_sha": collection.application_sha})
+                "generated_at": generated, "selection_application_sha": collection.application_sha, "processing_application_sha": processing_sha})
     recordings = []
     for r in collection.recordings.select_related("candidate", "publication"):
         candidate, pub = r.candidate, r.publication
@@ -40,13 +40,13 @@ def export(collection, directory):
             "tag_readback": json.dumps(candidate.preparation_report if candidate else {}, ensure_ascii=False),
             "message_id": pub.message_id if pub else "", "message_url": pub.message_url if pub else "",
             "retry_due_at": str(r.retry_due_at or ""), "timings_evidence": json.dumps(r.evidence, ensure_ascii=False),
-            "generated_at": generated, "application_sha": collection.application_sha})
+            "generated_at": generated, "selection_application_sha": collection.application_sha, "processing_application_sha": processing_sha})
     for filename, rows in [("popular_track_selections.csv", selections), ("popular_track_publications.csv", recordings)]:
         with (directory / filename).open("w", newline="", encoding="utf-8") as output:
             writer = csv.DictWriter(output, fieldnames=list(rows[0]) if rows else ["spotify_id"])
             writer.writeheader()
             writer.writerows(rows)
-    report = {**status(collection), "generated_at": generated, "application_sha": collection.application_sha,
+    report = {**status(collection), "generated_at": generated, "selection_application_sha": collection.application_sha, "processing_application_sha": processing_sha,
         "discovery_requests": sum(s.evidence.get("requests", 0) for s in collection.selections.all()),
         "discovery_seconds_summed": sum(s.evidence.get("discovery_seconds", 0) for s in collection.selections.all()),
         "artists": [{"artist": s.source.artist.official_name, "slots": s.slots.count(), "error": s.error,

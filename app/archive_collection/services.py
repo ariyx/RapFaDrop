@@ -2,6 +2,7 @@ import hashlib
 import json
 import time
 import subprocess
+import re
 from datetime import timedelta
 from pathlib import Path
 
@@ -37,11 +38,26 @@ def authorize_publication(collection_id, pub, operation, payload):
     collection = Collection.objects.get(pk=collection_id)
     assert_collection_safe(collection)
     recording = collection.recordings.filter(publication=pub).first()
-    if (operation != "send_audio" or pub.channel.target != TARGET or recording is None or
+    if (operation not in {"send_audio", "edit_caption", "edit_media"} or pub.channel.target != TARGET or recording is None or
             pub.kind != Publication.Kind.ARCHIVE or pub.track_id != recording.track_id or
-            pub.candidate_id != recording.candidate_id or payload != _audio_payload(pub)):
+            (operation != "edit_media" and pub.candidate_id != recording.candidate_id)):
         raise TargetBlocked("Publication is outside the frozen collection audio capability")
-    candidate = require_ready(pub.candidate)
+    if operation == "edit_caption":
+        core = {key: value for key, value in payload.items() if key != "message_id"}
+        if (not pub.message_id or payload.get("message_id", pub.message_id) != pub.message_id or
+                core != {"caption_html": render_caption(pub.kind, pub.context, pub.template.config).html, "context": pub.context}):
+            raise TargetBlocked("Only the current archive template for this exact stored message may be applied")
+        return
+    candidate = require_ready(recording.candidate if operation == "edit_media" else pub.candidate)
+    core = {key: value for key, value in payload.items() if key != "message_id"}
+    if core != _audio_payload(pub, candidate):
+        raise TargetBlocked("Audio payload is not the recorded prepared file")
+    if operation == "edit_media" and (not pub.message_id or
+            payload.get("message_id", pub.message_id) != pub.message_id or
+            candidate.provenance.get("policy_retag_of") != pub.candidate_id or
+            candidate.sha256 != pub.candidate.sha256 or
+            candidate.validation_report.get("full_decode") != "passed"):
+        raise TargetBlocked("Only validated retagging of the identical recording in its stored message is authorized")
     if candidate.source_match.evidence.get("archive_spotify_id") != recording.spotify_id:
         raise TargetBlocked("Candidate is not bound to the frozen recording")
 
@@ -114,6 +130,25 @@ def commit_selection(selection, evidence):
     return selection
 
 
+def _credit_block(value, names):
+    remaining = normalize_text(value)
+    matched = False
+    for name in sorted(names, key=len, reverse=True):
+        remaining, count = re.subn(r"(?<!\w)" + re.escape(name) + r"(?!\w)", " ", remaining)
+        matched |= bool(count)
+    remaining = re.sub(r"\b(?:feat|and|x)\b", " ", remaining)
+    return matched and not remaining.strip()
+
+
+def _recording_title(value, names):
+    normalized = normalize_text(value)
+    if " feat " in normalized:
+        core, credits = normalized.split(" feat ", 1)
+        if _credit_block(credits, names):
+            return core.strip()
+    return normalized
+
+
 def identity_matches(row, metadata, profiles):
     """Strict profile + recording/version + duration; fuzzy search never grants identity."""
     profile = str(row.get("uploader_url") or "").rstrip("/").lower()
@@ -121,16 +156,16 @@ def identity_matches(row, metadata, profiles):
     if source is None:
         return None, "Uploader profile is not a verified credited artist source"
     names = [normalize_text(c["name"]) for c in metadata["credits"]]
-    title = normalize_text(row.get("title"))
-    expected = normalize_text(metadata["title"])
-    # Only an exact title, or an explicit credited artist prefix separated by ' - '.
+    title = _recording_title(row.get("title"), names)
+    expected = _recording_title(metadata["title"], names)
+    # Explicit display credits may surround the title, but every credited name
+    # must exist in the frozen Spotify track credits. Version labels are retained.
     if title != expected and " - " in str(row.get("title", "")):
-        prefix, suffix = str(row["title"]).split(" - ", 1)
-        credited = normalize_text(prefix)
-        for name in sorted(names, key=len, reverse=True):
-            credited = credited.replace(name, " ")
-        if not credited.strip() and normalize_text(suffix) == expected:
-            title = expected
+        left, right = str(row["title"]).split(" - ", 1)
+        if _credit_block(left, names):
+            title = _recording_title(right, names)
+        elif _credit_block(right, names):
+            title = _recording_title(left, names)
     if title != expected or edition_markers(row.get("title")) != edition_markers(metadata["title"]):
         return None, "Recording title/version does not match exactly"
     try:
@@ -374,6 +409,9 @@ def run(collection, gateway, *, limit=166):
             pub = reserve(recording)
             if pub is None:
                 continue
+            # Reservation persists the Publication FK on a separately locked instance.
+            # Reload before saving timings/state, otherwise the stale instance clears it.
+            recording.refresh_from_db()
             if not pub.message_id:
                 started = time.monotonic()
                 pub = perform(pub, "send_audio", "initial", _audio_payload(pub), gateway=gateway, candidate=pub.candidate)
@@ -432,3 +470,91 @@ def cleanup_confirmed(collection):
         r.evidence = {**r.evidence, "confirmed_media_cleanup_at": timezone.now().isoformat()}
         r.save(update_fields=("evidence", "updated_at"))
     return {"removed_files": len(removed), "retained": retained, "production_messages_deleted": 0}
+
+
+@transaction.atomic
+def link_confirmed_publications(collection):
+    """Recover archive links using exact candidate/track identities, never a network resend."""
+    collection = Collection.objects.select_for_update().get(pk=collection.pk)
+    if not collection.frozen_at or not collection.paused:
+        raise ValueError("Link repair requires a frozen paused collection")
+    repaired = []
+    for r in collection.recordings.filter(publication__isnull=True, candidate__isnull=False).select_related("candidate__source_match"):
+        if r.candidate.source_match.evidence.get("archive_spotify_id") != r.spotify_id:
+            continue
+        pub = Publication.objects.filter(channel__target=TARGET, track=r.track,
+            candidate=r.candidate, kind="archive_audio", state="published", message_id__isnull=False).first()
+        if pub:
+            r.publication = pub
+            r.state = "published"
+            r.evidence = {**r.evidence, "publication_link_recovered_at": timezone.now().isoformat()}
+            r.save()
+            repaired.append({"spotify_id": r.spotify_id, "message_id": pub.message_id})
+    return repaired
+
+
+def refresh_published(collection, gateway):
+    from publication.services import edit_caption
+    assert_collection_safe(collection)
+    results = []
+    for r in collection.recordings.filter(publication__message_id__isnull=False).select_related("publication__template", "publication__channel"):
+        pub = r.publication
+        desired = render_caption(pub.kind, pub.context, pub.template.config).html
+        if pub.caption_html != desired:
+            pub = edit_caption(pub, {}, gateway=gateway)
+        if pub.state != "published":
+            results.append({"message_id": pub.message_id, "state": pub.state})
+            break
+        r.evidence = {**r.evidence, "caption_refresh": {"message_id": pub.message_id, "state": pub.state}}
+        if r.evidence.get("telegram_readback", {}).get("status") != "passed":
+            r.evidence["telegram_readback"] = gateway.readback(r)
+        r.save(update_fields=("evidence", "updated_at"))
+        results.append({"message_id": pub.message_id, "state": pub.state, "readback": r.evidence.get("telegram_readback")})
+    return results
+
+
+def retag_published(collection, gateway):
+    """Prepare immutable copies from retained originals; edit the existing messages only."""
+    from media_pipeline.models import MediaAttempt
+    from media_pipeline.services import _accept_audio_file, _safe_media_path
+    from operations.services import active_media_tag_fields
+    from publication.services import upgrade_single
+    assert_collection_safe(collection)
+    fields = set(active_media_tag_fields(settings.MEDIA_CHANNEL_TAG_FIELDS))
+    results = []
+    for r in collection.recordings.filter(publication__message_id__isnull=False).order_by("order"):
+        pub = r.publication
+        old = pub.candidate
+        if fields <= set(old.preparation_report.get("mapped_fields", [])):
+            continue
+        # A restart reuses its persisted prepared replacement; never creates another send.
+        new = r.candidate if r.candidate_id != old.pk else None
+        if new is None:
+            raw = _safe_media_path(old.candidate_path)
+            artwork = _safe_media_path(old.artwork_path) if old.artwork_path else None
+            new = MediaCandidate.objects.create(track=old.track, release=old.release,
+                source_match=old.source_match, provider="manual", expected_duration_seconds=old.expected_duration_seconds,
+                provenance={**old.provenance, "policy_retag_of": old.pk, "retagged_at_utc": timezone.now().isoformat()})
+            attempt = MediaAttempt.objects.create(candidate=new, provider="policy-retag", started_at=timezone.now())
+            new = _accept_audio_file(new, attempt, raw, expected=old.expected_duration_seconds,
+                artwork_path=artwork, share_prepared=False)
+            require_ready(new)
+            decoded = subprocess.run(["ffmpeg", "-v", "error", "-xerror", "-i", new.prepared_path,
+                "-map", "0:a:0", "-f", "null", "-"], capture_output=True, timeout=90)
+            if decoded.returncode or new.sha256 != old.sha256:
+                raise ValueError("Retagging failed complete decoding or original recording byte identity")
+            new.validation_report = {**new.validation_report, "full_decode": "passed"}
+            new.save(update_fields=("validation_report",))
+            r.candidate = new
+            r.save(update_fields=("candidate", "updated_at"))
+        pub = upgrade_single(pub, new, gateway=gateway, correction_notice=False)
+        if pub.state != "published" or pub.candidate_id != new.pk:
+            results.append({"message_id": pub.message_id, "state": pub.state})
+            break
+        r.refresh_from_db()
+        r.evidence = {**r.evidence, "telegram_readback": gateway.readback(r),
+            "policy_retag": {"previous_candidate_id": old.pk, "candidate_id": new.pk,
+                "message_id": pub.message_id, "fields": sorted(fields), "readback": new.preparation_report["readback"]}}
+        r.save(update_fields=("evidence", "updated_at"))
+        results.append({"message_id": pub.message_id, "state": pub.state, "readback": r.evidence["telegram_readback"]})
+    return results

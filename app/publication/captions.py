@@ -11,7 +11,7 @@ class CaptionError(ValueError):
 DEFAULT_CONFIG = {
     "header": "DROP", "lp_header": "LP DROP", "ep_header": "EP DROP",
     "footer": "t.me/RapFaDrop", "intro_footer": "t.me/RapFaDrop",
-    "prior_heading": "پیش‌تر از این آلبوم منتشر شده:",
+    "prior_heading": "Previously released from this album:",
     "rows": ["music_video_url", "album_post_url", "original_track_post_url", "platforms"],
     "labels": {"music_video_url": "Music Video", "spotify_url": "Spotify", "soundcloud_url": "SoundCloud", "album_post_url": "Album", "original_track_post_url": "Original", "original_album_post_url": "Original Album"},
 }
@@ -108,8 +108,6 @@ def render_caption(kind, context, config=None, *, limit=1024):
         elif key in labels and context.get(key):
             rows.append(link(labels[key], context[key], channel=key in {"album_post_url", "original_track_post_url"}))
     heading = [f"<b>{escape(str(header))}</b>"] if header else []
-    if kind == "archive_audio":
-        heading.extend([escape(str(context.get("title", ""))), " × ".join(escape(str(a)) for a in context.get("artists", []))])
     blocks = (["\n".join(heading)] if heading else []) + (["\n".join(rows)] if rows else []) + [escape(str(config["footer"]))]
     result = "\n\n".join(blocks)
     if visible_length(result) > limit:

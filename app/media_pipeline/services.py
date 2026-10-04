@@ -302,7 +302,7 @@ def process_manual_upload(candidate, audio_upload, *, actor, artwork_upload=None
         shutil.rmtree(staging, ignore_errors=True)
 
 
-def _accept_audio_file(candidate, attempt, source_path, *, expected, artwork_path=None, artwork_state=None, now=None, actor=None):
+def _accept_audio_file(candidate, attempt, source_path, *, expected, artwork_path=None, artwork_state=None, now=None, actor=None, share_prepared=True):
     preparation_started = time.monotonic()
     now = now or timezone.now()
     source_path = Path(source_path)
@@ -370,7 +370,7 @@ def _accept_audio_file(candidate, attempt, source_path, *, expected, artwork_pat
     raw_target.chmod(0o600)
     artwork_target = _store_artwork(directory, artwork_path)
     # If identical verified bytes already exist for this track, share their immutable files.
-    identical = MediaCandidate.objects.filter(track=candidate.track, state=MediaCandidate.State.READY, sha256=facts["sha256"]).exclude(pk=candidate.pk).first()
+    identical = MediaCandidate.objects.filter(track=candidate.track, state=MediaCandidate.State.READY, sha256=facts["sha256"]).exclude(pk=candidate.pk).first() if share_prepared else None
     if identical:
         raw_target.unlink(missing_ok=True)
         if artwork_target:

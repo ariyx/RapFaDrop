@@ -344,6 +344,21 @@ class MediaPipelineTests(TestCase):
             with self.assertRaises(MediaRequestError):
                 process_manual_upload(first, SimpleUploadedFile("x.mp3", stream.read()), actor=get_user_model().objects.create_user("operator"))
 
+    def test_retagging_same_raw_recording_prepares_new_policy_instead_of_sharing_stale_tags(self):
+        from .tagging import CHANNEL_FIELDS
+        from .services import _accept_audio_file
+        with override_settings(MEDIA_CHANNEL_TAG_FIELDS={'comments', 'encoded_by', 'author_url'}):
+            first = acquire_candidate(self.queue, provider_name='fixture-retag', provider=FakeProvider(self.low_audio))
+        second = MediaCandidate.objects.create(track=first.track, release=first.release, source_match=first.source_match, provider='manual')
+        attempt = MediaAttempt.objects.create(candidate=second, provider='policy-retag', started_at=timezone.now())
+        with override_settings(MEDIA_CHANNEL_TAG_FIELDS=CHANNEL_FIELDS):
+            second = _accept_audio_file(second, attempt, Path(first.candidate_path), expected=30, share_prepared=False)
+        self.assertEqual(first.sha256, second.sha256)
+        self.assertNotEqual(first.prepared_path, second.prepared_path)
+        self.assertTrue(CHANNEL_FIELDS <= set(second.preparation_report['mapped_fields']))
+        self.assertTrue(second.preparation_report['readback']['channel_fields_read_back'])
+        self.assertTrue(Path(first.prepared_path).is_file())
+
     def _another_source_item(self):
         return SourceItem.objects.create(
             platform="soundcloud", native_item_id="another-media-id", source=self.source,

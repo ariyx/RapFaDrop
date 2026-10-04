@@ -27,8 +27,8 @@ class CollectionGateway(TelegramGateway):
             return
         from .services import assert_collection_safe
         assert_collection_safe(Collection.objects.get(pk=self.collection_id))
-        if method != "sendAudio" or str(data.get("chat_id")) != TARGET or getattr(self._verified, "target", None) != TARGET:
-            raise TargetBlocked("Collection capability permits only verified frozen audio sends")
+        if method not in {"sendAudio", "editMessageCaption", "editMessageMedia"} or str(data.get("chat_id")) != TARGET or getattr(self._verified, "target", None) != TARGET:
+            raise TargetBlocked("Collection capability permits only verified frozen audio/caption operations")
 
     def _guard_live(self, target):
         from .services import assert_collection_safe
@@ -65,7 +65,7 @@ class CollectionGateway(TelegramGateway):
         pub = recording.publication
         if not pub or not pub.message_id or pub.channel.target != TARGET:
             raise TargetBlocked("Readback requires a confirmed collection production message")
-        attempt = pub.attempts.filter(state="succeeded", operation="send_audio").order_by("-pk").first()
+        attempt = pub.attempts.filter(state="succeeded", operation__in=("send_audio", "edit_media")).order_by("-pk").first()
         media = (attempt.response.get("media") or {}) if attempt else {}
         if not media.get("file_id") or media.get("file_size", 0) > 20_000_000:
             return {"status": "blocked", "reason": "No durable file_id or file exceeds hosted Bot API 20MB readback limit"}

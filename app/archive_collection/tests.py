@@ -8,6 +8,7 @@ from publication.gateway import TargetBlocked, GatewayError, GatewayResult, Unce
 from publication.models import Publication, PublicationChannel, PublicationReconciliation
 from publication.services import perform, _audio_payload
 from sources.models import Artist, ArtistSource
+from media_pipeline.models import MediaCandidate
 from .models import Collection, ArtistSelection, Recording, Slot
 from .popular import validate_popular, select_two
 from .services import commit_selection, ensure_manual_candidate, identity_matches, reserve, authorize_publication
@@ -45,6 +46,8 @@ class PopularTests(SimpleTestCase):
         self.assertNotIn("DROP", result)
         self.assertNotIn(">Album<", result)
         self.assertNotIn(" / ", result)
+        self.assertNotIn("Song", result)
+        self.assertNotIn("Artist", result)
         self.assertTrue(result.endswith("\n\nt.me/RapFaDrop"))
 
 
@@ -224,3 +227,80 @@ class CollectionTests(TestCase):
         self.selection.refresh_from_db()
         self.assertEqual(self.selection.slots.count(), 1)
         self.assertIn("Fewer than two", self.selection.error)
+
+    def test_run_retains_reserved_publication_link_and_replay(self):
+        from .services import run, status
+        r, pub = self.ready()
+        Recording.objects.filter(pk=r.pk).update(publication=None)
+        gateway = self.gateway()
+        with patch("archive_collection.services.time.sleep"):
+            run(self.collection, gateway, limit=1)
+        r.refresh_from_db()
+        self.assertEqual(r.publication_id, pub.pk)
+        self.assertEqual(r.publication.message_id, 123)
+        self.assertEqual(status(self.collection)["published"], 1)
+        with patch("archive_collection.services.time.sleep"):
+            run(self.collection, gateway, limit=1)
+        self.assertEqual(gateway.calls, 1)
+
+    def test_caption_refresh_edits_same_message_without_retained_media(self):
+        from publication.services import edit_caption
+        _, pub = self.ready()
+        gateway = self.gateway()
+        pub = perform(pub, "send_audio", "initial", _audio_payload(pub), gateway=gateway)
+        Path(pub.candidate.prepared_path).unlink()
+        pub.caption_html = "<b>ARCHIVE</b>\nSong\nArtist"
+        pub.save(update_fields=("caption_html",))
+        pub = edit_caption(pub, {}, gateway=gateway)
+        self.assertEqual(pub.message_id, 123)
+        self.assertNotIn("Song", pub.caption_html)
+        self.assertNotIn("Artist", pub.caption_html)
+        edit_caption(pub, {}, gateway=gateway)
+        self.assertEqual(gateway.calls, 2)  # one send and one edit; no duplicate audio
+
+    def test_credited_display_suffixes_match_but_unknown_guests_and_versions_do_not(self):
+        profile = ArtistSource.objects.create(artist=self.artist, platform="soundcloud", canonical_url="https://soundcloud.com/official")
+        m = metadata()
+        m["credits"].append({"id": B, "name": "Guest"})
+        for title in ("Song (feat. Guest)", "Artist - Song (Ft. Guest)", "Song - Artist & Guest"):
+            row = {"uploader_url": profile.canonical_url, "title": title, "duration": 180}
+            self.assertEqual(identity_matches(row, m, [profile])[0], profile)
+        for title in ("Song (feat. Unknown)", "Song (feat. Guest) Remix", "Song - Artist & Unknown"):
+            row = {"uploader_url": profile.canonical_url, "title": title, "duration": 180}
+            self.assertIsNone(identity_matches(row, m, [profile])[0])
+
+
+    def test_same_recording_retag_edits_existing_message_without_correction_or_resend(self):
+        from publication.services import upgrade_single
+        r, pub = self.ready()
+        gateway = self.gateway()
+        pub = perform(pub, 'send_audio', 'initial', _audio_payload(pub), gateway=gateway)
+        old = pub.candidate
+        new = MediaCandidate.objects.create(track=old.track, release=old.release, source_match=old.source_match,
+            provider='manual', state='ready', preparation_state='ready', sha256=old.sha256,
+            prepared_path=old.prepared_path, observed_facts=old.observed_facts,
+            validation_report=old.validation_report, preparation_report={'owner_policy': 'eleven-fields'},
+            quality_rank=old.quality_rank, provenance={'policy_retag_of': old.pk})
+        r.candidate = new
+        r.save(update_fields=('candidate',))
+        pub = upgrade_single(pub, new, gateway=gateway, correction_notice=False)
+        self.assertEqual(pub.message_id, 123)
+        self.assertEqual(pub.candidate_id, new.pk)
+        self.assertEqual(gateway.calls, 2)
+        self.assertEqual(Publication.objects.count(), 1)
+        upgrade_single(pub, new, gateway=gateway, correction_notice=False)
+        self.assertEqual(gateway.calls, 2)
+
+    def test_retag_rejects_different_recording_bytes(self):
+        r, pub = self.ready()
+        gateway = self.gateway()
+        pub = perform(pub, 'send_audio', 'initial', _audio_payload(pub), gateway=gateway)
+        old = pub.candidate
+        new = MediaCandidate.objects.create(track=old.track, release=old.release, source_match=old.source_match,
+            provider='manual', state='ready', preparation_state='ready', sha256='different',
+            prepared_path=old.prepared_path, observed_facts=old.observed_facts,
+            validation_report=old.validation_report, provenance={'policy_retag_of': old.pk})
+        r.candidate = new
+        r.save(update_fields=('candidate',))
+        with self.assertRaises(TargetBlocked):
+            authorize_publication(self.collection.pk, pub, 'edit_media', _audio_payload(pub, new))

@@ -26,8 +26,9 @@ an explicit archive metadata fact and review-required candidate for the existing
 authenticated manual-upload workflow, without discovery ingestion, a historical
 baseline change or a processing queue task. Unverified uploader/search identities
 are not promoted to official sources. Complete files undergo duration validation,
-tag/artwork readback and an entire FFmpeg decode. ARCHIVE captions preserve full
-Spotify credits, optional track-level links, and the footer; no historical DROP or
+tag/artwork readback and an entire FFmpeg decode. Official file metadata retains
+complete Spotify credits. Owner-requested ARCHIVE captions contain only the bold
+ARCHIVE heading, conditional platform/related links and footer; no historical DROP or
 fabricated album/test-channel URL. Telegram success stores media file IDs as well
 as message IDs; bounded getFile readback compares actual uploaded bytes. Confirmed
 readback allows disposable media cleanup, never production-message deletion.
@@ -56,3 +57,35 @@ CLI dispatchers; channel serialization persists before every external mutation.
 
 Execution evidence and the complete 83-artist coverage table will be recorded
 below after the server run. Until then no production publication is claimed.
+
+
+## Owner caption and metadata correction (2026-10-04)
+
+The owner replaced the earlier three-field policy with all eleven channel fields:
+subtitle/comments/publisher/encoded_by/copyright/composers/conductors/initial_key
+contain @RapFaDrop; album and album artist append ` | @RapFaDrop`; author_url is
+https://t.me/RapFaDrop. MP3 uses ID3 frames; M4A uses native atoms plus UTF-8 iTunes
+freeform PUBLISHER/CONDUCTOR/INITIALKEY/AUTHORURL atoms. Player display of freeform
+atoms varies; actual file readback is required. Main title and track artists stay
+official. Album introduction prior-single heading is now English:
+`Previously released from this album:`.
+
+Retagging creates a separate immutable prepared candidate from retained originals,
+with complete decode and equal raw recording SHA, then edits the same stored
+Telegram message through a durable edit_media attempt. It sends no correction or
+replacement audio post. Restarts reuse the persisted candidate; uncertain edits
+require reconciliation. A separate caption edit removes archive title/artist rows.
+
+A real collection run exposed a stale-instance save clearing the reserved
+Recording-to-Publication FK after successful sends. Publication/Attempt message IDs
+survived. The fix reloads after reservation; repair-links only attaches exact
+confirmed candidate/track/channel/archive bindings while paused and never sends.
+Four existing confirmed messages (4?7) require this repair, caption refresh and
+all-field retagging before further collection sends. Official SoundCloud display
+suffix matching now accepts only complete frozen Spotify credited names, preserving
+version/duration/official-profile requirements; unknown guests/remixes stay blocked.
+
+Selection SHA remains frozen at eb074f6e808836554ea474904473fc920bab039a, with 83
+artists, 166 slots and 155 unique recordings. Exports distinguish that observation
+SHA from the SHA performing the later preparation/publication. Server checks and
+final execution evidence will be appended after verification.

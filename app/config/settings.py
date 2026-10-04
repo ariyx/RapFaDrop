@@ -91,7 +91,7 @@ MEDIA_ALLOWED_AUDIO_EXTENSIONS = tuple(
 )
 MEDIA_CHANNEL_TAG_FIELDS = frozenset(
     value.strip().lower()
-    for value in os.environ.get("RAPFADROP_MEDIA_CHANNEL_TAG_FIELDS", "comments,encoded_by,author_url").split(",")
+    for value in os.environ.get("RAPFADROP_MEDIA_CHANNEL_TAG_FIELDS", "subtitle,comments,album_artist_suffix,album_suffix,publisher,encoded_by,author_url,copyright,composers,conductors,initial_key").split(",")
     if value.strip()
 )
 MEDIA_PROVIDER_ORDER = tuple(

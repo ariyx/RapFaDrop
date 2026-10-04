@@ -8,7 +8,7 @@ from mutagen.mp4 import MP4
 from mutagen.id3 import TCOM, TPUB, TPE2, TIT3, TKEY
 from PIL import Image
 
-from .tagging import prepare_tagged_copy
+from .tagging import prepare_tagged_copy, CHANNEL_FIELDS, readback_tags, TaggingError
 from .validation import quality_rank, quality_improved, delivery_eligible
 
 
@@ -68,3 +68,37 @@ class OwnerMediaPolicyTests(SimpleTestCase):
         self.assertFalse(quality_improved(quality_rank({'codec_name': 'mp3', 'audio_bitrate_bps': 192000}), aac))
         self.assertFalse(delivery_eligible({'codec_name': 'flac'}))
         self.assertFalse(delivery_eligible({'codec_name': 'pcm_s16le'}))
+
+
+    @override_settings(MEDIA_CHANNEL_TAG_FIELDS=CHANNEL_FIELDS)
+    def test_all_eleven_owner_fields_are_embedded_in_mp3_and_m4a(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for ext, codec in [('mp3', 'libmp3lame'), ('m4a', 'aac')]:
+                raw, prepared = root / ('raw.' + ext), root / ('prepared.' + ext)
+                subprocess.run(['ffmpeg', '-v', 'error', '-f', 'lavfi', '-i', 'sine=duration=1', '-c:a', codec, '-y', str(raw)], check=True, timeout=30)
+                report = prepare_tagged_copy(raw, prepared, {'title':'Song', 'artists':['Artist', 'Guest'], 'album':'Album', 'album_artists':['Album Artist']})
+                self.assertFalse(report['unsupported_fields'])
+                self.assertTrue(CHANNEL_FIELDS <= set(report['mapped_fields']))
+                if ext == 'mp3':
+                    audio = MP3(prepared)
+                    for key in ['TIT3', 'TPUB', 'TENC', 'TCOP', 'TCOM', 'TPE3', 'TKEY']:
+                        self.assertEqual(str(audio.tags[key]), '@RapFaDrop')
+                    self.assertEqual(str(audio.tags['TALB']), 'Album | @RapFaDrop')
+                    self.assertEqual(str(audio.tags['TPE2']), 'Album Artist | @RapFaDrop')
+                    self.assertTrue(any(str(f) == '@RapFaDrop' for f in audio.tags.getall('COMM')))
+                    self.assertEqual(str(audio.tags.getall('WOAR')[0]), 'https://t.me/RapFaDrop')
+                    audio.tags['TPE2'] = TPE2(encoding=3, text='Album Artist')
+                else:
+                    audio = MP4(prepared)
+                    for key in ['desc', '\xa9cmt', '\xa9too', 'cprt', '\xa9wrt']:
+                        self.assertEqual(audio.tags[key], ['@RapFaDrop'])
+                    for key in ['PUBLISHER', 'CONDUCTOR', 'INITIALKEY']:
+                        self.assertEqual(bytes(audio.tags['----:com.apple.iTunes:' + key][0]), b'@RapFaDrop')
+                    self.assertEqual(bytes(audio.tags['----:com.apple.iTunes:AUTHORURL'][0]), b'https://t.me/RapFaDrop')
+                    self.assertEqual(audio.tags['\xa9alb'], ['Album | @RapFaDrop'])
+                    self.assertEqual(audio.tags['aART'], ['Album Artist | @RapFaDrop'])
+                    audio.tags['aART'] = ['Album Artist']
+                audio.save()
+                with self.assertRaises(TaggingError):
+                    readback_tags(prepared, 'Song', ['Artist', 'Guest'], 'Album', '@RapFaDrop', False, CHANNEL_FIELDS)
