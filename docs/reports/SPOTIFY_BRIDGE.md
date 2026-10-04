@@ -1,5 +1,11 @@
 # Controlled Spotify discovery to media queue bridge
 
+## Server E2E follow-up, 2026-10-04
+
+Final application SHA `26afd28da5e20bbca37975b5a4512ea871dd6f72` passed a server-only isolated historical replay through discovery, review, complete real SoundCloud acquisition, preparation and test-channel publication. Official Spotify release/track collaborator credits are now materialized; contributor records remain disabled. Candidate selection prefers supported confident providers, and real SoundCloud native ID/title/uploader mismatches require review before downloading. Album publication refreshes the confirmed introduction before reserving its first track, ensuring its Album link is present.
+
+The 135-test full server suite and 35 focused post-deployment publication tests passed. Both singles and a nine-track LP passed with prior-single reuse, full staging, conditional captions, actual audio tags/artwork, durable Telegram IDs, retry/restart and replay without duplicates. The intentionally mismatched candidate stayed unposted. All test posts and disposable media/database/queue resources were removed. Production remains five enabled sources/177 unchanged historical IDs, bridge ON and publication OFF. Details, measured stage timings and unmeasured live latency: [server E2E report](SPOTIFY_E2E.md). Historical verification below describes the earlier checkpoint.
+
 ## Behavior and safety gate
 
 `RAPFADROP_SPOTIFY_MEDIA_BRIDGE_ENABLED=false` is the default. A new Spotify ID is enriched with complete album/EP/single details after a successful discography poll. The 177 historical baseline IDs are not enriched or bridged. The poll persists a newly discovered item only after detail validation succeeds. Auto-queue requires a unique same-artist canonical release, matching release type and ordered track list, corroborating durations and recent release date, and a unique confident full-audio SoundCloud match for each track from a recently observed, nonbaseline source item. Regional catalog additions, editions, incomplete details, uncertain dates or audio, and ambiguous identity go to admin review with a reason. The existing Spotify URL is metadata, never a media provider.

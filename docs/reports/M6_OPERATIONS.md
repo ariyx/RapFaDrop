@@ -1,5 +1,13 @@
 # M6 operations evidence
 
+## Server-only Spotify E2E completion, 2026-10-04
+
+The owner-authorized isolated test is complete at tested/deployed application SHA `26afd28da5e20bbca37975b5a4512ea871dd6f72`. See [the full evidence report](SPOTIFY_E2E.md) for exact test-channel message IDs/deletion results, acquisition quality, stage timings, fixes, backup restore digests and limitations. The final full server suite passed 135 tests, and post-deployment publication checks passed 35 tests. A real reviewed single and nine-track LP passed through actual application acquisition/tagging/publication, retry/restart and replay. No live-release latency is claimed.
+
+The disposable server project used PostgreSQL/Redis ports 55433/56380 and queue `isolated-e2e`, its own volumes and bounded runner/worker resources; no production task consumer or data volume was shared. Destination `-1004475982526` (`@RapFaDropTest`) and safety overrides were verified before every Telegram mutation. IDs 21–31 from the first run and 32–42 from the corrected repeat were all deleted. Test containers, database/media volumes, Redis queue, credential environment, source build archives/directories and draft image tag were removed. Only safe mode-0600 audit JSON/JSONL under root-only `/var/lib/rapfadrop-operations/e2e-20261004/` and protected deployment backups remain.
+
+Both exact-SHA deployments followed checksum/list/37-table restore comparison before service replacement; temporary restore databases were dropped. Production application services were recreated using all three existing Compose files; PostgreSQL/Redis, firewall, Nginx and pilot overlays were preserved. Final production readback retained five enabled/verified Spotify sources, exactly 177 historical IDs with unchanged baseline/item digests, bridge ON, Telegram/publication OFF, zero downstream records and zero media files. No test resources remained. Do not activate production publication as part of this handoff. Historical sections below retain their original checkpoints.
+
 Observed on 2026-10-02. The initial run was authorized for **Phase 2 server preflight and reporting only**; its server commands were read-only. Subsequent owner-authorized HTTP deployment and limited Phase 3 work are recorded separately below. M6 is incomplete.
 
 ## Server preflight
