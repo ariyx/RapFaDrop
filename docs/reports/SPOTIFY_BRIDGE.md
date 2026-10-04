@@ -1,5 +1,9 @@
 # Controlled Spotify discovery to media queue bridge
 
+## Discovery-only rollout, 2026-10-04
+
+Current application SHA `5d89fcedcc1c01d5f9f00b533242e6d9045fbb0f` runs with the bridge **OFF**. The protected fourth `discovery-only.compose.yaml` overlay overrides the older bridge overlay on all app services, uses `spotify_pilot:app` for metadata-only beat scheduling, and leaves the media worker removed. Telegram/publication remain OFF. Do not omit this fourth overlay from later service recreation or silently restore the bridge. The original five baselines remain intact; newly qualified sources were baselined while disabled before activation. The earlier bridge-ON checkpoints below are historical. Current counts, qualification failures and scheduled observation: [SOURCE_ACTIVATION.md](SOURCE_ACTIVATION.md).
+
 ## Server E2E follow-up, 2026-10-04
 
 Final application SHA `26afd28da5e20bbca37975b5a4512ea871dd6f72` passed a server-only isolated historical replay through discovery, review, complete real SoundCloud acquisition, preparation and test-channel publication. Official Spotify release/track collaborator credits are now materialized; contributor records remain disabled. Candidate selection prefers supported confident providers, and real SoundCloud native ID/title/uploader mismatches require review before downloading. Album publication refreshes the confirmed introduction before reserving its first track, ensuring its Album link is present.

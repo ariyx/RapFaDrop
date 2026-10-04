@@ -1,5 +1,9 @@
 # M6 operations evidence
 
+## Discovery activation and owner inventory, 2026-10-04
+
+Current tested/pushed/deployed application is `5d89fcedcc1c01d5f9f00b533242e6d9045fbb0f`. Server-only metadata isolation and source activation supersede the earlier bridge-ON checkpoints: **bridge OFF**, media worker removed, metadata-only beat/discovery worker retained, production Telegram/publication OFF. The protected fourth overlay must accompany the original three Compose files. The restore-verified backup, complete disabled-source baselines, all-source inventory, scheduled outcomes and preservation checks are in [SOURCE_ACTIVATION.md](SOURCE_ACTIVATION.md). The [latest album/EP report](LATEST_ALBUM_SELECTION.md) covers all 83 artists and stops at owner review; this task performed no acquisition or publication.
+
 ## Roster expansion completion, 2026-10-04
 
 Application SHA `2a439a67ce5251c2004a4bce93c2ad770be11f8c` is tested and deployed. Production expanded 30/57 to 83 artists/130 sources, reusing every existing record and adding 53 disabled artists/73 disabled sources. All 143 exact-SHA server tests and 19 focused import/source tests passed. A protected 201480-byte pre-import backup passed checksum/list and 37-table restore comparison; the disposable restore database was dropped. The guarded dry-run/import/repeat preserved every existing source field, original artist flags and baseline/item hashes; repeat created zero rows. Five original sources remain active, the 177 historical Spotify IDs and 51 older SoundCloud items remain, bridge ON and publication OFF. Production health/admin counts passed, downstream/media counts stayed zero, and test resources were removed. `.env`, pilot overlays, firewall and Nginx were preserved. Commands and safe comparisons are retained in `/var/lib/rapfadrop-operations/roster-20261004/`; details and unresolved profiles: [roster expansion report](ARTIST_ROSTER_EXPANSION.md). All sections below are historical checkpoints.

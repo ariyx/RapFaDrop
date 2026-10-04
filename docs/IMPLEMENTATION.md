@@ -1,6 +1,6 @@
 # RapFaDrop — implementation guide for coding agents
 
-Status: **isolated server Spotify-to-Telegram verification and the 83-identity roster expansion complete; production Telegram publication remains OFF.** Current evidence and SHAs are in `STATUS.md`; historical milestone sections below retain their original observations.
+Status: **83-identity discovery activation and latest album/EP owner inventory complete; bridge and production publication remain OFF.** Current evidence and SHAs are in `STATUS.md`; historical milestone sections below retain their original observations.
 Repository: `https://github.com/ariyx/RapFaDrop.git` (documentation-only at the checkpoint in [`STATUS.md`](STATUS.md); verify current Git state).
 Product source of truth: [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md).  
 
@@ -10,6 +10,8 @@ The owner authorized SpotifyScraper 3.9.2 and its Spotify web-player/Pathfinder 
 Reference for documentation organization: `https://github.com/ariyx/flow`; reuse its separation of agent instructions, product decisions and milestone plans, not its technology or product rules.
 
 ## 1. Outcome and scope
+
+The 2026-10-04 discovery-only rollout adds `baseline_source --while-disabled` (service keyword `allow_disabled=True`). An unbaselined source must be verified and disabled; bridge, Telegram live sending and publication must all be disabled. Historical IDs are committed atomically before artist/source activation, and completed runs are reused. The normal enabled-source path remains available. SoundCloud metadata baselines reject absent entries, duplicate IDs and responses reaching the 100-entry bound; they cannot silently declare a capped feed complete. Spotify adapter/audit probes record HTTP requests, validated pages and elapsed provider time for baseline and polling outcomes, including detail requests for unseen IDs. No schema migration was required. See [activation evidence](reports/SOURCE_ACTIVATION.md) and the [83-artist owner inventory](reports/LATEST_ALBUM_SELECTION.md).
 
 The current owner-approved roster contains 83 identities (expanded on 2026-10-04); the original 30-artist milestone descriptions below are historical. `sources.roster.import_roster` and `seed_sources` load the offline manifest in `app/sources/data/approved_roster.json`. Atomic imports serialize with an advisory lock, reuse canonical names/aliases/platform identities, abort ambiguous merges, add missing aliases and sources, and preserve all existing source operational fields. New rows remain disabled; verification is set only for new sources with recorded identity and actual adapter evidence. Provenance/outcomes are audited. `seed_sources --dry-run` rolls back changes; no provider, baseline, task or Telegram call occurs during import. See [`reports/ARTIST_ROSTER_EXPANSION.md`](reports/ARTIST_ROSTER_EXPANSION.md) for measured metadata compatibility and unresolved sources.
 

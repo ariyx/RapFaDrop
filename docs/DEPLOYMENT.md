@@ -1,5 +1,19 @@
 # Deployment and verification
 
+## Current discovery-only production override (2026-10-04)
+
+Production application is `5d89fcedcc1c01d5f9f00b533242e6d9045fbb0f`. All current production Compose operations must include the protected **fourth** overlay, in this order:
+
+```sh
+docker compose -p rapfadrop \
+  -f /opt/rapfadrop/compose.internal.yaml \
+  -f /var/lib/rapfadrop-operations/spotify-pilot.compose.yaml \
+  -f /var/lib/rapfadrop-operations/spotify-bridge.compose.yaml \
+  -f /var/lib/rapfadrop-operations/discovery-only.compose.yaml ps
+```
+
+This overlay keeps the bridge OFF and beat on `spotify_pilot:app`. The media worker is removed; only the discovery worker (`spotify-pilot`, solo concurrency 1), beat and web run alongside PostgreSQL/Redis. Keep Telegram mode disabled, live sending false and publication worker false. Omitting the fourth file would reintroduce the earlier bridge-ON configuration. Current protected backup/restoration, exact-SHA checks and source preservation: [activation report](reports/SOURCE_ACTIVATION.md). Historical instructions below describe earlier milestones.
+
 This runbook applies to RapFaDrop milestones. Keep application and documentation changes in the local Git checkout. Never edit application source directly on the server. Do not deploy draft behavior beyond the milestone being delivered.
 
 ## Local delivery
