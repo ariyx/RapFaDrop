@@ -94,6 +94,8 @@ def find(recording):
             continue
         provider=YtDlpProvider() if source.platform=='soundcloud' else YouTubeProvider()
         rows,metrics=catalog(source,provider);checks.append({'acquisition_source_id':source.pk,'catalog':metrics})
+        if metrics.get('backoff'):
+            continue
         candidates=[r for r in rows if title_matches(r.get('title'),m)]
         # Reuse exact stable results on retry; search only if a direct catalog failed.
         if not candidates and source.platform=='soundcloud' and not metrics.get('backoff'):
@@ -115,6 +117,8 @@ def find(recording):
             if budget<=0:break
             url=row.get('webpage_url') or row.get('url') or ''
             if url in recording.evidence.get('failed_source_urls',[]):continue
+            if source.platform=='soundcloud' and urlsplit(url).path.strip('/').split('/')[0].lower()!=urlsplit(source.profile_url).path.strip('/').lower():
+                continue
             if not provider.can_handle(url):continue
             budget-=1
             try:
@@ -133,4 +137,8 @@ def find(recording):
                 if valid:return (source,actual,url),{'checks':checks,'reason':'Verified official native uploader/channel, complete recording/version and duration','provider_probes':6-budget}
             except Exception as exc:
                 checks.append({'acquisition_source_id':source.pk,'id':str(row.get('id')),'probe_error':redact_diagnostic(exc)})
+                if '403' in str(exc) or '429' in str(exc) or 'not a bot' in str(exc):
+                    source.last_error=redact_diagnostic(exc);source.retry_due_at=timezone.now()+timedelta(minutes=15)
+                    source.save(update_fields=('last_error','retry_due_at'))
+                    break
     return None,{'checks':checks,'provider_probes':6-budget,'reason':'No complete confidently matched recording in bounded verified catalogs/searches; inspect source/match evidence before manual upload.' if sources else 'No corroborated credited acquisition profile yet; independent official links are required.'}

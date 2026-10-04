@@ -114,3 +114,5 @@ class ContinuationTests(TestCase):
             p.probe.return_value=ProviderProbe('yt-dlp-youtube','https://www.youtube.com/watch?v=abcdefghijk','abcdefghijk','Artist - Song (Official Audio)',180,'Artist',evidence={'channel_id':source.native_id})
             found,evidence=find(r);self.assertEqual(found[0].pk,source.pk);self.assertEqual(evidence['provider_probes'],1)
             p.probe.side_effect=RuntimeError('403 bounded failure');self.assertIsNone(find(r)[0]);p.download.assert_not_called()
+            source.refresh_from_db();self.assertGreater(source.retry_due_at,timezone.now())
+            calls=p.probe.call_count;self.assertIsNone(find(r)[0]);self.assertEqual(p.probe.call_count,calls)
