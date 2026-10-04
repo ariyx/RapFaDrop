@@ -519,6 +519,7 @@ def retag_published(collection, gateway):
     from media_pipeline.models import MediaAttempt
     from media_pipeline.services import _accept_audio_file, _safe_media_path
     from operations.services import active_media_tag_fields
+    from media_pipeline.tagging import CHANNEL_POLICY_VERSION
     from publication.services import upgrade_single
     assert_collection_safe(collection)
     fields = set(active_media_tag_fields(settings.MEDIA_CHANNEL_TAG_FIELDS))
@@ -526,7 +527,7 @@ def retag_published(collection, gateway):
     for r in collection.recordings.filter(publication__message_id__isnull=False).order_by("order"):
         pub = r.publication
         old = pub.candidate
-        if fields <= set(old.preparation_report.get("mapped_fields", [])) and (not r.metadata.get("artwork_url") or old.preparation_report.get("readback", {}).get("artwork_read_back") is True):
+        if old.preparation_report.get("channel_policy_version") == CHANNEL_POLICY_VERSION and fields <= set(old.preparation_report.get("mapped_fields", [])) and (not r.metadata.get("artwork_url") or old.preparation_report.get("readback", {}).get("artwork_read_back") is True):
             continue
         # A restart reuses its persisted prepared replacement; never creates another send.
         new = r.candidate if r.candidate_id != old.pk else None

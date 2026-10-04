@@ -20,6 +20,7 @@ CHANNEL_FIELDS = {
     "subtitle", "comments", "album_artist_suffix", "album_suffix", "publisher",
     "encoded_by", "author_url", "copyright", "composers", "conductors", "initial_key",
 }
+CHANNEL_POLICY_VERSION = 2
 
 
 class TaggingError(ValueError):
@@ -106,7 +107,7 @@ def prepare_tagged_copy(source_path, prepared_path, metadata, artwork_path=None)
         album_artist = album_artist_with_tag or _first(tags.get("aART")).removesuffix(f" | {channel}") or artists[0]
         tags["aART"] = [f"{album_artist} | {channel}" if "album_artist_suffix" in configured else album_artist]
         mp4_fields = {
-            "comments": ("\xa9cmt", [channel]), "subtitle": ("desc", [channel]),
+            "comments": ("\xa9cmt", [channel]), "subtitle": ("----:com.apple.iTunes:SUBTITLE", [channel.encode("utf-8")]),
             "encoded_by": ("\xa9too", [channel]), "copyright": ("cprt", [channel]),
             "composers": ("\xa9wrt", [channel]),
             "publisher": ("----:com.apple.iTunes:PUBLISHER", [channel.encode("utf-8")]),
@@ -119,6 +120,10 @@ def prepare_tagged_copy(source_path, prepared_path, metadata, artwork_path=None)
                 mapped.append(field)
             elif _tag_text(tags.get(key)) == channel:
                 tags.pop(key, None)
+        # desc is a podcast description, not a subtitle. Remove only our exact
+        # legacy value; preserve any legitimate original description.
+        if _tag_text(tags.get("desc")) == channel:
+            tags.pop("desc", None)
         if "author_url" in configured:
             tags["----:com.apple.iTunes:AUTHORURL"] = [settings.MEDIA_AUTHOR_URL.encode("utf-8")]
             mapped.append("author_url")
@@ -157,6 +162,7 @@ def prepare_tagged_copy(source_path, prepared_path, metadata, artwork_path=None)
         raise TaggingError(f"Unsupported Mutagen tagging class: {type(audio).__name__}")
 
     return {
+        "channel_policy_version": CHANNEL_POLICY_VERSION,
         "format": type(audio).__name__,
         "channel_tag": channel,
         "mapped_fields": ["title", "main_artist", "album", "track_number", "disc_number", "release_date", *sorted(mapped)],
@@ -275,7 +281,7 @@ def _channel_readback(tags, channel, configured, id3=False, mp4=False):
     if not configured:
         return True
     keys = {
-        "subtitle": "TIT3" if id3 else "desc" if mp4 else "subtitle",
+        "subtitle": "TIT3" if id3 else "----:com.apple.iTunes:SUBTITLE" if mp4 else "subtitle",
         "comments": "COMM" if id3 else "\xa9cmt" if mp4 else "comment",
         "publisher": "TPUB" if id3 else "----:com.apple.iTunes:PUBLISHER" if mp4 else "PUBLISHER",
         "encoded_by": "TENC" if id3 else "\xa9too" if mp4 else "ENCODED-BY",

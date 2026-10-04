@@ -91,9 +91,9 @@ class OwnerMediaPolicyTests(SimpleTestCase):
                     audio.tags['TPE2'] = TPE2(encoding=3, text='Album Artist')
                 else:
                     audio = MP4(prepared)
-                    for key in ['desc', '\xa9cmt', '\xa9too', 'cprt', '\xa9wrt']:
+                    for key in ['\xa9cmt', '\xa9too', 'cprt', '\xa9wrt']:
                         self.assertEqual(audio.tags[key], ['@RapFaDrop'])
-                    for key in ['PUBLISHER', 'CONDUCTOR', 'INITIALKEY']:
+                    for key in ['SUBTITLE', 'PUBLISHER', 'CONDUCTOR', 'INITIALKEY']:
                         self.assertEqual(bytes(audio.tags['----:com.apple.iTunes:' + key][0]), b'@RapFaDrop')
                     self.assertEqual(bytes(audio.tags['----:com.apple.iTunes:AUTHORURL'][0]), b'https://t.me/RapFaDrop')
                     self.assertEqual(audio.tags['\xa9alb'], ['Album | @RapFaDrop'])
