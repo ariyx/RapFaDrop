@@ -7,9 +7,9 @@ from django.utils import timezone
 
 from media_pipeline.models import MediaCandidate
 from media_pipeline.providers import PROVIDERS
-from sources.models import ArtistSource, SourceItem
+from sources.models import Artist, ArtistSource, SourceItem
 
-from .models import CanonicalRelease, IdentityAuditEvent, ProcessingQueueItem, ReleaseTrack, SourceMatch
+from .models import CanonicalRelease, IdentityAuditEvent, ProcessingQueueItem, ReleaseCredit, ReleaseTrack, SourceMatch, TrackCredit
 from .normalization import edition_markers, normalize_text
 
 
@@ -108,6 +108,32 @@ def _candidate_release(item, kind):
     return matches[0] if len(matches) == 1 else None
 
 
+def _apply_official_credits(item, release, memberships, tracks):
+    """Preserve verified Spotify contributors without enabling monitoring for them."""
+    def apply(model, parent_field, parent, names):
+        artists = []
+        for name in names:
+            if not isinstance(name, str) or not name.strip():
+                raise ValueError("Spotify artist credit is incomplete")
+            normalized = normalize_text(name)
+            matches = [artist for artist in Artist.objects.all() if normalized in {
+                normalize_text(artist.official_name), *[normalize_text(alias) for alias in artist.aliases or []]}]
+            if len(matches) > 1:
+                raise ValueError("Spotify artist credit matches multiple identities")
+            artist = matches[0] if matches else Artist.objects.create(official_name=name.strip(), enabled=False)
+            if artist not in artists:
+                artists.append(artist)
+        if not artists:
+            raise ValueError("Spotify artist credits are unavailable")
+        rows = model.objects.filter(**{parent_field: parent})
+        rows.exclude(artist__in=artists).delete()
+        for position, artist in enumerate(artists, 1):
+            model.objects.update_or_create(**{parent_field: parent, "artist": artist}, defaults={"position": position})
+    apply(ReleaseCredit, "release", release, item.metadata["artist_credits"])
+    for membership, track in zip(memberships, tracks):
+        apply(TrackCredit, "track", membership.track, track.get("artist_credits") or item.metadata["artist_credits"])
+
+
 def try_auto_bridge(item, now=None):
     """Return (result, reason, candidate release); no queue on uncertain evidence."""
     from .services import _queue_item
@@ -133,6 +159,8 @@ def try_auto_bridge(item, now=None):
                for membership, track in zip(memberships, tracks)]
     if any(match is None for match in matches):
         return None, "No unique verified full-audio SoundCloud match for every track", release
+
+    _apply_official_credits(item, release, memberships, tracks)
 
     spotify_match = SourceMatch.objects.create(
         source_item=item, release=release,
@@ -184,7 +212,9 @@ def _materialize_approved(item, release, tracks, kind):
     if (release.release_type != kind or normalize_text(release.title) != normalize_text(item.title) or
             not release.credited_artists.filter(pk=artist.pk).exists()):
         raise ValueError("Selected canonical release does not match Spotify identity")
-    return release, _membership_tracks(release, tracks)
+    memberships = _membership_tracks(release, tracks)
+    _apply_official_credits(item, release, memberships, tracks)
+    return release, memberships
 
 
 def _manual_match(item, primary_match, release, membership, spotify_track, now):

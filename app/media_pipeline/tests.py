@@ -111,6 +111,39 @@ class MediaPipelineTests(TestCase):
         self.assertTrue(candidate.audit_events.filter(action="candidate_retry_scheduled").exists())
         self.assertFalse(hasattr(candidate, "publication"))
 
+    def test_candidate_selects_supported_match_after_older_spotify_match(self):
+        self.item.platform = "spotify"
+        self.item.canonical_url = "https://open.spotify.com/track/unsupported"
+        self.item.save()
+        sc = SourceItem.objects.create(source=self.source, platform="soundcloud", native_item_id="supported-sc",
+            title=self.item.title, canonical_url="https://soundcloud.com/hichkasofficial/supported",
+            first_observed_at=timezone.now(), metadata={"duration": 30})
+        match = SourceMatch.objects.create(source_item=sc, release=self.match.release, track=self.match.track,
+                                          confidence=100, state="approved", matching_method="operator")
+        candidate = request_candidate(self.queue, provider_name="yt-dlp")
+        self.assertEqual(candidate.source_match, match)
+        self.assertEqual(candidate.state, MediaCandidate.State.CANDIDATE)
+
+    def test_provider_identity_change_requires_review_before_any_download(self):
+        from unittest.mock import Mock
+        for field in ("provider_item_id", "title", "uploader"):
+            with self.subTest(field=field):
+                MediaCandidate.objects.all().delete()
+                provider = Mock(name="identity-provider")
+                provider.name = "yt-dlp"
+                provider.can_handle.return_value = True
+                fields = dict(provider="yt-dlp", source_url=self.item.canonical_url,
+                              provider_item_id=self.item.native_item_id, title=self.item.title,
+                              duration_seconds=30, uploader=self.artist.official_name)
+                fields[field] = "unrelated"
+                provider.probe.return_value = ProviderProbe(**fields)
+                candidate = acquire_candidate(self.queue, provider_name="yt-dlp", provider=provider)
+                self.assertEqual(candidate.state, MediaCandidate.State.REVIEW_REQUIRED)
+                self.assertEqual(candidate.last_outcome, "provider_identity_mismatch")
+                self.assertEqual(candidate.attempts.get().state, MediaAttempt.State.REVIEW_REQUIRED)
+                provider.download.assert_not_called()
+                self.assertEqual(candidate.prepared_path, "")
+
     def test_retry_recovers_candidate_without_losing_source_provenance(self):
         failed = FakeProvider(failure=ProviderError("transient"))
         original_source_id = self.item.pk

@@ -79,12 +79,14 @@ def request_candidate(queue_item, provider_name=None, *, provider_instance=None)
         queue = ProcessingQueueItem.objects.select_for_update().get(pk=queue_item.pk)
         if queue.track_id is None or queue.state not in {ProcessingQueueItem.State.PENDING, ProcessingQueueItem.State.RETRY_WAIT}:
             raise MediaRequestError("Media is available only for an identified pending queue track")
-        match = SourceMatch.objects.filter(
+        matches = list(SourceMatch.objects.filter(
             track_id=queue.track_id,
             release_id=queue.release_id,
             confidence__gte=90,
             state__in=(SourceMatch.State.MATCHED, SourceMatch.State.APPROVED, SourceMatch.State.CORRECTED),
-        ).select_related("source_item").order_by("created_at", "pk").first()
+        ).select_related("source_item").order_by("created_at", "pk"))
+        match = next((row for row in matches if provider.can_handle(row.source_item.canonical_url)),
+                     matches[0] if matches else None)
         if match is None:
             raise MediaRequestError("Queue item has no confidently identified source match")
         source_item = match.source_item
@@ -179,6 +181,28 @@ def _run_provider(candidate, provider, now=None):
     staging = _staging_dir(candidate)
     try:
         probe = provider.probe(source_item.canonical_url, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
+        if provider.name == "yt-dlp" and source_item.platform == "soundcloud":
+            from releases.normalization import normalize_text
+            from releases.services import _uploader_mismatch
+            recorded_uploader = source_item.metadata.get("uploader")
+            identity_changed = (probe.provider_item_id != source_item.native_item_id or
+                                normalize_text(probe.title) != normalize_text(source_item.title))
+            if recorded_uploader:
+                identity_changed |= normalize_text(probe.uploader) != normalize_text(recorded_uploader)
+            else:
+                source_item.metadata = {**source_item.metadata, "uploader": probe.uploader}
+                identity_changed |= not probe.uploader or bool(_uploader_mismatch(source_item))
+            if identity_changed:
+                candidate.state = MediaCandidate.State.REVIEW_REQUIRED
+                candidate.last_outcome = "provider_identity_mismatch"
+                candidate.last_error = "Provider ID, title, or uploader differs from the approved source identity."
+                candidate.retry_due_at = None
+                candidate.save(update_fields=("state", "last_outcome", "last_error", "retry_due_at", "updated_at"))
+                MediaAttempt.objects.filter(pk=attempt.pk).update(state=MediaAttempt.State.REVIEW_REQUIRED,
+                    finished_at=timezone.now(), outcome=candidate.last_outcome, error=candidate.last_error)
+                MediaAuditEvent.objects.create(candidate=candidate, action="provider_identity_review",
+                                              detail={"attempt_id": attempt.pk})
+                return candidate
         result = provider.download(probe, staging, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
         downloaded_path = Path(result.path)
         if downloaded_path.is_symlink() or not downloaded_path.resolve().is_relative_to(staging.resolve()):

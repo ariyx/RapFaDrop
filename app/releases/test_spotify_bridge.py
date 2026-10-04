@@ -75,6 +75,24 @@ class SpotifyBridgeTests(TestCase):
         self.assertFalse(ReviewItem.objects.exists())
         self.assertFalse(MediaAttempt.objects.exists())
 
+    def test_review_approval_preserves_all_official_release_and_track_credits(self):
+        from django.contrib.auth import get_user_model
+        item = self._spotify_item("Official duet", [("Official duet", 180)], date=self.now)
+        item.metadata["artist_credits"] = ["Sijal", "Sogand"]
+        item.metadata["tracks"][0]["artist_credits"] = ["Sijal", "Sogand"]
+        item.save()
+        self.assertEqual(ingest_source_item(item), "review_required")
+        review = ReviewItem.objects.get(source_item=item)
+        actor = get_user_model().objects.create_user(username="credit-reviewer")
+        resolve_review(review, action="approve", actor=actor, resolution="Verified official duet credits")
+        match = SourceMatch.objects.get(source_item=item)
+        self.assertEqual(list(match.release.artist_credits.order_by("position").values_list("artist__official_name", flat=True)), ["Sijal", "Sogand"])
+        self.assertEqual(list(match.track.artist_credits.order_by("position").values_list("artist__official_name", flat=True)), ["Sijal", "Sogand"])
+        self.assertFalse(Artist.objects.get(official_name="Sogand").enabled)
+        self.assertFalse(ArtistSource.objects.filter(artist__official_name="Sogand").exists())
+        resolve_review(review, action="approve", actor=actor, resolution="Replay")
+        self.assertEqual(ProcessingQueueItem.objects.filter(track=match.track).count(), 1)
+
     @override_settings(SPOTIFY_DISCOVERY_MODE="spotifyscraper")
     def test_complete_poll_bridges_only_new_id_after_historical_baseline(self):
         class FakeDiscovery:
