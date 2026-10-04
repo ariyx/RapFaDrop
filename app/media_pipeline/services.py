@@ -1,4 +1,5 @@
 import shutil
+import time
 import uuid
 from datetime import timedelta
 from pathlib import Path
@@ -175,7 +176,9 @@ def _run_provider(candidate, provider, now=None):
 
     staging = _staging_dir(candidate)
     try:
+        probe_started = time.monotonic()
         probe = provider.probe(source_item.canonical_url, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
+        probe_seconds = round(time.monotonic() - probe_started, 3)
         if provider.name == "yt-dlp" and source_item.platform == "soundcloud":
             from releases.normalization import normalize_text
             from releases.services import _uploader_mismatch
@@ -198,7 +201,9 @@ def _run_provider(candidate, provider, now=None):
                 MediaAuditEvent.objects.create(candidate=candidate, action="provider_identity_review",
                                               detail={"attempt_id": attempt.pk})
                 return candidate
+        acquisition_started = time.monotonic()
         result = provider.download(probe, staging, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
+        acquisition_seconds = round(time.monotonic() - acquisition_started, 3)
         downloaded_path = Path(result.path)
         if downloaded_path.is_symlink() or not downloaded_path.resolve().is_relative_to(staging.resolve()):
             raise ProviderError("Provider output was outside its assigned staging directory", retryable=False)
@@ -210,6 +215,8 @@ def _run_provider(candidate, provider, now=None):
             "provider_title": probe.title,
             "provider_uploader": probe.uploader,
             "provider_duration_seconds": probe.duration_seconds,
+            "acquisition_seconds": acquisition_seconds,
+            "provider_probe_seconds": probe_seconds,
             "artwork_source_url": _safe_evidence_url(probe.artwork_source_url) if probe.artwork_source_url else "",
         }
         candidate.save(update_fields=("expected_duration_seconds", "provenance", "updated_at"))
@@ -296,6 +303,7 @@ def process_manual_upload(candidate, audio_upload, *, actor, artwork_upload=None
 
 
 def _accept_audio_file(candidate, attempt, source_path, *, expected, artwork_path=None, artwork_state=None, now=None, actor=None):
+    preparation_started = time.monotonic()
     now = now or timezone.now()
     source_path = Path(source_path)
     if source_path.is_symlink():
@@ -408,6 +416,7 @@ def _accept_audio_file(candidate, attempt, source_path, *, expected, artwork_pat
     candidate.validation_report = {"status": "valid", "complete": True, "audio_stream_present": True}
     candidate.preparation_state = MediaCandidate.PreparationState.READY
     candidate.preparation_report = prep_report
+    candidate.provenance = {**candidate.provenance, "validation_and_preparation_seconds": round(time.monotonic() - preparation_started, 3)}
     candidate.artwork_state = (artwork_state or MediaCandidate.ArtworkState.NOT_PROVIDED) if not artwork_path else MediaCandidate.ArtworkState.EMBEDDED
     candidate.state = MediaCandidate.State.READY
     candidate.last_outcome = "ready"
@@ -447,6 +456,9 @@ def _record_failure(candidate_id, attempt_id, error, *, now=None, retryable=True
 
 
 def _official_metadata(candidate):
+    archive = candidate.source_match.evidence.get("archive_official_metadata")
+    if archive and candidate.source_match.matching_method in {"archive_spotify_soundcloud", "archive_frozen_spotify"}:
+        return archive
     track = candidate.track
     release = candidate.release
     credits = [row.artist.official_name for row in track.artist_credits.select_related("artist").order_by("position", "pk")]

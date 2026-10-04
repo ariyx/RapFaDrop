@@ -36,7 +36,7 @@ def normalize_target(target):
 def guard_target(target):
     target = normalize_target(target)
     cleaned = target.lower().replace("https://t.me/", "").replace("http://t.me/", "").lstrip("@")
-    if cleaned == "rapfadrop" or (settings.TELEGRAM_PRODUCTION_CHAT_ID and target == str(settings.TELEGRAM_PRODUCTION_CHAT_ID)):
+    if cleaned == "rapfadrop" or target == "-1004311149640" or (settings.TELEGRAM_PRODUCTION_CHAT_ID and target == str(settings.TELEGRAM_PRODUCTION_CHAT_ID)):
         raise TargetBlocked("Production-channel publication is blocked in M4")
     return target
 
@@ -46,6 +46,7 @@ class GatewayResult:
     message_id: int
     chat_id: str
     message_url: str = ""
+    media: dict | None = None
 
 
 def message_url(chat_id, message_id, username=""):
@@ -98,10 +99,16 @@ class TelegramGateway:
         self._verified = threading.local()
 
     def _request(self, method, data, files=None):
+        self._check_request(method, data)
+        return self._transport_request(method, data, files)
+
+    def _check_request(self, method, data):
         if method != "getChat":
             target = guard_target(data.get("chat_id", ""))
             if not settings.TELEGRAM_LIVE_ENABLED or settings.TELEGRAM_MODE != "test" or target != getattr(self._verified, "target", None):
                 raise TargetBlocked("Gateway mutations require execute() with a freshly verified isolated target")
+
+    def _transport_request(self, method, data, files=None):
         if files:
             boundary = "rapfadrop" + uuid.uuid4().hex
             chunks = []
@@ -177,7 +184,9 @@ class TelegramGateway:
         mid = payload.get("message_id") if result is True else (result.get("message_id") if isinstance(result, dict) else None)
         if not mid:
             raise UncertainGatewayError("Telegram success did not contain a message ID")
-        return GatewayResult(int(mid), chat_id, message_url(chat_id, int(mid), username))
+        audio = result.get("audio", {}) if isinstance(result, dict) else {}
+        media = {key: audio[key] for key in ("file_id", "file_unique_id", "duration", "mime_type", "file_size", "title", "performer") if key in audio}
+        return GatewayResult(int(mid), chat_id, message_url(chat_id, int(mid), username), media)
 
     def _audio_files(self, payload):
         path = Path(payload["audio_path"])

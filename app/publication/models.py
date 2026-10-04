@@ -36,6 +36,7 @@ class PublicationChannel(models.Model):
 class Publication(models.Model):
     class Kind(models.TextChoices):
         SINGLE = "single_audio", "Single audio"
+        ARCHIVE = "archive_audio", "Archive audio"
         INTRO = "album_intro", "Album introduction"
         TRACK = "album_track_audio", "Album track audio"
         EDITION = "edition", "Edition audio"

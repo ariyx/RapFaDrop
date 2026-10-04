@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "media_pipeline",
     "publication",
     "operations",
+    "archive_collection",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

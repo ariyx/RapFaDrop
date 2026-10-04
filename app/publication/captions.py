@@ -96,7 +96,7 @@ def render_caption(kind, context, config=None, *, limit=1024):
             else:
                 chunks[-1] += "\n" + row
         return RenderedCaption(result, tuple(chunks))
-    header = config["header"]
+    header = config.get("archive_header", "ARCHIVE") if kind == "archive_audio" else config["header"]
     if kind == "album_track_audio":
         header = config["ep_header"] if str(context.get("release_type", "")).lower() == "ep" else config["lp_header"]
     rows = []
@@ -107,7 +107,10 @@ def render_caption(kind, context, config=None, *, limit=1024):
                 rows.append(" / ".join(platform_rows))
         elif key in labels and context.get(key):
             rows.append(link(labels[key], context[key], channel=key in {"album_post_url", "original_track_post_url"}))
-    blocks = ([f"<b>{escape(str(header))}</b>"] if header else []) + (["\n".join(rows)] if rows else []) + [escape(str(config["footer"]))]
+    heading = [f"<b>{escape(str(header))}</b>"] if header else []
+    if kind == "archive_audio":
+        heading.extend([escape(str(context.get("title", ""))), " × ".join(escape(str(a)) for a in context.get("artists", []))])
+    blocks = (["\n".join(heading)] if heading else []) + (["\n".join(rows)] if rows else []) + [escape(str(config["footer"]))]
     result = "\n\n".join(blocks)
     if visible_length(result) > limit:
         raise CaptionError("Audio caption exceeds the supported caption limit")

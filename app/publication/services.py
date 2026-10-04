@@ -19,7 +19,7 @@ from .gateway import GatewayError, GatewayResult, UncertainGatewayError, guard_t
 from .models import AlbumSession, CaptionTemplate, Publication, PublicationAttempt, PublicationAuditEvent, PublicationChannel, PublicationReconciliation
 
 
-AUDIO_KINDS = (Publication.Kind.SINGLE, Publication.Kind.TRACK, Publication.Kind.EDITION)
+AUDIO_KINDS = (Publication.Kind.SINGLE, Publication.Kind.TRACK, Publication.Kind.EDITION, Publication.Kind.ARCHIVE)
 CONFIDENT_STATES = (SourceMatch.State.MATCHED, SourceMatch.State.APPROVED, SourceMatch.State.CORRECTED)
 SEND_OPERATIONS = {"send_audio", "send_intro", "send_text", "reply", "notify"}
 
@@ -170,7 +170,11 @@ def _mark_uncertain(attempt, message):
 def perform(pub, operation, operation_key, payload, *, gateway, candidate=None, now=None, session_id=None):
     """Commit an attempt and channel lease BEFORE a network operation; never blind-resend."""
     now = now or timezone.now()
-    guard_target(pub.channel.target)
+    if getattr(gateway, "collection_id", None) is not None:
+        from archive_collection.services import authorize_publication
+        authorize_publication(gateway.collection_id, pub, operation, payload)
+    else:
+        guard_target(pub.channel.target)
     with transaction.atomic():
         channel = PublicationChannel.objects.select_for_update().get(pk=pub.channel_id)
         pub = Publication.objects.select_for_update().get(pk=pub.pk)
@@ -250,7 +254,7 @@ def perform(pub, operation, operation_key, payload, *, gateway, candidate=None, 
                 _audit(pub, "operation_failed", attempt=attempt, detail={"retry_due_at": pub.retry_due_at.isoformat()})
         else:
             attempt.state = PublicationAttempt.State.SUCCEEDED
-            attempt.response = {"message_id": result.message_id, "chat_id": result.chat_id, "message_url": result.message_url}
+            attempt.response = {"message_id": result.message_id, "chat_id": result.chat_id, "message_url": result.message_url, "media": result.media or {}}
             attempt.finished_at = now
             attempt.save(update_fields=("state", "response", "finished_at"))
             _apply_success(pub, attempt, result, now)

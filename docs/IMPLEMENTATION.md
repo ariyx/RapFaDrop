@@ -2,6 +2,11 @@
 
 Status: **83-identity discovery, owner inventory, recoverable encrypted backups and owner caption/tag/quality defaults implemented; bridge and production publication remain OFF.** Current evidence and SHAs are in `STATUS.md`; historical milestone sections below retain their original observations.
 Repository: `https://github.com/ariyx/RapFaDrop.git` (documentation-only at the checkpoint in [`STATUS.md`](STATUS.md); verify current Git state).
+The owner-authorized initial Popular archive is a separate explicit collection:
+frozen two-slot artist selections, unique stable recording identities, bounded
+official-source acquisition and a collection-only production gateway. It does
+not enable the future-discovery bridge, general publication worker or beat sends.
+See [collection architecture and commands](reports/POPULAR_TRACK_COLLECTION.md).
 Product source of truth: [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md).  
 
 ## Controlled Spotify metadata discovery (2026-10-03)
