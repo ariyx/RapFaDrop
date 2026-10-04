@@ -36,17 +36,19 @@ class FakeAdapter:
 
 
 class SeedTests(TestCase):
-    def test_imports_thirty_disabled_unverified_artists_and_candidates(self):
+    def test_imports_approved_disabled_artists_and_candidates(self):
+        from sources.roster import load_roster
+        rows = load_roster()
+        source_count = sum(len(row['sources']) for row in rows)
         call_command("seed_sources", verbosity=0)
-        self.assertEqual(Artist.objects.count(), 30)
-        self.assertEqual(ArtistSource.objects.count(), 57)
+        self.assertEqual(Artist.objects.count(), 83)
+        self.assertEqual(ArtistSource.objects.count(), source_count)
         self.assertFalse(Artist.objects.filter(enabled=True).exists())
         self.assertFalse(ArtistSource.objects.filter(enabled=True).exists())
-        self.assertFalse(ArtistSource.objects.exclude(verification="unverified").exists())
-        self.assertEqual(Artist.objects.exclude(aliases=[]).count(), 30)
+        self.assertEqual(Artist.objects.exclude(aliases=[]).count(), 83)
         call_command("seed_sources", verbosity=0)
-        self.assertEqual(Artist.objects.count(), 30)
-        self.assertEqual(ArtistSource.objects.count(), 57)
+        self.assertEqual(Artist.objects.count(), 83)
+        self.assertEqual(ArtistSource.objects.count(), source_count)
 
     def test_persian_alias_round_trips_through_seed_model_management_and_admin(self):
         expected = "حسین تی‌ام"

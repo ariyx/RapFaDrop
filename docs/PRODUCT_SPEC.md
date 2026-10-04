@@ -12,6 +12,8 @@ The initial new-release channel must not automatically backfill historical track
 
 ## 2. Artist allowlist and source profiles
 
+The owner expanded the allowlist to **83 identities** on 2026-10-04. The complete current list, source candidates and outcomes are in [`ARTIST_ROSTER.md`](ARTIST_ROSTER.md) and the normalized import manifest. All added artists/sources remain disabled; adding a verified identity does not authorize polling, baselining or publication. Preserve existing curated profiles, activation and schedules when importing. Historical initial roster below remains the source of its original 30 identities.
+
 The owner approved the following **30 artists** as the initial list. Profile links are seed candidates found from public pages; verify profile identity and recent official works at activation. Do not silently replace a missing source with a fan account. The allowlist grows through the panel. Store official display name, aliases, native profile IDs, profile URLs, verification state, enabled state, timestamps and audit history.
 
 | Artist | Spotify | SoundCloud |

@@ -27,6 +27,8 @@ docker compose down
 
 ## Opt-in read-only probes
 
+The approved roster now contains 83 identities. Import it offline with `python manage.py seed_sources --dry-run`, then `python manage.py seed_sources` in the configured application container. Existing artist/source settings and curated URLs are preserved; all added records remain disabled. Verification outcomes and unresolved profiles are in [`docs/ARTIST_ROSTER.md`](docs/ARTIST_ROSTER.md). Server operations must use all three established production Compose files; see the current status and [expansion report](docs/reports/ARTIST_ROSTER_EXPANSION.md). Importing does not poll, baseline, acquire media or send Telegram messages.
+
 Probes never run at service startup or test discovery. They print sanitized JSON and omit signed media URLs. Redirect output to a local file when needed.
 
 ```powershell

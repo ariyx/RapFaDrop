@@ -1,7 +1,8 @@
-from django.core.management.base import BaseCommand
-from django.db import transaction
+import json
 
-from sources.models import Artist, ArtistSource, SourceAuditEvent
+from django.core.management.base import BaseCommand, CommandError
+
+from sources.roster import RosterConflict, import_roster
 
 
 SEEDS = [
@@ -39,28 +40,14 @@ SEEDS = [
 
 
 class Command(BaseCommand):
-    help = "Import the approved 30 artists and disabled, unverified candidate profiles."
+    help = "Import the approved roster offline; preserve curated records and keep new records disabled."
 
-    @transaction.atomic
+    def add_arguments(self, parser):
+        parser.add_argument('--dry-run', action='store_true', help='Review the diff without persisting any changes.')
+
     def handle(self, *args, **options):
-        created_artists = created_sources = 0
-        for name, persian_alias, spotify_id, soundcloud_slug in SEEDS:
-            artist, created = Artist.objects.get_or_create(official_name=name)
-            created_artists += created
-            aliases = list(artist.aliases or [])
-            if persian_alias not in aliases:
-                aliases.append(persian_alias)
-                artist.aliases = aliases
-                artist.save(update_fields=("aliases", "updated_at"))
-            defaults = {"native_profile_id": spotify_id, "canonical_url": f"https://open.spotify.com/artist/{spotify_id}"}
-            _, created = ArtistSource.objects.get_or_create(artist=artist, platform=ArtistSource.Platform.SPOTIFY, defaults=defaults)
-            created_sources += created
-            if soundcloud_slug:
-                _, created = ArtistSource.objects.get_or_create(
-                    artist=artist,
-                    platform=ArtistSource.Platform.SOUNDCLOUD,
-                    defaults={"canonical_url": f"https://soundcloud.com/{soundcloud_slug}"},
-                )
-                created_sources += created
-        SourceAuditEvent.objects.create(event_type="seed_imported", detail={"artists_created": created_artists, "sources_created": created_sources, "seed_artists": len(SEEDS)})
-        self.stdout.write(self.style.SUCCESS(f"Seed verified: {Artist.objects.count()} artists; {ArtistSource.objects.count()} sources ({created_artists} and {created_sources} created this run)."))
+        try:
+            result = import_roster(dry_run=options['dry_run'])
+        except RosterConflict as exc:
+            raise CommandError(str(exc)) from exc
+        self.stdout.write(json.dumps(result, ensure_ascii=False))
