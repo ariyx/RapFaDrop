@@ -40,14 +40,20 @@ def _upsert_items(source, items, observed_at, from_baseline):
     return count
 
 
-def baseline_source(source, adapter=None, now=None):
+def baseline_source(source, adapter=None, now=None, *, allow_disabled=False):
     """Snapshot history atomically. Repeating after a crash is safe by stable IDs."""
     if source.baseline_completed_at is not None:
         completed = BaselineRun.objects.filter(source=source, status=BaselineRun.Status.COMPLETE).order_by("-completed_at").first()
         if completed is None:
             raise ValueError("Completed baseline has no successful run record")
         return completed
-    if not source.artist.enabled or not source.enabled or source.verification != ArtistSource.Verification.VERIFIED:
+    if source.verification != ArtistSource.Verification.VERIFIED:
+        raise ValueError("Baseline requires a verified source")
+    if allow_disabled:
+        from django.conf import settings
+        if source.enabled or settings.SPOTIFY_MEDIA_BRIDGE_ENABLED or settings.TELEGRAM_MODE != "disabled" or settings.TELEGRAM_LIVE_ENABLED or settings.PUBLICATION_WORKER_ENABLED:
+            raise ValueError("Disabled-source baseline requires discovery-only isolation and a disabled source")
+    elif not source.artist.enabled or not source.enabled:
         raise ValueError("Baseline requires an enabled artist and enabled, verified source")
     if not source.release_polling_available:
         raise ValueError("Release baselining is unavailable for this platform")
@@ -57,7 +63,7 @@ def baseline_source(source, adapter=None, now=None):
         # Provider integrity is checked before a baseline run or cursor is written.
         items = adapter.list_recent(source)
     except Exception as exc:
-        record_source_failure(source, exc, now=now)
+        record_source_failure(source, exc, now=now, provider_probe=getattr(adapter, "last_probe", None))
         raise
     run = BaselineRun.objects.filter(source=source, status=BaselineRun.Status.RUNNING).order_by("started_at").first()
     if run is None:
@@ -79,7 +85,7 @@ def baseline_source(source, adapter=None, now=None):
             source.last_error = ""
             source.last_error_at = None
             source.save(update_fields=("baseline_completed_at", "last_success_at", "next_poll_at", "consecutive_failures", "last_error", "last_error_at", "updated_at"))
-            SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="baseline_completed", detail={"items": len(items), "created": created_count})
+            SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="baseline_completed", detail={"items": len(items), "created": created_count, "provider_probe": getattr(adapter, "last_probe", None)})
         return run
     except Exception as exc:
         run.status = BaselineRun.Status.FAILED
@@ -89,7 +95,7 @@ def baseline_source(source, adapter=None, now=None):
         raise
 
 
-def record_source_failure(source, error, now=None):
+def record_source_failure(source, error, now=None, *, provider_probe=None):
     now = now or timezone.now()
     source.consecutive_failures += 1
     delay = min(source.poll_interval_seconds * (2 ** (source.consecutive_failures - 1)), 21600)
@@ -100,7 +106,7 @@ def record_source_failure(source, error, now=None):
     source.last_error_at = now
     source.next_poll_at = now + timedelta(seconds=delay)
     source.save(update_fields=("consecutive_failures", "last_error", "last_error_at", "next_poll_at", "updated_at"))
-    SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="poll_failed", detail={"error_type": type(error).__name__, "error": str(error)[:500], "retry_seconds": delay})
+    SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="poll_failed", detail={"error_type": type(error).__name__, "error": str(error)[:500], "retry_seconds": delay, "provider_probe": provider_probe})
 
 
 def poll_source(source, adapter=None, now=None):
@@ -134,7 +140,7 @@ def poll_source(source, adapter=None, now=None):
                 if item["native_item_id"] in new_ids:
                     adapter.fetch_item(source, item)
         with transaction.atomic():
-            _upsert_items(source, items, now, from_baseline=False)
+            created_count = _upsert_items(source, items, now, from_baseline=False)
             if new_ids:
                 from releases.services import ingest_source_item
                 for source_item in SourceItem.objects.filter(platform=source.platform, native_item_id__in=new_ids):
@@ -145,10 +151,10 @@ def poll_source(source, adapter=None, now=None):
             source.last_error = ""
             source.last_error_at = None
             source.save(update_fields=("last_success_at", "next_poll_at", "consecutive_failures", "last_error", "last_error_at", "updated_at"))
-            SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="poll_succeeded", detail={"items": len(items)})
+            SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="poll_succeeded", detail={"items": len(items), "created": created_count, "provider_probe": getattr(adapter, "last_probe", None)})
         return "success"
     except Exception as exc:
-        record_source_failure(source, exc, now=now)
+        record_source_failure(source, exc, now=now, provider_probe=getattr(adapter, "last_probe", None))
         return "failed"
 
 

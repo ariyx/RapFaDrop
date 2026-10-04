@@ -19,13 +19,37 @@ class SoundCloudAdapter:
                    "socket_timeout": 30, "extract_flat": False, "playlistend": 100}
         with yt_dlp.YoutubeDL(options) as ydl:
             profile = ydl.extract_info(source.canonical_url, download=False)
-        entries = profile.get("entries") or []
-        return [normalize_soundcloud_item(item) for item in entries if item]
+        if not isinstance(profile, dict) or profile.get("entries") is None:
+            raise SourceUnavailable("SoundCloud profile response lacks a complete entry list")
+        entries = list(profile["entries"])
+        if len(entries) >= options['playlistend'] or any(not entry for entry in entries):
+            raise SourceUnavailable("SoundCloud profile response is truncated or reaches the 100-entry bound")
+        items = [normalize_soundcloud_item(item) for item in entries]
+        if len({item['native_item_id'] for item in items}) != len(items):
+            raise SourceUnavailable("SoundCloud profile response repeats a native item ID")
+        return items
 
 
 class SpotifyAdapter:
     platform = "spotify"
     identity_capability = "SpotifyScraper artist identity; requires explicit verification"
+
+    def __init__(self):
+        self.last_probe = None
+
+    def _call(self, method, *args):
+        if settings.SPOTIFY_DISCOVERY_MODE != "spotifyscraper":
+            raise SourceUnavailable(self.status())
+        from .spotify_scraper import SpotifyScraperDiscovery
+        adapter = SpotifyScraperDiscovery()
+        try:
+            return getattr(adapter, method)(*args)
+        finally:
+            if method == 'fetch_item' and self.last_probe and adapter.last_probe:
+                self.last_probe = {key: self.last_probe[key] + adapter.last_probe[key]
+                                   for key in ('requests', 'pages', 'elapsed_seconds')}
+            else:
+                self.last_probe = adapter.last_probe
 
     @staticmethod
     def status():
@@ -37,22 +61,13 @@ class SpotifyAdapter:
         return "Unavailable: unsupported Spotify discovery mode; no adapter selected"
 
     def list_recent(self, source):
-        if settings.SPOTIFY_DISCOVERY_MODE != "spotifyscraper":
-            raise SourceUnavailable(self.status())
-        from .spotify_scraper import SpotifyScraperDiscovery
-        return SpotifyScraperDiscovery().list_recent(source)
+        return self._call('list_recent', source)
 
     def resolve_profile(self, source):
-        if settings.SPOTIFY_DISCOVERY_MODE != "spotifyscraper":
-            raise SourceUnavailable(self.status())
-        from .spotify_scraper import SpotifyScraperDiscovery
-        return SpotifyScraperDiscovery().resolve_profile(source)
+        return self._call('resolve_profile', source)
 
     def fetch_item(self, source, item):
-        if settings.SPOTIFY_DISCOVERY_MODE != "spotifyscraper":
-            raise SourceUnavailable(self.status())
-        from .spotify_scraper import SpotifyScraperDiscovery
-        return SpotifyScraperDiscovery().fetch_item(source, item)
+        return self._call('fetch_item', source, item)
 
 
 def _release_time(item):

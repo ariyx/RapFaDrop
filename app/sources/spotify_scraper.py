@@ -179,6 +179,7 @@ class SpotifyScraperDiscovery:
         if not SPOTIFY_ID.fullmatch(native_id):
             raise SpotifyMetadataError("Spotify release ID is invalid")
         transport = self.transport_factory()
+        started = time.monotonic()
         try:
             with self.client_factory(transport=transport) as client:
                 album = client.get_album(native_id)
@@ -207,4 +208,5 @@ class SpotifyScraperDiscovery:
         except Exception as exc:
             raise SpotifyMetadataError(f"Spotify release detail request failed: {type(exc).__name__}") from None
         finally:
+            self.last_probe = {"requests": transport.requests, "pages": transport.pages, "elapsed_seconds": round(time.monotonic() - started, 3)}
             transport.close()
