@@ -1,5 +1,80 @@
 # Discovery source activation
 
+## Roster-wide coverage correction, 2026-10-04
+
+**Current coverage: 83/83 approved artists; 83 active Spotify sources.** The earlier rollout activated 53 additions while leaving 25 original artists unverified; it did not meet the owner's roster-wide intent. This correction reuses and verifies those existing records, baselines them while disabled and enables them only after successful complete responses. The previous 58 sources were not rebaselined, reset or reconfigured. Application remains **`5d89fcedcc1c01d5f9f00b533242e6d9045fbb0f`**; no application code change or deployment was required. This exact application passed **27 focused source/baseline/import tests** again in a disposable server environment, plus Django and migration-drift checks; its prior full suite passed 151 tests.
+
+### Backup and preservation
+
+Before mutations, a fresh protected backup `/var/backups/rapfadrop/pre_roster_coverage_20261004.dump` (**340564 bytes, mode 0600**) passed checksum/list verification and a disposable restore. **37 tables** matched with digest `58a5d466070eebf08b7948d48a699449ed7c7230e49f869562a013e871eded0f`; restore database `coverage_restore_20261004` was removed. Discovery worker/beat were briefly paused for the consistent snapshot and restarted with all four established Compose files; no existing due time or interval was reset.
+
+The starting database contained **2336 items / 59 baselines / one open review**, rather than the earlier 2335-item/zero-review checkpoint. Dalu's real single **HAHAAA** (`6IByq1FJu3hGv0CoU6qBVc`) had already been observed at `2026-10-04T13:36:05.813992Z` and entered review before this correction. The review reason remains “New Spotify ID requires release-time and cross-platform identity review.” It was preserved unchanged; this task neither approved nor queued it. A release date alone is insufficient to measure its live detection latency.
+
+Full field-by-field comparisons preserved **all 2336 prior items**, **all 59 prior baselines**, the existing review, all artist names/aliases and all curated source artist/platform/native ID/URL fields. The original 177 IDs are included unchanged. For the pre-existing 58 active sources, enabled/verified flags, 180-second intervals and baseline timestamps remain unchanged; normal polling alone advances success/due/error/backoff fields. Unrelated disabled sources remain entirely unchanged.
+
+### Verification and activation of the missing 25
+
+Each source received fresh actual-adapter artist identity, strictly validated complete discography (totals, offsets, page lengths and unique IDs), and one complete official release-detail check corroborating primary artist credits. Every Spotify native ID and canonical URL remained the curated value. The documented name mappings **Hossein Tiem → Tiem**, **Hesam Tiem → HesamTiem**, **Koorosh Wantons → Koorosh** come explicitly from the original approved artist/Spotify table in `PRODUCT_SPEC.md`; live IDs, names and release credits corroborated them. No curated name or alias was rewritten and no same-name alternative profile was substituted.
+
+**25 sources newly verified, baselined and activated.** Historical catalog memberships: **2004**; unique newly stored IDs: **1598**; globally existing/shared memberships: **406**. Final totals: **3934 items / 84 baselines / 83 artists / 130 sources**. Native-ID uniqueness constraints remain in force. All observed baseline IDs were confirmed globally stored; each second baseline call returned the same completed run. A subsequent activation-controller rerun emitted no actions and created no records.
+
+| Artist ID | Original artist | Existing source / profile | Live Spotify name | Baseline memberships | New IDs | Baseline run | Result | Scheduled outcomes |
+|---|---|---|---|---:|---:|---:|---|---|
+| 1 | Hossein Tiem | [1](https://open.spotify.com/artist/2ZgLpNVB2qQTifvz3l8xIY) | Tiem | 38 | 37 | 60 | activated | 4 success / 0 failed |
+| 2 | Hesam Tiem | [3](https://open.spotify.com/artist/6XsyaCX2jJLaS82vJoiiWi) | HesamTiem | 34 | 25 | 61 | activated | 4 success / 0 failed |
+| 3 | Amin Tijay | [5](https://open.spotify.com/artist/3JS9sHeI06RtolBR5s5O0L) | Amin Tijay | 51 | 43 | 62 | activated | 4 success / 0 failed |
+| 4 | Mamazi | [7](https://open.spotify.com/artist/4L42EENVSu2ZE8cwhVVeh8) | Mamazi | 94 | 83 | 63 | activated | 4 success / 0 failed |
+| 5 | Sajad Shahi | [9](https://open.spotify.com/artist/3VzZOmXc8pZRfNxoiliE1A) | Sajad Shahi | 36 | 30 | 64 | activated | 4 success / 0 failed |
+| 6 | Sinazza | [11](https://open.spotify.com/artist/2su0Z5gmtSRUreY11ocP8M) | Sinazza | 32 | 32 | 65 | activated | 4 success / 0 failed |
+| 7 | Hoomaan | [13](https://open.spotify.com/artist/6UJS43T8NPhmWmmpFY0hzP) | Hoomaan | 46 | 31 | 66 | activated | 4 success / 0 failed |
+| 8 | Vinak | [15](https://open.spotify.com/artist/1sKlyO3CCEvjeTN6Uck39S) | Vinak | 86 | 78 | 67 | activated | 4 success / 0 failed |
+| 9 | Dorcci | [17](https://open.spotify.com/artist/6jj9lOTeZC28LkPoXK9hiT) | Dorcci | 36 | 33 | 68 | activated | 4 success / 0 failed |
+| 10 | Hiphopologist | [19](https://open.spotify.com/artist/45YMrIBH74j8e2wNlRSSdK) | Hiphopologist | 78 | 65 | 69 | activated | 4 success / 0 failed |
+| 11 | Chvrsi | [21](https://open.spotify.com/artist/7Hj58arwOvp6exTny9r5Ie) | Chvrsi | 72 | 58 | 70 | activated | 4 success / 0 failed |
+| 12 | Poori | [23](https://open.spotify.com/artist/5uEEhLt2ETeApnvs40MOxk) | Poori | 73 | 69 | 71 | activated | 3 success / 0 failed |
+| 13 | Arta | [25](https://open.spotify.com/artist/6gPKjPIXbBBnuLyLEq79Sz) | Arta | 89 | 62 | 72 | activated | 3 success / 0 failed |
+| 14 | Koorosh Wantons | [27](https://open.spotify.com/artist/1UjD9VWeqDDlDSvNlnFTdl) | Koorosh | 99 | 31 | 73 | activated | 3 success / 0 failed |
+| 15 | Canis | [29](https://open.spotify.com/artist/6OPdGHW0QD6WknWX2tlzJm) | Canis | 28 | 22 | 74 | activated | 3 success / 0 failed |
+| 17 | Behzad Leito | [33](https://open.spotify.com/artist/4zNEj5bkHE0kNSpfIwgdvu) | Behzad Leito | 102 | 56 | 75 | activated | 3 success / 0 failed |
+| 18 | Sepehr Khalse | [35](https://open.spotify.com/artist/2SFwcduI9cdZsG6UxnBm3C) | Sepehr Khalse | 127 | 59 | 76 | activated | 3 success / 0 failed |
+| 19 | Shayea | [37](https://open.spotify.com/artist/3QNGoF6VzVNnkpjJDT3NHq) | Shayea | 64 | 61 | 77 | activated | 3 success / 0 failed |
+| 21 | Sina Sae | [40](https://open.spotify.com/artist/5er043agmHdVZkWTxL0Lpk) | Sina Sae | 41 | 40 | 78 | activated | 3 success / 0 failed |
+| 24 | Reza Pishro | [46](https://open.spotify.com/artist/0u4qrFczDmAsJesHPgbnru) | Reza Pishro | 57 | 53 | 79 | activated | 3 success / 0 failed |
+| 26 | Tohi | [49](https://open.spotify.com/artist/7pBXdJN9S9N9nNifjPixET) | Tohi | 60 | 46 | 80 | activated | 3 success / 0 failed |
+| 27 | Erfan | [51](https://open.spotify.com/artist/1yPzb9mqugowOfUs2vIOgL) | Erfan | 90 | 61 | 81 | activated | 3 success / 0 failed |
+| 28 | Amir Tataloo | [53](https://open.spotify.com/artist/5CEosSs2y4M9THNGI6mej8) | Amir Tataloo | 458 | 446 | 82 | activated | 3 success / 0 failed |
+| 29 | Sohrab Mj | [54](https://open.spotify.com/artist/2B4DnBz9uzJN5nPgLEHCt7) | Sohrab Mj | 70 | 46 | 83 | activated | 3 success / 0 failed |
+| 30 | Mehrad Hidden | [56](https://open.spotify.com/artist/0jCVTRvQkILbJvpviTpvd1) | Mehrad Hidden | 43 | 31 | 84 | activated | 3 success / 0 failed |
+
+### Scheduled observation and bounded requests
+
+**25/25** newly activated sources completed at least three real scheduled outcomes. New-source successful polls: **86**; failures: **0**. Completion spacing: **175.584–247.465 seconds**. Each new source uses 180 seconds; due times were staggered 60–204 seconds in six-second steps, with serial verification/activation and a solo worker. Beat remains on a 60-second metadata-only scan; old schedules remain intact. Provider failures use normal isolated exponential backoff; two consecutive failures pause only the affected new source. No manually invoked poll was counted as scheduled observation.
+
+| New-source phase | HTTP requests | Validated discography pages | Summed provider seconds |
+|---|---:|---:|---:|
+| Identity | 50 | 0 | 13.959 |
+| Complete baseline catalog | 74 | 49 | 11.766 |
+| Corroborating release details | 50 | 0 | 10.729 |
+| Scheduled polls | 249 | 162 | 43.784 |
+
+The observed metadata-worker window contains **17 completed batches**, summed duration **177.946 seconds**, longest **27.495 seconds**. Batch timings include the original 58 sources as well as the newly activated 25; per-source metrics above cover only the correction. Requests are bounded by the actual adapter's 20-page discography/100-track detail guards, one release-credit sample per source and at most one retry for transient qualification errors. No acquisition, preparation or upload stage occurred.
+
+### Coverage exceptions and final controls
+
+Remaining uncovered artists: **0**. **None. All 83 approved artists have active verified/baselined Spotify discovery.**
+
+Scheduled provider failures: `[]`. Final consecutive failures and any source holds are retained in the [safe 83-artist evidence](data/roster_coverage_correction.json), together with fresh identities, corroborating releases, complete native-ID sets/digests, durable baseline runs, exact scheduled outcomes, queue state and container safety readback.
+
+**Bridge OFF; media worker absent; production Telegram mode disabled; live sending false; publication worker false.** All four protected Compose overlays remain required. Final downstream counts: `{"MediaAttempt": 0, "MediaCandidate": 0, "ProcessingQueueItem": 0, "Publication": 0, "PublicationAttempt": 0, "ReviewItem": 1}`; media files **0**. No audio download, downstream processing/publication job, review approval or Telegram mutation occurred. Discovery/media queues were empty at collection; the unchanged default queue holds one inert `celery.backend_cleanup` envelope. Production health passed. The isolated test containers/tmpfs database/Redis/media and test image tag were removed; no production volume was touched. Safe audit files and the protected backup remain. No unrelated service, credential or protected overlay was altered.
+
+The latest-album inventory remains an earlier metadata snapshot; its “source verification before” fields predate this correction. Album acquisition and publication are still outside this task. Documentation-only commits do not change the deployed application SHA.
+
+---
+
+## Historical first activation rollout
+
+The following 58-source checkpoint and source table describe the earlier incomplete rollout. Current coverage and verification state are above.
+
 Server-only, 2026-10-04. Tested, normally pushed and deployed application SHA **`5d89fcedcc1c01d5f9f00b533242e6d9045fbb0f`**, starting from `2a439a67ce5251c2004a4bce93c2ad770be11f8c`. Exact-SHA isolated server checks passed **151 full tests**, **27 focused tests**, Django checks and migration drift. Documentation-only follow-up commits do not change the deployed application.
 
 ## Isolation and backup
