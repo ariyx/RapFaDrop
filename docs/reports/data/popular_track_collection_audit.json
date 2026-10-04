@@ -1,0 +1,484 @@
+{
+  "generated_at": "2026-10-04T19:59:02.703808+00:00",
+  "selection_sha": "eb074f6e808836554ea474904473fc920bab039a",
+  "state": {
+    "name": "initial-popular-20261004",
+    "paused": true,
+    "frozen_at": "2026-10-04 18:10:54.595358+00:00",
+    "artists": 83,
+    "selected_slots": 166,
+    "unique_recordings": 155,
+    "published": 9,
+    "reused_posts": 0,
+    "new_posts": 9,
+    "unresolved_artists": 0,
+    "states": {
+      "pending": 146,
+      "published": 9
+    },
+    "verification": {
+      "bot_id": 8697681226,
+      "chat_id": -1004311149640,
+      "chat_title": "Rap Farsi Drop",
+      "bot_username": "RapFaDropBot",
+      "chat_username": "RapFaDrop",
+      "member_status": "administrator",
+      "can_post_messages": true
+    }
+  },
+  "active_verified_spotify": 83,
+  "source_items": 4092,
+  "baselines": 84,
+  "reviews": 1,
+  "downstream_queue": 0,
+  "discovery_requests": 490,
+  "discovery_seconds_summed": 135.849,
+  "publication_operations": {
+    "send_audio": 9,
+    "edit_caption": 4,
+    "edit_media": 10
+  },
+  "publication_operation_states": {
+    "succeeded": 23
+  },
+  "media_attempts": {
+    "yt-dlp|succeeded": 9,
+    "policy-retag|succeeded": 10
+  },
+  "all_recordings_attempted": true,
+  "processing_application_sha": "c08738439737f928d696bed75923bcdaacca4181",
+  "cleanup": {
+    "verified_posts": [
+      {
+        "message_id": 9,
+        "spotify_id": "5XauDXikxxSnvMfAbjUKeZ",
+        "title": "Bargard",
+        "readback": {
+          "title_matches": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true,
+          "artwork_read_back": true
+        },
+        "actual_channel_values": {
+          "SUBTITLE": "@RapFaDrop",
+          "PUBLISHER": "@RapFaDrop",
+          "CONDUCTOR": "@RapFaDrop",
+          "INITIALKEY": "@RapFaDrop",
+          "AUTHORURL": "https://t.me/RapFaDrop",
+          "©cmt": [
+            "@RapFaDrop"
+          ],
+          "©too": [
+            "@RapFaDrop"
+          ],
+          "cprt": [
+            "@RapFaDrop"
+          ],
+          "©wrt": [
+            "@RapFaDrop"
+          ],
+          "album_artist": [
+            "Sijal | @RapFaDrop"
+          ],
+          "album": [
+            "Serotonin | @RapFaDrop"
+          ]
+        },
+        "uploaded_bytes": 5186658,
+        "policy_version": 2
+      },
+      {
+        "message_id": 10,
+        "spotify_id": "22cRr8Qxt2Dy0lxAKcBJKl",
+        "title": "Be Mula",
+        "readback": {
+          "title_matches": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true,
+          "artwork_read_back": true
+        },
+        "actual_channel_values": {
+          "SUBTITLE": "@RapFaDrop",
+          "PUBLISHER": "@RapFaDrop",
+          "CONDUCTOR": "@RapFaDrop",
+          "INITIALKEY": "@RapFaDrop",
+          "AUTHORURL": "https://t.me/RapFaDrop",
+          "©cmt": [
+            "@RapFaDrop"
+          ],
+          "©too": [
+            "@RapFaDrop"
+          ],
+          "cprt": [
+            "@RapFaDrop"
+          ],
+          "©wrt": [
+            "@RapFaDrop"
+          ],
+          "album_artist": [
+            "Ho3ein | @RapFaDrop"
+          ],
+          "album": [
+            "Be Mula | @RapFaDrop"
+          ]
+        },
+        "uploaded_bytes": 2811147,
+        "policy_version": 2
+      },
+      {
+        "message_id": 11,
+        "spotify_id": "2BoeI9kcFAf5EF52WHBYrP",
+        "title": "Dashi",
+        "readback": {
+          "title_matches": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true,
+          "artwork_read_back": true
+        },
+        "actual_channel_values": {
+          "SUBTITLE": "@RapFaDrop",
+          "PUBLISHER": "@RapFaDrop",
+          "CONDUCTOR": "@RapFaDrop",
+          "INITIALKEY": "@RapFaDrop",
+          "AUTHORURL": "https://t.me/RapFaDrop",
+          "©cmt": [
+            "@RapFaDrop"
+          ],
+          "©too": [
+            "@RapFaDrop"
+          ],
+          "cprt": [
+            "@RapFaDrop"
+          ],
+          "©wrt": [
+            "@RapFaDrop"
+          ],
+          "album_artist": [
+            "Shahin Najafi / Erfan | @RapFaDrop"
+          ],
+          "album": [
+            "Dashi | @RapFaDrop"
+          ]
+        },
+        "uploaded_bytes": 5365071,
+        "policy_version": 2
+      },
+      {
+        "message_id": 4,
+        "spotify_id": "1lEmjwe5EJFwpDHPbdEfR5",
+        "title": "LAMS",
+        "readback": {
+          "title_matches": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true,
+          "artwork_read_back": true
+        },
+        "actual_channel_values": {
+          "SUBTITLE": "@RapFaDrop",
+          "PUBLISHER": "@RapFaDrop",
+          "CONDUCTOR": "@RapFaDrop",
+          "INITIALKEY": "@RapFaDrop",
+          "AUTHORURL": "https://t.me/RapFaDrop",
+          "©cmt": [
+            "@RapFaDrop"
+          ],
+          "©too": [
+            "@RapFaDrop"
+          ],
+          "cprt": [
+            "@RapFaDrop"
+          ],
+          "©wrt": [
+            "@RapFaDrop"
+          ],
+          "album_artist": [
+            "Bahram | @RapFaDrop"
+          ],
+          "album": [
+            "ESHTEBAHE KHOOB | @RapFaDrop"
+          ]
+        },
+        "uploaded_bytes": 4843548,
+        "policy_version": 2
+      },
+      {
+        "message_id": 5,
+        "spotify_id": "3Ur3BpWj50OlzjMImmoyQy",
+        "title": "209",
+        "readback": {
+          "title_matches": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true,
+          "artwork_read_back": true
+        },
+        "actual_channel_values": {
+          "SUBTITLE": "@RapFaDrop",
+          "PUBLISHER": "@RapFaDrop",
+          "CONDUCTOR": "@RapFaDrop",
+          "INITIALKEY": "@RapFaDrop",
+          "AUTHORURL": "https://t.me/RapFaDrop",
+          "©cmt": [
+            "@RapFaDrop"
+          ],
+          "©too": [
+            "@RapFaDrop"
+          ],
+          "cprt": [
+            "@RapFaDrop"
+          ],
+          "©wrt": [
+            "@RapFaDrop"
+          ],
+          "album_artist": [
+            "Shahin Najafi | @RapFaDrop"
+          ],
+          "album": [
+            "Sigma | @RapFaDrop"
+          ]
+        },
+        "uploaded_bytes": 5093163,
+        "policy_version": 2
+      },
+      {
+        "message_id": 6,
+        "spotify_id": "6f8ginsFVrSDwG88elopa6",
+        "title": "Masire Dard",
+        "readback": {
+          "title_matches": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true,
+          "artwork_read_back": true
+        },
+        "actual_channel_values": {
+          "SUBTITLE": "@RapFaDrop",
+          "PUBLISHER": "@RapFaDrop",
+          "CONDUCTOR": "@RapFaDrop",
+          "INITIALKEY": "@RapFaDrop",
+          "AUTHORURL": "https://t.me/RapFaDrop",
+          "©cmt": [
+            "RadioJavan.com - The Best Persian Music 24/7",
+            "@RapFaDrop"
+          ],
+          "©too": [
+            "@RapFaDrop"
+          ],
+          "cprt": [
+            "@RapFaDrop"
+          ],
+          "©wrt": [
+            "@RapFaDrop"
+          ],
+          "album_artist": [
+            "Emad Ghavidel | @RapFaDrop"
+          ],
+          "album": [
+            "Masire Dard | @RapFaDrop"
+          ]
+        },
+        "uploaded_bytes": 7497894,
+        "policy_version": 2
+      },
+      {
+        "message_id": 12,
+        "spotify_id": "0IP6pLlvgOJvSEyUIzfT2q",
+        "title": "Battle for Homs",
+        "readback": {
+          "title_matches": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true,
+          "artwork_read_back": true
+        },
+        "actual_channel_values": {
+          "SUBTITLE": "@RapFaDrop",
+          "PUBLISHER": "@RapFaDrop",
+          "CONDUCTOR": "@RapFaDrop",
+          "INITIALKEY": "@RapFaDrop",
+          "AUTHORURL": "https://t.me/RapFaDrop",
+          "©cmt": [
+            "wWw.EmadGhavidel.Com",
+            "@RapFaDrop"
+          ],
+          "©too": [
+            "@RapFaDrop"
+          ],
+          "cprt": [
+            "@RapFaDrop"
+          ],
+          "©wrt": [
+            "@RapFaDrop"
+          ],
+          "album_artist": [
+            "Emad Ghavidel | @RapFaDrop"
+          ],
+          "album": [
+            "Battle for Homs | @RapFaDrop"
+          ]
+        },
+        "uploaded_bytes": 4170571,
+        "policy_version": 2
+      },
+      {
+        "message_id": 7,
+        "spotify_id": "5Ddxv3Fw7XegdM1aHl89Nf",
+        "title": "Azizam",
+        "readback": {
+          "title_matches": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true,
+          "artwork_read_back": true
+        },
+        "actual_channel_values": {
+          "SUBTITLE": "@RapFaDrop",
+          "PUBLISHER": "@RapFaDrop",
+          "CONDUCTOR": "@RapFaDrop",
+          "INITIALKEY": "@RapFaDrop",
+          "AUTHORURL": "https://t.me/RapFaDrop",
+          "©cmt": [
+            "@RapFaDrop"
+          ],
+          "©too": [
+            "@RapFaDrop"
+          ],
+          "cprt": [
+            "@RapFaDrop"
+          ],
+          "©wrt": [
+            "@RapFaDrop"
+          ],
+          "album_artist": [
+            "Sami Low / Arta | @RapFaDrop"
+          ],
+          "album": [
+            "Azizam | @RapFaDrop"
+          ]
+        },
+        "uploaded_bytes": 4503953,
+        "policy_version": 2
+      },
+      {
+        "message_id": 13,
+        "spotify_id": "0hb1mMmnRcupxuZqQFhNGK",
+        "title": "Beri",
+        "readback": {
+          "title_matches": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true,
+          "artwork_read_back": true
+        },
+        "actual_channel_values": {
+          "SUBTITLE": "@RapFaDrop",
+          "PUBLISHER": "@RapFaDrop",
+          "CONDUCTOR": "@RapFaDrop",
+          "INITIALKEY": "@RapFaDrop",
+          "AUTHORURL": "https://t.me/RapFaDrop",
+          "©cmt": [
+            "@RapFaDrop"
+          ],
+          "©too": [
+            "@RapFaDrop"
+          ],
+          "cprt": [
+            "@RapFaDrop"
+          ],
+          "©wrt": [
+            "@RapFaDrop"
+          ],
+          "album_artist": [
+            "Gdaal / 021kid / Diata | @RapFaDrop"
+          ],
+          "album": [
+            "Beri | @RapFaDrop"
+          ]
+        },
+        "uploaded_bytes": 4696882,
+        "policy_version": 2
+      }
+    ],
+    "obsolete_files_removed": 28,
+    "obsolete_shared_candidates_retained": [],
+    "current_files_cleanup": {
+      "removed_files": 27,
+      "retained": [],
+      "production_messages_deleted": 0
+    },
+    "production_messages_deleted": 0,
+    "verified_at": "2026-10-04T19:58:03.731600+00:00"
+  },
+  "preservation": "All original 83 artist, 130 source, 3934 item, 84 baseline and one review rows preserved; polling timestamps may advance.",
+  "replay": {
+    "prior_message_ids_unchanged": [
+      4,
+      5,
+      6,
+      7,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "duplicate_audio_sends": 0
+  },
+  "runtime": {
+    "bridge": false,
+    "publication_worker": false,
+    "telegram_live": false,
+    "telegram_mode": "disabled",
+    "media_worker": "absent",
+    "collection_paused": true,
+    "automatic_collection_retry": "absent",
+    "daily_backup_timer": "active"
+  },
+  "final_operations": {
+    "temporary_source_directories_removed": [
+      "source",
+      "exact-source",
+      "retag-exact-source",
+      "quiet-exact-source",
+      "artwork-exact-source",
+      "final-exact-source",
+      "policy-v2-exact-source"
+    ],
+    "backups": [
+      {
+        "artifact": "rapfadrop-20261004T192413Z-289fc0ac.tar.age",
+        "application_sha": "d0d83ceb6f7c604a3b397737d63c919c66ec35ec",
+        "bytes": 829832,
+        "restore_verified": true,
+        "restored_tables": 41,
+        "restore_utc": "2026-10-04T19:24:36.835018+00:00",
+        "sha256": "9424e791bcacf81533f16235cbbf59cf66d95322ed83a46c566865833e4cc6e2",
+        "upload": "complete",
+        "backup_chat_id": -1004475982526,
+        "message_ids": [
+          70,
+          71
+        ]
+      },
+      {
+        "artifact": "rapfadrop-20261004T200417Z-f89e92d8.tar.age",
+        "application_sha": "c08738439737f928d696bed75923bcdaacca4181",
+        "bytes": 870808,
+        "restore_verified": true,
+        "restored_tables": 41,
+        "restore_utc": "2026-10-04T20:04:41.482747+00:00",
+        "sha256": "de70d793ab3b61a9dd19b7eb01fdeca4b8b4c73c4b4ad8d5af875e0289a5951d",
+        "upload": "complete",
+        "backup_chat_id": -1004475982526,
+        "message_ids": [
+          72,
+          73
+        ]
+      }
+    ]
+  }
+}
