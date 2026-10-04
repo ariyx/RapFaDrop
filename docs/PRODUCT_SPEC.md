@@ -124,7 +124,7 @@ REFIGH                         [bold]
 LP · Reza Pishro × Tohi
 feat. Ali Owj · Big Shaggy · Nassim  [guest names italic]
 
-پیش‌تر از این آلبوم منتشر شده:
+Previously released from this album:
 › CD
 › Raghse Andam 3
 
@@ -141,7 +141,7 @@ Candidate template variables: `title`, `artists`, `features`, `release_type`, `m
 ## 6. File metadata and artwork
 
 - Preserve official title and artist in filenames and main audio fields. Use official art for embedded cover and album introduction.
-- Current owner default branding is only comments/encoded-by `@RapFaDrop` and author URL `https://t.me/RapFaDrop`. Preserve legitimate official album artist, album, composer, publisher, rights, subtitle/key and numbering/artwork; remove only exact recognizable legacy channel values when preparing a reusable copy. No bulk historical mutation or redownload. The tag policy remains panel-editable.
+- Current owner branding uses all eleven configurable fields: subtitle/comments/publisher/encoded_by/copyright/composers/conductors/initial_key contain `@RapFaDrop`; album_artist_suffix and album_suffix append ` | @RapFaDrop`; author_url is `https://t.me/RapFaDrop`. Official track title/main artists, numbering and artwork are retained. MP4 publisher/conductor/key/author URL use UTF-8 iTunes freeform atoms. Archive captions omit title/artist rows. Owner-authorized retagging edits the same existing archive messages from retained complete originals; uncertain outcomes require reconciliation. The policy remains panel-editable.
 - Prefer a complete matched source MP3 near 320kbps unless known to be a lossy transcode; fall back immediately to available complete compressed audio (including AAC/M4A near 160kbps). Nominal bitrate does not prove authenticity or perceptual superiority. No ordinary WAV/FLAC delivery or automatic lossless conversion. Cross-codec quality cannot be established by comparing bitrate; genuine later improvements use the same Telegram message. No speculative acquisition integration is authorized.
 
 ## 7. Admin panel and observability

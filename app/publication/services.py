@@ -254,7 +254,7 @@ def perform(pub, operation, operation_key, payload, *, gateway, candidate=None, 
                 _audit(pub, "operation_failed", attempt=attempt, detail={"retry_due_at": pub.retry_due_at.isoformat()})
         else:
             attempt.state = PublicationAttempt.State.SUCCEEDED
-            attempt.response = {"message_id": result.message_id, "chat_id": result.chat_id, "message_url": result.message_url, "media": result.media or {}}
+            attempt.response = {"message_id": result.message_id, "chat_id": result.chat_id, "message_url": result.message_url, "media": result.media or {}, "correction_notice": correction_notice}
             attempt.finished_at = now
             attempt.save(update_fields=("state", "response", "finished_at"))
             _apply_success(pub, attempt, result, now)
@@ -318,6 +318,14 @@ def upgrade_single(pub, candidate, *, gateway, now=None, correction_notice=True)
 
 def ensure_correction(pub, attempt, *, gateway, now=None):
     if attempt.operation != "edit_media" or attempt.state != PublicationAttempt.State.SUCCEEDED:
+        return
+    if attempt.response.get("correction_notice", True) is False:
+        return
+    # Historical archive policy edits predate the durable flag. Their recorded
+    # identical-original binding also excludes a later maintenance reply.
+    if (pub.kind == Publication.Kind.ARCHIVE and attempt.candidate_id and attempt.previous_candidate_id and
+            attempt.candidate.provenance.get("policy_retag_of") == attempt.previous_candidate_id and
+            attempt.candidate.sha256 == attempt.previous_candidate.sha256):
         return
     notice, _ = Publication.objects.get_or_create(channel=pub.channel, identity_key=f"correction:{pub.pk}:{attempt.operation_key}", defaults={"kind": Publication.Kind.CORRECTION, "original": pub, "caption_html": escape(settings.PUBLICATION_CORRECTION_TEXT), "context": {"reply_to_message_id": pub.message_id}})
     return perform(notice, "reply", "initial", {"caption_html": notice.caption_html, **notice.context}, gateway=gateway, now=now)

@@ -288,6 +288,12 @@ class CollectionTests(TestCase):
         self.assertEqual(pub.candidate_id, new.pk)
         self.assertEqual(gateway.calls, 2)
         self.assertEqual(Publication.objects.count(), 1)
+        from publication.services import ensure_correction
+        attempt = pub.attempts.get(operation='edit_media')
+        ensure_correction(pub, attempt, gateway=gateway)
+        attempt.response.pop('correction_notice')
+        ensure_correction(pub, attempt, gateway=gateway)
+        self.assertEqual(Publication.objects.count(), 1)
         upgrade_single(pub, new, gateway=gateway, correction_notice=False)
         self.assertEqual(gateway.calls, 2)
 
