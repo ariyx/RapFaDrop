@@ -53,12 +53,17 @@ def authorize_publication(collection_id, pub, operation, payload):
     core = {key: value for key, value in payload.items() if key != "message_id"}
     if core != _audio_payload(pub, candidate):
         raise TargetBlocked("Audio payload is not the recorded prepared file")
-    if operation == "edit_media" and (not pub.message_id or
-            payload.get("message_id", pub.message_id) != pub.message_id or
-            candidate.provenance.get("policy_retag_of") != pub.candidate_id or
-            candidate.sha256 != pub.candidate.sha256 or
-            candidate.validation_report.get("full_decode") != "passed"):
-        raise TargetBlocked("Only validated retagging of the identical recording in its stored message is authorized")
+    if operation == "edit_media":
+        from media_pipeline.validation import quality_improved
+        retag = candidate.provenance.get('policy_retag_of') == pub.candidate_id and candidate.sha256 == pub.candidate.sha256
+        genuine_upgrade = (candidate.provenance.get('genuine_quality_upgrade_of') == pub.candidate_id
+            and candidate.provenance.get('conversion') == 'none requested'
+            and quality_improved(candidate.quality_rank,pub.candidate.quality_rank)
+            and not candidate.quality_rank.get('transcoded_from_lossy'))
+        if (not pub.message_id or payload.get('message_id',pub.message_id)!=pub.message_id or
+                candidate.track_id!=pub.track_id or candidate.validation_report.get('full_decode')!='passed' or
+                not (retag or genuine_upgrade)):
+            raise TargetBlocked('Only an identical recording retag or validated genuine quality upgrade may edit the stored message')
     if candidate.source_match.evidence.get("archive_spotify_id") != recording.spotify_id:
         raise TargetBlocked("Candidate is not bound to the frozen recording")
 
@@ -385,6 +390,10 @@ def reserve(recording):
     candidate = require_ready(recording.candidate)
     if candidate.validation_report.get("full_decode") != "passed":
         raise ValueError("Collection audio requires a recorded full-file decode before reservation")
+    if recording.metadata.get('artwork_url') and candidate.preparation_report.get('readback',{}).get('artwork_read_back') is not True:
+        recording.state='review';recording.reason='Frozen official artwork was not embedded/read back; complete audio retained for preparation review.'
+        recording.save(update_fields=('state','reason','updated_at'))
+        return None
     channel, _ = PublicationChannel.objects.get_or_create(target=TARGET)
     channel = PublicationChannel.objects.select_for_update().get(pk=channel.pk)
     existing = Publication.objects.filter(channel=channel, track=recording.track).first()
@@ -652,4 +661,28 @@ def retag_published(collection, gateway):
                 "message_id": pub.message_id, "fields": sorted(fields), "readback": new.preparation_report["readback"]}}
         r.save(update_fields=("evidence", "updated_at"))
         results.append({"message_id": pub.message_id, "state": pub.state, "readback": r.evidence["telegram_readback"]})
+    return results
+
+
+def upgrade_ready_published(collection,gateway):
+    """No acquisition or tag changes: use a separately validated better recording if present."""
+    from media_pipeline.validation import quality_improved
+    from publication.services import upgrade_single
+    assert_collection_safe(collection)
+    results=[]
+    for r in collection.recordings.filter(state='published',publication__message_id__isnull=False):
+        old=r.publication.candidate
+        candidates=MediaCandidate.objects.filter(track=r.track,state='ready').exclude(pk=old.pk)
+        better=next((c for c in candidates if c.source_match.evidence.get('archive_spotify_id')==r.spotify_id
+            and quality_improved(c.quality_rank,old.quality_rank) and not c.quality_rank.get('transcoded_from_lossy')
+            and c.validation_report.get('full_decode')=='passed' and c.provenance.get('conversion')=='none requested'
+            and c.preparation_report.get('readback',{}).get('channel_fields_read_back') is True
+            and (not r.metadata.get('artwork_url') or c.preparation_report.get('readback',{}).get('artwork_read_back') is True)),None)
+        if better is None:continue
+        better.provenance={**better.provenance,'genuine_quality_upgrade_of':old.pk};better.save(update_fields=('provenance',))
+        r.candidate=better;r.save(update_fields=('candidate','updated_at'))
+        pub=upgrade_single(r.publication,better,gateway=gateway,correction_notice=False)
+        if pub.state!='published':break
+        r.evidence={**r.evidence,'telegram_readback':gateway.readback(r),'genuine_quality_upgrade':{'previous_candidate_id':old.pk,'candidate_id':better.pk,'message_id':pub.message_id}}
+        r.save(update_fields=('evidence','updated_at'));results.append({'message_id':pub.message_id,'candidate_id':better.pk})
     return results

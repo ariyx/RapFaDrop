@@ -116,3 +116,29 @@ class ContinuationTests(TestCase):
             p.probe.side_effect=RuntimeError('403 bounded failure');self.assertIsNone(find(r)[0]);p.download.assert_not_called()
             source.refresh_from_db();self.assertGreater(source.retry_due_at,timezone.now())
             calls=p.probe.call_count;self.assertIsNone(find(r)[0]);self.assertEqual(p.probe.call_count,calls)
+
+    def test_missing_frozen_cover_stays_review_without_send(self):
+        from .services import reserve
+        r,_=self.ready()
+        # Simulate a frozen cover requirement in the fixture's initial observation.
+        type(r).objects.filter(pk=r.pk).update(metadata={**r.metadata,'artwork_url':'https://i.scdn.co/image/fixture'},publication=None)
+        r.refresh_from_db();self.assertIsNone(reserve(r));r.refresh_from_db();self.assertEqual(r.state,'review')
+
+    def test_genuine_quality_upgrade_keeps_message_and_rejects_transcode(self):
+        from .services import authorize_publication
+        from publication.services import perform,_audio_payload,upgrade_single
+        from media_pipeline.models import MediaCandidate
+        r,pub=self.ready();gateway=self.gateway();pub=perform(pub,'send_audio','initial',_audio_payload(pub),gateway=gateway)
+        old=pub.candidate
+        # Use the actual quality rank schema produced by the media validator.
+        from media_pipeline.validation import quality_rank
+        old.quality_rank=quality_rank({'codec_name':'aac','audio_bitrate_bps':96000,'container':'mov,mp4,m4a,3gp,3g2,mj2'});old.save(update_fields=('quality_rank',))
+        new=MediaCandidate.objects.create(track=old.track,release=old.release,source_match=old.source_match,provider='yt-dlp',state='ready',preparation_state='ready',sha256='new-recording-bytes',prepared_path=old.prepared_path,validation_report={'complete':True,'full_decode':'passed'},observed_facts=old.observed_facts,quality_rank=quality_rank({'codec_name':'aac','audio_bitrate_bps':160000,'container':'mov,mp4,m4a,3gp,3g2,mj2'}),provenance={'genuine_quality_upgrade_of':old.pk,'conversion':'none requested'})
+        r.candidate=new;r.save(update_fields=('candidate',))
+        authorize_publication(self.collection.pk,pub,'edit_media',_audio_payload(pub,new))
+        new.quality_rank={**new.quality_rank,'transcoded_from_lossy':True};new.save(update_fields=('quality_rank',))
+        from publication.gateway import TargetBlocked
+        with self.assertRaises(TargetBlocked):authorize_publication(self.collection.pk,pub,'edit_media',_audio_payload(pub,new))
+        new.quality_rank={**new.quality_rank,'transcoded_from_lossy':False};new.save(update_fields=('quality_rank',))
+        pub=upgrade_single(pub,new,gateway=gateway,correction_notice=False)
+        self.assertEqual(pub.message_id,123);self.assertEqual(gateway.calls,2)
