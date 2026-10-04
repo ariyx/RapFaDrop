@@ -48,6 +48,8 @@ when the pending file actually exists; retain/reconcile its message ID first.
 Telegram copies are retained indefinitely until separate owner-controlled
 deletion. Local retention keeps seven distinct daily + four distinct weekly
 restore-verified artifacts; the last usable and incomplete uploads are kept.
+Safe JSON receipts (checksums, upload/readback status and message IDs) are retained
+after archive expiration; they contain no recovery key, tokens or dump contents.
 Legacy raw dumps are outside automated retention, root-only, pending deliberate
 owner archival/deletion; this tool does not delete earlier recovery points.
 

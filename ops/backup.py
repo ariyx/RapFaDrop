@@ -328,7 +328,8 @@ def retention(c):
     keep = retained(states, c.get('daily_retention', 7), c.get('weekly_retention', 4))
     for path, state in states:
         if path not in keep:
-            path.unlink(); Path(str(path) + '.json').unlink()
+            # Safe receipts (hashes, upload/readback state, message IDs) outlive artifacts.
+            path.unlink()
     return {'retained': len(keep), 'removed': len(states)-len(keep), 'telegram_retention': 'manual; no deletion'}
 
 

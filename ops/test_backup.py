@@ -80,6 +80,19 @@ class BackupTests(unittest.TestCase):
             with patch.object(backup, 'guard'), patch.object(backup, 'api', side_effect=rejected):
                 with self.assertRaises(backup.DefiniteUploadError): backup.upload({'backup_dir': directory, 'backup_chat_id': backup.CHAT}, artifact)
 
+    def test_retention_preserves_durable_upload_receipts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            paths=[]
+            for index, stamp in enumerate(['20261004T010000Z','20261004T020000Z']):
+                artifact=Path(directory)/f'rapfadrop-{index}.tar.age'
+                artifact.write_bytes(b'fixture')
+                backup.write_json(str(artifact)+'.json', {'utc':stamp,'restore_verified':True,'upload':'complete','messages':[{'message_id':40+index}]})
+                paths.append(artifact)
+            backup.retention({'backup_dir':directory})
+            self.assertFalse(paths[0].exists())
+            self.assertTrue(paths[1].exists())
+            self.assertEqual(json.loads(Path(str(paths[0])+'.json').read_text())['messages'][0]['message_id'],40)
+
     def test_production_restore_without_explicit_phrase_cannot_mutate(self):
         with patch.object(backup, 'pg') as pg:
             with self.assertRaises(ValueError): backup.production_restore({}, Path('archive'), '')
