@@ -17,6 +17,8 @@ class PublicationScheduleTests(SimpleTestCase):
     def test_real_lazy_celery_settings_and_stale_beat_state_cannot_emit_disabled_publication(self):
         # A separate process reproduces lazy configuration loading and persistent
         # beat state from a previously publication-enabled run, using no real broker.
+        # Pin Django's broker setting too: lazy Celery initialization can reload
+        # namespaced settings after the direct app.conf assignment below.
         code = '''
 import json,shelve,tempfile
 from datetime import timedelta
@@ -41,7 +43,7 @@ with tempfile.TemporaryDirectory() as directory:
  scheduler.close()
  print(json.dumps(tasks))
 '''
-        env = {**os.environ, "RAPFADROP_PUBLICATION_WORKER_ENABLED": "false", "RAPFADROP_TELEGRAM_LIVE_ENABLED": "true", "RAPFADROP_TELEGRAM_MODE": "test"}
+        env = {**os.environ, "REDIS_URL": "memory://", "RAPFADROP_PUBLICATION_WORKER_ENABLED": "false", "RAPFADROP_TELEGRAM_LIVE_ENABLED": "true", "RAPFADROP_TELEGRAM_MODE": "test"}
         result = subprocess.run([sys.executable, "-c", code], env=env, capture_output=True, text=True, timeout=30)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(json.loads(result.stdout), ["sources.tasks.poll_due_artist_sources"])
