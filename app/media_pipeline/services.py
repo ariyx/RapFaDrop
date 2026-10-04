@@ -14,7 +14,7 @@ from .artwork import fetch_recorded_soundcloud_artwork
 from .models import MediaAttempt, MediaAuditEvent, MediaCandidate
 from .providers import PROVIDERS, ProviderError, redact_diagnostic
 from .tagging import TaggingError, prepare_tagged_copy, validate_artwork
-from .validation import MediaValidationError, compare_duration, probe_audio, quality_rank
+from .validation import MediaValidationError, compare_duration, probe_audio, quality_rank, quality_key, delivery_eligible
 
 
 class MediaRequestError(ValueError):
@@ -58,15 +58,10 @@ def _safe_media_path(path):
 
 
 def best_ready_candidate(track):
-    candidates = list(MediaCandidate.objects.filter(track=track, state=MediaCandidate.State.READY))
+    candidates = [item for item in MediaCandidate.objects.filter(track=track, state=MediaCandidate.State.READY) if delivery_eligible(item.observed_facts)]
     if not candidates:
         return None
-    return max(candidates, key=lambda item: (
-        int(item.quality_rank.get("measured_bitrate_bps", 0)),
-        int(item.quality_rank.get("sample_rate_hz", 0)),
-        int(item.quality_rank.get("channels", 0)),
-        int(item.quality_rank.get("provenance_confidence", 0)),
-    ))
+    return max(candidates, key=lambda item: quality_key(item.quality_rank))
 
 
 def request_candidate(queue_item, provider_name=None, *, provider_instance=None):

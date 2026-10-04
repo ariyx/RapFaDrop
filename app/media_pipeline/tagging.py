@@ -63,7 +63,8 @@ def prepare_tagged_copy(source_path, prepared_path, metadata, artwork_path=None)
         tag_fields = settings.MEDIA_CHANNEL_TAG_FIELDS
     configured = set(tag_fields) & CHANNEL_FIELDS
     album_with_tag = f"{album} | {channel}" if album and "album_suffix" in configured else album
-    album_artist_with_tag = f"{artists[0]} | {channel}" if "album_artist_suffix" in configured else artists[0]
+    album_artists = metadata.get("album_artists")
+    album_artist_with_tag = " / ".join(album_artists) if album_artists else None
     unsupported = []
     mapped = sorted(configured & {"album_suffix", "album_artist_suffix"})
     art_info = validate_artwork(artwork_path) if artwork_path else None
@@ -80,7 +81,9 @@ def prepare_tagged_copy(source_path, prepared_path, metadata, artwork_path=None)
         tags["TIT2"] = TIT2(encoding=3, text=title)
         tags["TPE1"] = TPE1(encoding=3, text=artists)
         tags["TALB"] = TALB(encoding=3, text=album_with_tag)
-        tags["TPE2"] = TPE2(encoding=3, text=album_artist_with_tag)
+        existing = str(tags.get("TPE2", ""))
+        album_artist = album_artist_with_tag or existing.removesuffix(f" | {channel}") or artists[0]
+        tags["TPE2"] = TPE2(encoding=3, text=f"{album_artist} | {channel}" if "album_artist_suffix" in configured else album_artist)
         _set_id3(tags, configured, mapped, unsupported)
         if metadata.get("release_date"):
             tags["TDRC"] = TDRC(encoding=3, text=str(metadata["release_date"]))
@@ -100,7 +103,8 @@ def prepare_tagged_copy(source_path, prepared_path, metadata, artwork_path=None)
         tags["\xa9nam"] = [title]
         tags["\xa9ART"] = artists
         tags["\xa9alb"] = [album_with_tag]
-        tags["aART"] = [album_artist_with_tag]
+        album_artist = album_artist_with_tag or _first(tags.get("aART")).removesuffix(f" | {channel}") or artists[0]
+        tags["aART"] = [f"{album_artist} | {channel}" if "album_artist_suffix" in configured else album_artist]
         mp4_fields = {
             "comments": ("\xa9cmt", [channel]), "subtitle": ("desc", [channel]),
             "encoded_by": ("\xa9too", [channel]), "copyright": ("cprt", [channel]),
@@ -108,17 +112,23 @@ def prepare_tagged_copy(source_path, prepared_path, metadata, artwork_path=None)
         }
         for field, (key, value) in mp4_fields.items():
             if field in configured:
-                tags[key] = value
+                tags[key] = list(dict.fromkeys([*tags.get(key, []), *value])) if field == "comments" else value
                 mapped.append(field)
-            else:
+            elif _tag_text(tags.get(key)) == channel:
                 tags.pop(key, None)
-        tags["\xa9day"] = [str(metadata["release_date"])] if metadata.get("release_date") else []
-        tags["trkn"] = [(int(metadata["track_number"]), 0)] if metadata.get("track_number") else []
-        tags["disk"] = [(int(metadata["disc_number"]), 0)] if metadata.get("disc_number") else []
+        if "author_url" in configured:
+            tags["----:com.apple.iTunes:AUTHORURL"] = [settings.MEDIA_AUTHOR_URL.encode("utf-8")]
+            mapped.append("author_url")
+        if metadata.get("release_date"):
+            tags["\xa9day"] = [str(metadata["release_date"])]
+        if metadata.get("track_number"):
+            tags["trkn"] = [(int(metadata["track_number"]), 0)]
+        if metadata.get("disc_number"):
+            tags["disk"] = [(int(metadata["disc_number"]), 0)]
         if art_info:
             image_format = MP4Cover.FORMAT_JPEG if art_info["format"] == "JPEG" else MP4Cover.FORMAT_PNG
             tags["covr"] = [MP4Cover(image_data, imageformat=image_format)]
-        unsupported.extend(sorted(configured & {"publisher", "author_url", "conductors", "initial_key"}))
+        unsupported.extend(sorted(configured & {"publisher", "conductors", "initial_key"}))
         audio.save()
     elif isinstance(audio, FLAC):
         mapped.extend(_write_vorbis_tags(audio, metadata, artists, album_with_tag, album_artist_with_tag, channel, configured))
@@ -157,7 +167,7 @@ def prepare_tagged_copy(source_path, prepared_path, metadata, artwork_path=None)
 def _set_id3(tags, configured, mapped, unsupported):
     frames = {
         "subtitle": ("TIT3", TIT3(encoding=3, text=settings.MEDIA_CHANNEL_TAG)),
-        "comments": ("COMM", COMM(encoding=3, lang="eng", desc="", text=settings.MEDIA_CHANNEL_TAG)),
+        "comments": ("COMM", COMM(encoding=3, lang="eng", desc="RapFaDrop", text=settings.MEDIA_CHANNEL_TAG)),
         "publisher": ("TPUB", TPUB(encoding=3, text=settings.MEDIA_CHANNEL_TAG)),
         "encoded_by": ("TENC", TENC(encoding=3, text=settings.MEDIA_CHANNEL_TAG)),
         "author_url": ("WOAR", WOAR(url=settings.MEDIA_AUTHOR_URL)),
@@ -168,10 +178,15 @@ def _set_id3(tags, configured, mapped, unsupported):
     }
     for name, (frame_id, frame) in frames.items():
         if name in configured:
-            tags[frame_id] = frame
+            if name == "comments":
+                tags.add(frame)
+            else:
+                tags[frame_id] = frame
             mapped.append(name)
         else:
-            tags.delall(frame_id)
+            for existing in tags.getall(frame_id):
+                if _tag_text(existing) in {settings.MEDIA_CHANNEL_TAG, settings.MEDIA_AUTHOR_URL}:
+                    del tags[existing.HashKey]
 
 
 def _write_vorbis_tags(audio, metadata, artists, album, album_artist, channel, configured):
@@ -181,7 +196,7 @@ def _write_vorbis_tags(audio, metadata, artists, album, album_artist, channel, c
         "TITLE": [str(metadata["title"])],
         "ARTIST": artists,
         "ALBUM": [album],
-        "ALBUMARTIST": [album_artist],
+        "ALBUMARTIST": [album_artist or _first(audio.get("albumartist")).removesuffix(f" | {channel}") or artists[0]],
     }
     fields_by_name = {
         "subtitle": "SUBTITLE", "comments": "COMMENT", "publisher": "PUBLISHER",
@@ -193,12 +208,12 @@ def _write_vorbis_tags(audio, metadata, artists, album, album_artist, channel, c
         if name in configured:
             fields[key] = [channel]
             mapped.append(name)
-        else:
+        elif _tag_text(audio.get(key)) == channel:
             audio.pop(key, None)
     if "author_url" in configured:
         fields["URL"] = [settings.MEDIA_AUTHOR_URL]
         mapped.append("author_url")
-    else:
+    elif _tag_text(audio.get("URL")) == settings.MEDIA_AUTHOR_URL:
         audio.pop("URL", None)
     if metadata.get("release_date"):
         fields["DATE"] = [str(metadata["release_date"])]
@@ -254,22 +269,29 @@ def readback_tags(path, expected_title, expected_artists, expected_album, channe
 
 
 def _channel_readback(tags, channel, configured, id3=False, mp4=False):
+    if not configured:
+        return True
     keys = {
         "subtitle": "TIT3" if id3 else "desc" if mp4 else "subtitle",
         "comments": "COMM" if id3 else "\xa9cmt" if mp4 else "comment",
         "publisher": "TPUB" if id3 else "PUBLISHER",
         "encoded_by": "TENC" if id3 else "\xa9too" if mp4 else "ENCODED-BY",
-        "author_url": "WOAR" if id3 else "URL",
+        "author_url": "WOAR" if id3 else "----:com.apple.iTunes:AUTHORURL" if mp4 else "URL",
         "copyright": "TCOP" if id3 else "cprt" if mp4 else "COPYRIGHT",
         "composers": "TCOM" if id3 else "\xa9wrt" if mp4 else "COMPOSER",
         "conductors": "TPE3" if id3 else "CONDUCTOR",
         "initial_key": "TKEY" if id3 else "INITIALKEY",
     }
-    for field in configured & keys.keys():
-        raw = tags.getall(keys[field]) if id3 and field == "comments" else tags.get(keys[field])
+    supported = configured & keys.keys()
+    if mp4:
+        supported -= {"publisher", "conductors", "initial_key"}
+    for field in supported:
+        raw = tags.getall(keys[field]) if id3 else tags.get(keys[field])
         value = _tag_text(raw)
-        if value and (channel in value or (field == "author_url" and settings.MEDIA_AUTHOR_URL in value)):
-            return True
+        if not value or not (channel in value or (field == "author_url" and settings.MEDIA_AUTHOR_URL in value)):
+            return False
+    if supported:
+        return True
     album_artist = str(tags.get("TPE2" if id3 else "aART" if mp4 else "albumartist", ""))
     return "album_artist_suffix" in configured and channel in album_artist
 
@@ -277,6 +299,8 @@ def _channel_readback(tags, channel, configured, id3=False, mp4=False):
 def _tag_text(value):
     if value is None:
         return ""
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
     if hasattr(value, "text"):
         return " ".join(str(item) for item in value.text)
     if hasattr(value, "url"):

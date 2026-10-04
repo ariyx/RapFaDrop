@@ -93,9 +93,9 @@ Template order, literal text, optional rows and metadata settings are editable w
 DROP                           [bold]
 
 Music Video                    [official video URL, if found]
-Spotify / SoundCloud           [each label only if that track has a URL]
 Album                          [channel introduction URL, once posted]
 Original                       [channel original-track URL for a distinct version]
+Spotify / SoundCloud           [each label only if that track has a URL; last information row]
 
 t.me/RapFaDrop
 ```
@@ -108,9 +108,9 @@ If only one streaming URL exists, show just its label without `/`. Preserve `DRO
 LP DROP                        [bold; EP DROP for EP; editable/removable]
 
 Music Video                    [if found]
-Spotify / SoundCloud           [available track links only]
 Album                          [linked to this collection's introduction]
 Original                       [if this is a distinct version with an earlier post]
+Spotify / SoundCloud           [available track links only; last information row]
 
 t.me/RapFaDrop
 ```
@@ -128,18 +128,21 @@ feat. Ali Owj · Big Shaggy · Nassim  [guest names italic]
 › CD
 › Raghse Andam 3
 
-@RapFaDrop
+Original Album                 [when available]
+Spotify / SoundCloud           [verified collection links, when available]
+
+t.me/RapFaDrop
 ```
 
-Use `EP` in place of `LP` for an EP. Hide the `feat.` row and the entire prior-singles block when absent. For an eligible edition with a prior introduction, show a linked `Original Album` before `@RapFaDrop`. If the list of links exceeds Telegram's effective caption limit, keep the introduction concise and place overflow links in a following text message. Inline buttons are deferred; a separate archive channel may be added later.
+Use `EP` in place of `LP` for an EP. Hide missing rows and whole empty blocks. Related-release links precede the final Spotify/SoundCloud information block, followed by a blank line and `t.me/RapFaDrop`. If prior links overflow, keep the introduction concise and place overflow links in following text messages. Customized templates remain editable; historical messages are not rewritten by a defaults change.
 
 Candidate template variables: `title`, `artists`, `features`, `release_type`, `music_video_url`, `spotify_url`, `soundcloud_url`, `album_post_url`, `previous_singles`, `original_track_post_url`, `original_album_post_url`, and `channel`. Final variable naming and Telegram rendering are implementation details to verify in a test channel.
 
 ## 6. File metadata and artwork
 
 - Preserve official title and artist in filenames and main audio fields. Use official art for embedded cover and album introduction.
-- The owner wants `@RapFaDrop` placed, according to their visual reference, in `Subtitle`, `Comments`, as a suffix to `Album artist` and `Album`, and in configurable `Publisher`, `Encoded by`, `Author URL`, `Copyright`, `Composers`, `Conductors` and `Initial key` fields. Map these to each output format and verify actual Telegram player display with sample files. The tag policy is panel-editable.
-- Keep verified official authorship/rights credits distinguishable from channel attribution. Placing a channel label in unusual fields reflects the owner's requested presentation and is not a claim that the channel created or owns the work. Review behavior when an official value already exists before overwriting it.
+- Current owner default branding is only comments/encoded-by `@RapFaDrop` and author URL `https://t.me/RapFaDrop`. Preserve legitimate official album artist, album, composer, publisher, rights, subtitle/key and numbering/artwork; remove only exact recognizable legacy channel values when preparing a reusable copy. No bulk historical mutation or redownload. The tag policy remains panel-editable.
+- Prefer a complete matched source MP3 near 320kbps unless known to be a lossy transcode; fall back immediately to available complete compressed audio (including AAC/M4A near 160kbps). Nominal bitrate does not prove authenticity or perceptual superiority. No ordinary WAV/FLAC delivery or automatic lossless conversion. Cross-codec quality cannot be established by comparing bitrate; genuine later improvements use the same Telegram message. No speculative acquisition integration is authorized.
 
 ## 7. Admin panel and observability
 

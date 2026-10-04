@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily RapFaDrop recovery backup
+
+[Timer]
+OnCalendar=*-*-* 03:17:00 UTC
+RandomizedDelaySec=5min
+Persistent=true
+Unit=rapfadrop-backup.service
+
+[Install]
+WantedBy=timers.target

@@ -1,5 +1,17 @@
 # Deployment and verification
 
+## Recoverable encrypted backup and exact tested deployment
+
+Current recovery commands and isolated/explicit production restore guidance are
+in [ops/BACKUP_RESTORE.md](../ops/BACKUP_RESTORE.md). Run create/check/upload before
+every application deployment or significant DB mutation. Use `ops/deploy.py`
+with a root-only marker recording checks of the exact pushed SHA; it enforces
+the backup, restore drill, upload, clean checkout and all four discovery-only
+overlays before migration/default versioning and health verification. The daily
+host timer is independent of Celery/publication. Archive config files contain
+secrets and stay encrypted; the recovery identity is separate and must be saved
+independently by the owner. No production restore was authorized or run as a drill.
+
 ## Current discovery-only production override (2026-10-04)
 
 Production application is `5d89fcedcc1c01d5f9f00b533242e6d9045fbb0f`. All current production Compose operations must include the protected **fourth** overlay, in this order:

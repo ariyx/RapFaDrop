@@ -66,6 +66,7 @@ def probe_audio(path, timeout=None):
         "format_bitrate_bps": _integer(format_report.get("bit_rate")),
         "measured_bitrate_bps": measured_bitrate,
         "codec_name": str(stream.get("codec_name") or ""),
+        "audio_bitrate_bps": _integer(stream.get("bit_rate")),
         "sample_rate_hz": _integer(stream.get("sample_rate")),
         "channels": _integer(stream.get("channels")),
         "audio_stream_count": len(audio_streams),
@@ -97,13 +98,39 @@ def compare_duration(observed, expected):
 
 def quality_rank(facts, provenance=None):
     # Actual measured bytes/duration take precedence over provider-advertised rates.
+    provenance = provenance or {}
+    rate = int(facts.get("audio_bitrate_bps") or facts.get("measured_bitrate_bps") or 0)
+    preferred = facts.get("codec_name") == "mp3" and 300000 <= rate <= 340000 and not provenance.get("transcoded_from_lossy")
     return {
+        "delivery_tier": 2 if preferred else 1 if delivery_eligible(facts) else 0,
+        "codec_name": facts.get("codec_name", ""),
+        "audio_bitrate_bps": rate,
+        "transcoded_from_lossy": bool(provenance.get("transcoded_from_lossy")),
         "measured_bitrate_bps": int(facts.get("measured_bitrate_bps") or 0),
         "sample_rate_hz": int(facts.get("sample_rate_hz") or 0),
         "channels": int(facts.get("channels") or 0),
         "provenance_confidence": int((provenance or {}).get("provenance_confidence", 0)),
-        "ranking_basis": "ffprobe file-size/duration and observed audio properties; advertised bitrate ignored",
+        "ranking_basis": "Complete matched MP3 near 320k preferred unless known lossy transcode; compressed fallback. Nominal bitrate is not authenticity proof; cross-codec fidelity is not measured.",
     }
+
+
+def delivery_eligible(facts):
+    return facts.get("codec_name") in {"mp3", "aac"}
+
+
+def quality_key(rank):
+    # Codec preference is a delivery policy, not a claim of equivalent perceptual quality.
+    return (rank.get("delivery_tier", 1), rank.get("audio_bitrate_bps", rank.get("measured_bitrate_bps", 0)), rank.get("provenance_confidence", 0))
+
+
+def quality_improved(new, old):
+    if new.get("transcoded_from_lossy"):
+        return False
+    if new.get("delivery_tier", 1) != old.get("delivery_tier", 1):
+        return new.get("delivery_tier", 1) > old.get("delivery_tier", 1)
+    if new.get("codec_name") != old.get("codec_name"):
+        return False  # A numeric cross-codec bitrate comparison cannot prove an upgrade.
+    return new.get("audio_bitrate_bps", new.get("measured_bitrate_bps", 0)) > old.get("audio_bitrate_bps", old.get("measured_bitrate_bps", 0))
 
 
 def _number(value):

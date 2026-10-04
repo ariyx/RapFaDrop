@@ -11,6 +11,7 @@ from media_pipeline.models import MediaCandidate
 from media_pipeline.providers import redact_diagnostic
 from media_pipeline.services import best_ready_candidate
 from media_pipeline.tagging import validate_artwork
+from media_pipeline.validation import quality_improved
 from releases.models import CanonicalRelease, SourceMatch
 
 from .captions import DEFAULT_CONFIG, render_caption, safe_url
@@ -302,8 +303,9 @@ def upgrade_single(pub, candidate, *, gateway, now=None):
     old = pub.candidate
     if old.pk == candidate.pk:
         return pub
-    quality_keys = ("measured_bitrate_bps", "sample_rate_hz", "channels", "provenance_confidence")
-    better = tuple(candidate.quality_rank.get(key, 0) for key in quality_keys) > tuple(old.quality_rank.get(key, 0) for key in quality_keys)
+    if candidate.quality_rank.get("transcoded_from_lossy"):
+        raise PublicationError("A known lossy transcode cannot replace an existing recording as an upgrade")
+    better = quality_improved(candidate.quality_rank, old.quality_rank)
     tagging_changed = candidate.preparation_report != old.preparation_report
     if not better and not tagging_changed:
         raise PublicationError("Candidate does not provide a measured quality or recorded tag improvement")
@@ -415,6 +417,10 @@ def prepare_album(release, target, *, context=None):
             return session
         validate_artwork(_path(cover.artwork_path))
         intro_context = {"title": release.title, "release_type": release.release_type.upper(), "artists": list(release.artist_credits.order_by("position", "pk").values_list("artist__official_name", flat=True)), "features": session.context.get("features", []), "previous_singles": previous}
+        for match in release.source_matches.filter(track__isnull=True, confidence__gte=90, state__in=CONFIDENT_STATES).select_related("source_item"):
+            item = match.source_item
+            if item.platform in {"spotify", "soundcloud"}:
+                intro_context.setdefault(f"{item.platform}_url", safe_url(item.canonical_url))
         original = Publication.objects.filter(channel=channel, kind=Publication.Kind.INTRO, release=release.edition_of, message_id__isnull=False).first() if release.edition_of_id else None
         if original:
             intro_context["original_album_post_url"] = original.message_url

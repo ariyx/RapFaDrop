@@ -6,6 +6,12 @@ Product source of truth: [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md).
 
 ## Controlled Spotify metadata discovery (2026-10-03)
 
+Current owner operations/defaults update (2026-10-04): host `ops/backup.py` uses authenticated age encryption, a separate once-generated recovery identity, consistent PostgreSQL/config/SHA manifests, isolated schema/content restore checks, a dedicated backup-only Telegram target and durable upload status. Seven daily/four weekly local restore-verified retention and a separate systemd daily timer do not dispatch Celery work. `ops/deploy.py` integrates restore-verified encrypted backup/upload before exact server-tested SHA deployment using the same lock. See [recovery commands](../ops/BACKUP_RESTORE.md). The owner must independently save the protected recovery identity; a retrieval command is not delivery.
+
+Caption defaults place related-release/video links before the final platform block and a blank line before `t.me/RapFaDrop`, including introductions and later edits. `refresh_owner_defaults` creates new versions only for known legacy defaults and preserves/report custom settings, without historical Telegram edits. Media defaults are comments/encoded_by/author_url only. MP3 uses a separate named COMM frame, TENC and WOAR; M4A uses ©cmt, ©too and the explicit iTunes AUTHORURL freeform atom (not a claim that Telegram displays it). Legitimate inactive tag fields and existing album artist/numbering remain intact; exact legacy channel values are removed on preparation. Unsupported customized M4A publisher/conductor/key fields are reported. No prepared production files currently exist to migrate.
+
+Quality selection favors validated complete MP3 near 320kbps unless known lossy-transcoded, then bounded available MP3/AAC compressed fallback. Providers select without conversion; ffprobe audio-stream bitrate is recorded separately from bytes/duration, which includes artwork/tag overhead. Nominal bitrate/provenance is not proof of source authenticity or perceptual fidelity. WAV/FLAC are excluded from automatic ready selection, cross-codec bitrate alone cannot authorize an upgrade, and known lossy transcodes cannot replace an existing publication as an upgrade. Lossless conversion remains unsupported. No music acquisition/send is part of this task.
+
 The owner authorized SpotifyScraper 3.9.2 and its Spotify web-player/Pathfinder dependency without Premium. This supersedes the older trial's endpoint and release-date restrictions. `RAPFADROP_SPOTIFY_DISCOVERY_MODE=spotifyscraper` selects the replaceable metadata-only adapter; `unavailable` remains the default. Identity is checked against each stored artist/source record before verification. The adapter fetches all album and single groups with strict page/total/ID validation; a failed or partial response cannot become an empty baseline or advance a successful poll cursor. The baseline stores historical IDs only. Later complete polls enrich unseen IDs with optional date/type/credits/tracks, then use `SourceItem` and the existing review/matching tables. A new regional catalog ID is reviewed rather than assumed newly published. Spotify metadata creates no audio or publication work, even when a review is approved. SoundCloud remains a separate polling path and independent discovery source. Operational risks and measured results are in [`reports/SPOTIFY_PILOT.md`](reports/SPOTIFY_PILOT.md).
 Reference for documentation organization: `https://github.com/ariyx/flow`; reuse its separation of agent instructions, product decisions and milestone plans, not its technology or product rules.
 
@@ -121,16 +127,16 @@ Render dynamic links as Telegram-safe entities (or escaped supported markup). Tr
 ```text
 Single audio:            DROP (bold)
                          [Music Video]
-                         [Spotify / SoundCloud]
                          [Album]
                          [Original]
+                         [Spotify / SoundCloud]
                          t.me/RapFaDrop
 
 Album track audio:       LP DROP / EP DROP (bold, editable/removable)
                          [Music Video]
-                         [Spotify / SoundCloud]
                          Album (linked to introduction)
                          [Original]
+                         [Spotify / SoundCloud]
                          t.me/RapFaDrop
 
 Album cover post:        REFIGH (bold; example official title)
@@ -140,7 +146,9 @@ Album cover post:        REFIGH (bold; example official title)
                          [› CD]
                          [› Raghse Andam 3]
                          [Original Album]
-                         @RapFaDrop
+                         [Spotify / SoundCloud]
+
+                         t.me/RapFaDrop
 ```
 
 Square brackets here mean conditional rows, not literal output. `Music Video` requires an official video URL. Spotify and SoundCloud are each included only with that track's URL; omit the slash when only one exists. `Album` appears on an earlier single only after the introduction exists. `feat.` and the prior-singles section vanish as whole blocks when empty. The previous-single labels are linked to channel messages and use the `›` symbol required by M4. The album name is bold; only guest names after `feat.` are italic. When a caption exceeds Telegram's effective limit, keep the introduction concise and put overflow links in a following text post. No inline buttons are required in the first release.

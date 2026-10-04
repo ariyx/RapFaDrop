@@ -111,7 +111,7 @@ class YtDlpProvider:
         output_template = str(destination / "source.%(ext)s")
         args = [
             "--socket-timeout", str(min(timeout, 45)), "--retries", "1", "--fragment-retries", "1",
-            "--max-filesize", f"{max_mb}M", "--format", "bestaudio/best", "--output", output_template,
+            "--max-filesize", f"{max_mb}M", "--format", "bestaudio[acodec=mp3][abr>=300]/bestaudio[ext=m4a]/bestaudio[acodec=mp3]", "--output", output_template,
             "--", probe.source_url,
         ]
         self._run(args, timeout)

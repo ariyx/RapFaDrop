@@ -186,7 +186,7 @@ class MediaPipelineTests(TestCase):
         self.assertEqual(candidate.sha256, candidate.observed_facts["sha256"])
         self.assertEqual(candidate.preparation_report["readback"]["title_matches"], True)
         self.assertEqual(candidate.preparation_report["unsupported_fields"], [])
-        self.assertTrue(readback_tags(prepared, "هیچ‌کس راه", ["هیچ‌کس"], "هیچ‌کس راه | @RapFaDrop", "@RapFaDrop", False)["main_artists_match"])
+        self.assertTrue(readback_tags(prepared, "هیچ‌کس راه", ["هیچ‌کس"], "هیچ‌کس راه", "@RapFaDrop", False)["main_artists_match"])
 
     def test_missing_audio_and_corrupt_media_are_rejected(self):
         corrupt = Path(self.temp.name) / "corrupt.mp3"
@@ -242,10 +242,12 @@ class MediaPipelineTests(TestCase):
         low_candidate = self._candidate("fixture-low")
         low_candidate.state = MediaCandidate.State.READY
         low_candidate.quality_rank = low_rank
+        low_candidate.observed_facts = low
         low_candidate.save()
         high_candidate = self._candidate("fixture-high")
         high_candidate.state = MediaCandidate.State.READY
         high_candidate.quality_rank = high_rank
+        high_candidate.observed_facts = high
         high_candidate.save()
         self.assertEqual(best_ready_candidate(self.match.track).pk, high_candidate.pk)
 
@@ -256,7 +258,7 @@ class MediaPipelineTests(TestCase):
         }, artwork_path=self.cover)
         self.assertEqual(report["artwork"]["state"], "embedded")
         self.assertTrue(report["readback"]["artwork_read_back"])
-        self.assertEqual(readback_tags(mp3_prepared, "هیچ‌کس راه", ["هیچ‌کس"], "راه | @RapFaDrop", "@RapFaDrop", True)["title_matches"], True)
+        self.assertEqual(readback_tags(mp3_prepared, "هیچ‌کس راه", ["هیچ‌کس"], "راه", "@RapFaDrop", True)["title_matches"], True)
         self.assertEqual(validate_artwork(self.cover)["format"], "JPEG")
 
         m4a = Path(self.temp.name) / "fixture.m4a"
@@ -266,7 +268,8 @@ class MediaPipelineTests(TestCase):
         mp4_prepared = Path(self.temp.name) / "prepared.m4a"
         mp4_report = prepare_tagged_copy(m4a, mp4_prepared, {"title": "Road", "artists": ["Artist"], "album": "Road"})
         self.assertEqual(mp4_report["readback"]["title_matches"], True)
-        self.assertIn("conductors", mp4_report["unsupported_fields"])
+        self.assertEqual(mp4_report["unsupported_fields"], [])
+        self.assertIn("author_url", mp4_report["mapped_fields"])
 
     @override_settings(MEDIA_CHANNEL_TAG_FIELDS=frozenset({"comments"}))
     def test_channel_tag_policy_only_writes_configured_fields(self):

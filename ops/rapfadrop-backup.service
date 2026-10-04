@@ -1,0 +1,14 @@
+[Unit]
+Description=RapFaDrop encrypted recovery backup (no music publication)
+After=docker.service
+
+[Service]
+Type=oneshot
+User=root
+UMask=0077
+ExecStart=/usr/bin/python3 /opt/rapfadrop/ops/backup.py daily --reason daily
+Nice=10
+CPUQuota=50%
+MemoryMax=384M
+TimeoutStartSec=15min
+

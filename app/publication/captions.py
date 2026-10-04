@@ -10,9 +10,9 @@ class CaptionError(ValueError):
 
 DEFAULT_CONFIG = {
     "header": "DROP", "lp_header": "LP DROP", "ep_header": "EP DROP",
-    "footer": "t.me/RapFaDrop", "intro_footer": "@RapFaDrop",
+    "footer": "t.me/RapFaDrop", "intro_footer": "t.me/RapFaDrop",
     "prior_heading": "پیش‌تر از این آلبوم منتشر شده:",
-    "rows": ["music_video_url", "platforms", "album_post_url", "original_track_post_url"],
+    "rows": ["music_video_url", "album_post_url", "original_track_post_url", "platforms"],
     "labels": {"music_video_url": "Music Video", "spotify_url": "Spotify", "soundcloud_url": "SoundCloud", "album_post_url": "Album", "original_track_post_url": "Original", "original_album_post_url": "Original Album"},
 }
 
@@ -63,8 +63,14 @@ def render_caption(kind, context, config=None, *, limit=1024):
         bottom = []
         if context.get("original_album_post_url"):
             bottom.append(link(labels["original_album_post_url"], context["original_album_post_url"], channel=True))
-        bottom.append(escape(str(config["intro_footer"])))
-        base = "\n".join(lines) + "\n\n" + "\n".join(bottom)
+        platforms = [link(labels[name], context[name]) for name in ("spotify_url", "soundcloud_url") if context.get(name)]
+        if platforms:
+            bottom.append(" / ".join(platforms))
+        bottom_text = "\n".join(bottom)
+        if bottom_text:
+            bottom_text += "\n\n"
+        bottom_text += escape(str(config["intro_footer"]))
+        base = "\n".join(lines) + "\n\n" + bottom_text
         if visible_length(base) > limit:
             raise CaptionError("Core introduction exceeds caption limit; shorten the verified display/template values")
         included, overflow = [], []
@@ -72,7 +78,7 @@ def render_caption(kind, context, config=None, *, limit=1024):
         heading = escape(str(config["prior_heading"]))
         for item in prior:
             row = "› " + link(item["title"], item["url"], channel=True)
-            trial = "\n".join(lines) + "\n\n" + heading + "\n" + "\n".join([*included, row]) + "\n\n" + "\n".join(bottom)
+            trial = "\n".join(lines) + "\n\n" + heading + "\n" + "\n".join([*included, row]) + "\n\n" + bottom_text
             if overflow or visible_length(trial) > limit:
                 overflow.append(row)
             else:
@@ -80,7 +86,7 @@ def render_caption(kind, context, config=None, *, limit=1024):
         result = "\n".join(lines)
         if included:
             result += "\n\n" + heading + "\n" + "\n".join(included)
-        result += "\n\n" + "\n".join(bottom)
+        result += "\n\n" + bottom_text
         chunks = []
         for row in overflow:
             if visible_length(row) > 4096:
