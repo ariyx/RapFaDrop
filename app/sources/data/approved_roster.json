@@ -840,7 +840,6 @@
           },
           "evidence": [
             "https://open.spotify.com/artist/57LWeRc7ybAWTsS2vS1GA7",
-            "https://farsichart.com/fa/artists/reza-bahram",
             "https://farsichart.com/fa/artists/bahram"
           ],
           "response_completeness": "complete validated discography",
@@ -870,7 +869,6 @@
           "adapter_success": true,
           "evidence": [
             "https://soundcloud.com/bahramnouraei",
-            "https://farsichart.com/fa/artists/reza-bahram",
             "https://farsichart.com/fa/artists/bahram"
           ],
           "primary_profile_title": "Stream Bahram music | Listen to songs, albums, playlists for free on SoundCloud",
