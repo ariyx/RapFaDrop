@@ -476,6 +476,9 @@ def advance_album(session, *, gateway, now=None):
         if intro.state != Publication.State.PUBLISHED:
             _album_failure(session, intro, now)
             return session
+    # reserve_audio reads the session's related intro. Refresh its cached value
+    # after a first send so the first track links to the confirmed cover post.
+    session.intro = intro
     for index, caption in enumerate(session.overflow):
         overflow, _ = Publication.objects.get_or_create(channel=session.channel, identity_key=f"overflow:{session.pk}:{index}", defaults={"kind": Publication.Kind.OVERFLOW, "release": session.release, "album_session": session, "caption_html": caption})
         overflow = perform(overflow, "send_text", "initial", {"caption_html": caption}, gateway=gateway, now=now, session_id=session.pk)

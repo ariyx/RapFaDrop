@@ -279,6 +279,18 @@ class PublicationTests(PublicationFixtures, TestCase):
         self.assertEqual([call["title"] for call in audios], ["Earlier", "New Track"])
         self.assertFalse(any("reply_to_message_id" in call for call in audios))
 
+    def test_first_album_track_links_to_intro_confirmed_in_the_same_call(self):
+        release, candidates = self.album(2)
+        session = advance_album(prepare_album(release, self.target), gateway=self.gateway)
+        self.assertEqual(session.state, "complete")
+        intro = Publication.objects.get(pk=session.intro_id)
+        self.assertTrue(intro.message_url)
+        for call in self.gateway.calls:
+            if call["operation"] == "send_audio":
+                self.assertIn(intro.message_url, call["caption_html"])
+        for pub in Publication.objects.filter(album_session=session, kind=Publication.Kind.TRACK):
+            self.assertIn(intro.message_url, pub.caption_html)
+
     def test_album_missing_ready_track_blocks_intro_but_not_other_single(self):
         release, candidates = self.album(2)
         MediaCandidate.objects.filter(pk=candidates[1].pk).update(state="review_required")
