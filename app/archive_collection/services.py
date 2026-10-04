@@ -178,6 +178,10 @@ def identity_matches(row, metadata, profiles):
 
 
 def discover_candidate(recording, provider=None):
+    from .models import AcquisitionSource
+    if provider is None and AcquisitionSource.objects.exists():
+        from .acquisition import find
+        return find(recording)
     provider = provider or YtDlpProvider()
     m = recording.metadata
     credited_ids = [c["id"] for c in m["credits"]]
@@ -216,6 +220,13 @@ def bind_candidate(recording, found):
     if recording.candidate_id and recording.candidate.provider != "manual":
         return recording.candidate
     source, row, url = found
+    from .models import AcquisitionSource
+    if isinstance(source, AcquisitionSource) and source.platform == 'youtube':
+        return bind_youtube_candidate(recording, source, row, url)
+    acquisition_source = source if isinstance(source, AcquisitionSource) else None
+    if acquisition_source:
+        source, _ = ArtistSource.objects.get_or_create(artist=source.artist, platform='soundcloud', defaults={
+            'canonical_url':source.profile_url,'native_profile_id':source.native_id,'enabled':False,'verification':'unverified'})
     m = recording.metadata
     digest = hashlib.sha256(f"spotify:track:{recording.spotify_id}".encode()).hexdigest()
     track, _ = Track.objects.get_or_create(identity_key=digest,
@@ -239,12 +250,15 @@ def bind_candidate(recording, found):
         "expected_duration_seconds": m["duration_seconds"], "provenance": {"provider": "yt-dlp", "source_url": url,
             "native_item_id": str(row["id"]), "spotify_track_id": recording.spotify_id, "provenance_confidence": 95,
             "official_profile": source.canonical_url, "conversion": "none requested", "archive_collection": recording.collection.name}})
+    if acquisition_source and not candidate.provenance.get('acquisition_source_id'):
+        candidate.provenance={**candidate.provenance,'acquisition_source_id':acquisition_source.pk,'acquisition_platform':'soundcloud'}
+        candidate.save(update_fields=('provenance',))
     recording.candidate, recording.track = candidate, track
     recording.save(update_fields=("candidate", "track", "updated_at"))
     return candidate
 
 
-def acquire(recording):
+def acquire(recording, *, fallback_budget=1):
     started = time.monotonic()
     recording.attempts += 1
     recording.state = "acquiring"
@@ -293,11 +307,38 @@ def acquire(recording):
             except Exception as manual_error:
                 recording.reason = redact_diagnostic(manual_error)
         recording.state = "pending"
-        recording.reason = redact_diagnostic(exc) + ("; " + recording.reason if recording.reason else "")
+        recording.reason = redact_diagnostic(exc)
         recording.retry_due_at = timezone.now() + timedelta(seconds=min(300 * 2 ** min(recording.attempts - 1, 6), 21600))
     recording.evidence = {**recording.evidence, "last_acquisition_attempt_seconds": round(time.monotonic() - started, 3)}
     recording.save()
+    # A failed provider candidate is retained as evidence; try one independently
+    # verified source rather than permanently pinning every retry to that file.
+    if fallback_budget and recording.state in {'pending','review'} and recording.candidate_id and recording.candidate.provider!='manual':
+        failed=recording.candidate
+        failed_urls=list(dict.fromkeys([*recording.evidence.get('failed_source_urls',[]),failed.provenance.get('source_url','')]))
+        recording.evidence={**recording.evidence,'failed_source_urls':failed_urls,'provider_failures':[*recording.evidence.get('provider_failures',[]),{'candidate_id':failed.pk,'provider':failed.provider,'source_url':failed.provenance.get('source_url'),'reason':recording.reason,'at':timezone.now().isoformat()}]}
+        recording.candidate=None
+        recording.save(update_fields=('candidate','evidence','updated_at'))
+        return acquire(recording,fallback_budget=fallback_budget-1)
     return recording
+
+
+def bind_youtube_candidate(recording,source,row,url):
+    ensure_manual_candidate(recording)
+    recording.refresh_from_db()
+    base=recording.candidate
+    # Frozen Spotify SourceMatch remains authoritative; provider identity is
+    # corroborated separately, so no YouTube feed is attached to discovery.
+    candidate,_=MediaCandidate.objects.get_or_create(track=recording.track,release=base.release,
+        source_match=base.source_match,provider='yt-dlp-youtube',provenance__source_url=url,defaults={
+            'expected_duration_seconds':recording.metadata['duration_seconds'],'provenance':{
+                'provider':'yt-dlp-youtube','source_url':url,'native_item_id':str(row['id']),
+                'source_recording_title':row['title'],'official_channel_id':source.native_id,
+                'acquisition_platform':'youtube','acquisition_source_id':source.pk,
+                'official_profile':source.profile_url,'spotify_track_id':recording.spotify_id,
+                'archive_collection':recording.collection.name,'conversion':'none requested','provenance_confidence':95}})
+    recording.candidate=candidate;recording.save(update_fields=('candidate','updated_at'))
+    return candidate
 
 
 @transaction.atomic
@@ -361,7 +402,7 @@ def reserve(recording):
         return existing
     m = recording.metadata
     context = {"title": m["title"], "artists": [c["name"] for c in m["credits"]],
-        "spotify_url": m["spotify_url"], "soundcloud_url": candidate.provenance.get("source_url", "")}
+        "spotify_url": m["spotify_url"], "soundcloud_url": candidate.provenance.get("source_url", "") if candidate.provenance.get("acquisition_platform", "soundcloud") == "soundcloud" else "", "channel_target": TARGET}
     template = _template(Publication.Kind.ARCHIVE)
     pub = Publication.objects.create(channel=channel, track=recording.track, release=candidate.release,
         candidate=candidate, kind=Publication.Kind.ARCHIVE, identity_key=f"audio:{recording.track.canonical_id}",
@@ -438,14 +479,49 @@ def run(collection, gateway, *, limit=166):
 
 
 def status(collection):
+    from .models import RecordingAlias
+    alias_count=RecordingAlias.objects.filter(recording__collection=collection).count()
     return {"name": collection.name, "paused": collection.paused, "frozen_at": str(collection.frozen_at),
         "artists": collection.selections.count(), "selected_slots": Slot.objects.filter(selection__collection=collection).count(),
         "unique_recordings": collection.recordings.count(), "published": collection.recordings.filter(publication__message_id__isnull=False).count(),
         "reused_posts": collection.recordings.filter(state="reused").count(),
         "new_posts": collection.recordings.filter(state="published").count(),
         "unresolved_artists": collection.selections.exclude(error="").count(),
+        "frozen_recording_rows":collection.recordings.count(), "canonical_recordings":collection.recordings.count()-alias_count,
+        "confirmed_unique_messages":collection.recordings.filter(publication__message_id__isnull=False).values('publication_id').distinct().count(),
         "states": {s: collection.recordings.filter(state=s).count() for s in collection.recordings.values_list("state", flat=True).distinct()},
         "verification": collection.verification}
+
+
+@transaction.atomic
+def reconcile_recording_alias(recording,canonical,evidence):
+    """Keep frozen rows/source facts, satisfy alternate slots with a corroborated post."""
+    from .models import RecordingAlias
+    from .acquisition import title_matches
+    r=Recording.objects.select_for_update().get(pk=recording.pk)
+    c=Recording.objects.select_for_update(of=('self',)).select_related('publication__channel','candidate__source_match__source_item').get(pk=canonical.pk)
+    existing=RecordingAlias.objects.filter(recording=r).first()
+    if existing:
+        if existing.canonical_id!=c.pk or r.publication_id!=c.publication_id:
+            raise ValueError('Existing alias binding differs; manual reconciliation required')
+        return existing
+    m,n=r.metadata,c.metadata
+    credited=lambda data:{normalize_text(x['name']) for x in data['credits']}
+    if (r.collection_id!=c.collection_id or not r.collection.paused or r.pk==c.pk or r.publication_id or
+            not c.publication_id or c.publication.state!='published' or not c.publication.message_id or c.publication.channel.target!=TARGET or
+            not title_matches(m['title'],n) or credited(m)!=credited(n) or abs(m['duration_seconds']-n['duration_seconds'])>2 or
+            not evidence.get('checked_at') or not evidence.get('independent_links') or
+            str(evidence.get('shared_native_item_id'))!=c.candidate.source_match.source_item.native_item_id or
+            evidence.get('shared_recording_url')!=c.candidate.provenance.get('source_url') or
+            evidence.get('both_recordings_match_official_source') is not True):
+        raise ValueError('Alias requires corroborated identical official recording, complete credits/duration and confirmed same-channel post')
+    alias,created=RecordingAlias.objects.get_or_create(recording=r,defaults={'canonical':c,'evidence':evidence})
+    if not created and alias.canonical_id!=c.pk:raise ValueError('Alias identity cannot be replaced')
+    r.publication,r.candidate,r.track=c.publication,c.candidate,c.track
+    r.state='reused';r.reason='Alternate Spotify native identity reconciled to the same official recording; existing post reused.';r.retry_due_at=None
+    r.evidence={**r.evidence,'alias_reconciliation':evidence,'canonical_spotify_id':c.spotify_id}
+    r.save(update_fields=('publication','candidate','track','state','reason','retry_due_at','evidence','updated_at'))
+    return alias
 
 
 def cleanup_confirmed(collection):
@@ -500,15 +576,24 @@ def refresh_published(collection, gateway):
     results = []
     for r in collection.recordings.filter(publication__message_id__isnull=False).select_related("publication__template", "publication__channel"):
         pub = r.publication
+        if pub.kind != Publication.Kind.ARCHIVE or pub.channel.target != collection.target or pub.track_id != r.track_id or pub.candidate_id != r.candidate_id:
+            raise TargetBlocked("Confirmed publication binding differs from frozen recording")
+        from operations.management.commands.refresh_owner_defaults import known_audio_default
+        if pub.template.config.get('audio_layout') != 'compact' and not known_audio_default(pub.template.config):
+            results.append({'message_id': pub.message_id, 'state': 'custom_template_conflict'})
+            continue
+        current = _template(pub.kind)
+        if current.pk != pub.template_id:
+            pub.template = current
+            pub.save(update_fields=('template', 'updated_at'))
+        started = time.monotonic()
         desired = render_caption(pub.kind, pub.context, pub.template.config).html
         if pub.caption_html != desired:
             pub = edit_caption(pub, {}, gateway=gateway)
         if pub.state != "published":
             results.append({"message_id": pub.message_id, "state": pub.state})
             break
-        r.evidence = {**r.evidence, "caption_refresh": {"message_id": pub.message_id, "state": pub.state}}
-        if r.evidence.get("telegram_readback", {}).get("status") != "passed":
-            r.evidence["telegram_readback"] = gateway.readback(r)
+        r.evidence = {**r.evidence, "caption_refresh": {"message_id": pub.message_id, "state": pub.state, "caption_html": pub.caption_html, "seconds": round(time.monotonic()-started, 3), "at": timezone.now().isoformat()}}
         r.save(update_fields=("evidence", "updated_at"))
         results.append({"message_id": pub.message_id, "state": pub.state, "readback": r.evidence.get("telegram_readback")})
     return results

@@ -29,7 +29,7 @@ class CaptionTemplateForm(forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-        allowed_kinds = {"single_audio", "album_intro", "album_track_audio", "edition", "overflow", "correction", "notification"}
+        allowed_kinds = {"single_audio", "album_intro", "album_track_audio", "archive_audio", "edition", "overflow", "correction", "notification"}
         if cleaned.get("kind") not in allowed_kinds:
             self.add_error("kind", "Choose a documented publication template kind.")
         if not self.instance.pk and cleaned.get("enabled"):

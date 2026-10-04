@@ -70,3 +70,34 @@ class Slot(models.Model):
     class Meta:
         constraints = [models.UniqueConstraint(fields=("selection", "number"), name="archive_slot_once"),
                        models.CheckConstraint(condition=models.Q(number__in=(1, 2)), name="archive_two_slots")]
+
+
+class AcquisitionSource(models.Model):
+    """Verified acquisition identity only. No polling flag, baseline or queue capability."""
+    artist = models.ForeignKey('sources.Artist', on_delete=models.PROTECT)
+    platform = models.CharField(max_length=20, choices=[('soundcloud', 'SoundCloud'), ('youtube', 'YouTube')])
+    native_id = models.CharField(max_length=160)
+    profile_url = models.URLField(max_length=500)
+    evidence = models.JSONField(default=dict)
+    verified_at = models.DateTimeField()
+    catalog = models.JSONField(default=list)
+    catalog_checked_at = models.DateTimeField(null=True)
+    retry_due_at = models.DateTimeField(null=True)
+    last_error = models.CharField(max_length=1000, blank=True)
+
+    @property
+    def canonical_url(self):
+        return self.profile_url
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=('artist', 'platform', 'native_id'), name='archive_acquisition_identity_once')]
+
+
+class RecordingAlias(models.Model):
+    recording = models.OneToOneField(Recording, on_delete=models.PROTECT, related_name='canonical_alias')
+    canonical = models.ForeignKey(Recording, on_delete=models.PROTECT, related_name='aliases')
+    evidence = models.JSONField(default=dict)
+    reconciled_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [models.CheckConstraint(condition=~models.Q(recording=models.F('canonical')), name='archive_alias_not_self')]

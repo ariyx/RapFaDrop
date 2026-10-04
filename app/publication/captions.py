@@ -9,6 +9,8 @@ class CaptionError(ValueError):
 
 
 DEFAULT_CONFIG = {
+    "audio_layout": "compact", "archive_header": "FAVE",
+    "brand_label": "Rap Farsi Drop", "brand_url": "https://t.me/RapFaDrop",
     "header": "DROP", "lp_header": "LP DROP", "ep_header": "EP DROP",
     "footer": "t.me/RapFaDrop", "intro_footer": "t.me/RapFaDrop",
     "prior_heading": "Previously released from this album:",
@@ -49,8 +51,62 @@ def link(label, url, *, channel=False):
     return f'<a href="{escape(url, quote=True)}">{escape(str(label))}</a>' if url else ""
 
 
+def confirmed_message_url(value, context):
+    """Only the service's confirmed same-channel binding can select a message link."""
+    url = safe_url(value, channel=True)
+    parts = urlsplit(url)
+    path = parts.path.strip("/").split("/")
+    target = str(context.get("channel_target", "-1004311149640"))
+    if target in {"-1004311149640", "@RapFaDrop"}:
+        allowed = len(path) == 2 and path[0].lower() == "rapfadrop" or len(path) == 3 and path[:2] == ["c", "4311149640"]
+    else:
+        allowed = len(path) == 2 or len(path) == 3 and path[:2] == ["c", target.removeprefix("-100")]
+    return url if allowed and path[-1].isdigit() and int(path[-1]) > 0 else ""
+
+
+def compact_audio(kind, context, config, labels, limit):
+    for key in ('spotify_url','soundcloud_url','album_post_url','original_track_post_url','original_album_post_url','music_video_url'):
+        if context.get(key):safe_url(context[key],channel=key.endswith('post_url'))
+    header = config["archive_header"] if kind == "archive_audio" else config["header"]
+    if kind == "album_track_audio":
+        header = config["ep_header"] if str(context.get("release_type", "")).lower() == "ep" else config["lp_header"]
+    lines = [f"<b>{escape(str(header))}</b>"] if header else []
+    version = context.get("version_type")
+    if version in {"instrumental", "reissue", "deluxe"}:
+        text = version.capitalize()
+        original = confirmed_message_url(context.get("original_track_post_url") or context.get("original_album_post_url"), context) if context.get("original_confirmed") else ""
+        if original:
+            text += " (" + link(labels["original_track_post_url"], original, channel=True) + ")"
+        lines.append(text)
+    selected = ""
+    if context.get("album_intro_confirmed") and context.get("album_post_url"):
+        album = confirmed_message_url(context["album_post_url"], context)
+        if album:
+            selected = link(labels["album_post_url"], album, channel=True)
+    if not selected:
+        for key in ("spotify_url", "soundcloud_url"):
+            if context.get(key):
+                selected = link(labels[key], context[key])
+                break
+    brand = link(config["brand_label"], config["brand_url"], channel=True)
+    lines.append(" · ".join(x for x in (selected, brand) if x))
+    result = "\n".join(lines)
+    if visible_length(result) > limit:
+        raise CaptionError("Audio caption exceeds the supported caption limit")
+    return RenderedCaption(result)
+
+
 def render_caption(kind, context, config=None, *, limit=1024):
+    # Unmigrated custom audio versions retain their historical rendering.
+    raw_config=config or {}
+    custom_legacy = False
+    if config is not None and 'audio_layout' not in config:
+        from operations.management.commands.refresh_owner_defaults import known_audio_default
+        custom_legacy = not known_audio_default(config)
     config = {**DEFAULT_CONFIG, **(config or {})}
+    if custom_legacy:
+        config['audio_layout'] = 'legacy'
+        config['archive_header'] = raw_config.get('archive_header', 'ARCHIVE')
     labels = {**DEFAULT_CONFIG["labels"], **config.get("labels", {})}
     if kind == "album_intro":
         album_type = str(context.get("release_type", "LP")).upper()
@@ -96,6 +152,8 @@ def render_caption(kind, context, config=None, *, limit=1024):
             else:
                 chunks[-1] += "\n" + row
         return RenderedCaption(result, tuple(chunks))
+    if config["audio_layout"] == "compact" and kind in {'archive_audio','single_audio','album_track_audio','edition'}:
+        return compact_audio(kind, context, config, labels, limit)
     header = config.get("archive_header", "ARCHIVE") if kind == "archive_audio" else config["header"]
     if kind == "album_track_audio":
         header = config["ep_header"] if str(context.get("release_type", "")).lower() == "ep" else config["lp_header"]

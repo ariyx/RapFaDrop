@@ -156,7 +156,8 @@ def _run_provider(candidate, provider, now=None):
         if candidate.state in {MediaCandidate.State.INVALID, MediaCandidate.State.REVIEW_REQUIRED} and candidate.attempt_count:
             return candidate
         source_item = candidate.source_match.source_item
-        if not provider.can_handle(source_item.canonical_url):
+        source_url = candidate.provenance.get('source_url', source_item.canonical_url) if candidate.provenance.get('acquisition_platform') == 'youtube' else source_item.canonical_url
+        if not provider.can_handle(source_url):
             candidate.state = MediaCandidate.State.REVIEW_REQUIRED
             candidate.last_outcome = "unsupported_source"
             candidate.last_error = "No configured provider can acquire audio from this source."
@@ -177,7 +178,7 @@ def _run_provider(candidate, provider, now=None):
     staging = _staging_dir(candidate)
     try:
         probe_started = time.monotonic()
-        probe = provider.probe(source_item.canonical_url, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
+        probe = provider.probe(source_url, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
         probe_seconds = round(time.monotonic() - probe_started, 3)
         if provider.name == "yt-dlp" and source_item.platform == "soundcloud":
             from releases.normalization import normalize_text
@@ -201,6 +202,12 @@ def _run_provider(candidate, provider, now=None):
                 MediaAuditEvent.objects.create(candidate=candidate, action="provider_identity_review",
                                               detail={"attempt_id": attempt.pk})
                 return candidate
+        if provider.name == 'yt-dlp-youtube':
+            from releases.normalization import normalize_text
+            expected=candidate.provenance
+            if (probe.provider_item_id!=expected.get('native_item_id') or (probe.evidence or {}).get('channel_id')!=expected.get('official_channel_id')
+                    or normalize_text(probe.title)!=normalize_text(expected.get('source_recording_title'))):
+                raise ProviderError('YouTube recording/channel identity changed after validation',retryable=False)
         acquisition_started = time.monotonic()
         result = provider.download(probe, staging, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
         acquisition_seconds = round(time.monotonic() - acquisition_started, 3)
@@ -222,7 +229,7 @@ def _run_provider(candidate, provider, now=None):
         candidate.save(update_fields=("expected_duration_seconds", "provenance", "updated_at"))
         artwork = None
         artwork_state = MediaCandidate.ArtworkState.NOT_PROVIDED
-        frozen_artwork = candidate.source_match.evidence.get("archive_official_metadata", {}).get("artwork_url") if candidate.source_match.matching_method == "archive_spotify_soundcloud" else None
+        frozen_artwork = candidate.source_match.evidence.get("archive_official_metadata", {}).get("artwork_url") if candidate.source_match.matching_method in {"archive_spotify_soundcloud", "archive_frozen_spotify"} else None
         artwork_url = frozen_artwork or probe.artwork_source_url
         if artwork_url:
             art_staging = staging / "source-artwork"

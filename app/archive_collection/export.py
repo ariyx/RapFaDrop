@@ -32,6 +32,8 @@ def export(collection, directory, *, processing_sha=""):
             "track_number": r.metadata.get("track_number"), "disc_number": r.metadata.get("disc_number"),
             "artists_satisfied": " | ".join(r.slots.select_related("selection__source__artist").values_list("selection__source__artist__official_name", flat=True)),
             "state": r.state, "reason": r.reason, "candidate_id": r.candidate_id, "provider": candidate.provider if candidate else "",
+            "acquisition_provider":candidate.provenance.get('provider','') if candidate else '',
+            "canonical_spotify_id":r.evidence.get('canonical_spotify_id',r.spotify_id),
             "media_source": candidate.provenance.get("source_url", "") if candidate else "",
             "codec": candidate.observed_facts.get("codec_name", "") if candidate else "",
             "audio_bitrate_bps": candidate.observed_facts.get("audio_bitrate_bps", "") if candidate else "",

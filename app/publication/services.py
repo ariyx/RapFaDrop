@@ -86,7 +86,10 @@ def _channel(target):
 
 def _audio_context(candidate, channel):
     track, release = candidate.track, candidate.release
-    context = {"title": track.official_title, "artists": list(track.artist_credits.order_by("position", "pk").values_list("artist__official_name", flat=True)), "release_type": release.release_type}
+    context = {"title": track.official_title, "artists": list(track.artist_credits.order_by("position", "pk").values_list("artist__official_name", flat=True)), "release_type": release.release_type, "channel_target": channel.target}
+    version = track.edition if track.edition != "original" else release.edition
+    if version in {"instrumental", "reissue", "deluxe"}:
+        context["version_type"] = version
     matches = SourceMatch.objects.filter(track=track, confidence__gte=90, state__in=CONFIDENT_STATES).select_related("source_item").order_by("pk")
     for match in matches:
         source = match.source_item
@@ -97,9 +100,15 @@ def _audio_context(candidate, channel):
     original = Publication.objects.filter(channel=channel, track=track.edition_of, message_id__isnull=False).first() if track.edition_of_id else None
     if original and original.message_url:
         context["original_track_post_url"] = original.message_url
+        context["original_confirmed"] = original.state == Publication.State.PUBLISHED
+    elif release.edition_of_id:
+        original_album = Publication.objects.filter(channel=channel, release=release.edition_of, kind=Publication.Kind.INTRO, state=Publication.State.PUBLISHED, message_id__isnull=False).first()
+        if original_album:
+            context.update(original_album_post_url=original_album.message_url, original_confirmed=True)
     album = AlbumSession.objects.filter(channel=channel, release__release_tracks__track=track, intro__message_id__isnull=False).select_related("intro").order_by("pk").first()
     if album and album.intro.message_url:
         context["album_post_url"] = album.intro.message_url
+        context["album_intro_confirmed"] = album.intro.state == Publication.State.PUBLISHED
     return context, original
 
 
@@ -123,6 +132,7 @@ def reserve_audio(candidate, target, *, kind=None, album_session=None):
         context, original = _audio_context(candidate, channel)
         if album_session:
             context["album_post_url"] = album_session.intro.message_url
+            context["album_intro_confirmed"] = album_session.intro.state == Publication.State.PUBLISHED
             context["release_type"] = album_session.release.release_type
         template = _template(kind)
         pub = Publication.objects.create(channel=channel, identity_key=f"audio:{candidate.track.canonical_id}", kind=kind, track=candidate.track, release=candidate.release, candidate=candidate, original=original, template=template, context=context, caption_html=render_caption(kind, context, template.config).html, album_session=album_session)
@@ -341,6 +351,8 @@ def edit_caption(pub, changes, *, gateway, now=None, session_id=None):
     context = {**pub.context}
     for key, value in changes.items():
         context[key] = safe_url(value, channel=key.endswith("post_url"))
+        if key == 'album_post_url':
+            context['album_intro_confirmed'] = Publication.objects.filter(channel_id=pub.channel_id,kind=Publication.Kind.INTRO,state=Publication.State.PUBLISHED,message_id__isnull=False,message_url=context[key]).exists()
     rendered = render_caption(pub.kind, context, pub.template.config)
     key = "caption:" + hashlib.sha256(rendered.html.encode()).hexdigest()
     return perform(pub, "edit_caption", key, {"caption_html": rendered.html, "context": context}, gateway=gateway, now=now, session_id=session_id)

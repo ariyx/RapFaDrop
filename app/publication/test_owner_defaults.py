@@ -8,15 +8,15 @@ from .models import CaptionTemplate
 
 
 class OwnerCaptionTests(SimpleTestCase):
-    def test_all_audio_kinds_platforms_last_and_omissions(self):
-        context = {'release_type': 'ep', 'music_video_url': 'https://example.com/video', 'album_post_url': 'https://t.me/RapFaDrop/1', 'original_track_post_url': 'https://t.me/RapFaDrop/2', 'spotify_url': 'https://open.spotify.com/track/a', 'soundcloud_url': 'https://soundcloud.com/a/b'}
+    def test_all_audio_kinds_select_one_link(self):
+        context = {'release_type': 'ep', 'album_intro_confirmed':True, 'music_video_url': 'https://example.com/video', 'album_post_url': 'https://t.me/RapFaDrop/1', 'original_track_post_url': 'https://t.me/RapFaDrop/2', 'spotify_url': 'https://open.spotify.com/track/a', 'soundcloud_url': 'https://soundcloud.com/a/b'}
         for kind in ['single_audio', 'album_track_audio', 'edition']:
             html = render_caption(kind, context).html
-            self.assertLess(html.index('Music Video</a>'), html.index('Album</a>'))
-            self.assertLess(html.index('Original</a>'), html.index('Spotify</a>'))
-            self.assertTrue(html.endswith('SoundCloud</a>\n\nt.me/RapFaDrop'))
-            self.assertNotIn('\n\n\n', html)
-        self.assertEqual(render_caption('single_audio', {}).html, '<b>DROP</b>\n\nt.me/RapFaDrop')
+            self.assertIn('Album</a> · ',html)
+            self.assertNotIn('Spotify</a>',html)
+            self.assertNotIn('SoundCloud</a>',html)
+            self.assertNotIn('\n\n', html)
+        self.assertEqual(render_caption('single_audio', {}).html, '<b>DROP</b>\n<a href="https://t.me/RapFaDrop">Rap Farsi Drop</a>')
         self.assertNotIn(' / ', render_caption('edition', {'spotify_url': context['spotify_url']}).html)
 
     def test_intro_related_links_then_platforms_then_footer(self):
@@ -29,7 +29,7 @@ class OwnerCaptionTests(SimpleTestCase):
 
 class DefaultMigrationTests(TestCase):
     def test_known_defaults_versioned_custom_preserved_and_idempotent(self):
-        old = {**DEFAULT_CONFIG, 'rows': OLD_ROWS, 'intro_footer': '@RapFaDrop', 'prior_heading': 'پیش‌تر از این آلبوم منتشر شده:'}
+        old = {**{k:v for k,v in DEFAULT_CONFIG.items() if k not in {'audio_layout','archive_header','brand_label','brand_url'}}, 'rows': OLD_ROWS, 'intro_footer': '@RapFaDrop', 'prior_heading': 'پیش‌تر از این آلبوم منتشر شده:'}
         legacy = CaptionTemplate.objects.create(kind='single_audio', version=1, config=old)
         custom = CaptionTemplate.objects.create(kind='edition', version=1, config={**old, 'header': 'Owner custom', 'prior_heading': 'Owner custom heading'})
         setting = OperatorSettings.objects.create(pk=1, tag_fields=list(OLD_TAGS))

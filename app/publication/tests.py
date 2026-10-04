@@ -41,7 +41,7 @@ class CaptionTests(SimpleTestCase):
         for missing in ("SoundCloud", "Music Video", ">Album<", ">Original<"):
             self.assertNotIn(missing, rendered.html)
         no_links = render_caption("single_audio", {}).html
-        self.assertEqual(no_links, "<b>DROP</b>\n\nt.me/RapFaDrop")
+        self.assertEqual(no_links, '<b>DROP</b>\n<a href="https://t.me/RapFaDrop">Rap Farsi Drop</a>')
 
     def test_intro_title_only_bold_guest_only_italic_and_required_marker(self):
         result = render_caption("album_intro", {"title": "راه & <script> 🎧", "artists": ["هیچ‌کس", "Artist <Two>"], "features": ["Guest & One", "مهمان"], "release_type": "EP", "previous_singles": [{"title": "Earlier <single>", "url": "https://t.me/test_channel/12"}]})
@@ -56,7 +56,7 @@ class CaptionTests(SimpleTestCase):
         intro = render_caption("album_intro", {"title": "Album", "artists": ["Artist"]}).html
         self.assertNotIn("feat.", intro)
         self.assertNotIn("پیش‌تر", intro)
-        track = render_caption("album_track_audio", {"release_type": "ep", "album_post_url": "https://t.me/test_channel/1"}, {"ep_header": ""}).html
+        track = render_caption("album_track_audio", {"release_type": "ep", "album_post_url": "https://t.me/RapFaDrop/1", "album_intro_confirmed":True}, {"ep_header": "", "audio_layout":"compact"}).html
         self.assertNotIn("<b>", track)
         self.assertIn(">Album</a>", track)
 
@@ -254,8 +254,9 @@ class PublicationTests(PublicationFixtures, TestCase):
         result = edit_caption(pub, {"music_video_url": "https://www.youtube.com/watch?v=official", "spotify_url": "https://open.spotify.com/track/fixture"}, gateway=self.gateway)
         self.assertEqual(result.message_id, pub.message_id)
         self.assertIn("<b>DROP</b>", result.caption_html)
-        self.assertIn("Music Video</a>", result.caption_html)
-        self.assertIn(" / ", result.caption_html)
+        self.assertNotIn("Music Video</a>", result.caption_html)
+        self.assertNotIn(" / ", result.caption_html)
+        self.assertIn('Spotify</a> · ',result.caption_html)
         self.assertEqual(result.template.version, 1)
 
     def test_earlier_single_album_links_both_directions_and_skips_audio(self):

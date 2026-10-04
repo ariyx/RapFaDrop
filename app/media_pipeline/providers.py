@@ -100,7 +100,7 @@ class YtDlpProvider:
             duration_seconds=_positive_float(info.get("duration")),
             uploader=str(info.get("uploader") or info.get("channel") or "")[:300],
             artwork_source_url=artwork_url,
-            evidence={"extractor": str(info.get("extractor_key") or "SoundCloud"), "format_count": len(info.get("formats") or [])},
+            evidence={"extractor": str(info.get("extractor_key") or "SoundCloud"), "format_count": len(info.get("formats") or []), "uploader_id": str(info.get('uploader_id') or ''), "uploader_url": info.get('uploader_url')},
         )
 
     def download(self, probe, destination, timeout=None):
@@ -128,6 +128,31 @@ class YtDlpProvider:
         return DownloadResult(path, probe.provider_item_id, probe.title, probe.duration_seconds, probe.uploader, probe.evidence or {})
 
 
+class YouTubeProvider(YtDlpProvider):
+    """Separate official source fallback using the maintained existing downloader."""
+    name = 'yt-dlp-youtube'
+
+    def can_handle(self, source_url):
+        parts = urlsplit(source_url or '')
+        from urllib.parse import parse_qs
+        return (parts.scheme == 'https' and not parts.username and not parts.password and parts.port in (None,443)
+                and parts.hostname in {'www.youtube.com','youtube.com','music.youtube.com'} and parts.path == '/watch'
+                and bool(re.fullmatch(r'[\w-]{11}', parse_qs(parts.query).get('v',[''])[0])))
+
+    def probe(self, source_url, timeout=None):
+        if not self.can_handle(source_url):
+            raise ProviderError('Only validated YouTube watch recording URLs are supported',retryable=False)
+        timeout = int(timeout or settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
+        info=json.loads(self._run(['--socket-timeout','10','--skip-download','--dump-single-json','--',source_url],timeout))
+        if info.get('is_live') or info.get('live_status') in {'is_live','is_upcoming'} or info.get('has_drm'):
+            raise ProviderError('Live, upcoming or DRM recording is ineligible',retryable=False)
+        return ProviderProbe(self.name,source_url,str(info.get('id') or ''),str(info.get('title') or ''),
+            _positive_float(info.get('duration')),str(info.get('channel') or info.get('uploader') or ''),
+            evidence={'channel_id':info.get('channel_id'), 'channel_url':info.get('channel_url'),
+                      'extractor':'YouTube', 'format_count':len(info.get('formats') or []),
+                      'description':str(info.get('description') or '')[:3000]})
+
+
 def _positive_float(value):
     try:
         result = float(value)
@@ -136,4 +161,4 @@ def _positive_float(value):
         return None
 
 
-PROVIDERS = {YtDlpProvider.name: YtDlpProvider()}
+PROVIDERS = {YtDlpProvider.name: YtDlpProvider(), YouTubeProvider.name: YouTubeProvider()}

@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Collection, ArtistSelection, Recording, Slot
+from .models import Collection, ArtistSelection, Recording, Slot, AcquisitionSource, RecordingAlias
 
 
-@admin.register(Collection, ArtistSelection, Recording, Slot)
+@admin.register(Collection, ArtistSelection, Recording, Slot, AcquisitionSource, RecordingAlias)
 class ArchiveAuditAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         return [field.name for field in self.model._meta.fields]
