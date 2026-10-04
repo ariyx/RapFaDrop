@@ -9,14 +9,24 @@ from .providers import ProviderError
 
 def fetch_recorded_soundcloud_artwork(source_url, destination, timeout=20):
     """Fetch only yt-dlp-recorded SoundCloud CDN artwork; never follow arbitrary URLs."""
+    return _fetch_recorded_artwork(source_url, destination, timeout, spotify=False)
+
+
+def fetch_recorded_spotify_artwork(source_url, destination, timeout=20):
+    """Fetch a frozen official album cover only from Spotify's pinned image CDN."""
+    return _fetch_recorded_artwork(source_url, destination, timeout, spotify=True)
+
+
+def _fetch_recorded_artwork(source_url, destination, timeout, *, spotify):
     current = source_url
     session = requests.Session()
     session.trust_env = True
     try:
         for _ in range(4):
             parts = urlsplit(current)
-            if parts.scheme != "https" or not parts.hostname or not parts.hostname.endswith(".sndcdn.com"):
-                raise ProviderError("Recorded artwork URL is outside the approved SoundCloud CDN", retryable=False)
+            allowed = (parts.hostname == "i.scdn.co" and parts.path.startswith("/image/")) if spotify else (parts.hostname and parts.hostname.endswith(".sndcdn.com"))
+            if parts.scheme != "https" or not allowed or parts.username or parts.password or parts.port not in {None, 443}:
+                raise ProviderError("Recorded artwork URL is outside the approved provider CDN", retryable=False)
             response = session.get(current, timeout=timeout, stream=True, allow_redirects=False)
             if response.is_redirect:
                 next_url = urljoin(current, response.headers.get("Location", ""))

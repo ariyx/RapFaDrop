@@ -11,7 +11,7 @@ from django.utils import timezone
 
 from releases.models import ProcessingQueueItem, SourceMatch
 
-from .artwork import fetch_recorded_soundcloud_artwork
+from .artwork import fetch_recorded_soundcloud_artwork, fetch_recorded_spotify_artwork
 from .models import MediaAttempt, MediaAuditEvent, MediaCandidate
 from .providers import PROVIDERS, ProviderError, redact_diagnostic
 from .tagging import TaggingError, prepare_tagged_copy, validate_artwork
@@ -222,12 +222,16 @@ def _run_provider(candidate, provider, now=None):
         candidate.save(update_fields=("expected_duration_seconds", "provenance", "updated_at"))
         artwork = None
         artwork_state = MediaCandidate.ArtworkState.NOT_PROVIDED
-        if probe.artwork_source_url:
+        frozen_artwork = candidate.source_match.evidence.get("archive_official_metadata", {}).get("artwork_url") if candidate.source_match.matching_method == "archive_spotify_soundcloud" else None
+        artwork_url = frozen_artwork or probe.artwork_source_url
+        if artwork_url:
             art_staging = staging / "source-artwork"
             try:
-                artwork = fetch_recorded_soundcloud_artwork(probe.artwork_source_url, art_staging)
+                artwork = (fetch_recorded_spotify_artwork if frozen_artwork else fetch_recorded_soundcloud_artwork)(artwork_url, art_staging)
                 validate_artwork(artwork)
                 artwork_state = MediaCandidate.ArtworkState.EMBEDDED
+                candidate.provenance = {**candidate.provenance, "official_artwork_source_url": _safe_evidence_url(artwork_url)}
+                candidate.save(update_fields=("provenance",))
             except (ProviderError, TaggingError):
                 artwork_state = MediaCandidate.ArtworkState.INVALID
                 artwork = None

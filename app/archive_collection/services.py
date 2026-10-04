@@ -2,6 +2,7 @@ import hashlib
 import json
 import time
 import subprocess
+import tempfile
 import re
 from datetime import timedelta
 from pathlib import Path
@@ -229,7 +230,7 @@ def bind_candidate(recording, found):
         "confidence": 95, "state": "matched", "matching_method": "archive_spotify_soundcloud",
         "evidence": {"archive_spotify_id": recording.spotify_id, "archive_official_metadata": {
             "title": m["title"], "artists": [c["name"] for c in m["credits"]], "album": m["album_title"],
-            "album_artists": m.get("album_artists"), "track_number": m.get("track_number"),
+            "album_artists": m.get("album_artists"), "artwork_url": m.get("artwork_url"), "track_number": m.get("track_number"),
             "disc_number": m.get("disc_number"), "release_date": m.get("release_date")}, "match": recording.evidence}})
     if not created and (match.track_id != track.pk or match.matching_method != "archive_spotify_soundcloud" or
             match.evidence.get("archive_spotify_id") != recording.spotify_id):
@@ -320,7 +321,7 @@ def ensure_manual_candidate(recording):
         "confidence": 100, "state": "matched", "matching_method": "archive_frozen_spotify",
         "evidence": {"archive_spotify_id": recording.spotify_id, "archive_official_metadata": {
             "title": m["title"], "artists": [c["name"] for c in m["credits"]], "album": m["album_title"],
-            "album_artists": m.get("album_artists"), "track_number": m.get("track_number"),
+            "album_artists": m.get("album_artists"), "artwork_url": m.get("artwork_url"), "track_number": m.get("track_number"),
             "disc_number": m.get("disc_number"), "release_date": m.get("release_date")}}})
     if not created and (match.track_id != track.pk or match.matching_method != "archive_frozen_spotify"):
         raise ValueError("Existing Spotify identity/review requires reconciliation; not overwritten")
@@ -525,7 +526,7 @@ def retag_published(collection, gateway):
     for r in collection.recordings.filter(publication__message_id__isnull=False).order_by("order"):
         pub = r.publication
         old = pub.candidate
-        if fields <= set(old.preparation_report.get("mapped_fields", [])):
+        if fields <= set(old.preparation_report.get("mapped_fields", [])) and (not r.metadata.get("artwork_url") or old.preparation_report.get("readback", {}).get("artwork_read_back") is True):
             continue
         # A restart reuses its persisted prepared replacement; never creates another send.
         new = r.candidate if r.candidate_id != old.pk else None
@@ -536,8 +537,16 @@ def retag_published(collection, gateway):
                 source_match=old.source_match, provider="manual", expected_duration_seconds=old.expected_duration_seconds,
                 provenance={**old.provenance, "policy_retag_of": old.pk, "retagged_at_utc": timezone.now().isoformat()})
             attempt = MediaAttempt.objects.create(candidate=new, provider="policy-retag", started_at=timezone.now())
-            new = _accept_audio_file(new, attempt, raw, expected=old.expected_duration_seconds,
-                artwork_path=artwork, share_prepared=False)
+            with tempfile.TemporaryDirectory(prefix="archive-artwork-", dir=settings.MEDIA_ROOT) as directory:
+                if artwork is None and r.metadata.get("artwork_url"):
+                    from media_pipeline.artwork import fetch_recorded_spotify_artwork
+                    from media_pipeline.tagging import validate_artwork
+                    artwork = fetch_recorded_spotify_artwork(r.metadata["artwork_url"], Path(directory) / "cover")
+                    validate_artwork(artwork)
+                    new.provenance = {**new.provenance, "official_artwork_source_url": r.metadata["artwork_url"]}
+                    new.save(update_fields=("provenance",))
+                new = _accept_audio_file(new, attempt, raw, expected=old.expected_duration_seconds,
+                    artwork_path=artwork, share_prepared=False)
             require_ready(new)
             decoded = subprocess.run(["ffmpeg", "-v", "error", "-xerror", "-i", new.prepared_path,
                 "-map", "0:a:0", "-f", "null", "-"], capture_output=True, timeout=90)
