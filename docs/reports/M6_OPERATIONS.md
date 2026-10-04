@@ -1,5 +1,26 @@
 # M6 operations evidence
 
+## Encrypted recovery backups and owner defaults — 2026-10-04
+
+Current tested/deployed application/operations SHA is
+`a1a47841d7feded2caa50db0d7ee27b5c83e4688`. All 156 application and eight backup
+tests passed on the server, including actual MP3/M4A tag/artwork preservation,
+age tamper checks and durable-receipt retention. All 37 tables/schema matched
+isolated restores; no production restore occurred. Root-only daily systemd
+backups use dedicated verified chat `-1004475982526`, authenticated encryption,
+independent recovery identity and seven-daily/four-weekly retention. Final
+archive/manifest messages **55/56** passed byte-matched readback and are retained.
+The owner must save a private independent key copy; retrieval is documented,
+not treated as delivery. The protected `.env` migrated only the known eleven-
+field tag default to three fields; four overlays and all other values remain.
+83 active Spotify sources, 3934 items, 84 baselines and the existing review are
+preserved, with no media/jobs/publication. Bridge/media/music publication remain
+OFF. Disposable resources were removed and health passed. The initial receipt-
+expiration defect/audit gap and corrected exact-SHA verification are recorded in
+[task report](BACKUP_CAPTION_METADATA_QUALITY.md),
+[safe evidence](data/backup_policy_evidence.json) and
+[restore runbook](../../ops/BACKUP_RESTORE.md). Historical checkpoints follow.
+
 ## Roster-wide discovery correction, 2026-10-04
 
 The 25 original artists left uncovered by the earlier 58-source rollout now have freshly verified, complete baselines and active Spotify polling. **83/83 approved artists covered; 83 active Spotify sources.** All 25 completed at least three scheduled outcomes: 86 successes, zero failures in the observed window. The existing 58 sources were not reset or rebaselined. All 2336 starting items, 59 baselines and the pre-existing open Dalu “HAHAAA” review passed full preservation checks; 1598 additional historical IDs give 3934 items / 84 baselines. The fresh protected 340564-byte backup restored with identical digests across 37 tables; the restore database was removed. All 27 focused tests and system/migration checks passed on the deployed image in a disposable server project, then its resources were removed. No application changes or deployment were necessary: SHA remains `5d89fcedcc1c01d5f9f00b533242e6d9045fbb0f`. Bridge/media/publication remain OFF with the same four overlays, metadata-only solo worker and beat. Safe audit evidence is retained under `/var/lib/rapfadrop-operations/coverage-20261004/`; [current per-artist report](SOURCE_ACTIVATION.md) supersedes the historical checkpoints below. Stop before album acquisition/publication.

@@ -1,0 +1,338 @@
+{
+  "generated_at_utc": "2026-10-04T16:54:27.584184+00:00",
+  "application_sha": "a1a47841d7feded2caa50db0d7ee27b5c83e4688",
+  "verification": {
+    "application_tests": 156,
+    "backup_tests": 8,
+    "focused_policy_tests": 5,
+    "django_check": "passed",
+    "migration_drift": "none",
+    "production_restore_executed": false
+  },
+  "final_state": {
+    "counts": {
+      "Artist": 83,
+      "ArtistSource": 130,
+      "SourceItem": 3934,
+      "BaselineRun": 84,
+      "ReviewItem": 1,
+      "ProcessingQueueItem": 0,
+      "MediaCandidate": 0,
+      "MediaAttempt": 0,
+      "Publication": 0,
+      "PublicationAttempt": 0
+    },
+    "media_files": 0,
+    "active_spotify": 83,
+    "templates": [],
+    "operator_tag_fields": [],
+    "effective_media_tag_fields": [
+      "author_url",
+      "comments",
+      "encoded_by"
+    ],
+    "safety": "all OFF",
+    "preservation": "checked"
+  },
+  "configuration": {
+    "application_services": [
+      {
+        "service": "web",
+        "running": true,
+        "channel_tag_fields": [
+          "author_url",
+          "comments",
+          "encoded_by"
+        ],
+        "command": [
+          "gunicorn",
+          "config.wsgi:application",
+          "--bind",
+          "91.107.178.12:8000",
+          "--workers",
+          "2",
+          "--timeout",
+          "60"
+        ]
+      },
+      {
+        "service": "worker",
+        "running": true,
+        "channel_tag_fields": [
+          "author_url",
+          "comments",
+          "encoded_by"
+        ],
+        "command": [
+          "celery",
+          "-A",
+          "spotify_pilot:app",
+          "worker",
+          "-Q",
+          "spotify-pilot",
+          "--concurrency=1",
+          "--pool=solo",
+          "--loglevel=INFO",
+          "--without-gossip",
+          "--without-mingle",
+          "--hostname=spotify-pilot@%h"
+        ]
+      },
+      {
+        "service": "beat",
+        "running": true,
+        "channel_tag_fields": [
+          "author_url",
+          "comments",
+          "encoded_by"
+        ],
+        "command": [
+          "celery",
+          "-A",
+          "spotify_pilot:app",
+          "beat",
+          "--loglevel=INFO",
+          "--schedule=/tmp/discovery-only-beat",
+          "--max-interval=5"
+        ]
+      }
+    ],
+    "queue_lengths": {
+      "spotify-pilot": 0,
+      "spotify-media": 0,
+      "celery": 1
+    }
+  },
+  "audit": {
+    "utc": "2026-10-04T16:50:24.411748+00:00",
+    "application_sha": "a1a47841d7feded2caa50db0d7ee27b5c83e4688",
+    "backups": [
+      {
+        "utc": "20261004T164756Z",
+        "application_sha": "a1a47841d7feded2caa50db0d7ee27b5c83e4688",
+        "bytes": 573768,
+        "sha256": "ce9f017af67916de83e39c9c1ad1b31aa565e9838e0852d04cb8c659968ce848",
+        "restore_verified": true,
+        "restored_tables": 37,
+        "upload": "complete",
+        "artifact": "/var/backups/rapfadrop/encrypted/rapfadrop-20261004T164756Z-6d77e66a.tar.age",
+        "mode": "0o600",
+        "messages": [
+          {
+            "message_id": 55,
+            "name": "rapfadrop-20261004T164756Z-6d77e66a.tar.age.part0001",
+            "bytes": 573768,
+            "readback": "sha256 matched"
+          },
+          {
+            "message_id": 56,
+            "name": "rapfadrop-20261004T164756Z-6d77e66a.tar.age.manifest.json",
+            "bytes": 497,
+            "readback": "sha256 matched"
+          }
+        ]
+      }
+    ],
+    "config_checks": [
+      {
+        "artifact": "rapfadrop-20261004T164756Z-6d77e66a.tar.age",
+        "protected_files_checked": 9,
+        "only_authorized_env_tag_default_difference_allowed": true,
+        "recovery_identity_excluded": true,
+        "standalone_recovery_tool": true
+      }
+    ],
+    "secret": {
+      "present": true,
+      "mode": "0o600",
+      "owner_independent_copy": "not delivered; must be saved privately by owner"
+    },
+    "retention": {
+      "retained": 1,
+      "removed": 0,
+      "telegram_retention": "manual; no deletion"
+    },
+    "durable_receipts": [
+      {
+        "artifact": "rapfadrop-20261004T163425Z-28e787af.tar.age",
+        "artifact_present": false,
+        "restore_verified": true,
+        "messages": [
+          {
+            "message_id": 51,
+            "name": "rapfadrop-20261004T163425Z-28e787af.tar.age.part0001",
+            "readback": "sha256 matched"
+          },
+          {
+            "message_id": 52,
+            "name": "rapfadrop-20261004T163425Z-28e787af.tar.age.manifest.json",
+            "readback": "sha256 matched"
+          }
+        ]
+      },
+      {
+        "artifact": "rapfadrop-20261004T164638Z-7d295645.tar.age",
+        "artifact_present": false,
+        "restore_verified": true,
+        "messages": [
+          {
+            "message_id": 53,
+            "name": "rapfadrop-20261004T164638Z-7d295645.tar.age.part0001",
+            "readback": "sha256 matched"
+          },
+          {
+            "message_id": 54,
+            "name": "rapfadrop-20261004T164638Z-7d295645.tar.age.manifest.json",
+            "readback": "sha256 matched"
+          }
+        ]
+      },
+      {
+        "artifact": "rapfadrop-20261004T164756Z-6d77e66a.tar.age",
+        "artifact_present": true,
+        "restore_verified": true,
+        "messages": [
+          {
+            "message_id": 55,
+            "name": "rapfadrop-20261004T164756Z-6d77e66a.tar.age.part0001",
+            "readback": "sha256 matched"
+          },
+          {
+            "message_id": 56,
+            "name": "rapfadrop-20261004T164756Z-6d77e66a.tar.age.manifest.json",
+            "readback": "sha256 matched"
+          }
+        ]
+      }
+    ],
+    "timer_enabled": "enabled",
+    "timer_active": "active",
+    "timer_next": "NextElapseUSecRealtime=Mon 2026-10-05 03:21:23 UTC",
+    "isolated_restore_databases": [],
+    "disposable_source_directories_removed": true
+  },
+  "previous_safe_audit": {
+    "utc": "2026-10-04T16:40:19.078275+00:00",
+    "application_sha": "c65d6ba71fb47c7cb784464004aba132019842e3",
+    "backups": [
+      {
+        "utc": "20261004T163034Z",
+        "application_sha": "c65d6ba71fb47c7cb784464004aba132019842e3",
+        "bytes": 563528,
+        "sha256": "24023a7af49f3f6b18a46a9027bcb08b73cd0934cf68bca8fd18cd9530ee9dd7",
+        "restore_verified": true,
+        "restored_tables": 37,
+        "upload": "complete",
+        "artifact": "/var/backups/rapfadrop/encrypted/rapfadrop-20261004T163034Z-29d87461.tar.age",
+        "mode": "0o600",
+        "messages": [
+          {
+            "message_id": 47,
+            "name": "rapfadrop-20261004T163034Z-29d87461.tar.age.part0001",
+            "bytes": 563528,
+            "readback": "sha256 matched"
+          },
+          {
+            "message_id": 48,
+            "name": "rapfadrop-20261004T163034Z-29d87461.tar.age.manifest.json",
+            "bytes": 497,
+            "readback": "sha256 matched"
+          }
+        ]
+      },
+      {
+        "utc": "20261004T163345Z",
+        "application_sha": "c65d6ba71fb47c7cb784464004aba132019842e3",
+        "bytes": 563528,
+        "sha256": "57241af9fd553035f9ca52f07440a3e04b23a444513a388a7ff4735f285f0eec",
+        "restore_verified": true,
+        "restored_tables": 37,
+        "upload": "complete",
+        "artifact": "/var/backups/rapfadrop/encrypted/rapfadrop-20261004T163345Z-443aa104.tar.age",
+        "mode": "0o600",
+        "messages": [
+          {
+            "message_id": 49,
+            "name": "rapfadrop-20261004T163345Z-443aa104.tar.age.part0001",
+            "bytes": 563528,
+            "readback": "sha256 matched"
+          },
+          {
+            "message_id": 50,
+            "name": "rapfadrop-20261004T163345Z-443aa104.tar.age.manifest.json",
+            "bytes": 497,
+            "readback": "sha256 matched"
+          }
+        ]
+      },
+      {
+        "utc": "20261004T163425Z",
+        "application_sha": "c65d6ba71fb47c7cb784464004aba132019842e3",
+        "bytes": 563528,
+        "sha256": "af5284b89729802ced8c59a52fa5892b27cb2dddec9e2c78a6d5d41b9932b1a1",
+        "restore_verified": true,
+        "restored_tables": 37,
+        "upload": "complete",
+        "artifact": "/var/backups/rapfadrop/encrypted/rapfadrop-20261004T163425Z-28e787af.tar.age",
+        "mode": "0o600",
+        "messages": [
+          {
+            "message_id": 51,
+            "name": "rapfadrop-20261004T163425Z-28e787af.tar.age.part0001",
+            "bytes": 563528,
+            "readback": "sha256 matched"
+          },
+          {
+            "message_id": 52,
+            "name": "rapfadrop-20261004T163425Z-28e787af.tar.age.manifest.json",
+            "bytes": 497,
+            "readback": "sha256 matched"
+          }
+        ]
+      }
+    ],
+    "config_checks": [
+      {
+        "artifact": "rapfadrop-20261004T163034Z-29d87461.tar.age",
+        "protected_files_checked": 9,
+        "only_authorized_env_tag_default_difference_allowed": true,
+        "recovery_identity_excluded": true,
+        "standalone_recovery_tool": true
+      },
+      {
+        "artifact": "rapfadrop-20261004T163345Z-443aa104.tar.age",
+        "protected_files_checked": 9,
+        "only_authorized_env_tag_default_difference_allowed": true,
+        "recovery_identity_excluded": true,
+        "standalone_recovery_tool": true
+      },
+      {
+        "artifact": "rapfadrop-20261004T163425Z-28e787af.tar.age",
+        "protected_files_checked": 9,
+        "only_authorized_env_tag_default_difference_allowed": true,
+        "recovery_identity_excluded": true,
+        "standalone_recovery_tool": true
+      }
+    ],
+    "secret": {
+      "present": true,
+      "mode": "0o600",
+      "owner_independent_copy": "not delivered; must be saved privately by owner"
+    },
+    "retention": {
+      "retained": 1,
+      "removed": 2,
+      "telegram_retention": "manual; no deletion"
+    },
+    "timer_enabled": "enabled",
+    "timer_active": "active",
+    "timer_next": "NextElapseUSecRealtime=Mon 2026-10-05 03:21:23 UTC",
+    "isolated_restore_databases": [],
+    "disposable_source_directories_removed": true
+  },
+  "initial_backup_message_ids": [
+    43,
+    44
+  ],
+  "early_receipt_gap": "A pre-deployment receipt expired before the fix; exact message IDs not independently reconstructed. No guessed IDs are recorded."
+}

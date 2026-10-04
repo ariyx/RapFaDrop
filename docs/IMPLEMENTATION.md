@@ -1,6 +1,6 @@
 # RapFaDrop — implementation guide for coding agents
 
-Status: **83-identity discovery activation and latest album/EP owner inventory complete; bridge and production publication remain OFF.** Current evidence and SHAs are in `STATUS.md`; historical milestone sections below retain their original observations.
+Status: **83-identity discovery, owner inventory, recoverable encrypted backups and owner caption/tag/quality defaults implemented; bridge and production publication remain OFF.** Current evidence and SHAs are in `STATUS.md`; historical milestone sections below retain their original observations.
 Repository: `https://github.com/ariyx/RapFaDrop.git` (documentation-only at the checkpoint in [`STATUS.md`](STATUS.md); verify current Git state).
 Product source of truth: [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md).  
 

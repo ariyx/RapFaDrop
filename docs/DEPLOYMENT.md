@@ -14,7 +14,7 @@ independently by the owner. No production restore was authorized or run as a dri
 
 ## Current discovery-only production override (2026-10-04)
 
-Production application is `5d89fcedcc1c01d5f9f00b533242e6d9045fbb0f`. All current production Compose operations must include the protected **fourth** overlay, in this order:
+Production application/operations is `a1a47841d7feded2caa50db0d7ee27b5c83e4688` after the encrypted-backup/defaults task. All current production Compose operations must include the protected **fourth** overlay, in this order:
 
 ```sh
 docker compose -p rapfadrop \
