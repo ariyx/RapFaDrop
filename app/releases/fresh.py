@@ -309,6 +309,7 @@ def process_dispatch(dispatch, blocked):
             return
     all_ready = True
     acquisition_budget = 2
+    ready_before = dispatch.tracks.filter(candidate__state='ready').count()
     for ft in dispatch.tracks.select_related("track", "candidate", "dispatch__release").order_by("updated_at", "pk"):
         prior = Publication.objects.filter(track=ft.track, channel__target=settings.TELEGRAM_PRODUCTION_CHAT_ID, state="published").first()
         if prior:
@@ -371,8 +372,11 @@ def process_dispatch(dispatch, blocked):
                           context={"features": list(dict.fromkeys(dispatch.evidence.get("features", [])))})
             if session.state == 'waiting_media':
                 all_ready = False
-    dispatch.attempts += 1
-    dispatch.due_at = timezone.now() + timedelta(seconds=min(60 * 2 ** min(dispatch.attempts, 8), 21600))
+    ready_after = dispatch.tracks.filter(candidate__state='ready').count()
+    # Successful incremental preparation is progress, not a provider failure.
+    # Do not exponentially delay remaining album tracks while files are arriving.
+    dispatch.attempts = 0 if all_ready or ready_after > ready_before else dispatch.attempts + 1
+    dispatch.due_at = timezone.now() + timedelta(seconds=60 if dispatch.attempts == 0 else min(60 * 2 ** min(dispatch.attempts, 8), 21600))
     dispatch.reason = "Publication staged" if all_ready else "Waiting for complete matched media; album introduction withheld"
     dispatch.save(update_fields=("attempts", "due_at", "reason", "updated_at"))
 

@@ -81,6 +81,32 @@ class FreshEligibilityTests(TestCase):
         self.assertEqual(first.tracks.get().track_id,second.tracks.get().track_id)
         self.assertEqual(ProcessingQueueItem.objects.count(),1)
 
+    @override_settings(TELEGRAM_PRODUCTION_CHAT_ID='-1004311149640')
+    def test_incomplete_album_with_new_ready_file_does_not_get_failure_backoff(self):
+        from .fresh import process_dispatch
+        from .models import SourceMatch
+        from media_pipeline.models import MediaCandidate
+        metadata = dict(self.metadata, album_type='album', track_count=3, tracks=[
+            dict(self.metadata['tracks'][0], id=native*22, title=title, position=position)
+            for position,(native,title) in enumerate([('C','One'),('F','Two'),('H','Three')],1)])
+        dispatch = FreshDispatch.objects.create(source_item=self.item, disposition='eligible', reason='fixture', attempts=7)
+        dispatch = materialize(dispatch,metadata)
+        one,two,three=list(dispatch.tracks.order_by('position'))
+        for ft in (one,two):
+            match=SourceMatch.objects.get(track=ft.track, matching_method='fresh_official_track')
+            candidate=MediaCandidate.objects.create(track=ft.track, release=dispatch.release, source_match=match,
+                provider='manual', state='ready')
+            if ft.pk==one.pk:
+                ft.candidate=candidate
+                ft.save()
+        with patch('releases.fresh.verified_ready', side_effect=lambda c:c), patch('archive_collection.acquisition.find',
+                return_value=(None,{'reason':'Complete audio unavailable'})):
+            process_dispatch(dispatch,{})
+        dispatch.refresh_from_db()
+        self.assertEqual(dispatch.attempts,0)
+        self.assertLess((dispatch.due_at-timezone.now()).total_seconds(),61)
+        self.assertFalse(Publication.objects.exists())
+
     def test_incomplete_or_duplicate_order_is_review(self):
         self.metadata['track_count'] = 2
         with self.assertRaisesRegex(ValueError, 'Complete'):
