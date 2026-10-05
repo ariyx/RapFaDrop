@@ -94,6 +94,8 @@ MEDIA_CHANNEL_TAG_FIELDS = frozenset(
     for value in os.environ.get("RAPFADROP_MEDIA_CHANNEL_TAG_FIELDS", "subtitle,comments,album_artist_suffix,album_suffix,publisher,encoded_by,author_url,copyright,composers,conductors,initial_key").split(",")
     if value.strip()
 )
+MEDIA_YOUTUBE_COOKIES_FILE = os.environ.get('RAPFADROP_MEDIA_YOUTUBE_COOKIES_FILE', '')
+MEDIA_YOUTUBE_JS_RUNTIME = os.environ.get('RAPFADROP_MEDIA_YOUTUBE_JS_RUNTIME', '')
 MEDIA_PROVIDER_ORDER = tuple(
     value.strip()
     for value in os.environ.get("RAPFADROP_MEDIA_PROVIDER_ORDER", "yt-dlp").split(",")

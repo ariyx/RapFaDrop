@@ -2,6 +2,8 @@ import json
 import re
 import subprocess
 import sys
+import shutil
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
@@ -132,6 +134,26 @@ class YtDlpProvider:
 class YouTubeProvider(YtDlpProvider):
     """Separate official source fallback using the maintained existing downloader."""
     name = 'yt-dlp-youtube'
+
+    def _run(self, args, timeout):
+        runtime = getattr(settings, 'MEDIA_YOUTUBE_JS_RUNTIME', '')
+        extra = ['--js-runtimes', runtime] if runtime else []
+        cookie_file = getattr(settings, 'MEDIA_YOUTUBE_COOKIES_FILE', '')
+        if not cookie_file:
+            return super()._run([*extra, *args], timeout)
+        # yt-dlp saves its cookie jar: keep the protected mount immutable and
+        # discard its private working copy after every bounded invocation.
+        with tempfile.TemporaryDirectory(prefix='youtube-session-') as directory:
+            path = Path(directory) / 'cookies.txt'
+            try:
+                source = Path(cookie_file)
+                if source.is_symlink() or source.stat().st_mode & 0o077:
+                    raise ValueError('Session file must be private')
+                shutil.copyfile(source, path)
+                path.chmod(0o600)
+            except (OSError, ValueError):
+                raise ProviderError('Configured YouTube session is unavailable or not private', retryable=False) from None
+            return super()._run(['--cookies', str(path), *extra, *args], timeout)
 
     def can_handle(self, source_url):
         parts = urlsplit(source_url or '')
