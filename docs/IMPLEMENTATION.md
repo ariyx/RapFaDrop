@@ -8,6 +8,17 @@ official-source acquisition and a collection-only production gateway. It does
 not enable the future-discovery bridge, general publication worker or beat sends.
 See [collection architecture and commands](reports/POPULAR_TRACK_COLLECTION.md).
 
+The 2026-10-05 acquisition continuation extends bounded official-source lookup:
+SoundCloud catalogs can expand once from 50 to 150 rows, and verified-channel
+YouTube lookup may use a cached ten-result search. Complete native uploader/channel,
+exact title/version, duration and collaborator credits are required. A matching
+music-video duration does not establish the selected mix and remains for review.
+Shared 403/429/authentication challenges stop that provider for the current run
+while other providers remain eligible. The existing native MP3/AAC downloader,
+eleven-field tag/artwork checks, full decode and collection-only durable gateway
+remain authoritative. No intermediary downloader or future-release activation
+is added. Execution evidence will be recorded in the acquisition report.
+
 The continuation uses compact audio captions selected by publication context:
 Fave for this frozen collection, Drop for a standalone release, LP Drop/EP Drop
 for album-session tracks. The heading is bold and links to the production channel.

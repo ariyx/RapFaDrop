@@ -100,7 +100,8 @@ class YtDlpProvider:
             duration_seconds=_positive_float(info.get("duration")),
             uploader=str(info.get("uploader") or info.get("channel") or "")[:300],
             artwork_source_url=artwork_url,
-            evidence={"extractor": str(info.get("extractor_key") or "SoundCloud"), "format_count": len(info.get("formats") or []), "uploader_id": str(info.get('uploader_id') or ''), "uploader_url": info.get('uploader_url')},
+            evidence={"extractor": str(info.get("extractor_key") or "SoundCloud"), "format_count": len(info.get("formats") or []), "uploader_id": str(info.get('uploader_id') or ''), "uploader_url": info.get('uploader_url'),
+                      "description": str(info.get('description') or '')[:6000], "artist": str(info.get('artist') or '')[:1000]},
         )
 
     def download(self, probe, destination, timeout=None):
@@ -150,7 +151,10 @@ class YouTubeProvider(YtDlpProvider):
             _positive_float(info.get('duration')),str(info.get('channel') or info.get('uploader') or ''),
             evidence={'channel_id':info.get('channel_id'), 'channel_url':info.get('channel_url'),
                       'extractor':'YouTube', 'format_count':len(info.get('formats') or []),
-                      'description':str(info.get('description') or '')[:3000]})
+                      'description':str(info.get('description') or '')[:6000],
+                      'artist':str(info.get('artist') or '')[:1000],
+                      'available_audio_formats':[{'id':str(f.get('format_id') or ''),'codec':f.get('acodec'),'container':f.get('ext'),'bitrate_kbps':f.get('abr')}
+                          for f in (info.get('formats') or []) if f.get('vcodec')=='none' and not f.get('has_drm')]})
 
 
 def _positive_float(value):

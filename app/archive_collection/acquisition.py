@@ -29,6 +29,26 @@ def title_matches(title,metadata):
     return display_title(title,names)==display_title(metadata['title'],names) and edition_markers(title)==edition_markers(metadata['title'])
 
 
+def credits_match(probe,metadata,source):
+    """A verified uploader identifies that artist, not every collaborator."""
+    native_ids=set(source.artist.sources.filter(platform='spotify').values_list('native_profile_id',flat=True))
+    evidence=probe.evidence or {}
+    text=normalize_text(' '.join([probe.title,probe.uploader,evidence.get('description',''),evidence.get('artist','')]))
+    for credit in metadata['credits']:
+        if credit['id'] in native_ids:
+            continue
+        name=normalize_text(credit['name'])
+        if not name or not (re.search(r'(?<!\w)'+re.escape(name)+r'(?!\w)',text) or
+                            (' ' in name and re.search(r'(?<!\w)'+re.escape(name.replace(' ',''))+r'(?!\w)',text))):
+            return False
+    return True
+
+
+def shared_blocker(error):
+    text=str(error).lower()
+    return any(marker in text for marker in ('403','429','not a bot','sign in to confirm'))
+
+
 @transaction.atomic
 def verify_source(artist,platform,native_id,profile_url,evidence):
     """Persist checked crosslinks/native response, not a guessed display-name identity."""
@@ -62,55 +82,78 @@ def safe_row(row):
     return out
 
 
-def catalog(source,provider):
+def catalog(source,provider,*,expand=False):
     if source.retry_due_at and source.retry_due_at>timezone.now():
         return source.catalog,{'cache':True,'backoff':True,'error':source.last_error}
-    if source.catalog_checked_at and source.catalog_checked_at>timezone.now()-timedelta(hours=6):
+    if not expand and source.catalog_checked_at and source.catalog_checked_at>timezone.now()-timedelta(hours=6):
         return source.catalog,{'cache':True,'entries':len(source.catalog)}
     url=source.profile_url if source.platform=='soundcloud' else source.profile_url+'/videos'
     start=time.monotonic()
     try:
-        raw=json.loads(provider._run(['--socket-timeout','10','--skip-download','--flat-playlist','--playlist-end','50','--dump-single-json','--',url],60))
+        extra=['--playlist-start','51'] if expand else []
+        limit=150 if expand else 50
+        raw=json.loads(provider._run(['--socket-timeout','10','--skip-download','--flat-playlist',*extra,'--playlist-end',str(limit),'--dump-single-json','--',url],60))
         entries=raw.get('entries')
-        if not isinstance(entries,list) or len(entries)>50:
+        if not isinstance(entries,list) or len(entries)>(100 if expand else 50):
             raise ProviderError('Bounded official catalog response malformed')
-        source.catalog=[safe_row(r) for r in entries if isinstance(r,dict)]
+        rows=[safe_row(r) for r in entries if isinstance(r,dict)]
+        source.catalog=list({r.get('id'):r for r in ([*source.catalog,*rows] if expand else rows)}.values())[:150]
+        source.evidence={**source.evidence,'catalog_bound':limit}
         source.catalog_checked_at=timezone.now();source.last_error='';source.retry_due_at=None
-        source.save(update_fields=('catalog','catalog_checked_at','last_error','retry_due_at'))
-        return source.catalog,{'cache':False,'entries':len(entries),'bounded_to':50,'seconds':round(time.monotonic()-start,3)}
+        source.save(update_fields=('catalog','catalog_checked_at','last_error','retry_due_at','evidence'))
+        return source.catalog,{'cache':False,'entries':len(source.catalog),'bounded_to':limit,'seconds':round(time.monotonic()-start,3)}
     except Exception as exc:
         source.last_error=redact_diagnostic(exc);source.retry_due_at=timezone.now()+timedelta(minutes=15)
         source.save(update_fields=('last_error','retry_due_at'))
         return source.catalog,{'cache':bool(source.catalog),'error':source.last_error,'seconds':round(time.monotonic()-start,3)}
 
 
-def find(recording):
+def find(recording,*,blocked_providers=None):
     from .services import identity_matches
     m=recording.metadata
     sources=list(AcquisitionSource.objects.filter(artist__sources__platform='spotify',artist__sources__native_profile_id__in=[c['id'] for c in m['credits']]).distinct())
     checks=[];budget=6
+    blocked_providers=blocked_providers if blocked_providers is not None else {}
     for source in sorted(sources,key=lambda s:s.platform!='soundcloud'):
+        if source.platform in blocked_providers:
+            checks.append({'acquisition_source_id':source.pk,'provider_backoff':blocked_providers[source.platform]})
+            continue
         if source.evidence.get('scope_recordings') and recording.spotify_id not in source.evidence['scope_recordings']:
             continue
         provider=YtDlpProvider() if source.platform=='soundcloud' else YouTubeProvider()
         rows,metrics=catalog(source,provider);checks.append({'acquisition_source_id':source.pk,'catalog':metrics})
+        if metrics.get('error') and shared_blocker(metrics['error']):
+            blocked_providers[source.platform]=metrics['error']
+            continue
         if metrics.get('backoff'):
             continue
         candidates=[r for r in rows if title_matches(r.get('title'),m)]
+        if not candidates and source.platform=='soundcloud' and len(rows)==50 and source.evidence.get('catalog_bound',50)<150:
+            rows,metrics=catalog(source,provider,expand=True)
+            checks.append({'acquisition_source_id':source.pk,'catalog_expansion':metrics})
+            if metrics.get('error') and shared_blocker(metrics['error']):
+                blocked_providers[source.platform]=metrics['error'];continue
+            candidates=[r for r in rows if title_matches(r.get('title'),m)]
         # Reuse exact stable results on retry; search only if a direct catalog failed.
-        if not candidates and source.platform=='soundcloud' and not metrics.get('backoff'):
+        if not candidates and not metrics.get('backoff'):
             cache=recording.evidence.get('provider_search_cache',{}).get(str(source.pk))
             if cache and cache.get('checked_at') and timezone.now()-timezone.datetime.fromisoformat(cache['checked_at'])<timedelta(hours=6):
                 search=cache['rows']
             else:
                 try:
                     query=source.artist.official_name+' '+m['title']
-                    raw=json.loads(provider._run(['--socket-timeout','10','--skip-download','--flat-playlist','--dump-single-json','--playlist-end','20','--',f'scsearch20:{query}'],45))
-                    search=[safe_row(r) for r in (raw.get('entries') or [])[:20] if isinstance(r,dict)]
+                    bound=20 if source.platform=='soundcloud' else 10
+                    prefix='scsearch' if source.platform=='soundcloud' else 'ytsearch'
+                    raw=json.loads(provider._run(['--socket-timeout','10','--skip-download','--flat-playlist','--dump-single-json','--playlist-end',str(bound),'--',f'{prefix}{bound}:{query}'],45))
+                    search=[safe_row(r) for r in (raw.get('entries') or [])[:bound] if isinstance(r,dict)]
                     cachemap={**recording.evidence.get('provider_search_cache',{}),str(source.pk):{'checked_at':timezone.now().isoformat(),'rows':search}}
                     recording.evidence={**recording.evidence,'provider_search_cache':cachemap};recording.save(update_fields=('evidence','updated_at'))
                 except Exception as exc:
                     checks.append({'acquisition_source_id':source.pk,'search_error':redact_diagnostic(exc)})
+                    if shared_blocker(exc):
+                        blocked_providers[source.platform]=redact_diagnostic(exc)
+                        source.last_error=redact_diagnostic(exc);source.retry_due_at=timezone.now()+timedelta(minutes=15)
+                        source.save(update_fields=('last_error','retry_due_at'))
                     search=[]
             candidates=[r for r in search if title_matches(r.get('title'),m)]
         for row in candidates:
@@ -133,12 +176,25 @@ def find(recording):
                     # An official channel does not turn a music video/live take into the studio recording.
                     valid=actual['channel_id']==source.native_id and title_matches(probe.title,m)
                 valid &= bool(probe.duration_seconds and abs(probe.duration_seconds-m['duration_seconds'])<=5)
-                checks.append({'acquisition_source_id':source.pk,'id':probe.provider_item_id,'title':probe.title,'duration':probe.duration_seconds,'matched':bool(valid)})
+                credits_valid=credits_match(probe,m,source)
+                valid &= credits_valid
+                # Duration alone cannot establish that a video uses the selected studio mix.
+                video_review=bool(re.search(r'\bmusic video\b',probe.title,re.I))
+                if video_review:
+                    valid=False
+                checks.append({'acquisition_source_id':source.pk,'id':probe.provider_item_id,'title':probe.title,'duration':probe.duration_seconds,'credits_matched':credits_valid,'matched':bool(valid)})
+                if video_review:checks[-1]['review_reason']='Music-video mix requires independent selected-recording corroboration; no arbitrary trimming.'
                 if valid:return (source,actual,url),{'checks':checks,'reason':'Verified official native uploader/channel, complete recording/version and duration','provider_probes':6-budget}
             except Exception as exc:
                 checks.append({'acquisition_source_id':source.pk,'id':str(row.get('id')),'probe_error':redact_diagnostic(exc)})
-                if '403' in str(exc) or '429' in str(exc) or 'not a bot' in str(exc):
+                if shared_blocker(exc):
+                    blocked_providers[source.platform]=redact_diagnostic(exc)
                     source.last_error=redact_diagnostic(exc);source.retry_due_at=timezone.now()+timedelta(minutes=15)
                     source.save(update_fields=('last_error','retry_due_at'))
                     break
-    return None,{'checks':checks,'provider_probes':6-budget,'reason':'No complete confidently matched recording in bounded verified catalogs/searches; inspect source/match evidence before manual upload.' if sources else 'No corroborated credited acquisition profile yet; independent official links are required.'}
+    reason='No complete confidently matched recording in bounded verified catalogs/searches; inspect source/match evidence before manual upload.' if sources else 'No corroborated credited acquisition profile yet; independent official links are required.'
+    if blocked_providers and sources:
+        reason+=' Provider access blocked: '+ '; '.join(platform+': '+error for platform,error in blocked_providers.items())
+    elif any(c.get('credits_matched') is False or c.get('review_reason') for c in checks):
+        reason+=' Candidate collaborator credits or music-video mix remain unverified; manual identity review required.'
+    return None,{'checks':checks,'provider_probes':6-budget,'reason':reason}

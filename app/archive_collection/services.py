@@ -182,11 +182,11 @@ def identity_matches(row, metadata, profiles):
     return source, "Verified credited profile, exact recording/version and duration"
 
 
-def discover_candidate(recording, provider=None):
+def discover_candidate(recording, provider=None, *, blocked_providers=None):
     from .models import AcquisitionSource
     if provider is None and AcquisitionSource.objects.exists():
         from .acquisition import find
-        return find(recording)
+        return find(recording,blocked_providers=blocked_providers)
     provider = provider or YtDlpProvider()
     m = recording.metadata
     credited_ids = [c["id"] for c in m["credits"]]
@@ -263,14 +263,14 @@ def bind_candidate(recording, found):
     return candidate
 
 
-def acquire(recording, *, fallback_budget=1):
+def acquire(recording, *, fallback_budget=1, blocked_providers=None):
     started = time.monotonic()
     recording.attempts += 1
     recording.state = "acquiring"
     recording.save(update_fields=("attempts", "state", "updated_at"))
     try:
         if not recording.candidate_id or (recording.candidate.provider == "manual" and recording.candidate.state != "ready"):
-            found, evidence = discover_candidate(recording)
+            found, evidence = discover_candidate(recording,blocked_providers=blocked_providers)
             recording.evidence = {**recording.evidence, "matching": evidence}
             recording.save(update_fields=("evidence", "updated_at"))
             if not found:
@@ -324,7 +324,7 @@ def acquire(recording, *, fallback_budget=1):
         recording.evidence={**recording.evidence,'failed_source_urls':failed_urls,'provider_failures':[*recording.evidence.get('provider_failures',[]),{'candidate_id':failed.pk,'provider':failed.provider,'source_url':failed.provenance.get('source_url'),'reason':recording.reason,'at':timezone.now().isoformat()}]}
         recording.candidate=None
         recording.save(update_fields=('candidate','evidence','updated_at'))
-        return acquire(recording,fallback_budget=fallback_budget-1)
+        return acquire(recording,fallback_budget=fallback_budget-1,blocked_providers=blocked_providers)
     return recording
 
 
@@ -424,6 +424,7 @@ def reserve(recording):
 def run(collection, gateway, *, limit=166):
     assert_collection_safe(collection)
     processed = 0
+    blocked_providers={}
     # Dedicated CLI only; no Celery task or beat entry can dispatch this path.
     for recording in collection.recordings.order_by("order", "pk"):
         collection.refresh_from_db()
@@ -449,11 +450,11 @@ def run(collection, gateway, *, limit=166):
             continue
         processed += 1
         if not recording.candidate_id or recording.candidate.state != "ready":
-            acquire(recording)
+            acquire(recording,blocked_providers=blocked_providers)
             recording.refresh_from_db()
         if recording.candidate_id and recording.candidate.state == "ready":
             if recording.candidate.validation_report.get("full_decode") != "passed":
-                acquire(recording)
+                acquire(recording,blocked_providers=blocked_providers)
                 recording.refresh_from_db()
                 if recording.candidate.state != "ready":
                     continue
