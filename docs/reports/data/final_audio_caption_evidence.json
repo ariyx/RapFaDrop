@@ -1,0 +1,1621 @@
+{
+  "generated_at": "2026-10-05T09:09:33.308940+00:00",
+  "tested_deployed_application_sha": "452c6196fbda4f96f6b9d6624e17ea1c677a5643",
+  "rows": [
+    {
+      "message_id": 4,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/1lEmjwe5EJFwpDHPbdEfR5\">Spotify</a> · <a href=\"https://soundcloud.com/bahramnouraei/lams\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/1lEmjwe5EJFwpDHPbdEfR5",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/bahramnouraei/lams",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 5,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/3Ur3BpWj50OlzjMImmoyQy\">Spotify</a> · <a href=\"https://soundcloud.com/shahinnajafimusic/209a\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/3Ur3BpWj50OlzjMImmoyQy",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/shahinnajafimusic/209a",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 6,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/6f8ginsFVrSDwG88elopa6\">Spotify</a> · <a href=\"https://soundcloud.com/ghavidelemad/emad-ghavidel-masire-dard\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/6f8ginsFVrSDwG88elopa6",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/ghavidelemad/emad-ghavidel-masire-dard",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 7,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/5Ddxv3Fw7XegdM1aHl89Nf\">Spotify</a> · <a href=\"https://soundcloud.com/samiloww/azizam\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/5Ddxv3Fw7XegdM1aHl89Nf",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/samiloww/azizam",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 9,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/5XauDXikxxSnvMfAbjUKeZ\">Spotify</a> · <a href=\"https://soundcloud.com/sijalofficial/bargard\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/5XauDXikxxSnvMfAbjUKeZ",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/sijalofficial/bargard",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 10,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/22cRr8Qxt2Dy0lxAKcBJKl\">Spotify</a> · <a href=\"https://soundcloud.com/masinrap/bemola\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/22cRr8Qxt2Dy0lxAKcBJKl",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/masinrap/bemola",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 11,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/2BoeI9kcFAf5EF52WHBYrP\">Spotify</a> · <a href=\"https://soundcloud.com/shahinnajafimusic/dashi-shahin-najafi-erfan\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/2BoeI9kcFAf5EF52WHBYrP",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/shahinnajafimusic/dashi-shahin-najafi-erfan",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 12,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/0IP6pLlvgOJvSEyUIzfT2q\">Spotify</a> · <a href=\"https://soundcloud.com/ghavidelemad/battle-for-homs\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/0IP6pLlvgOJvSEyUIzfT2q",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/ghavidelemad/battle-for-homs",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 13,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/0hb1mMmnRcupxuZqQFhNGK\">Spotify</a> · <a href=\"https://soundcloud.com/gdaal/beri\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/0hb1mMmnRcupxuZqQFhNGK",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/gdaal/beri",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 15,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/0IrFAuYmzjMY3pwEwifk7S\">Spotify</a> · <a href=\"https://soundcloud.com/hesamtiem/50a1\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/0IrFAuYmzjMY3pwEwifk7S",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/hesamtiem/50a1",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 16,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/6CfjLwPNwc1zG0sjS3zAeG\">Spotify</a> · <a href=\"https://soundcloud.com/amintijayy/chikar-kardi-baam\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/6CfjLwPNwc1zG0sjS3zAeG",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/amintijayy/chikar-kardi-baam",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 17,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/3J3wsGmQ2v1W21Zq68DWsi\">Spotify</a> · <a href=\"https://soundcloud.com/amintijayy/love-dardesarsaaz\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/3J3wsGmQ2v1W21Zq68DWsi",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/amintijayy/love-dardesarsaaz",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 18,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/2roGWnSQNZdVzZXXnEYMy9\">Spotify</a> · <a href=\"https://soundcloud.com/hiphopologistsoroush/alan-kojayi\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/2roGWnSQNZdVzZXXnEYMy9",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/hiphopologistsoroush/alan-kojayi",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 19,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/2cSKIAaeIrGFHFCus74XvG\">Spotify</a> · <a href=\"https://soundcloud.com/hiphopologistsoroush/rotation-ft-sinazza-prod-kagan-neem\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/2cSKIAaeIrGFHFCus74XvG",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/hiphopologistsoroush/rotation-ft-sinazza-prod-kagan-neem",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 20,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/2Ty7bGT5io8tYoW8is7OeD\">Spotify</a> · <a href=\"https://soundcloud.com/arta-mir/mituni-mage\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/2Ty7bGT5io8tYoW8is7OeD",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/arta-mir/mituni-mage",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 21,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/4cfkjg7kpcBLfqqyD5QauZ\">Spotify</a> · <a href=\"https://soundcloud.com/hiphopologistsoroush/hiphopologist-badzaat\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/4cfkjg7kpcBLfqqyD5QauZ",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/hiphopologistsoroush/hiphopologist-badzaat",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 22,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/16dERXbEiHg3EaB8u1AqnC\">Spotify</a> · <a href=\"https://soundcloud.com/hiphopologistsoroush/boz-prod-kagan-chashbeatzz\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/16dERXbEiHg3EaB8u1AqnC",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/hiphopologistsoroush/boz-prod-kagan-chashbeatzz",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 23,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/1IkGrC3bwlE05xiKnDcmZ9\">Spotify</a> · <a href=\"https://soundcloud.com/bezilei/chera-rafti\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/1IkGrC3bwlE05xiKnDcmZ9",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/bezilei/chera-rafti",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 24,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/1aVqUoNTNB7DkjOzfteYAB\">Spotify</a> · <a href=\"https://soundcloud.com/chvrsi/keshidi-par\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/1aVqUoNTNB7DkjOzfteYAB",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/chvrsi/keshidi-par",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 25,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/4cd1aGMGvQzJ4FEUQQpFvs\">Spotify</a> · <a href=\"https://soundcloud.com/arta-mir/har-eshghi-mimirad\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/4cd1aGMGvQzJ4FEUQQpFvs",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/arta-mir/har-eshghi-mimirad",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 26,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/0xJGuS0MYvyvzZnarcvhm8\">Spotify</a> · <a href=\"https://soundcloud.com/bezilei/highway\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/0xJGuS0MYvyvzZnarcvhm8",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/bezilei/highway",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 27,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/0FLzWaEqNCnxR6yzzalIKO\">Spotify</a> · <a href=\"https://soundcloud.com/bezilei/ta-betoonam\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/0FLzWaEqNCnxR6yzzalIKO",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/bezilei/ta-betoonam",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 28,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/5Khf1WwYdDPpJK1n24r8Ps\">Spotify</a> · <a href=\"https://soundcloud.com/tohi/cd7\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/5Khf1WwYdDPpJK1n24r8Ps",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/tohi/cd7",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 29,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/7atsKtq14sRd7c78ChDFjh\">Spotify</a> · <a href=\"https://soundcloud.com/amirtataloo/navazesh\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/7atsKtq14sRd7c78ChDFjh",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/amirtataloo/navazesh",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 30,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/7BYWyzFJdtfVil3iv4a5HP\">Spotify</a> · <a href=\"https://soundcloud.com/mehradhiddenofficial/bitab\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/7BYWyzFJdtfVil3iv4a5HP",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/mehradhiddenofficial/bitab",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 31,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/5GYOmFsUkDRv2pbd3Ten4V\">Spotify</a> · <a href=\"https://soundcloud.com/mehradhiddenofficial/yeki-dige-ft-arash-dara\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/5GYOmFsUkDRv2pbd3Ten4V",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/mehradhiddenofficial/yeki-dige-ft-arash-dara",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 32,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/57AuUmLlMiuESb9sGCdqaw\">Spotify</a> · <a href=\"https://soundcloud.com/alisorena/gorizazmarkaz\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/57AuUmLlMiuESb9sGCdqaw",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/alisorena/gorizazmarkaz",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 33,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/1LPfNTQsAZMV4N7U3K9EDi\">Spotify</a> · <a href=\"https://soundcloud.com/sadeghvahedi/shaba\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/1LPfNTQsAZMV4N7U3K9EDi",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/sadeghvahedi/shaba",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 34,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/7HPAQ6dZ0Ug779oePVRX4m\">Spotify</a> · <a href=\"https://soundcloud.com/hiphopologistsoroush/marize-ham\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/7HPAQ6dZ0Ug779oePVRX4m",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/hiphopologistsoroush/marize-ham",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 35,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/3RGhl4wCg4yKMVMiMQHi1u\">Spotify</a> · <a href=\"https://soundcloud.com/arta-mir/mohemni\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/3RGhl4wCg4yKMVMiMQHi1u",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/arta-mir/mohemni",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 36,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/0G9YAZYeYxEKrODXHtwjJ8\">Spotify</a> · <a href=\"https://soundcloud.com/khal3music/shol-tekoon-feat-catchybeatz\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/0G9YAZYeYxEKrODXHtwjJ8",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/khal3music/shol-tekoon-feat-catchybeatz",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 37,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/7op5W1dOrGUj8C3iTgZjxS\">Spotify</a> · <a href=\"https://soundcloud.com/bezilei/okay-with-catchybeatz-putak\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/7op5W1dOrGUj8C3iTgZjxS",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/bezilei/okay-with-catchybeatz-putak",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 38,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/5I9EVK81FtHXQCh4sV6fu7\">Spotify</a> · <a href=\"https://soundcloud.com/bezilei/vel-besho\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/5I9EVK81FtHXQCh4sV6fu7",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/bezilei/vel-besho",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 39,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/0hig0GToSfzsCEEKzvqw0A\">Spotify</a> · <a href=\"https://soundcloud.com/ashnarap/ashna-x-ali-hosseini-tanha\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/0hig0GToSfzsCEEKzvqw0A",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/ashnarap/ashna-x-ali-hosseini-tanha",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 40,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/75RUP3gK3c03V0W8kPkwyc\">Spotify</a> · <a href=\"https://soundcloud.com/bezilei/chikar-kardi\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/75RUP3gK3c03V0W8kPkwyc",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/bezilei/chikar-kardi",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 41,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/5IlhdUHCCbWCwRaUKE47Q7\">Spotify</a> · <a href=\"https://soundcloud.com/bezilei/mesle-ghablan\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/5IlhdUHCCbWCwRaUKE47Q7",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/bezilei/mesle-ghablan",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 42,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/1HeUD9YwRMWygv110ayqVo\">Spotify</a> · <a href=\"https://soundcloud.com/arta-mir/burn\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/1HeUD9YwRMWygv110ayqVo",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/arta-mir/burn",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 43,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/2M7bvTjVQRLj4MLLzhP8NZ\">Spotify</a> · <a href=\"https://soundcloud.com/arta-mir/19-dead-inside\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/2M7bvTjVQRLj4MLLzhP8NZ",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/arta-mir/19-dead-inside",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 44,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/5O3jZIEoHTAfwzz2pzMDBR\">Spotify</a> · <a href=\"https://soundcloud.com/ali_pashaw/door-azin-shahr\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/5O3jZIEoHTAfwzz2pzMDBR",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/ali_pashaw/door-azin-shahr",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 45,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/6BQ5geV0pie2byvekYlNaB\">Spotify</a> · <a href=\"https://soundcloud.com/arta-mir/16-kojayi\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/6BQ5geV0pie2byvekYlNaB",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/arta-mir/16-kojayi",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    },
+    {
+      "message_id": 46,
+      "state": "edited",
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/4zLfBK3fJ2uScxol7KpoVD\">Spotify</a> · <a href=\"https://soundcloud.com/poriyaadroit/warcraft\">SoundCloud</a>",
+      "telegram_caption_text": "Fave\n› Spotify · SoundCloud",
+      "telegram_caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/4zLfBK3fJ2uScxol7KpoVD",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/poriyaadroit/warcraft",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ],
+      "heading_bold_and_linked_readback": true,
+      "same_file_unique_identity": true,
+      "same_track_candidate_binding": true,
+      "message_id_preserved": true,
+      "last_error": ""
+    }
+  ],
+  "edited_ids": [
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    11,
+    12,
+    13,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "unchanged_ids": [],
+  "failed_or_uncertain_ids": [],
+  "all_file_identities_preserved": true,
+  "all_message_ids_preserved": true,
+  "all_heading_entities_verified": true,
+  "preservation_counts": {
+    "Artist": {
+      "before": 83,
+      "after": 83
+    },
+    "ArtistSource": {
+      "before": 131,
+      "after": 131
+    },
+    "SourceItem": {
+      "before": 4124,
+      "after": 4125
+    },
+    "BaselineRun": {
+      "before": 84,
+      "after": 84
+    },
+    "ReviewItem": {
+      "before": 1,
+      "after": 2
+    },
+    "SourceMatch": {
+      "before": 192,
+      "after": 193
+    },
+    "Track": {
+      "before": 155,
+      "after": 155
+    },
+    "CanonicalRelease": {
+      "before": 148,
+      "after": 148
+    },
+    "ProcessingQueueItem": {
+      "before": 0,
+      "after": 0
+    },
+    "MediaCandidate": {
+      "before": 201,
+      "after": 201
+    },
+    "MediaAttempt": {
+      "before": 51,
+      "after": 51
+    },
+    "Collection": {
+      "before": 1,
+      "after": 1
+    },
+    "ArtistSelection": {
+      "before": 83,
+      "after": 83
+    },
+    "Recording": {
+      "before": 155,
+      "after": 155
+    },
+    "Slot": {
+      "before": 166,
+      "after": 166
+    },
+    "Publication": {
+      "before": 41,
+      "after": 41
+    },
+    "CaptionTemplate": {
+      "before": 3,
+      "after": 4
+    },
+    "OperatorSettings": {
+      "before": 0,
+      "after": 0
+    }
+  },
+  "preservation_differences": [],
+  "caption_attempt_count": 41,
+  "collection_paused": true,
+  "active_verified_spotify": 83,
+  "bridge_and_ordinary_publication": "OFF",
+  "new_audio_sends_retags_deletes_corrections": 0,
+  "remaining_unposted_recordings": 113,
+  "frozen_native_rows": 155,
+  "slots": 166,
+  "scheduled_metadata_additions": {
+    "SourceItem": 1,
+    "ReviewItem": 1,
+    "SourceMatch": 1
+  },
+  "scheduled_new_spotify_ids": [
+    "5DGYK44aTDyMJrka40TZ0S"
+  ]
+}

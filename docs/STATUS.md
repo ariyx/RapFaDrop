@@ -1,5 +1,23 @@
 # Project status and handoff
 
+Updated: 2026-10-05 (final audio captions). Tested, pushed and deployed application
+**`452c6196fbda4f96f6b9d6624e17ea1c677a5643`** passed **78 focused tests,
+200 full application tests and eight backup tests**, migrations/checks and health.
+All **41 confirmed Popular collection posts** (4–7, 9–13, 15–46) were edited
+in place to the owner's final bold, channel-linked **Fave** format and conditional
+`› Spotify · SoundCloud/Album` line. Telegram response entities verified all
+headings; all message/audio identities and existing metadata/selection records
+were preserved. Zero failed/uncertain edits, new music sends, retags or deletes.
+Replay added zero attempts; all 41 captions were already current.
+Protected pre-deployment backup restored all 43 tables and uploaded as 80/81.
+Collection remains paused with 113 native rows unposted; its acquisition service
+is stopped. **83 active verified Spotify sources / 84 baselines** remain intact;
+normal discovery added Pellezterari to identity review (4,125 items / two reviews),
+with zero downstream jobs. Bridge and ordinary publication remain OFF.
+[Caption report](reports/FINAL_AUDIO_CAPTIONS.md) and
+[safe evidence](reports/data/final_audio_caption_evidence.json).
+Older checkpoints below are historical. Stop after captions.
+
 Updated: 2026-10-04T19:59:02.703808+00:00 (initial Popular archive completed with explicit pending coverage). Tested/pushed/deployed application **`c08738439737f928d696bed75923bcdaacca4181`**, **183 application + eight backup tests** passed on the server. Frozen **83 artists / 166 slots / 155 unique recordings**; **nine production posts** (IDs 4, 5, 6, 7, 9, 10, 11, 12, 13), satisfying ten slots; **146 pending** with exact source/match/DRM/identity blockers. No duplicate on restart/replay. Owner caption correction, eleven channel tags and English album prior-single heading are implemented; all nine complete AAC files passed actual tags/artwork and Telegram byte readback. Eight streams about 160 kb/s, one about 96 kb/s, no fabricated quality. Collection paused; **83 active verified discovery sources, 84 baselines, original 3934 items and one review preserved**, now 4092 items and zero downstream jobs. Bridge OFF, ordinary publication OFF, media worker absent; metadata polling and daily protected backups active. Removed 55 disposable media/artwork files and seven source/build directories; production messages retained. Final 870808-byte recovery backup passed 41-table restore and uploaded as backup-channel messages 72/73. No further album acquisition or automatic publication enabled. [Full 83-artist report](reports/POPULAR_TRACK_COLLECTION.md), [slot CSV](reports/data/popular_track_selections.csv), [unique recording CSV](reports/data/popular_track_publications.csv). Older checkpoints below describe their historical states.
 
 Owner steering 2026-10-04: archive captions omit title/artist; all eleven channel tag fields supersede the earlier three-field default. Album prior-single heading is Previously released from this album:. Collection paused with four confirmed production messages (4-7) pending same-message corrections; ordinary publication and bridge remain OFF. Verification evidence follows after deployment.

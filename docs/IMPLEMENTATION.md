@@ -8,6 +8,25 @@ official-source acquisition and a collection-only production gateway. It does
 not enable the future-discovery bridge, general publication worker or beat sends.
 See [collection architecture and commands](reports/POPULAR_TRACK_COLLECTION.md).
 
+The continuation uses compact audio captions selected by publication context:
+Fave for this frozen collection, Drop for a standalone release, LP Drop/EP Drop
+for album-session tracks. The heading is bold and links to the production channel.
+The link line starts with › and selects Spotify first, then a confirmed same-channel
+Album introduction or SoundCloud. Known audio defaults migrate
+as immutable versions; introduction, notice and correction templates are preserved.
+AcquisitionSource stores independently corroborated native SC/YouTube identities
+without polling/baseline capabilities. Cached official catalogs (50 entries),
+bounded SC search (20 entries), six complete probes per match and isolated
+15-minute provider backoff keep this explicit CLI separate from discovery.
+RecordingAlias preserves each frozen native row while reusing a corroborated
+canonical publication. Complete decode, actual eleven-field/artwork readback and
+frozen official artwork are required before sends. A genuine validated better
+candidate may upgrade the same message; quality is never fabricated by transcoding.
+Current execution and remaining blockers are in
+[the final caption report](reports/FINAL_AUDIO_CAPTIONS.md). Caption-only edits
+have a narrow paused-collection capability; sends and media edits still require
+an explicitly unpaused collection. Telegram heading entities are durable evidence.
+
 Observed initial archive outcome (2026-10-04): c08738439737f928d696bed75923bcdaacca4181 passed 183 application tests and eight backup tests on the server and was deployed through the protected restore-verified procedure. Frozen 83 artists / 166 slots / 155 unique recordings yielded nine complete AAC posts and 146 explicit pending source/match/DRM/identity cases. All eleven tags, artwork and uploaded bytes were read back before removing disposable files. Replay across restarts preserved message IDs without duplicate sends. The collection is paused, has no automatic retry service, and ordinary future publication remains OFF. Durable retry/review evidence survives cleanup. [Complete results and per-artist blockers](reports/POPULAR_TRACK_COLLECTION.md).
 
 Product source of truth: [`PRODUCT_SPEC.md`](PRODUCT_SPEC.md).  
