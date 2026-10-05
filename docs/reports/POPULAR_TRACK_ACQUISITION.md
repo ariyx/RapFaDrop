@@ -1,5 +1,79 @@
 # Popular-track acquisition continuation
 
+## Authenticated YouTube continuation — 2026-10-05
+
+Observation **2026-10-05T12:13:16.778776Z**, not the completed batch total.
+Owner's private session works. The standard extraction environment needed Deno
+**2.5.0** (official release checksum verified) and yt-dlp-ejs **0.8.0**, matching
+existing yt-dlp **2026.8.19**. No anonymous retry, access-control workaround or
+intermediary was used. Four authenticated preflight probes included three JS setup
+failures; the corrected environment acquired and fully decoded YND in **22.412 s**.
+Verified native video `he9zJ_8qx2Y` / channel `UCOM4zsSA4rkG2BjZ0A5hTNg`, both
+POOBON/MAMAZI credits, 137.624671 s versus 137.579 s selected: native AAC/M4A,
+128,016 audio bps, 44,100 Hz stereo, 2,226,866 bytes, no conversion. Available Opus
+formats were observed; the existing Telegram-compatible native AAC path was used.
+
+Tested/pushed/deployed **`74a4c7c43a829018784f4c45728d0838ab2aa9e5`** adds optional
+private YouTube cookie/runtime configuration and a disposable private cookie copy
+per invocation, preserving the mounted original. SoundCloud remains unaffected;
+missing configured credentials fail without anonymous fallback. **65 relevant
+tests**, Django checks and migration drift passed; the full suite was not repeated.
+Protected predeploy backup restored **43 tables**, uploaded as backup messages
+**84/85** (`rapfadrop-20261005T113524Z-528356e7.tar.age`, 1,495,592 bytes).
+
+The publication gate first held three fully decoded recordings because legacy
+frozen SourceMatch evidence lacked the selected artwork URL. **83 missing derived
+artwork evidence fields** were recovered from unchanged frozen selections; existing
+values/identity/review states and curated metadata were not replaced. Three retained
+recordings were prepared as separate copies through the existing tagging pipeline,
+with unchanged original audio hashes, fresh full decode and all eleven tags/cover
+read back. They were not downloaded again. A preparation-only clone initially hit
+the existing candidate uniqueness constraint; it sent nothing and the operation
+was corrected to the existing manual-copy mechanism without changing constraints.
+
+Confirmed new production messages **48–55**: YND, Ghatle Amd, ADDI, Khodafez,
+Boro Khoone, Rooye Jenazat Miraghsam, Yani Chi Nemishe, Mano Bespar. All eight are
+native AAC around **128 kb/s**, no conversion, full decode, eleven tags/artwork and
+Telegram byte/hash readback passed. Actual bold/linked Fave captions retain the
+Spotify link and omit YouTube; no caption/template policy changed. Original 42
+publications were unchanged, with eight successful new attempts and no duplicate
+or uncertain send at this observation.
+
+Current observation: **50 unique posts / 53 satisfied native rows / 60 of 166 slots**;
+**102 native rows pending**, 15 artists complete, 30 partial, 38 unserved. Frozen
+83 artists / 166 slots / 155 native / 152 canonical identities are unchanged.
+83 active verified Spotify sources, 84 baselines, 4,126 items, two existing reviews
+and zero downstream jobs remain preserved. Bridge and ordinary publication OFF.
+Old cached login-error reasons on pending rows are historical, not proof that the
+provided session currently fails. Remaining due/identity/mix/source decisions are
+still enforced; unresolved files are not sent.
+
+The collection-only one-shot **`rapfadrop-youtube-ready-recovery.service`** is
+continuing a bounded pass independently of the owner's computer; this observation
+does not claim the batch has finished. It traps exit to pause, writes final safe
+evidence/current CSVs and cleans confirmed media. Ordered postprocess service
+**`rapfadrop-youtube-postprocess.service`** then removes superseded files only after
+confirmed readback/hash identity, plus disposable tests/source/probe resources.
+Private auth/runtime remain server-only for this authorized collection path.
+No future-release timer, bridge or publication worker is activated.
+
+```sh
+# Immediate pause, without resetting retries/selections or deleting posts:
+docker compose -p rapfadrop-popular -f /var/lib/rapfadrop-operations/popular-collection.compose.yaml run --rm -T collection popular_collection pause
+# Inspect the running server pass:
+systemctl show rapfadrop-youtube-ready-recovery.service -p ActiveState -p MainPID -p Result
+tail -n 5 /var/lib/rapfadrop-operations/popular-20261004/youtube-ready-publication.log
+```
+
+Final server artifacts, after completion, are under
+`/var/lib/rapfadrop-operations/popular-20261004/report/`:
+`youtube_publication_evidence.json`, both collection CSVs, and
+`youtube-superseded-cleanup.json`. This Git snapshot is timestamped; background
+completion does not automatically commit newer server totals.
+[Safe observation/timings](data/youtube_session_evidence.json),
+[slot CSV](data/popular_track_selections.csv),
+[native recording CSV](data/popular_track_publications.csv).
+
 Generated 2026-10-05; final database evidence at **2026-10-05T10:17:40.530090Z**;
 current CSV timestamps are in each row. Application tested, pushed and deployed:
 **`2c8de05810e06fa577afa17fa9c07ce2c34a5133`**. Documentation commits after that SHA

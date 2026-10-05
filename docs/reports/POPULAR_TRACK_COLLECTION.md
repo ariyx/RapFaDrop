@@ -4,11 +4,12 @@ The latest bounded acquisition results, current coverage and remaining blockers
 are in [POPULAR_TRACK_ACQUISITION.md](POPULAR_TRACK_ACQUISITION.md). The
 [166-slot CSV](data/popular_track_selections.csv) and
 [155-native-row CSV](data/popular_track_publications.csv) now reflect the
-2026-10-05 server state: 42 unique messages, 45 satisfied native rows, 110 pending.
+2026-10-05T12:13:16Z server observation: 50 unique messages, 53 satisfied native
+rows, 102 pending; the authorized bounded server continuation is still running.
 Original frozen selection timestamps remain unchanged. Final captions are described
 in [FINAL_AUDIO_CAPTIONS.md](FINAL_AUDIO_CAPTIONS.md). The narrative below records
 the initial nine-post outcome and original caption/search defaults; the collection
-is paused and future-release publication stays OFF.
+is continuing only this bounded pass; future-release publication stays OFF.
 
 The owner authorizes only the initial two-slot Popular collection in production
 `-1004311149640` (`@RapFaDrop`). Automatic future discovery publication stays OFF.

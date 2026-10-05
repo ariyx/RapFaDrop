@@ -18,8 +18,11 @@ while other providers remain eligible. The existing native MP3/AAC downloader,
 eleven-field tag/artwork checks, full decode and collection-only durable gateway
 remain authoritative. No intermediary downloader or future-release activation
 is added. The bounded server continuation published message 47 and reconciled
-two alternate IDs into existing posts; native YouTube acquisition remains blocked
-by a login challenge. See [observed acquisition results, checks and commands](reports/POPULAR_TRACK_ACQUISITION.md).
+two alternate IDs into existing posts. The subsequent owner-session task resolved
+YouTube access with optional private per-invocation cookie copies, Deno and the
+pinned compatible EJS package. Collection-only runtime/session mounts remain
+separate from discovery and ordinary publication. The timestamped report records
+verified native AAC and the continuing bounded server pass. See [observed acquisition results, checks and commands](reports/POPULAR_TRACK_ACQUISITION.md).
 
 The continuation uses compact audio captions selected by publication context:
 Fave for this frozen collection, Drop for a standalone release, LP Drop/EP Drop

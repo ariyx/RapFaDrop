@@ -1,5 +1,23 @@
 # Project status and handoff
 
+Updated: 2026-10-05T12:13:16.778776Z (authenticated YouTube continuation snapshot).
+Tested/pushed/deployed **`74a4c7c43a829018784f4c45728d0838ab2aa9e5`**, **65 related
+tests**, checks and drift passed; no repeated full suite. Owner's private session
+plus standard Deno 2.5.0 / yt-dlp-ejs 0.8.0 enabled complete native YouTube AAC.
+**Eight new messages 48–55**, about 128 kb/s, no conversion; full decode, eleven
+tags, official artwork and Telegram byte readback passed. No old post changed,
+duplicate or uncertain send observed. Recovered 83 missing derived frozen artwork
+URLs without altering selections/metadata policy; three files re-prepared locally.
+**50 unique posts / 53 native rows / 60 of 166 slots satisfied**, 102 native rows
+pending at this timestamp. Frozen 83/166/155 and 152 canonical identities preserved.
+83 active verified sources / 84 baselines / 4,126 items / two reviews / zero jobs.
+Protected backup restored 43 tables and uploaded as **84/85**. The bounded
+collection-only service continues independently on the server, then automatically
+pauses and records final evidence/cleanup. This is a running observation, not its
+final total. Private auth is server-only; bridge/future publication remain OFF.
+[Current continuation and server commands](reports/POPULAR_TRACK_ACQUISITION.md),
+[safe timestamped evidence](reports/data/youtube_session_evidence.json).
+
 Updated: 2026-10-05 (bounded Popular collection acquisition continuation).
 Tested, pushed and deployed application **`2c8de05810e06fa577afa17fa9c07ce2c34a5133`**:
 **208 application + eight backup tests**, eight new focused regressions, checks,

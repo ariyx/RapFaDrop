@@ -1,0 +1,1417 @@
+{
+  "generated_at": "2026-10-05T12:13:16.778776+00:00",
+  "application_sha": "74a4c7c43a829018784f4c45728d0838ab2aa9e5",
+  "collection": "initial-popular-20261004",
+  "paused": false,
+  "artists": 83,
+  "artist_coverage": {
+    "partial": 30,
+    "complete": 15,
+    "none": 38
+  },
+  "slots": 166,
+  "satisfied_slots": 60,
+  "native_rows": 155,
+  "canonical_rows": 152,
+  "published_native_rows": 53,
+  "unique_publications": 50,
+  "pending": 102,
+  "pending_groups": {
+    "No complete confidently matched recording in bounded verified catalogs/searches; inspect source/match evidence before manual upload.": 15,
+    "No complete confidently matched recording in bounded verified catalogs/searches; inspect source/match evidence before manual upload. Candidate collaborator credits or music-video mix remain unverified; manual identity review required.": 6,
+    "Missing independently verified credited profile": 47,
+    "No bounded confident match; YouTube login challenge": 34
+  },
+  "new_posts": [
+    {
+      "spotify_id": "0nOTYCGtkJttIajOpwniMr",
+      "title": "YND",
+      "message_id": 48,
+      "provider": "manual",
+      "source_url": "https://www.youtube.com/watch?v=he9zJ_8qx2Y",
+      "source_facts": {
+        "sha256": "2541a7916a9dd0fdc1bbd6f1a658159d5baa13fd280a86fbc08f66fa15378e42",
+        "channels": 2,
+        "codec_name": "aac",
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sample_rate_hz": 44100,
+        "file_size_bytes": 2226866,
+        "duration_seconds": 137.624671,
+        "audio_bitrate_bps": 128016,
+        "audio_stream_count": 1,
+        "format_bitrate_bps": 129445,
+        "measured_bitrate_bps": 129446
+      },
+      "delivered_facts": {
+        "sha256": "8e3e832220b44d00e508c9f53d624c53ca294ca530cbae21a16812ca3adaeb52",
+        "file_size_bytes": 2259270,
+        "duration_seconds": 137.624671,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_bitrate_bps": 131329,
+        "measured_bitrate_bps": 131329,
+        "codec_name": "aac",
+        "audio_bitrate_bps": 128016,
+        "sample_rate_hz": 44100,
+        "channels": 2,
+        "audio_stream_count": 1
+      },
+      "validation": {
+        "status": "valid",
+        "complete": true,
+        "full_decode": "passed",
+        "audio_stream_present": true
+      },
+      "preparation": {
+        "format": "MP4",
+        "artwork": {
+          "state": "embedded",
+          "width": 300,
+          "format": "JPEG",
+          "height": 300,
+          "mime_type": "image/jpeg",
+          "size_bytes": 28352
+        },
+        "readback": {
+          "title_matches": true,
+          "artwork_read_back": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true
+        },
+        "channel_tag": "@RapFaDrop",
+        "mapped_fields": [
+          "title",
+          "main_artist",
+          "album",
+          "track_number",
+          "disc_number",
+          "release_date",
+          "album_artist_suffix",
+          "album_suffix",
+          "author_url",
+          "comments",
+          "composers",
+          "conductors",
+          "copyright",
+          "encoded_by",
+          "initial_key",
+          "publisher",
+          "subtitle"
+        ],
+        "unsupported_fields": [],
+        "channel_policy_version": 2
+      },
+      "conversion": "none requested",
+      "provider_timings": {
+        "acquisition_seconds": 9.803,
+        "provider_probe_seconds": 8.103,
+        "provider_duration_seconds": 138.0,
+        "validation_and_preparation_seconds": 0.213
+      },
+      "processing_timings": {
+        "upload_seconds": 1.229,
+        "media_total_seconds": 30.076,
+        "end_to_end_processing_seconds": 31.305,
+        "last_acquisition_attempt_seconds": 30.076
+      },
+      "telegram_readback": {
+        "bytes": 2259270,
+        "sha256": "8e3e832220b44d00e508c9f53d624c53ca294ca530cbae21a16812ca3adaeb52",
+        "status": "passed",
+        "prepared_sha256": "8e3e832220b44d00e508c9f53d624c53ca294ca530cbae21a16812ca3adaeb52"
+      },
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/0nOTYCGtkJttIajOpwniMr\">Spotify</a>",
+      "matching": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": false,
+              "entries": 50,
+              "seconds": 2.971,
+              "bounded_to": 50
+            },
+            "acquisition_source_id": 61
+          },
+          {
+            "id": "he9zJ_8qx2Y",
+            "title": "POOBON x MAMAZI - YND",
+            "matched": true,
+            "duration": 138.0,
+            "credits_matched": true,
+            "acquisition_source_id": 61
+          }
+        ],
+        "reason": "Verified official native uploader/channel, complete recording/version and duration",
+        "provider_probes": 1
+      }
+    },
+    {
+      "spotify_id": "7hMOCMa4e5JE8eKvhqhaFG",
+      "title": "Ghatle Amd",
+      "message_id": 49,
+      "provider": "manual",
+      "source_url": "https://www.youtube.com/watch?v=_2rIEuszvlk",
+      "source_facts": {
+        "sha256": "721b4e7711446b8c520d1f9f57b460fd65cdf8e57f0a25f6556c3b1fd2b8c794",
+        "channels": 2,
+        "codec_name": "aac",
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sample_rate_hz": 44100,
+        "file_size_bytes": 3493971,
+        "duration_seconds": 215.992018,
+        "audio_bitrate_bps": 127999,
+        "audio_stream_count": 1,
+        "format_bitrate_bps": 129411,
+        "measured_bitrate_bps": 129411
+      },
+      "delivered_facts": {
+        "sha256": "c43e0b121514801733d054540634ceac48bbb53b743fe54a66c37b00f9aee796",
+        "file_size_bytes": 3537529,
+        "duration_seconds": 215.992018,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_bitrate_bps": 131024,
+        "measured_bitrate_bps": 131024,
+        "codec_name": "aac",
+        "audio_bitrate_bps": 127999,
+        "sample_rate_hz": 44100,
+        "channels": 2,
+        "audio_stream_count": 1
+      },
+      "validation": {
+        "status": "valid",
+        "complete": true,
+        "full_decode": "passed",
+        "audio_stream_present": true
+      },
+      "preparation": {
+        "format": "MP4",
+        "artwork": {
+          "state": "embedded",
+          "width": 300,
+          "format": "JPEG",
+          "height": 300,
+          "mime_type": "image/jpeg",
+          "size_bytes": 38270
+        },
+        "readback": {
+          "title_matches": true,
+          "artwork_read_back": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true
+        },
+        "channel_tag": "@RapFaDrop",
+        "mapped_fields": [
+          "title",
+          "main_artist",
+          "album",
+          "track_number",
+          "disc_number",
+          "release_date",
+          "album_artist_suffix",
+          "album_suffix",
+          "author_url",
+          "comments",
+          "composers",
+          "conductors",
+          "copyright",
+          "encoded_by",
+          "initial_key",
+          "publisher",
+          "subtitle"
+        ],
+        "unsupported_fields": [],
+        "channel_policy_version": 2
+      },
+      "conversion": "none requested",
+      "provider_timings": {
+        "acquisition_seconds": 11.101,
+        "provider_probe_seconds": 8.504,
+        "provider_duration_seconds": 216.0,
+        "validation_and_preparation_seconds": 0.205
+      },
+      "processing_timings": {
+        "upload_seconds": 1.637,
+        "media_total_seconds": 31.759,
+        "end_to_end_processing_seconds": 33.396,
+        "last_acquisition_attempt_seconds": 31.759
+      },
+      "telegram_readback": {
+        "bytes": 3537529,
+        "sha256": "c43e0b121514801733d054540634ceac48bbb53b743fe54a66c37b00f9aee796",
+        "status": "passed",
+        "prepared_sha256": "c43e0b121514801733d054540634ceac48bbb53b743fe54a66c37b00f9aee796"
+      },
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/7hMOCMa4e5JE8eKvhqhaFG\">Spotify</a>",
+      "matching": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": false,
+              "entries": 44,
+              "seconds": 3.127,
+              "bounded_to": 50
+            },
+            "acquisition_source_id": 37
+          },
+          {
+            "id": "_2rIEuszvlk",
+            "title": "Dorcci - Ghatle Amd (Official Audio)",
+            "matched": true,
+            "duration": 216.0,
+            "credits_matched": true,
+            "acquisition_source_id": 37
+          }
+        ],
+        "reason": "Verified official native uploader/channel, complete recording/version and duration",
+        "provider_probes": 1
+      }
+    },
+    {
+      "spotify_id": "1YFAi3Mxuofp5tOUao2oaJ",
+      "title": "ADDI",
+      "message_id": 50,
+      "provider": "manual",
+      "source_url": "https://www.youtube.com/watch?v=uESFu_9wJ0s",
+      "source_facts": {
+        "sha256": "756510478c3f192964fd7d5269e62f5a7f41b37548290ba87174ee7e1b5ba210",
+        "channels": 2,
+        "codec_name": "aac",
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sample_rate_hz": 44100,
+        "file_size_bytes": 3779993,
+        "duration_seconds": 233.662404,
+        "audio_bitrate_bps": 128008,
+        "audio_stream_count": 1,
+        "format_bitrate_bps": 129417,
+        "measured_bitrate_bps": 129417
+      },
+      "delivered_facts": {
+        "sha256": "dd9728e26d257c13314f3da437eae6ae590fc235010eb6f02f75294542a615b1",
+        "file_size_bytes": 3807232,
+        "duration_seconds": 233.662404,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_bitrate_bps": 130349,
+        "measured_bitrate_bps": 130350,
+        "codec_name": "aac",
+        "audio_bitrate_bps": 128008,
+        "sample_rate_hz": 44100,
+        "channels": 2,
+        "audio_stream_count": 1
+      },
+      "validation": {
+        "status": "valid",
+        "complete": true,
+        "full_decode": "passed",
+        "audio_stream_present": true
+      },
+      "preparation": {
+        "format": "MP4",
+        "artwork": {
+          "state": "embedded",
+          "width": 300,
+          "format": "JPEG",
+          "height": 300,
+          "mime_type": "image/jpeg",
+          "size_bytes": 21670
+        },
+        "readback": {
+          "title_matches": true,
+          "artwork_read_back": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true
+        },
+        "channel_tag": "@RapFaDrop",
+        "mapped_fields": [
+          "title",
+          "main_artist",
+          "album",
+          "track_number",
+          "disc_number",
+          "release_date",
+          "album_artist_suffix",
+          "album_suffix",
+          "author_url",
+          "comments",
+          "composers",
+          "conductors",
+          "copyright",
+          "encoded_by",
+          "initial_key",
+          "publisher",
+          "subtitle"
+        ],
+        "unsupported_fields": [],
+        "channel_policy_version": 2
+      },
+      "conversion": "none requested",
+      "provider_timings": {
+        "acquisition_seconds": 10.316,
+        "provider_probe_seconds": 8.079,
+        "provider_duration_seconds": 234.0,
+        "validation_and_preparation_seconds": 0.169
+      },
+      "processing_timings": {
+        "upload_seconds": 1.787,
+        "media_total_seconds": 28.068,
+        "end_to_end_processing_seconds": 29.855,
+        "last_acquisition_attempt_seconds": 28.068
+      },
+      "telegram_readback": {
+        "bytes": 3807232,
+        "sha256": "dd9728e26d257c13314f3da437eae6ae590fc235010eb6f02f75294542a615b1",
+        "status": "passed",
+        "prepared_sha256": "dd9728e26d257c13314f3da437eae6ae590fc235010eb6f02f75294542a615b1"
+      },
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/1YFAi3Mxuofp5tOUao2oaJ\">Spotify</a>",
+      "matching": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": true,
+              "entries": 44
+            },
+            "acquisition_source_id": 37
+          },
+          {
+            "id": "uESFu_9wJ0s",
+            "title": "Dorcci - ADDI (Official Audio)",
+            "matched": true,
+            "duration": 234.0,
+            "credits_matched": true,
+            "acquisition_source_id": 37
+          }
+        ],
+        "reason": "Verified official native uploader/channel, complete recording/version and duration",
+        "provider_probes": 1
+      }
+    },
+    {
+      "spotify_id": "1VtYA3U4UyMrhIfy95vL8q",
+      "title": "Khodafez",
+      "message_id": 51,
+      "provider": "yt-dlp-youtube",
+      "source_url": "https://www.youtube.com/watch?v=43yLMA-ygeg",
+      "source_facts": {
+        "sha256": "a622357e8359e4b503ef48193fb77c20049bf488e1f478a0acb2828f5c197d0e",
+        "channels": 2,
+        "codec_name": "aac",
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sample_rate_hz": 44100,
+        "file_size_bytes": 3748948,
+        "duration_seconds": 231.758367,
+        "audio_bitrate_bps": 127999,
+        "audio_stream_count": 1,
+        "format_bitrate_bps": 129408,
+        "measured_bitrate_bps": 129409
+      },
+      "delivered_facts": {
+        "sha256": "dc56d601a5b2e544133202f2981e965c807e2f2343161138a36b4e68e0532b70",
+        "file_size_bytes": 3773509,
+        "duration_seconds": 231.758367,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_bitrate_bps": 130256,
+        "measured_bitrate_bps": 130257,
+        "codec_name": "aac",
+        "audio_bitrate_bps": 127999,
+        "sample_rate_hz": 44100,
+        "channels": 2,
+        "audio_stream_count": 1
+      },
+      "validation": {
+        "status": "valid",
+        "complete": true,
+        "full_decode": "passed",
+        "audio_stream_present": true
+      },
+      "preparation": {
+        "format": "MP4",
+        "artwork": {
+          "state": "embedded",
+          "width": 300,
+          "format": "JPEG",
+          "height": 300,
+          "mime_type": "image/jpeg",
+          "size_bytes": 18965
+        },
+        "readback": {
+          "title_matches": true,
+          "artwork_read_back": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true
+        },
+        "channel_tag": "@RapFaDrop",
+        "mapped_fields": [
+          "title",
+          "main_artist",
+          "album",
+          "track_number",
+          "disc_number",
+          "release_date",
+          "album_artist_suffix",
+          "album_suffix",
+          "author_url",
+          "comments",
+          "composers",
+          "conductors",
+          "copyright",
+          "encoded_by",
+          "initial_key",
+          "publisher",
+          "subtitle"
+        ],
+        "unsupported_fields": [],
+        "channel_policy_version": 2
+      },
+      "conversion": "none requested",
+      "provider_timings": {
+        "acquisition_seconds": 13.725,
+        "provider_probe_seconds": 7.35,
+        "provider_duration_seconds": 232.0,
+        "validation_and_preparation_seconds": 0.242
+      },
+      "processing_timings": {
+        "upload_seconds": 62.864,
+        "media_total_seconds": 30.756,
+        "end_to_end_processing_seconds": 93.62,
+        "last_acquisition_attempt_seconds": 30.756
+      },
+      "telegram_readback": {
+        "bytes": 3773509,
+        "sha256": "dc56d601a5b2e544133202f2981e965c807e2f2343161138a36b4e68e0532b70",
+        "status": "passed",
+        "prepared_sha256": "dc56d601a5b2e544133202f2981e965c807e2f2343161138a36b4e68e0532b70"
+      },
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/1VtYA3U4UyMrhIfy95vL8q\">Spotify</a>",
+      "matching": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": true,
+              "entries": 87
+            },
+            "acquisition_source_id": 19
+          },
+          {
+            "catalog": {
+              "cache": true,
+              "entries": 48
+            },
+            "acquisition_source_id": 26
+          },
+          {
+            "catalog": {
+              "cache": true,
+              "entries": 50
+            },
+            "acquisition_source_id": 43
+          },
+          {
+            "id": "43yLMA-ygeg",
+            "title": "Mehrad Hidden, Sepehr Khalse - Khodafez",
+            "matched": true,
+            "duration": 232.0,
+            "credits_matched": true,
+            "acquisition_source_id": 43
+          }
+        ],
+        "reason": "Verified official native uploader/channel, complete recording/version and duration",
+        "provider_probes": 1
+      }
+    },
+    {
+      "spotify_id": "0DYb1v4bxxh4NOVLtZk4nL",
+      "title": "Boro Khoone",
+      "message_id": 52,
+      "provider": "yt-dlp-youtube",
+      "source_url": "https://www.youtube.com/watch?v=f7ZQsE_08cc",
+      "source_facts": {
+        "sha256": "2b0ba3efbf478209177d366ab0933a15429a17c2c45b7b3af1b8c98462bac43e",
+        "channels": 2,
+        "codec_name": "aac",
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sample_rate_hz": 44100,
+        "file_size_bytes": 6357576,
+        "duration_seconds": 393.044172,
+        "audio_bitrate_bps": 128004,
+        "audio_stream_count": 1,
+        "format_bitrate_bps": 129401,
+        "measured_bitrate_bps": 129402
+      },
+      "delivered_facts": {
+        "sha256": "c76834110fa1c02895ce36938717b41f036613c726331dbfb38b6c50b80f2fd2",
+        "file_size_bytes": 6394976,
+        "duration_seconds": 393.044172,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_bitrate_bps": 130162,
+        "measured_bitrate_bps": 130163,
+        "codec_name": "aac",
+        "audio_bitrate_bps": 128004,
+        "sample_rate_hz": 44100,
+        "channels": 2,
+        "audio_stream_count": 1
+      },
+      "validation": {
+        "status": "valid",
+        "complete": true,
+        "full_decode": "passed",
+        "audio_stream_present": true
+      },
+      "preparation": {
+        "format": "MP4",
+        "artwork": {
+          "state": "embedded",
+          "width": 300,
+          "format": "JPEG",
+          "height": 300,
+          "mime_type": "image/jpeg",
+          "size_bytes": 29201
+        },
+        "readback": {
+          "title_matches": true,
+          "artwork_read_back": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true
+        },
+        "channel_tag": "@RapFaDrop",
+        "mapped_fields": [
+          "title",
+          "main_artist",
+          "album",
+          "track_number",
+          "disc_number",
+          "release_date",
+          "album_artist_suffix",
+          "album_suffix",
+          "author_url",
+          "comments",
+          "composers",
+          "conductors",
+          "copyright",
+          "encoded_by",
+          "initial_key",
+          "publisher",
+          "subtitle"
+        ],
+        "unsupported_fields": [],
+        "channel_policy_version": 2
+      },
+      "conversion": "none requested",
+      "provider_timings": {
+        "acquisition_seconds": 10.793,
+        "provider_probe_seconds": 7.788,
+        "provider_duration_seconds": 393.0,
+        "validation_and_preparation_seconds": 0.138
+      },
+      "processing_timings": {
+        "upload_seconds": 63.528,
+        "media_total_seconds": 27.349,
+        "end_to_end_processing_seconds": 90.877,
+        "last_acquisition_attempt_seconds": 27.349
+      },
+      "telegram_readback": {
+        "bytes": 6394976,
+        "sha256": "c76834110fa1c02895ce36938717b41f036613c726331dbfb38b6c50b80f2fd2",
+        "status": "passed",
+        "prepared_sha256": "c76834110fa1c02895ce36938717b41f036613c726331dbfb38b6c50b80f2fd2"
+      },
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/0DYb1v4bxxh4NOVLtZk4nL\">Spotify</a>",
+      "matching": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": true,
+              "entries": 87
+            },
+            "acquisition_source_id": 19
+          },
+          {
+            "catalog": {
+              "cache": true,
+              "entries": 50
+            },
+            "acquisition_source_id": 43
+          },
+          {
+            "id": "f7ZQsE_08cc",
+            "title": "Mahyar - Boro Khoone (feat. @Shayea & @Mehrad Hidden)",
+            "matched": true,
+            "duration": 393.0,
+            "credits_matched": true,
+            "acquisition_source_id": 43
+          }
+        ],
+        "reason": "Verified official native uploader/channel, complete recording/version and duration",
+        "provider_probes": 1
+      }
+    },
+    {
+      "spotify_id": "7wpdZLPwob9OzQOFDDHNER",
+      "title": "Rooye Jenazat Miraghsam",
+      "message_id": 53,
+      "provider": "yt-dlp-youtube",
+      "source_url": "https://www.youtube.com/watch?v=nKY6vq97MzI",
+      "source_facts": {
+        "sha256": "c814197eb981ed76fa0d1dec845513c4a4e7a3a5ed790af201988c4ef000e9a5",
+        "channels": 2,
+        "codec_name": "aac",
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sample_rate_hz": 44100,
+        "file_size_bytes": 2950954,
+        "duration_seconds": 182.415964,
+        "audio_bitrate_bps": 127999,
+        "audio_stream_count": 1,
+        "format_bitrate_bps": 129416,
+        "measured_bitrate_bps": 129416
+      },
+      "delivered_facts": {
+        "sha256": "056e7461f13fcc9b24c4f96a24328c2310c0dd268959b9ff4551098b4865270b",
+        "file_size_bytes": 2997513,
+        "duration_seconds": 182.415964,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_bitrate_bps": 131458,
+        "measured_bitrate_bps": 131458,
+        "codec_name": "aac",
+        "audio_bitrate_bps": 127999,
+        "sample_rate_hz": 44100,
+        "channels": 2,
+        "audio_stream_count": 1
+      },
+      "validation": {
+        "status": "valid",
+        "complete": true,
+        "full_decode": "passed",
+        "audio_stream_present": true
+      },
+      "preparation": {
+        "format": "MP4",
+        "artwork": {
+          "state": "embedded",
+          "width": 300,
+          "format": "JPEG",
+          "height": 300,
+          "mime_type": "image/jpeg",
+          "size_bytes": 41780
+        },
+        "readback": {
+          "title_matches": true,
+          "artwork_read_back": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true
+        },
+        "channel_tag": "@RapFaDrop",
+        "mapped_fields": [
+          "title",
+          "main_artist",
+          "album",
+          "track_number",
+          "disc_number",
+          "release_date",
+          "album_artist_suffix",
+          "album_suffix",
+          "author_url",
+          "comments",
+          "composers",
+          "conductors",
+          "copyright",
+          "encoded_by",
+          "initial_key",
+          "publisher",
+          "subtitle"
+        ],
+        "unsupported_fields": [],
+        "channel_policy_version": 2
+      },
+      "conversion": "none requested",
+      "provider_timings": {
+        "acquisition_seconds": 8.075,
+        "provider_probe_seconds": 8.466,
+        "provider_duration_seconds": 182.0,
+        "validation_and_preparation_seconds": 0.119
+      },
+      "processing_timings": {
+        "upload_seconds": 1.466,
+        "media_total_seconds": 27.711,
+        "end_to_end_processing_seconds": 29.177,
+        "last_acquisition_attempt_seconds": 27.711
+      },
+      "telegram_readback": {
+        "bytes": 2997513,
+        "sha256": "056e7461f13fcc9b24c4f96a24328c2310c0dd268959b9ff4551098b4865270b",
+        "status": "passed",
+        "prepared_sha256": "056e7461f13fcc9b24c4f96a24328c2310c0dd268959b9ff4551098b4865270b"
+      },
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/7wpdZLPwob9OzQOFDDHNER\">Spotify</a>",
+      "matching": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": false,
+              "entries": 25,
+              "seconds": 2.375,
+              "bounded_to": 50
+            },
+            "acquisition_source_id": 40
+          },
+          {
+            "id": "nKY6vq97MzI",
+            "title": "Hichkas - Rooye Jenazat Miraghsam",
+            "matched": true,
+            "duration": 182.0,
+            "credits_matched": true,
+            "acquisition_source_id": 40
+          }
+        ],
+        "reason": "Verified official native uploader/channel, complete recording/version and duration",
+        "provider_probes": 1
+      }
+    },
+    {
+      "spotify_id": "2dQRmru5lr8BP9qvUSKoS9",
+      "title": "Yani Chi Nemishe",
+      "message_id": 54,
+      "provider": "yt-dlp-youtube",
+      "source_url": "https://www.youtube.com/watch?v=8ZP28Oxex_4",
+      "source_facts": {
+        "sha256": "1865b2c09ebf8a923feedaf6ae3ef414f8de158d03c9a9ae849fb42ad12575ed",
+        "channels": 2,
+        "codec_name": "aac",
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sample_rate_hz": 44100,
+        "file_size_bytes": 3386948,
+        "duration_seconds": 209.374331,
+        "audio_bitrate_bps": 127999,
+        "audio_stream_count": 1,
+        "format_bitrate_bps": 129412,
+        "measured_bitrate_bps": 129412
+      },
+      "delivered_facts": {
+        "sha256": "08f044f6bfd298ad39abde0b8466819ece639ea065e8022323ce71f28d8d6c84",
+        "file_size_bytes": 3414104,
+        "duration_seconds": 209.374331,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_bitrate_bps": 130449,
+        "measured_bitrate_bps": 130450,
+        "codec_name": "aac",
+        "audio_bitrate_bps": 127999,
+        "sample_rate_hz": 44100,
+        "channels": 2,
+        "audio_stream_count": 1
+      },
+      "validation": {
+        "status": "valid",
+        "complete": true,
+        "full_decode": "passed",
+        "audio_stream_present": true
+      },
+      "preparation": {
+        "format": "MP4",
+        "artwork": {
+          "state": "embedded",
+          "width": 300,
+          "format": "JPEG",
+          "height": 300,
+          "mime_type": "image/jpeg",
+          "size_bytes": 21959
+        },
+        "readback": {
+          "title_matches": true,
+          "artwork_read_back": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true
+        },
+        "channel_tag": "@RapFaDrop",
+        "mapped_fields": [
+          "title",
+          "main_artist",
+          "album",
+          "track_number",
+          "disc_number",
+          "release_date",
+          "album_artist_suffix",
+          "album_suffix",
+          "author_url",
+          "comments",
+          "composers",
+          "conductors",
+          "copyright",
+          "encoded_by",
+          "initial_key",
+          "publisher",
+          "subtitle"
+        ],
+        "unsupported_fields": [],
+        "channel_policy_version": 2
+      },
+      "conversion": "none requested",
+      "provider_timings": {
+        "acquisition_seconds": 8.386,
+        "provider_probe_seconds": 7.68,
+        "provider_duration_seconds": 209.0,
+        "validation_and_preparation_seconds": 0.131
+      },
+      "processing_timings": {
+        "upload_seconds": 73.329,
+        "media_total_seconds": 25.093,
+        "end_to_end_processing_seconds": 98.422,
+        "last_acquisition_attempt_seconds": 25.093
+      },
+      "telegram_readback": {
+        "bytes": 3414104,
+        "sha256": "08f044f6bfd298ad39abde0b8466819ece639ea065e8022323ce71f28d8d6c84",
+        "status": "passed",
+        "prepared_sha256": "08f044f6bfd298ad39abde0b8466819ece639ea065e8022323ce71f28d8d6c84"
+      },
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/2dQRmru5lr8BP9qvUSKoS9\">Spotify</a>",
+      "matching": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": true,
+              "entries": 25
+            },
+            "acquisition_source_id": 40
+          },
+          {
+            "id": "8ZP28Oxex_4",
+            "title": "Hichkas - Yani Chi Nemishe",
+            "matched": true,
+            "duration": 209.0,
+            "credits_matched": true,
+            "acquisition_source_id": 40
+          }
+        ],
+        "reason": "Verified official native uploader/channel, complete recording/version and duration",
+        "provider_probes": 1
+      }
+    },
+    {
+      "spotify_id": "2sS3htenj2jGFO0DVz6zuv",
+      "title": "Mano Bespar",
+      "message_id": 55,
+      "provider": "yt-dlp-youtube",
+      "source_url": "https://www.youtube.com/watch?v=d_epOspqurM",
+      "source_facts": {
+        "sha256": "5367d69619aa812de4364d27250ee63a6dd96ac7d25a0d835b243a8e1801db6f",
+        "channels": 2,
+        "codec_name": "aac",
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sample_rate_hz": 44100,
+        "file_size_bytes": 4431271,
+        "duration_seconds": 273.949025,
+        "audio_bitrate_bps": 127999,
+        "audio_stream_count": 1,
+        "format_bitrate_bps": 129404,
+        "measured_bitrate_bps": 129404
+      },
+      "delivered_facts": {
+        "sha256": "74b27bde97cebac148e19e64b85e7f240f77b726b6a2c6ee76471dcf17b89fcd",
+        "file_size_bytes": 4479140,
+        "duration_seconds": 273.949025,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_bitrate_bps": 130802,
+        "measured_bitrate_bps": 130802,
+        "codec_name": "aac",
+        "audio_bitrate_bps": 127999,
+        "sample_rate_hz": 44100,
+        "channels": 2,
+        "audio_stream_count": 1
+      },
+      "validation": {
+        "status": "valid",
+        "complete": true,
+        "full_decode": "passed",
+        "audio_stream_present": true
+      },
+      "preparation": {
+        "format": "MP4",
+        "artwork": {
+          "state": "embedded",
+          "width": 300,
+          "format": "JPEG",
+          "height": 300,
+          "mime_type": "image/jpeg",
+          "size_bytes": 41604
+        },
+        "readback": {
+          "title_matches": true,
+          "artwork_read_back": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true
+        },
+        "channel_tag": "@RapFaDrop",
+        "mapped_fields": [
+          "title",
+          "main_artist",
+          "album",
+          "track_number",
+          "disc_number",
+          "release_date",
+          "album_artist_suffix",
+          "album_suffix",
+          "author_url",
+          "comments",
+          "composers",
+          "conductors",
+          "copyright",
+          "encoded_by",
+          "initial_key",
+          "publisher",
+          "subtitle"
+        ],
+        "unsupported_fields": [],
+        "channel_policy_version": 2
+      },
+      "conversion": "none requested",
+      "provider_timings": {
+        "acquisition_seconds": 9.689,
+        "provider_probe_seconds": 7.272,
+        "provider_duration_seconds": 274.0,
+        "validation_and_preparation_seconds": 0.119
+      },
+      "processing_timings": {
+        "upload_seconds": 121.894,
+        "media_total_seconds": 28.074,
+        "end_to_end_processing_seconds": 149.96800000000002,
+        "last_acquisition_attempt_seconds": 28.074
+      },
+      "telegram_readback": {
+        "bytes": 4479140,
+        "sha256": "74b27bde97cebac148e19e64b85e7f240f77b726b6a2c6ee76471dcf17b89fcd",
+        "status": "passed",
+        "prepared_sha256": "74b27bde97cebac148e19e64b85e7f240f77b726b6a2c6ee76471dcf17b89fcd"
+      },
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/2sS3htenj2jGFO0DVz6zuv\">Spotify</a>",
+      "matching": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": true,
+              "entries": 87
+            },
+            "acquisition_source_id": 19
+          },
+          {
+            "id": "2289998600",
+            "probe_error": "yt-dlp failed (1): ERROR: [soundcloud] 2289998600: This video is DRM protected",
+            "acquisition_source_id": 19
+          },
+          {
+            "catalog": {
+              "cache": true,
+              "entries": 50
+            },
+            "acquisition_source_id": 43
+          },
+          {
+            "id": "d_epOspqurM",
+            "title": "Mehrad Hidden x Kaviano - Mano Bespar [Official Audio]",
+            "matched": true,
+            "duration": 274.0,
+            "credits_matched": true,
+            "acquisition_source_id": 43
+          }
+        ],
+        "reason": "Verified official native uploader/channel, complete recording/version and duration",
+        "provider_probes": 2
+      }
+    }
+  ],
+  "new_attempts": [
+    {
+      "id": 107,
+      "operation": "send_audio",
+      "state": "succeeded",
+      "message_id": 48,
+      "caption_text": "Fave\n› Spotify",
+      "caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/0nOTYCGtkJttIajOpwniMr",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        }
+      ]
+    },
+    {
+      "id": 108,
+      "operation": "send_audio",
+      "state": "succeeded",
+      "message_id": 49,
+      "caption_text": "Fave\n› Spotify",
+      "caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/7hMOCMa4e5JE8eKvhqhaFG",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        }
+      ]
+    },
+    {
+      "id": 109,
+      "operation": "send_audio",
+      "state": "succeeded",
+      "message_id": 50,
+      "caption_text": "Fave\n› Spotify",
+      "caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/1YFAi3Mxuofp5tOUao2oaJ",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "operation": "send_audio",
+      "state": "succeeded",
+      "message_id": 51,
+      "caption_text": "Fave\n› Spotify",
+      "caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/1VtYA3U4UyMrhIfy95vL8q",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "operation": "send_audio",
+      "state": "succeeded",
+      "message_id": 52,
+      "caption_text": "Fave\n› Spotify",
+      "caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/0DYb1v4bxxh4NOVLtZk4nL",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        }
+      ]
+    },
+    {
+      "id": 112,
+      "operation": "send_audio",
+      "state": "succeeded",
+      "message_id": 53,
+      "caption_text": "Fave\n› Spotify",
+      "caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/7wpdZLPwob9OzQOFDDHNER",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        }
+      ]
+    },
+    {
+      "id": 113,
+      "operation": "send_audio",
+      "state": "succeeded",
+      "message_id": 54,
+      "caption_text": "Fave\n› Spotify",
+      "caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/2dQRmru5lr8BP9qvUSKoS9",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        }
+      ]
+    },
+    {
+      "id": 114,
+      "operation": "send_audio",
+      "state": "succeeded",
+      "message_id": 55,
+      "caption_text": "Fave\n› Spotify",
+      "caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/2sS3htenj2jGFO0DVz6zuv",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        }
+      ]
+    }
+  ],
+  "new_attempt_states": {
+    "succeeded": 8
+  },
+  "new_aliases": [],
+  "source_counts": {
+    "soundcloud": 33,
+    "youtube": 30
+  },
+  "active_verified_spotify": 83,
+  "baselines": 84,
+  "items": 4126,
+  "reviews": 2,
+  "bridge": false,
+  "ordinary_publication": false,
+  "publication_worker": false,
+  "downstream_jobs": 0,
+  "preservation": {
+    "frozen_collection": {
+      "original_rows": 1,
+      "current_rows": 1,
+      "changes": []
+    },
+    "frozen_recordings": {
+      "original_rows": 155,
+      "current_rows": 155,
+      "changes": []
+    },
+    "slots": {
+      "original_rows": 166,
+      "current_rows": 166,
+      "changes": []
+    },
+    "selections": {
+      "original_rows": 83,
+      "current_rows": 83,
+      "changes": []
+    },
+    "artists": {
+      "original_rows": 83,
+      "current_rows": 83,
+      "changes": []
+    },
+    "source_identities_and_baselines": {
+      "original_rows": 131,
+      "current_rows": 131,
+      "changes": []
+    },
+    "baseline_runs": {
+      "original_rows": 84,
+      "current_rows": 84,
+      "changes": []
+    },
+    "existing_items": {
+      "original_rows": 4126,
+      "current_rows": 4126,
+      "changes": []
+    },
+    "existing_reviews": {
+      "original_rows": 2,
+      "current_rows": 2,
+      "changes": []
+    },
+    "old_publications": {
+      "original_rows": 42,
+      "current_rows": 50,
+      "changes": []
+    },
+    "caption_templates": {
+      "original_rows": 4,
+      "current_rows": 4,
+      "changes": []
+    },
+    "downstream_jobs": {
+      "original_rows": 0,
+      "current_rows": 0,
+      "changes": []
+    }
+  },
+  "trial": {
+    "spotify_id": "0nOTYCGtkJttIajOpwniMr",
+    "url": "https://www.youtube.com/watch?v=he9zJ_8qx2Y",
+    "expected_title": "YND",
+    "expected_duration": 137.579,
+    "session_used": true,
+    "probe_seconds": 9.497,
+    "title": "POOBON x MAMAZI - YND",
+    "duration": 138.0,
+    "channel_id": "UCOM4zsSA4rkG2BjZ0A5hTNg",
+    "available_audio_formats": [
+      {
+        "id": "sb3",
+        "codec": "none",
+        "container": "mhtml",
+        "bitrate_kbps": 0
+      },
+      {
+        "id": "sb2",
+        "codec": "none",
+        "container": "mhtml",
+        "bitrate_kbps": 0
+      },
+      {
+        "id": "sb1",
+        "codec": "none",
+        "container": "mhtml",
+        "bitrate_kbps": 0
+      },
+      {
+        "id": "sb0",
+        "codec": "none",
+        "container": "mhtml",
+        "bitrate_kbps": 0
+      },
+      {
+        "id": "249",
+        "codec": "opus",
+        "container": "webm",
+        "bitrate_kbps": 57.496
+      },
+      {
+        "id": "250",
+        "codec": "opus",
+        "container": "webm",
+        "bitrate_kbps": 75.076
+      },
+      {
+        "id": "140",
+        "codec": "mp4a.40.2",
+        "container": "m4a",
+        "bitrate_kbps": 129.533
+      },
+      {
+        "id": "251",
+        "codec": "opus",
+        "container": "webm",
+        "bitrate_kbps": 145.486
+      }
+    ],
+    "acquisition_seconds": 11.889,
+    "state": "complete_matched",
+    "codec": "aac",
+    "container": "mov,mp4,m4a,3gp,3g2,mj2",
+    "audio_bitrate": "128016",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration_obtained": 137.624671,
+    "bytes": 2226866,
+    "full_decode": true,
+    "conversion": "none requested",
+    "total_seconds": 22.412
+  },
+  "artwork_recovery": {
+    "artwork_evidence_rows_recovered_this_run": 80,
+    "artwork_evidence_rows_recovered_total": 83,
+    "prepared_without_redownload": [
+      {
+        "spotify_id": "0nOTYCGtkJttIajOpwniMr",
+        "title": "YND",
+        "candidate_id": 207,
+        "previous_candidate_id": 203
+      },
+      {
+        "spotify_id": "7hMOCMa4e5JE8eKvhqhaFG",
+        "title": "Ghatle Amd",
+        "candidate_id": 208,
+        "previous_candidate_id": 204
+      },
+      {
+        "spotify_id": "1YFAi3Mxuofp5tOUao2oaJ",
+        "title": "ADDI",
+        "candidate_id": 209,
+        "previous_candidate_id": 205
+      }
+    ]
+  },
+  "handoff": "Bounded collection pass still running on server; observation is not the final batch total.",
+  "runtime": {
+    "deno": "2.5.0",
+    "yt_dlp": "2026.8.19",
+    "yt_dlp_ejs": "0.8.0"
+  }
+}
