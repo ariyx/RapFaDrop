@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
+from django.utils import timezone
 
 from .normalization import normalize_text
 
@@ -212,3 +213,48 @@ class IdentityAuditEvent(models.Model):
 
     class Meta:
         ordering = ("-occurred_at",)
+
+
+class FreshDispatch(models.Model):
+    """Durable eligibility manifest; broker messages cannot invent eligible work."""
+    source_item = models.OneToOneField("sources.SourceItem", on_delete=models.PROTECT)
+    disposition = models.CharField(max_length=20, default="review", db_index=True)
+    reason = models.CharField(max_length=500)
+    evidence = models.JSONField(default=dict)
+    release = models.ForeignKey(CanonicalRelease, null=True, on_delete=models.PROTECT)
+    due_at = models.DateTimeField(default=timezone.now)
+    attempts = models.PositiveIntegerField(default=0)
+    processing_state = models.CharField(max_length=20, default="pending", db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class FreshTrack(models.Model):
+    dispatch = models.ForeignKey(FreshDispatch, on_delete=models.PROTECT, related_name="tracks")
+    track = models.ForeignKey(Track, on_delete=models.PROTECT)
+    native_id = models.CharField(max_length=22)
+    position = models.PositiveSmallIntegerField()
+    metadata = models.JSONField(default=dict)
+    evidence = models.JSONField(default=dict)
+    candidate = models.ForeignKey("media_pipeline.MediaCandidate", null=True, on_delete=models.PROTECT)
+    publication = models.ForeignKey("publication.Publication", null=True, on_delete=models.PROTECT)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def spotify_id(self):
+        return self.native_id
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=("dispatch", "position"), name="fresh_track_position_once")]
+
+
+class FreshProviderBackoff(models.Model):
+    platform = models.CharField(max_length=20, unique=True)
+    due_at = models.DateTimeField()
+    reason = models.CharField(max_length=500)
+
+
+class FreshControl(models.Model):
+    name = models.CharField(max_length=20, unique=True, default="production")
+    paused = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)

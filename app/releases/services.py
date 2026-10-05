@@ -237,7 +237,7 @@ def ingest_source_item(source_item, now=None):
             return _review(source_item, ReviewItem.Category.ARTIST_MISMATCH, "Spotify release credits omit the verified artist", {"artist": artist.official_name, "credits": metadata.get("artist_credits")})[0]
         bridge_reason = ""
         bridge_release = None
-        if settings.SPOTIFY_MEDIA_BRIDGE_ENABLED:
+        if settings.SPOTIFY_MEDIA_BRIDGE_ENABLED and not settings.FRESH_PIPELINE_ENABLED:
             from .spotify_bridge import try_auto_bridge
             result, bridge_reason, bridge_release = try_auto_bridge(source_item, now=now)
             if result:
@@ -426,8 +426,16 @@ def resolve_review(review_item, action, actor=None, *, release=None, track=None,
     if action in {"approve", "correct"}:
         if review.source_item.metadata.get("spotify_discovery"):
             if settings.SPOTIFY_MEDIA_BRIDGE_ENABLED:
-                from .spotify_bridge import bridge_approved_review
-                queue_ids = bridge_approved_review(review, match, resolution=resolution, now=now)
+                if settings.FRESH_PIPELINE_ENABLED:
+                    from .fresh import classify
+                    from .models import FreshDispatch
+                    disposition, reason, evidence = classify(review.source_item, now=now)
+                    dispatch, _ = FreshDispatch.objects.get_or_create(source_item=review.source_item)
+                    dispatch.disposition, dispatch.reason, dispatch.evidence = disposition, reason, evidence
+                    dispatch.save()
+                else:
+                    from .spotify_bridge import bridge_approved_review
+                    queue_ids = bridge_approved_review(review, match, resolution=resolution, now=now)
         else:
             queue, _ = _queue_item(release=match.release, track=match.track, now=now)
     audit_action = {"approve": "review_approved", "reject": "review_rejected", "correct": "review_corrected"}[action]

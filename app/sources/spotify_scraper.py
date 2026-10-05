@@ -198,9 +198,15 @@ class SpotifyScraperDiscovery:
                     raise SpotifyMetadataError("Spotify release track lacks stable ID, title, or duration")
                 tracks.append({"id": track.id, "title": str(track.name)[:500],
                                "position": position, "duration_seconds": round(track.duration_ms / 1000, 3),
-                               "artist_credits": [str(credit.name)[:200] for credit in track.artists]})
+                               "artist_credits": [str(credit.name)[:200] for credit in track.artists],
+                               "artist_ids": [str(getattr(credit, 'id', '')) for credit in track.artists],
+                               "disc_number": getattr(track, "disc_number", 1),
+                               "track_number": getattr(track, "track_number", position)})
             item["source_release_at"] = album.release_date
             item["metadata"].update({"album_type": album_type, "album": album.name if album_type in {"album", "ep"} else "", "artist_credits": artists, "track_count": len(album.tracks), "tracks": tracks})
+            item["metadata"].update({"artist_ids": [str(getattr(artist, 'id', '')) for artist in album.artists],
+                                     "official_release_title": album.name,
+                                     "artwork_url": album.images[0].url if getattr(album, 'images', None) else ""})
             item["sanitized_raw_data"].update({"album_type": album_type or None, "release_date": album.release_date.isoformat() if album.release_date else None, "artist_credits": artists, "track_count": len(album.tracks), "tracks": tracks})
             return item
         except SpotifyMetadataError:

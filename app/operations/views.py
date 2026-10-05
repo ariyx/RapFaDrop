@@ -37,6 +37,8 @@ def operator_required(view):
 @operator_required
 def dashboard(request):
     from sources.adapters import SpotifyAdapter
+    from releases.models import FreshProviderBackoff
+    fresh_alerts = FreshProviderBackoff.objects.filter(due_at__gt=timezone.now())
     q = request.GET.get("q", "").strip()
     artists = Artist.objects.prefetch_related("sources").order_by("official_name")
     platform = request.GET.get("platform", "")
@@ -71,7 +73,7 @@ def dashboard(request):
     from django.contrib.auth import get_user_model
     from .services import OPERATOR_GROUP
     admins = get_user_model().objects.filter(is_staff=True, groups__name=OPERATOR_GROUP).distinct().order_by("username")
-    return render(request, "operations/dashboard.html", {"spotify_discovery_status": SpotifyAdapter.status(), "artists": artists, "query": q, "platform": platform, "verification": verification, "enabled": enabled, "metrics": metrics, "requests": OperatorActionRequest.objects.select_related("source", "actor")[:10], "admins": admins, "queue_items": ProcessingQueueItem.objects.exclude(state="complete").order_by("due_at")[:30], "media_candidates": MediaCandidate.objects.exclude(state="ready")[:20], "retry_publications": Publication.objects.filter(state=Publication.State.RETRY_WAIT).order_by("retry_due_at")[:20]})
+    return render(request, "operations/dashboard.html", {"fresh_alerts":fresh_alerts, "spotify_discovery_status": SpotifyAdapter.status(), "artists": artists, "query": q, "platform": platform, "verification": verification, "enabled": enabled, "metrics": metrics, "requests": OperatorActionRequest.objects.select_related("source", "actor")[:10], "admins": admins, "queue_items": ProcessingQueueItem.objects.exclude(state="complete").order_by("due_at")[:30], "media_candidates": MediaCandidate.objects.exclude(state="ready")[:20], "retry_publications": Publication.objects.filter(state=Publication.State.RETRY_WAIT).order_by("retry_due_at")[:20]})
 
 
 @operator_required

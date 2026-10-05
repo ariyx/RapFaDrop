@@ -156,7 +156,7 @@ def _run_provider(candidate, provider, now=None):
         if candidate.state in {MediaCandidate.State.INVALID, MediaCandidate.State.REVIEW_REQUIRED} and candidate.attempt_count:
             return candidate
         source_item = candidate.source_match.source_item
-        source_url = candidate.provenance.get('source_url', source_item.canonical_url) if candidate.provenance.get('acquisition_platform') == 'youtube' else source_item.canonical_url
+        source_url = candidate.provenance.get('source_url', source_item.canonical_url) if candidate.provenance.get('acquisition_platform') in {'youtube', 'soundcloud'} else source_item.canonical_url
         if not provider.can_handle(source_url):
             candidate.state = MediaCandidate.State.REVIEW_REQUIRED
             candidate.last_outcome = "unsupported_source"
@@ -180,6 +180,17 @@ def _run_provider(candidate, provider, now=None):
         probe_started = time.monotonic()
         probe = provider.probe(source_url, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
         probe_seconds = round(time.monotonic() - probe_started, 3)
+        if candidate.provenance.get('fresh_manifest_id') and (not probe.duration_seconds or
+                abs(probe.duration_seconds - candidate.expected_duration_seconds) > 5):
+            raise ProviderError('Fresh recording duration changed after matching', retryable=False)
+        if candidate.provenance.get('fresh_manifest_id') and provider.name == 'yt-dlp':
+            from releases.normalization import normalize_text
+            from archive_collection.models import AcquisitionSource
+            identity = AcquisitionSource.objects.get(pk=candidate.provenance['acquisition_source_id'])
+            if (probe.provider_item_id != candidate.provenance.get('native_item_id') or
+                    str((probe.evidence or {}).get('uploader_id')) != identity.native_id or
+                    normalize_text(probe.title) != normalize_text(candidate.provenance.get('source_recording_title'))):
+                raise ProviderError('SoundCloud recording/uploader identity changed after validation', retryable=False)
         if provider.name == "yt-dlp" and source_item.platform == "soundcloud":
             from releases.normalization import normalize_text
             from releases.services import _uploader_mismatch
@@ -230,6 +241,8 @@ def _run_provider(candidate, provider, now=None):
         artwork = None
         artwork_state = MediaCandidate.ArtworkState.NOT_PROVIDED
         frozen_artwork = candidate.source_match.evidence.get("archive_official_metadata", {}).get("artwork_url") if candidate.source_match.matching_method in {"archive_spotify_soundcloud", "archive_frozen_spotify"} else None
+        if candidate.source_match.matching_method == 'fresh_official_track':
+            frozen_artwork = candidate.source_match.evidence.get('official_metadata', {}).get('artwork_url')
         artwork_url = frozen_artwork or probe.artwork_source_url
         if artwork_url:
             art_staging = staging / "source-artwork"
@@ -467,6 +480,8 @@ def _record_failure(candidate_id, attempt_id, error, *, now=None, retryable=True
 
 
 def _official_metadata(candidate):
+    if candidate.source_match.matching_method == 'fresh_official_track':
+        return candidate.source_match.evidence['official_metadata']
     archive = candidate.source_match.evidence.get("archive_official_metadata")
     if archive and candidate.source_match.matching_method in {"archive_spotify_soundcloud", "archive_frozen_spotify"}:
         return archive

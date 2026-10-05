@@ -106,11 +106,18 @@ SPOTIFY_MEDIA_BRIDGE_ENABLED = os.environ.get("RAPFADROP_SPOTIFY_MEDIA_BRIDGE_EN
 TELEGRAM_MODE = os.environ.get("RAPFADROP_TELEGRAM_MODE", "disabled")
 TELEGRAM_LIVE_ENABLED = os.environ.get("RAPFADROP_TELEGRAM_LIVE_ENABLED", "false").lower() == "true"
 TELEGRAM_BOT_TOKEN = os.environ.get("RAPFADROP_TELEGRAM_BOT_TOKEN", "")
+if os.environ.get("RAPFADROP_TELEGRAM_BOT_TOKEN_FILE"):
+    _bot_file = Path(os.environ["RAPFADROP_TELEGRAM_BOT_TOKEN_FILE"])
+    if _bot_file.is_symlink() or not _bot_file.is_file() or _bot_file.stat().st_mode & 0o077:
+        raise ValueError("Protected bot credential file required")
+    TELEGRAM_BOT_TOKEN = _bot_file.read_text().strip()
 TELEGRAM_TEST_CHAT_ID = os.environ.get("RAPFADROP_TELEGRAM_TEST_CHAT_ID", "")
 TELEGRAM_REVIEW_CHAT_ID = os.environ.get("RAPFADROP_TELEGRAM_REVIEW_CHAT_ID", "")
 TELEGRAM_PRODUCTION_CHAT_ID = os.environ.get("RAPFADROP_TELEGRAM_PRODUCTION_CHAT_ID", "")
 TELEGRAM_TIMEOUT_SECONDS = int(os.environ.get("RAPFADROP_TELEGRAM_TIMEOUT_SECONDS", "60"))
 PUBLICATION_WORKER_ENABLED = os.environ.get("RAPFADROP_PUBLICATION_WORKER_ENABLED", "false").lower() == "true"
+FRESH_PIPELINE_ENABLED = os.environ.get("RAPFADROP_FRESH_PIPELINE_ENABLED", "false").lower() == "true"
+TELEGRAM_EXPECTED_BOT_ID = int(os.environ.get("RAPFADROP_TELEGRAM_EXPECTED_BOT_ID", "0"))
 PUBLICATION_ALBUM_HOLD_SECONDS = int(os.environ.get("RAPFADROP_PUBLICATION_ALBUM_HOLD_SECONDS", "900"))
 PUBLICATION_CORRECTION_DELETE_SECONDS = int(os.environ.get("RAPFADROP_PUBLICATION_CORRECTION_DELETE_SECONDS", "600"))
 PUBLICATION_CORRECTION_TEXT = os.environ.get("RAPFADROP_PUBLICATION_CORRECTION_TEXT", "Audio file updated.")
@@ -121,7 +128,12 @@ CELERY_TASK_IGNORE_RESULT = True
 CELERY_TIMEZONE = "UTC"
 from .scheduling import beat_schedule
 
-CELERY_BEAT_SCHEDULE = beat_schedule(PUBLICATION_WORKER_ENABLED, TELEGRAM_LIVE_ENABLED, TELEGRAM_MODE, SPOTIFY_MEDIA_BRIDGE_ENABLED)
+CELERY_BEAT_SCHEDULE = beat_schedule(PUBLICATION_WORKER_ENABLED, TELEGRAM_LIVE_ENABLED, TELEGRAM_MODE, SPOTIFY_MEDIA_BRIDGE_ENABLED, FRESH_PIPELINE_ENABLED)
+CELERY_TASK_ROUTES = {
+    "sources.tasks.poll_due_artist_sources": {"queue": "spotify-pilot"},
+    "releases.tasks.process_fresh_releases": {"queue": "fresh-media-v1"},
+    "publication.tasks.process_due_publications": {"queue": "fresh-publication-v1"},
+}
 
 # The adapter is selected explicitly; existing installations stay unavailable.
 SPOTIFY_DISCOVERY_MODE = os.environ.get("RAPFADROP_SPOTIFY_DISCOVERY_MODE", "unavailable")

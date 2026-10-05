@@ -427,9 +427,9 @@ class PublicationTests(PublicationFixtures, TestCase):
         channel = PublicationChannel.objects.create(target=self.target)
         template = CaptionTemplate.objects.create(kind="single_audio", version=1, config=DEFAULT_CONFIG)
         for index in range(20):
-            track = Track.objects.create(official_title=f"Earlier {index} " + "Long title "*8)
-            ReleaseTrack.objects.create(release=release, track=track, position=index+1)
-            Publication.objects.create(channel=channel, identity_key=f"audio:{track.canonical_id}", kind="single_audio", track=track, template=template, context={}, state="published", message_id=1000+index, message_url=f"https://t.me/test_archive/{1000+index}")
+            candidate = self.candidate(f"Earlier {index} " + "Long title "*8, release=release, position=index+1)
+            track = candidate.track
+            Publication.objects.create(channel=channel, identity_key=f"audio:{track.canonical_id}", kind="single_audio", track=track, candidate=candidate, template=template, context={}, state="published", message_id=1000+index, message_url=f"https://t.me/test_archive/{1000+index}")
         self.candidate("New Album Track", release=release, position=21)
         session = prepare_album(release, self.target)
         self.assertTrue(session.overflow)

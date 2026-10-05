@@ -30,13 +30,14 @@ def main():
         artifact = backup.create(c, 'pre-deploy-' + args.sha)
         backup.restore_drill(c, artifact)
         backup.upload(c, artifact)
-        backup.compose(c, 'stop', '-t', '60', 'beat', 'worker')
+        services = list(c.get('production_services') or ['beat', 'worker'])
+        backup.compose(c, 'stop', '-t', '180', *services)
         backup.run(['git', '-C', checkout, 'checkout', args.sha])
         backup.compose(c, 'config', '--quiet')
         backup.compose(c, 'build', 'web')
         backup.compose(c, 'run', '--rm', '--no-deps', 'web', 'python', 'manage.py', 'migrate', '--noinput')
         backup.compose(c, 'run', '--rm', '--no-deps', 'web', 'python', 'manage.py', 'refresh_owner_defaults')
-        backup.compose(c, 'up', '-d', '--no-deps', '--no-build', '--wait', '--wait-timeout', '90', 'web', 'worker', 'beat')
+        backup.compose(c, 'up', '-d', '--no-deps', '--no-build', '--wait', '--wait-timeout', '90', *list(c.get('production_services') or ['web', 'worker', 'beat']))
         for command in [('check',), ('migrate', '--check'), ('makemigrations', '--check', '--dry-run')]:
             backup.compose(c, 'exec', '-T', 'web', 'python', 'manage.py', *command)
         backup.guard(c)
@@ -44,7 +45,7 @@ def main():
             health = json.load(response)
         if health != {'status': 'ok', 'database': 'ok'}:
             raise ValueError('Health verification failed')
-        print(json.dumps({'deployed_sha': args.sha, 'verified_predeploy_backup': str(artifact), 'health': health, 'safety': 'bridge and publication OFF; metadata workers only'}))
+        print(json.dumps({'deployed_sha': args.sha, 'verified_predeploy_backup': str(artifact), 'health': health, 'safety': 'protected runtime roles verified'}))
 
 
 if __name__ == '__main__':

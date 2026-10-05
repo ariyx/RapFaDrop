@@ -79,14 +79,21 @@ def _template(kind):
     return template
 
 
-def _channel(target):
-    channel, _ = PublicationChannel.objects.get_or_create(target=guard_target(target))
+def _channel(target, *, fresh_staging=False):
+    if (fresh_staging and settings.FRESH_PIPELINE_ENABLED and settings.SPOTIFY_MEDIA_BRIDGE_ENABLED and
+            str(target) == str(settings.TELEGRAM_PRODUCTION_CHAT_ID) == '-1004311149640'):
+        checked_target = '-1004311149640'
+    else:
+        checked_target = guard_target(target)
+    channel, _ = PublicationChannel.objects.get_or_create(target=checked_target)
     return channel
 
 
 def _audio_context(candidate, channel):
     track, release = candidate.track, candidate.release
     context = {"title": track.official_title, "artists": list(track.artist_credits.order_by("position", "pk").values_list("artist__official_name", flat=True)), "release_type": release.release_type, "channel_target": channel.target}
+    if candidate.source_match.matching_method == 'fresh_official_track':
+        context['artists'] = candidate.source_match.evidence['official_metadata']['artists']
     version = track.edition if track.edition != "original" else release.edition
     if version in {"instrumental", "reissue", "deluxe"}:
         context["version_type"] = version
@@ -114,7 +121,7 @@ def _audio_context(candidate, channel):
 
 def reserve_audio(candidate, target, *, kind=None, album_session=None):
     candidate = require_ready(candidate)
-    channel = _channel(target)
+    channel = _channel(target, fresh_staging=True)
     kind = kind or (Publication.Kind.EDITION if candidate.track.edition_of_id else Publication.Kind.SINGLE)
     if kind not in AUDIO_KINDS:
         raise PublicationError("Invalid audio publication kind")
@@ -180,6 +187,9 @@ def _mark_uncertain(attempt, message):
 def perform(pub, operation, operation_key, payload, *, gateway, candidate=None, now=None, session_id=None, correction_notice=True):
     """Commit an attempt and channel lease BEFORE a network operation; never blind-resend."""
     now = now or timezone.now()
+    if getattr(gateway, 'fresh_production', False):
+        from releases.fresh import authorize_fresh_operation
+        authorize_fresh_operation(pub, operation)
     if getattr(gateway, "collection_id", None) is not None:
         from archive_collection.services import authorize_publication
         authorize_publication(gateway.collection_id, pub, operation, payload, allow_paused_caption_edits=getattr(gateway, 'allow_paused_caption_edits', False))
@@ -403,7 +413,7 @@ def reconcile(attempt, *, actor, decision, evidence, message_id=None, remote_cha
 def prepare_album(release, target, *, context=None):
     if release.release_type not in {"lp", "ep"} or release.state not in {"identified", "approved"} or not release.source_matches.filter(confidence__gte=90, state__in=CONFIDENT_STATES).exists():
         raise PublicationError("Album requires a confidently typed canonical LP/EP")
-    channel = _channel(target)
+    channel = _channel(target, fresh_staging=True)
     with transaction.atomic():
         channel = PublicationChannel.objects.select_for_update().get(pk=channel.pk)
         session, _ = AlbumSession.objects.get_or_create(channel=channel, release=release)
@@ -421,8 +431,9 @@ def prepare_album(release, target, *, context=None):
             candidate = best_ready_candidate(member.track)
             if existing:
                 previous.append({"title": member.track.official_title, "url": existing.message_url})
-                if existing.candidate_id:
-                    candidates.append(require_ready(existing.candidate))
+                if (existing.state != Publication.State.PUBLISHED or not existing.candidate_id or
+                        existing.candidate.validation_report.get("complete") is not True):
+                    raise PublicationError("Prior single requires confirmed validated recording evidence")
             elif candidate:
                 candidate = require_ready(candidate)
                 candidates.append(candidate)
@@ -520,7 +531,10 @@ def advance_album(session, *, gateway, now=None):
         entry = session.entries[session.cursor]
         if entry["prior_publication_id"]:
             prior = Publication.objects.get(pk=entry["prior_publication_id"])
-            edit_caption(prior, {"album_post_url": intro.message_url}, gateway=gateway, now=now, session_id=session.pk)
+            prior = edit_caption(prior, {"album_post_url": intro.message_url}, gateway=gateway, now=now, session_id=session.pk)
+            if prior.state != Publication.State.PUBLISHED:
+                _album_failure(session, prior, now)
+                return session
         else:
             candidate = MediaCandidate.objects.get(pk=entry["candidate_id"])
             pub = reserve_audio(candidate, session.channel.target, kind=Publication.Kind.TRACK, album_session=session)
@@ -544,8 +558,14 @@ def advance_album(session, *, gateway, now=None):
     return session
 
 
-def run_due(*, gateway, now=None):
+def run_due(*, gateway, now=None, publication_ids=None, session_ids=None):
     now = now or timezone.now()
+    publications = Publication.objects.all()
+    sessions = AlbumSession.objects.all()
+    if publication_ids is not None:
+        publications = publications.filter(pk__in=publication_ids)
+    if session_ids is not None:
+        sessions = sessions.filter(pk__in=session_ids)
     for channel_id in PublicationChannel.objects.filter(in_flight__isnull=False, lease_until__lte=now).values_list("pk", flat=True):
         with transaction.atomic():
             channel = PublicationChannel.objects.select_for_update().get(pk=channel_id)
@@ -557,7 +577,7 @@ def run_due(*, gateway, now=None):
                         AlbumSession.objects.filter(pk=attempt.publication.album_session_id).update(state="uncertain", failed_since=now)
                 channel.in_flight, channel.lease_until = None, None
                 channel.save(update_fields=("in_flight", "lease_until"))
-    for session in AlbumSession.objects.exclude(state__in=("complete", "uncertain")):
+    for session in sessions.exclude(state__in=("complete", "uncertain")):
         if not session.intro_id or session.state == "waiting_media":
             session = prepare_album(session.release, session.channel.target)
         try:
@@ -566,14 +586,14 @@ def run_due(*, gateway, now=None):
             session.state, session.last_error = "waiting_media", str(exc)
             session.failed_since = session.failed_since or now
             session.save(update_fields=("state", "last_error", "failed_since", "updated_at"))
-    for pub in Publication.objects.filter(state=Publication.State.PENDING, kind__in=AUDIO_KINDS, album_session__isnull=True):
+    for pub in publications.filter(state=Publication.State.PENDING, kind__in=AUDIO_KINDS, album_session__isnull=True):
         try:
             perform(pub, "send_audio", "initial", _audio_payload(pub), gateway=gateway, candidate=pub.candidate, now=now)
         except PublicationError as exc:
             pub.state, pub.last_error = Publication.State.REVIEW, str(exc)
             pub.save(update_fields=("state", "last_error", "updated_at"))
             _audit(pub, "local_media_review_required")
-    for pub in Publication.objects.filter(state=Publication.State.RETRY_WAIT, retry_due_at__lte=now, album_session__isnull=True):
+    for pub in publications.filter(state=Publication.State.RETRY_WAIT, retry_due_at__lte=now, album_session__isnull=True):
         attempt = pub.attempts.filter(state=PublicationAttempt.State.FAILED).order_by("-pk").first()
         if attempt:
             try:
@@ -582,7 +602,7 @@ def run_due(*, gateway, now=None):
                 pub.state, pub.last_error = Publication.State.REVIEW, str(exc)
                 pub.save(update_fields=("state", "last_error", "updated_at"))
                 _audit(pub, "local_media_review_required")
-    for pub in Publication.objects.filter(kind=Publication.Kind.CORRECTION, state=Publication.State.PUBLISHED, delete_due_at__lte=now):
+    for pub in publications.filter(kind=Publication.Kind.CORRECTION, state=Publication.State.PUBLISHED, delete_due_at__lte=now):
         perform(pub, "delete", "scheduled-delete", {}, gateway=gateway, now=now)
-    for attempt in PublicationAttempt.objects.filter(operation="edit_media", state=PublicationAttempt.State.SUCCEEDED).select_related("publication"):
+    for attempt in PublicationAttempt.objects.filter(publication__in=publications, operation="edit_media", state=PublicationAttempt.State.SUCCEEDED).select_related("publication"):
         ensure_correction(attempt.publication, attempt, gateway=gateway, now=now)

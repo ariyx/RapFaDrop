@@ -14,6 +14,26 @@ from .models import (
 )
 from .services import resolve_review
 from operations.services import audit, safe_audit_json
+from .models import FreshDispatch, FreshTrack, FreshProviderBackoff
+
+
+@admin.register(FreshDispatch)
+class FreshDispatchAdmin(admin.ModelAdmin):
+    list_display = ('source_item', 'disposition', 'processing_state', 'reason', 'due_at', 'attempts')
+    list_filter = ('disposition', 'processing_state')
+    readonly_fields = tuple(field.name for field in FreshDispatch._meta.fields)
+
+
+@admin.register(FreshTrack)
+class FreshTrackAdmin(admin.ModelAdmin):
+    list_display = ('dispatch', 'position', 'track', 'candidate', 'publication')
+    readonly_fields = tuple(field.name for field in FreshTrack._meta.fields)
+
+
+@admin.register(FreshProviderBackoff)
+class FreshProviderBackoffAdmin(admin.ModelAdmin):
+    list_display = ('platform', 'due_at', 'reason')
+    readonly_fields = tuple(field.name for field in FreshProviderBackoff._meta.fields)
 
 
 class ReleaseCreditInline(admin.TabularInline):

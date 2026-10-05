@@ -1,7 +1,7 @@
 """Keep the beat schedule consistent with publication safety switches."""
 
 
-def beat_schedule(publication_enabled, telegram_enabled, telegram_mode, spotify_bridge_enabled=False):
+def beat_schedule(publication_enabled, telegram_enabled, telegram_mode, spotify_bridge_enabled=False, fresh_enabled=False):
     schedule = {"poll-due-artist-sources": {"task": "sources.tasks.poll_due_artist_sources", "schedule": 60.0}}
     if spotify_bridge_enabled and not publication_enabled and not telegram_enabled:
         schedule["spotify-bridge-media"] = {
@@ -11,4 +11,8 @@ def beat_schedule(publication_enabled, telegram_enabled, telegram_mode, spotify_
         schedule["publication-recovery-and-correction-deletion"] = {
             "task": "publication.tasks.process_due_publications", "schedule": 30.0,
         }
+    if fresh_enabled and spotify_bridge_enabled:
+        schedule["fresh-release-processing"] = {"task": "releases.tasks.process_fresh_releases", "schedule": 60.0,
+                                               "options": {"queue": "fresh-media-v1"}}
+    schedule["poll-due-artist-sources"]["options"] = {"queue": "spotify-pilot"}
     return schedule

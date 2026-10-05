@@ -37,6 +37,11 @@ def guard_target(target):
     target = normalize_target(target)
     cleaned = target.lower().replace("https://t.me/", "").replace("http://t.me/", "").lstrip("@")
     if cleaned == "rapfadrop" or target == "-1004311149640" or (settings.TELEGRAM_PRODUCTION_CHAT_ID and target == str(settings.TELEGRAM_PRODUCTION_CHAT_ID)):
+        if (settings.FRESH_PIPELINE_ENABLED and settings.TELEGRAM_MODE == 'production' and
+                settings.TELEGRAM_LIVE_ENABLED and settings.PUBLICATION_WORKER_ENABLED and
+                str(settings.TELEGRAM_PRODUCTION_CHAT_ID) == '-1004311149640' and
+                settings.TELEGRAM_EXPECTED_BOT_ID == 8697681226):
+            return '-1004311149640'
         raise TargetBlocked("Production-channel publication is blocked in M4")
     return target
 
@@ -94,9 +99,12 @@ class _NoRedirect(HTTPRedirectHandler):
 class TelegramGateway:
     """Bot-only HTTPS transport. Construction and every mutation require explicit opt-in."""
     def __init__(self):
-        if not settings.TELEGRAM_LIVE_ENABLED or settings.TELEGRAM_MODE != "test" or not settings.TELEGRAM_BOT_TOKEN:
+        if not settings.TELEGRAM_LIVE_ENABLED or settings.TELEGRAM_MODE not in {"test", "production"} or not settings.TELEGRAM_BOT_TOKEN:
             raise TargetBlocked("Live test gateway requires enabled test mode and locally configured bot credentials")
+        if settings.TELEGRAM_MODE == 'production':
+            guard_target(settings.TELEGRAM_PRODUCTION_CHAT_ID)
         self._token = settings.TELEGRAM_BOT_TOKEN
+        self.fresh_production = settings.TELEGRAM_MODE == 'production'
         self._opener = build_opener(_NoRedirect())
         self._verified = threading.local()
 
@@ -105,6 +113,21 @@ class TelegramGateway:
         return self._transport_request(method, data, files)
 
     def _check_request(self, method, data):
+        if settings.TELEGRAM_MODE == 'production':
+            guard_target(settings.TELEGRAM_PRODUCTION_CHAT_ID)
+            allowed = {'-1004311149640'}
+            if settings.TELEGRAM_REVIEW_CHAT_ID:
+                allowed.add(str(settings.TELEGRAM_REVIEW_CHAT_ID))
+            if method in {'getMe', 'getChat', 'getChatMember'}:
+                if method != 'getMe' and str(data.get('chat_id')) not in allowed:
+                    raise TargetBlocked('Production read target mismatch')
+                return
+            target = str(data.get('chat_id'))
+            if target not in allowed or getattr(self._verified, 'target', None) != target:
+                raise TargetBlocked('Production mutation requires freshly verified exact target')
+            if target != '-1004311149640' and method != 'sendMessage':
+                raise TargetBlocked('Admin destination accepts only scoped notifications')
+            return
         if method != "getChat":
             target = guard_target(data.get("chat_id", ""))
             if not settings.TELEGRAM_LIVE_ENABLED or settings.TELEGRAM_MODE != "test" or target != getattr(self._verified, "target", None):
@@ -155,6 +178,24 @@ class TelegramGateway:
 
     def _guard_live(self, target):
         target = guard_target(target)
+        if settings.TELEGRAM_MODE == 'production':
+            if target == str(settings.TELEGRAM_REVIEW_CHAT_ID) and target != '-1004311149640':
+                chat = self._request('getChat', {'chat_id':target})
+                if str(chat.get('id')) != target or chat.get('username', '').lower() == 'rapfadrop':
+                    raise TargetBlocked('Configured review destination mismatch')
+                return target, chat.get('username', '')
+            if target != '-1004311149640':
+                raise TargetBlocked('Exact production target required')
+            bot = self._request('getMe', {})
+            chat = self._request('getChat', {'chat_id': target})
+            member = self._request('getChatMember', {'chat_id': target, 'user_id': settings.TELEGRAM_EXPECTED_BOT_ID})
+            if (bot.get('id') != settings.TELEGRAM_EXPECTED_BOT_ID or bot.get('is_bot') is not True or
+                    str(chat.get('id')) != target or chat.get('type') != 'channel' or
+                    chat.get('username', '').lower() != 'rapfadrop' or
+                    member.get('status') not in {'administrator', 'creator'} or
+                    (member.get('status') != 'creator' and member.get('can_post_messages') is not True)):
+                raise TargetBlocked('Production bot/channel/posting permission mismatch')
+            return target, chat['username']
         allowed = {normalize_target(value) for value in (settings.TELEGRAM_TEST_CHAT_ID, settings.TELEGRAM_REVIEW_CHAT_ID) if value}
         if target not in allowed:
             raise TargetBlocked("Target is not the locally configured test/review destination")
@@ -172,6 +213,13 @@ class TelegramGateway:
         return str(chat["id"]), chat.get("username", "")
 
     def execute(self, operation, target, payload):
+        if getattr(self, 'fresh_production', False):
+            from releases.fresh import authorize_fresh_operation
+            from .models import PublicationAttempt
+            attempt = PublicationAttempt.objects.filter(state='pending', operation=operation, payload=payload).select_related('publication__channel').first()
+            if not attempt:
+                raise TargetBlocked('Production mutation requires a durable fresh dispatch attempt')
+            authorize_fresh_operation(attempt.publication, operation)
         chat_id, username = self._guard_live(target)
         methods = {"send_audio": self.send_audio, "send_intro": self.send_intro, "edit_media": self.edit_media, "edit_caption": self.edit_caption, "send_text": self.send_text, "reply": self.send_correction, "delete": self.delete_correction, "notify": self.notify_admin}
         if operation not in methods:

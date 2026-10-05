@@ -1,5 +1,6 @@
 {% extends "operations/base.html" %}{% block content %}<h1>Operations</h1>
 <p>Spotify discovery: {{ spotify_discovery_status }}</p>
+{% for alert in fresh_alerts %}<p role="alert">{{ alert.platform }} acquisition paused until {{ alert.due_at }}: {{ alert.reason }}. Refresh the protected owner session or check provider access; pending releases are retained. <a href="/admin/releases/freshproviderbackoff/">Details</a></p>{% endfor %}
 <p>Sources: {{ metrics.source_success }} with success, {{ metrics.source_failure }} with failures. Open reviews: {{ metrics.open_reviews }}. Published records: {{ metrics.published }}. Publication attempts: {{ metrics.publication_attempts }}. Open reconciliations: {{ metrics.reconciliations }}.</p>
 <p>Average discovery → ready: {{ metrics.avg_ready_seconds|default:"not available" }} seconds; discovery → published: {{ metrics.avg_published_seconds|default:"not available" }} seconds.</p>
 <h2>Queue counts</h2><ul>{% for row in metrics.queue %}<li>{{ row.state }}: {{ row.count }}</li>{% empty %}<li>No queue items</li>{% endfor %}</ul>

@@ -90,12 +90,23 @@ def snapshot(db):
 def guard(c):
     if c.get('backup_chat_id') != CHAT or c.get('backup_chat_id') == c.get('production_chat_id') or c.get('production_chat_id') != PRODUCTION_CHAT:
         raise ValueError('Dedicated backup target required; no fallback')
-    for name in ['web', 'worker', 'beat']:
+    roles = c.get('production_services')
+    if roles and roles != {'web':'metadata', 'worker':'metadata', 'beat':'scheduler', 'fresh-media':'metadata', 'fresh-publication':'publisher'}:
+        raise ValueError('Exact approved production service roles required')
+    for name in (roles or ['web', 'worker', 'beat']):
         info = json.loads(run(['docker', 'inspect', f'rapfadrop-{name}-1']))[0]
         env = dict(value.split('=', 1) for value in info['Config']['Env'])
         required = {'RAPFADROP_SPOTIFY_MEDIA_BRIDGE_ENABLED': 'false', 'RAPFADROP_TELEGRAM_MODE': 'disabled', 'RAPFADROP_TELEGRAM_LIVE_ENABLED': 'false', 'RAPFADROP_PUBLICATION_WORKER_ENABLED': 'false'}
+        if roles:
+            live_role = roles[name] in {'publisher', 'scheduler'}
+            required.update({'RAPFADROP_SPOTIFY_MEDIA_BRIDGE_ENABLED':'true',
+                'RAPFADROP_FRESH_PIPELINE_ENABLED':'true', 'RAPFADROP_TELEGRAM_MODE':'production' if live_role else 'disabled',
+                'RAPFADROP_TELEGRAM_LIVE_ENABLED':'true' if live_role else 'false',
+                'RAPFADROP_PUBLICATION_WORKER_ENABLED':'true' if live_role else 'false'})
+            if live_role:
+                required.update({'RAPFADROP_TELEGRAM_PRODUCTION_CHAT_ID':PRODUCTION_CHAT, 'RAPFADROP_TELEGRAM_EXPECTED_BOT_ID':'8697681226'})
         if any(env.get(key) != value for key, value in required.items()):
-            raise ValueError('Discovery-only safety switches required')
+            raise ValueError('Protected runtime safety switches differ from approved roles')
 
 
 def key(c, *, create=False):
@@ -119,7 +130,8 @@ def create(c, reason):
     dest = root / f'rapfadrop-{stamp}-{uuid.uuid4().hex[:8]}.tar.age'
     with tempfile.TemporaryDirectory(prefix='.stage-', dir=root) as temporary:
         stage = Path(temporary)
-        compose(c, 'stop', '-t', '60', 'beat', 'worker', 'web')
+        runtime_services = list(c.get('production_services') or ['beat', 'worker', 'web'])
+        compose(c, 'stop', '-t', '180', *runtime_services)
         try:
             manifest = {'utc': stamp, 'reason': reason, 'application_sha': run(['git', '-C', c['checkout'], 'rev-parse', 'HEAD']).decode().strip(), 'snapshot': snapshot('rapfadrop'), 'runtime': {'postgres': sql('rapfadrop', 'SHOW server_version'), 'docker': run(['docker', '--version']).decode().strip(), 'python': run(['docker', 'run', '--rm', '--network', 'none', '--entrypoint', 'python', 'rapfadrop-web', '--version']).decode().strip()}, 'migrations': sql('rapfadrop', 'SELECT app,name FROM django_migrations ORDER BY app,name')}
             (stage / 'database.dump').write_bytes(pg('pg_dump', '-U', 'rapfadrop', '-p', '55432', '-d', 'rapfadrop', '--format=custom'))
@@ -144,7 +156,7 @@ def create(c, reason):
             manifest['files'] = {str(p.relative_to(stage)): digest(p) for p in stage.rglob('*') if p.is_file()}
             write_json(stage / 'manifest.json', manifest)
         finally:
-            compose(c, 'up', '-d', '--no-deps', '--no-build', 'web', 'worker', 'beat')
+            compose(c, 'up', '-d', '--no-deps', '--no-build', *runtime_services)
         archive = stage / 'backup.tar'
         with tarfile.open(archive, 'w') as tar:
             for file in stage.rglob('*'):
@@ -347,7 +359,7 @@ def production_restore(c, artifact, confirmation):
         current = run(['git', '-C', c['checkout'], 'rev-parse', 'HEAD']).decode().strip()
         if current != manifest['application_sha']:
             raise ValueError('Deploy the archived SHA first, with workers stopped; do not run newer code against restored schema')
-        compose(c, 'stop', '-t', '60', 'beat', 'worker', 'web')
+        compose(c, 'stop', '-t', '180', *list(c.get('production_services') or ['beat', 'worker', 'web']))
         # Deliberately leave dispatch stopped on success or failure; operator verifies before restart.
         pg('dropdb', '-U', 'rapfadrop', '-p', '55432', '--force', 'rapfadrop')
         pg('createdb', '-U', 'rapfadrop', '-p', '55432', '-T', 'template0', 'rapfadrop')
