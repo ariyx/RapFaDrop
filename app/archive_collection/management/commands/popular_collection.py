@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 token_path = Path(config["token_file"])
                 if token_path.stat().st_mode & 0o077:
                     raise CommandError("Collection token file must be private")
-                gateway = CollectionGateway(collection, token_path.read_text().strip(), config["expected_bot_id"])
+                gateway = CollectionGateway(collection, token_path.read_text().strip(), config["expected_bot_id"], allow_paused_caption_edits=action == 'refresh-published')
                 if os.geteuid() == 0:
                     # Credentials stay root-only on disk; downloader and media work use app UID.
                     os.setgroups([])

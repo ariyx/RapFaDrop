@@ -11,10 +11,11 @@ TARGET = "-1004311149640"
 
 
 class CollectionGateway(TelegramGateway):
-    def __init__(self, collection, token, expected_bot_id):
+    def __init__(self, collection, token, expected_bot_id, *, allow_paused_caption_edits=False):
         self.collection_id = collection.pk
         self._token = token
         self.expected_bot_id = int(expected_bot_id)
+        self.allow_paused_caption_edits = allow_paused_caption_edits
         if not token or collection.target != TARGET or not collection.frozen_at:
             raise TargetBlocked("Frozen authorized collection and protected bot credential required")
         self._opener = build_opener(_NoRedirect())
@@ -26,14 +27,14 @@ class CollectionGateway(TelegramGateway):
                 raise TargetBlocked("Collection read target mismatch")
             return
         from .services import assert_collection_safe
-        assert_collection_safe(Collection.objects.get(pk=self.collection_id))
+        assert_collection_safe(Collection.objects.get(pk=self.collection_id), allow_paused=self.allow_paused_caption_edits and method == 'editMessageCaption')
         if method not in {"sendAudio", "editMessageCaption", "editMessageMedia"} or str(data.get("chat_id")) != TARGET or getattr(self._verified, "target", None) != TARGET:
             raise TargetBlocked("Collection capability permits only verified frozen audio/caption operations")
 
     def _guard_live(self, target):
         from .services import assert_collection_safe
         collection = Collection.objects.get(pk=self.collection_id)
-        assert_collection_safe(collection)
+        assert_collection_safe(collection, allow_paused=self.allow_paused_caption_edits)
         if str(target) != TARGET:
             raise TargetBlocked("Owner-approved collection target mismatch")
         bot = self._request("getMe", {})
@@ -58,7 +59,7 @@ class CollectionGateway(TelegramGateway):
             publication__archive_recordings__collection_id=self.collection_id).select_related("publication__channel").first()
         if attempt is None:
             raise TargetBlocked("No collection-owned pending publication attempt")
-        authorize_publication(self.collection_id, attempt.publication, operation, payload)
+        authorize_publication(self.collection_id, attempt.publication, operation, payload, allow_paused_caption_edits=self.allow_paused_caption_edits)
         return super().execute(operation, target, payload)
 
     def readback(self, recording):

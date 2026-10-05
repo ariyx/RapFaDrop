@@ -13,12 +13,16 @@ AUDIO_KINDS = {'single_audio', 'album_track_audio', 'archive_audio', 'edition'}
 
 def known_audio_default(config):
     old = {k: v for k, v in DEFAULT_CONFIG.items() if k not in {'audio_layout', 'archive_header', 'brand_label', 'brand_url'}}
-    for rows in (old['rows'], OLD_ROWS):
-        for footer in ('t.me/RapFaDrop', '@RapFaDrop'):
-            for heading in ('Previously released from this album:', 'پیش‌تر از این آلبوم منتشر شده:'):
-                allowed = {**old, 'rows': rows, 'intro_footer': footer, 'prior_heading': heading, 'archive_header': 'ARCHIVE'}
-                if all(k in allowed and allowed[k] == v for k, v in config.items()):
-                    return True
+    previous = {**DEFAULT_CONFIG, 'audio_layout': 'compact', 'archive_header': 'FAVE', 'header': 'DROP', 'lp_header': 'LP DROP', 'ep_header': 'EP DROP'}
+    if config in (DEFAULT_CONFIG, previous):
+        return True
+    for headers in (old, {**old, 'header': 'DROP', 'lp_header': 'LP DROP', 'ep_header': 'EP DROP'}):
+        for rows in (old['rows'], OLD_ROWS):
+            for footer in ('t.me/RapFaDrop', '@RapFaDrop'):
+                for heading in ('Previously released from this album:', 'پیش‌تر از این آلبوم منتشر شده:'):
+                    allowed = {**headers, 'rows': rows, 'intro_footer': footer, 'prior_heading': heading, 'archive_header': 'ARCHIVE'}
+                    if all(k in allowed and allowed[k] == v for k, v in config.items()):
+                        return True
     return False
 
 
@@ -33,7 +37,7 @@ class Command(BaseCommand):
             if kind not in AUDIO_KINDS:
                 continue
             template = CaptionTemplate.objects.filter(kind=kind, enabled=True).order_by('-version').first()
-            if template.config.get('audio_layout') == 'compact':
+            if template.config.get('audio_layout') == 'linked_heading':
                 continue
             if known_audio_default(template.config):
                 version = CaptionTemplate.objects.filter(kind=kind).aggregate(v=Max('version'))['v'] + 1

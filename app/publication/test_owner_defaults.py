@@ -8,15 +8,15 @@ from .models import CaptionTemplate
 
 
 class OwnerCaptionTests(SimpleTestCase):
-    def test_all_audio_kinds_select_one_link(self):
+    def test_all_audio_kinds_select_spotify_then_album(self):
         context = {'release_type': 'ep', 'album_intro_confirmed':True, 'music_video_url': 'https://example.com/video', 'album_post_url': 'https://t.me/RapFaDrop/1', 'original_track_post_url': 'https://t.me/RapFaDrop/2', 'spotify_url': 'https://open.spotify.com/track/a', 'soundcloud_url': 'https://soundcloud.com/a/b'}
         for kind in ['single_audio', 'album_track_audio', 'edition']:
             html = render_caption(kind, context).html
-            self.assertIn('Album</a> · ',html)
-            self.assertNotIn('Spotify</a>',html)
+            self.assertIn('Spotify</a> · ',html)
+            self.assertIn('Album</a>',html)
             self.assertNotIn('SoundCloud</a>',html)
             self.assertNotIn('\n\n', html)
-        self.assertEqual(render_caption('single_audio', {}).html, '<b>DROP</b>\n<a href="https://t.me/RapFaDrop">Rap Farsi Drop</a>')
+        self.assertEqual(render_caption('single_audio', {}).html, '<a href="https://t.me/RapFaDrop"><b>Drop</b></a>')
         self.assertNotIn(' / ', render_caption('edition', {'spotify_url': context['spotify_url']}).html)
 
     def test_intro_related_links_then_platforms_then_footer(self):

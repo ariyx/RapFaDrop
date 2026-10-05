@@ -9,9 +9,9 @@ class CaptionError(ValueError):
 
 
 DEFAULT_CONFIG = {
-    "audio_layout": "compact", "archive_header": "FAVE",
+    "audio_layout": "linked_heading", "archive_header": "Fave",
     "brand_label": "Rap Farsi Drop", "brand_url": "https://t.me/RapFaDrop",
-    "header": "DROP", "lp_header": "LP DROP", "ep_header": "EP DROP",
+    "header": "Drop", "lp_header": "LP Drop", "ep_header": "EP Drop",
     "footer": "t.me/RapFaDrop", "intro_footer": "t.me/RapFaDrop",
     "prior_heading": "Previously released from this album:",
     "rows": ["music_video_url", "album_post_url", "original_track_post_url", "platforms"],
@@ -96,6 +96,36 @@ def compact_audio(kind, context, config, labels, limit):
     return RenderedCaption(result)
 
 
+def linked_heading_audio(kind, context, config, labels, limit):
+    for key in ('spotify_url', 'soundcloud_url', 'album_post_url', 'original_track_post_url', 'original_album_post_url'):
+        if context.get(key):
+            safe_url(context[key], channel=key.endswith('post_url'))
+    header = config['archive_header'] if kind == 'archive_audio' else config['header']
+    if kind == 'album_track_audio':
+        header = config['ep_header'] if str(context.get('release_type', '')).lower() == 'ep' else config['lp_header']
+    brand = safe_url(config['brand_url'], channel=True)
+    lines = [f'<a href="{escape(brand, quote=True)}"><b>{escape(str(header))}</b></a>'] if header and brand else []
+    version = context.get('version_type')
+    if version in {'instrumental', 'reissue', 'deluxe'}:
+        text = version.capitalize()
+        original = confirmed_message_url(context.get('original_track_post_url') or context.get('original_album_post_url'), context) if context.get('original_confirmed') else ''
+        if original:
+            text += ' (' + link(labels['original_track_post_url'], original, channel=True) + ')'
+        lines.append(text)
+    links = [link(labels['spotify_url'], context['spotify_url'])] if context.get('spotify_url') else []
+    album = confirmed_message_url(context['album_post_url'], context) if context.get('album_intro_confirmed') and context.get('album_post_url') else ''
+    if album:
+        links.append(link(labels['album_post_url'], album, channel=True))
+    elif context.get('soundcloud_url'):
+        links.append(link(labels['soundcloud_url'], context['soundcloud_url']))
+    if links:
+        lines.append('› ' + ' · '.join(links))
+    result = '\n'.join(lines)
+    if visible_length(result) > limit:
+        raise CaptionError('Audio caption exceeds the supported caption limit')
+    return RenderedCaption(result)
+
+
 def render_caption(kind, context, config=None, *, limit=1024):
     # Unmigrated custom audio versions retain their historical rendering.
     raw_config=config or {}
@@ -152,6 +182,8 @@ def render_caption(kind, context, config=None, *, limit=1024):
             else:
                 chunks[-1] += "\n" + row
         return RenderedCaption(result, tuple(chunks))
+    if config['audio_layout'] == 'linked_heading' and kind in {'archive_audio', 'single_audio', 'album_track_audio', 'edition'}:
+        return linked_heading_audio(kind, context, config, labels, limit)
     if config["audio_layout"] == "compact" and kind in {'archive_audio','single_audio','album_track_audio','edition'}:
         return compact_audio(kind, context, config, labels, limit)
     header = config.get("archive_header", "ARCHIVE") if kind == "archive_audio" else config["header"]

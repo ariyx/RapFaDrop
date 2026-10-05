@@ -34,14 +34,14 @@ from .tasks import process_due_publications
 class CaptionTests(SimpleTestCase):
     def test_single_conditionals_escape_and_one_platform(self):
         rendered = render_caption("single_audio", {"spotify_url": "https://open.spotify.com/track/example?a=1&b=2"})
-        self.assertIn("<b>DROP</b>", rendered.html)
+        self.assertIn("<b>Drop</b></a>", rendered.html)
         self.assertIn("Spotify</a>", rendered.html)
         self.assertIn("&amp;b=2", rendered.html)
         self.assertNotIn(" / ", rendered.html)
         for missing in ("SoundCloud", "Music Video", ">Album<", ">Original<"):
             self.assertNotIn(missing, rendered.html)
         no_links = render_caption("single_audio", {}).html
-        self.assertEqual(no_links, '<b>DROP</b>\n<a href="https://t.me/RapFaDrop">Rap Farsi Drop</a>')
+        self.assertEqual(no_links, '<a href="https://t.me/RapFaDrop"><b>Drop</b></a>')
 
     def test_intro_title_only_bold_guest_only_italic_and_required_marker(self):
         result = render_caption("album_intro", {"title": "راه & <script> 🎧", "artists": ["هیچ‌کس", "Artist <Two>"], "features": ["Guest & One", "مهمان"], "release_type": "EP", "previous_singles": [{"title": "Earlier <single>", "url": "https://t.me/test_channel/12"}]})
@@ -253,7 +253,7 @@ class PublicationTests(PublicationFixtures, TestCase):
         CaptionTemplate.objects.create(kind="single_audio", version=2, config={**DEFAULT_CONFIG, "header": "New header"})
         result = edit_caption(pub, {"music_video_url": "https://www.youtube.com/watch?v=official", "spotify_url": "https://open.spotify.com/track/fixture"}, gateway=self.gateway)
         self.assertEqual(result.message_id, pub.message_id)
-        self.assertIn("<b>DROP</b>", result.caption_html)
+        self.assertIn("<b>Drop</b></a>", result.caption_html)
         self.assertNotIn("Music Video</a>", result.caption_html)
         self.assertNotIn(" / ", result.caption_html)
         self.assertIn('Spotify</a> · ',result.caption_html)
@@ -273,9 +273,9 @@ class PublicationTests(PublicationFixtures, TestCase):
         self.assertIn(single.message_url, result.intro.caption_html)
         self.assertIn("› ", result.intro.caption_html)
         self.assertIn(result.intro.message_url, single.caption_html)
-        self.assertIn("<b>DROP</b>", single.caption_html)
+        self.assertIn("<b>Drop</b></a>", single.caption_html)
         new_pub = Publication.objects.get(track=other.track)
-        self.assertIn("<b>LP DROP</b>", new_pub.caption_html)
+        self.assertIn("<b>LP Drop</b></a>", new_pub.caption_html)
         audios = [call for call in self.gateway.calls if call["operation"] == "send_audio"]
         self.assertEqual([call["title"] for call in audios], ["Earlier", "New Track"])
         self.assertFalse(any("reply_to_message_id" in call for call in audios))
@@ -419,7 +419,7 @@ class PublicationTests(PublicationFixtures, TestCase):
         session.refresh_from_db()
         self.assertEqual(session.entries, frozen)
         self.assertEqual(pub.kind, "single_audio")
-        self.assertIn("<b>DROP</b>", pub.caption_html)
+        self.assertIn("<b>Drop</b></a>", pub.caption_html)
         self.assertIn(session.intro.message_url, pub.caption_html)
 
     def test_album_overflow_posts_are_durable_and_sent_once(self):

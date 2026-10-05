@@ -42,13 +42,13 @@ class PopularTests(SimpleTestCase):
     def test_archive_caption_no_drop_and_optional_links(self):
         result = render_caption("archive_audio", {"title": "Song", "artists": ["Artist"],
             "spotify_url": f"https://open.spotify.com/track/{A}"}).html
-        self.assertIn("FAVE", result)
-        self.assertNotIn("DROP", result)
+        self.assertIn("Fave", result)
+        self.assertNotIn("<b>Drop</b>", result)
         self.assertNotIn(">Album<", result)
         self.assertNotIn(" / ", result)
         self.assertNotIn("Song", result)
         self.assertNotIn("Artist", result)
-        self.assertTrue(result.endswith('<a href="https://t.me/RapFaDrop">Rap Farsi Drop</a>'))
+        self.assertTrue(result.startswith('<a href="https://t.me/RapFaDrop"><b>Fave</b></a>\n› '))
 
 
 @override_settings(TELEGRAM_MODE="disabled", TELEGRAM_LIVE_ENABLED=False,

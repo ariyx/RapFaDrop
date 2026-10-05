@@ -182,7 +182,7 @@ def perform(pub, operation, operation_key, payload, *, gateway, candidate=None, 
     now = now or timezone.now()
     if getattr(gateway, "collection_id", None) is not None:
         from archive_collection.services import authorize_publication
-        authorize_publication(gateway.collection_id, pub, operation, payload)
+        authorize_publication(gateway.collection_id, pub, operation, payload, allow_paused_caption_edits=getattr(gateway, 'allow_paused_caption_edits', False))
     else:
         guard_target(pub.channel.target)
     with transaction.atomic():
@@ -264,7 +264,8 @@ def perform(pub, operation, operation_key, payload, *, gateway, candidate=None, 
                 _audit(pub, "operation_failed", attempt=attempt, detail={"retry_due_at": pub.retry_due_at.isoformat()})
         else:
             attempt.state = PublicationAttempt.State.SUCCEEDED
-            attempt.response = {"message_id": result.message_id, "chat_id": result.chat_id, "message_url": result.message_url, "media": result.media or {}, "correction_notice": correction_notice}
+            attempt.response = {"message_id": result.message_id, "chat_id": result.chat_id, "message_url": result.message_url, "media": result.media or {}, "correction_notice": correction_notice,
+                "caption_text": result.caption_text, "caption_entities": list(result.caption_entities)}
             attempt.finished_at = now
             attempt.save(update_fields=("state", "response", "finished_at"))
             _apply_success(pub, attempt, result, now)

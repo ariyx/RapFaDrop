@@ -28,16 +28,16 @@ from .popular import fetch_popular
 TARGET = "-1004311149640"
 
 
-def assert_collection_safe(collection):
-    if (not collection.frozen_at or collection.paused or collection.target != TARGET or
+def assert_collection_safe(collection, *, allow_paused=False):
+    if (not collection.frozen_at or (collection.paused and not allow_paused) or collection.target != TARGET or
             settings.SPOTIFY_MEDIA_BRIDGE_ENABLED or settings.PUBLICATION_WORKER_ENABLED or
             settings.TELEGRAM_LIVE_ENABLED or settings.TELEGRAM_MODE != "disabled"):
         raise TargetBlocked("Only an unpaused frozen archive may publish, with future-release switches OFF")
 
 
-def authorize_publication(collection_id, pub, operation, payload):
+def authorize_publication(collection_id, pub, operation, payload, *, allow_paused_caption_edits=False):
     collection = Collection.objects.get(pk=collection_id)
-    assert_collection_safe(collection)
+    assert_collection_safe(collection, allow_paused=allow_paused_caption_edits and operation == 'edit_caption')
     recording = collection.recordings.filter(publication=pub).first()
     if (operation not in {"send_audio", "edit_caption", "edit_media"} or pub.channel.target != TARGET or recording is None or
             pub.kind != Publication.Kind.ARCHIVE or pub.track_id != recording.track_id or
@@ -581,14 +581,14 @@ def link_confirmed_publications(collection):
 
 def refresh_published(collection, gateway):
     from publication.services import edit_caption
-    assert_collection_safe(collection)
+    assert_collection_safe(collection, allow_paused=getattr(gateway, 'allow_paused_caption_edits', False))
     results = []
     for r in collection.recordings.filter(publication__message_id__isnull=False).select_related("publication__template", "publication__channel"):
         pub = r.publication
         if pub.kind != Publication.Kind.ARCHIVE or pub.channel.target != collection.target or pub.track_id != r.track_id or pub.candidate_id != r.candidate_id:
             raise TargetBlocked("Confirmed publication binding differs from frozen recording")
         from operations.management.commands.refresh_owner_defaults import known_audio_default
-        if pub.template.config.get('audio_layout') != 'compact' and not known_audio_default(pub.template.config):
+        if not known_audio_default(pub.template.config):
             results.append({'message_id': pub.message_id, 'state': 'custom_template_conflict'})
             continue
         current = _template(pub.kind)

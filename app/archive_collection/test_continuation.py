@@ -16,16 +16,17 @@ from .tests import metadata,A
 
 class CompactCaptionTests(SimpleTestCase):
     def test_context_headings_and_no_blank_rows(self):
-        for kind,context,expected in [('archive_audio',{'release_type':'lp'},'FAVE'),('single_audio',{'release_type':'ep'},'DROP'),('album_track_audio',{'release_type':'ep'},'EP DROP'),('album_track_audio',{'release_type':'lp'},'LP DROP')]:
+        for kind,context,expected in [('archive_audio',{'release_type':'lp'},'Fave'),('single_audio',{'release_type':'ep'},'Drop'),('album_track_audio',{'release_type':'ep'},'EP Drop'),('album_track_audio',{'release_type':'lp'},'LP Drop')]:
             text=render_caption(kind,context).html
-            self.assertTrue(text.startswith('<b>'+expected+'</b>\n'))
-            self.assertEqual(len(text.splitlines()),2)
+            self.assertEqual(text,'<a href="https://t.me/RapFaDrop"><b>'+expected+'</b></a>')
 
     def test_link_priority_rejects_unconfirmed_and_other_chat(self):
         c={'spotify_url':'https://open.spotify.com/track/a','soundcloud_url':'https://soundcloud.com/a/b','album_post_url':'https://t.me/RapFaDropTest/1','album_intro_confirmed':True}
         self.assertIn('Spotify</a>',render_caption('archive_audio',c).html)
         c['album_post_url']='https://t.me/RapFaDrop/12'
         self.assertIn('Album</a>',render_caption('archive_audio',c).html)
+        self.assertIn('Spotify</a>',render_caption('archive_audio',c).html)
+        self.assertNotIn('SoundCloud</a>',render_caption('archive_audio',c).html)
         c['album_intro_confirmed']=False
         self.assertIn('Spotify</a>',render_caption('archive_audio',c).html)
         c.pop('spotify_url');self.assertIn('SoundCloud</a>',render_caption('archive_audio',c).html)
@@ -35,7 +36,7 @@ class CompactCaptionTests(SimpleTestCase):
             c={'version_type':version,'original_track_post_url':'https://t.me/RapFaDrop/2','original_confirmed':True}
             self.assertIn(version.capitalize()+' (<a',render_caption('edition',c).html)
             c['original_confirmed']=False
-            self.assertIn('\n'+version.capitalize()+'\n',render_caption('edition',c).html)
+            self.assertTrue(render_caption('edition',c).html.endswith('\n'+version.capitalize()))
         self.assertNotIn('Original',render_caption('single_audio',{'version_type':'quality_upgrade','original_confirmed':True}).html)
 
     def test_intro_exact_output_unchanged(self):

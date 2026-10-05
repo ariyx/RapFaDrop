@@ -47,6 +47,8 @@ class GatewayResult:
     chat_id: str
     message_url: str = ""
     media: dict | None = None
+    caption_text: str = ''
+    caption_entities: tuple = ()
 
 
 def message_url(chat_id, message_id, username=""):
@@ -186,7 +188,9 @@ class TelegramGateway:
             raise UncertainGatewayError("Telegram success did not contain a message ID")
         audio = result.get("audio", {}) if isinstance(result, dict) else {}
         media = {key: audio[key] for key in ("file_id", "file_unique_id", "duration", "mime_type", "file_size", "title", "performer") if key in audio}
-        return GatewayResult(int(mid), chat_id, message_url(chat_id, int(mid), username), media)
+        return GatewayResult(int(mid), chat_id, message_url(chat_id, int(mid), username), media,
+            result.get('caption', '') if isinstance(result, dict) else '',
+            tuple(result.get('caption_entities', ())) if isinstance(result, dict) else ())
 
     def _audio_files(self, payload):
         path = Path(payload["audio_path"])
