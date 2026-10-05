@@ -1,5 +1,20 @@
 # Project status and handoff
 
+Updated: 2026-10-05 (isolated Spotify audio feasibility trial). No direct Spotify
+acquisition qualified: pinned Zotify/Votify require protected-audio key/decryption
+paths outside the owner's boundary, and no saved account session was found.
+Pinned musicdl's two explicitly selected public intermediary paths were tested:
+MusicFab's CDN timed out; Spotsaver produced three complete-duration MP3 files
+with unresolved version/native-quality provenance and a rejected freshness
+sample (158.119 s versus 193.170 s expected). Full decoding passed on all four
+files; measured MP3 320 kb/s is not evidence of native Spotify 320 quality.
+All four temporary files and source checkouts were removed. No production writes,
+Telegram calls, app build/deployment or activation occurred; current application
+remains **`452c6196fbda4f96f6b9d6624e17ea1c677a5643`**. Collection paused,
+83 active Spotify sources, 84 baselines, 41 publications and safety switches
+preserved. [Trial comparison and exact blockers](reports/SPOTIFY_AUDIO_TRIAL.md).
+Stop before integration, bulk acquisition or publication.
+
 Updated: 2026-10-05 (final audio captions). Tested, pushed and deployed application
 **`452c6196fbda4f96f6b9d6624e17ea1c677a5643`** passed **78 focused tests,
 200 full application tests and eight backup tests**, migrations/checks and health.

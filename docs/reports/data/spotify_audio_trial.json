@@ -1,0 +1,754 @@
+{
+  "evidence_timestamp": "2026-10-05T09:26:21.545225+00:00",
+  "application_sha": "452c6196fbda4f96f6b9d6624e17ea1c677a5643",
+  "pins": {
+    "zotify": {
+      "version": "0.6.14",
+      "commit": "08d844fe3e644ae6cd9bea34a3b4982e61129f33"
+    },
+    "votify": {
+      "version": "1.9.9",
+      "commit": "db14e4d1aa01456e0ec3b55d6f7268787ba2e2c4"
+    },
+    "librespot_source_inspected": {
+      "version": "0.0.10",
+      "commit": "683d9e76f91ba7ae03919494dac8d899ca505651"
+    },
+    "musicdl": {
+      "version": "2.14.0",
+      "commit": "e5c3bd51b518642c24027921e63f482865809b61"
+    }
+  },
+  "authentication_and_path_inspection": {
+    "timestamp": "2026-10-05T09:21:40.963311+00:00",
+    "session_files_examined": 0,
+    "suitable_spotify_sessions": [],
+    "path_checks": {
+      "zotify_content_feeder": true,
+      "librespot_track_requests_audio_key": true,
+      "librespot_stream_uses_aes_decryption": true,
+      "votify_song_requires_decryption_key": true,
+      "votify_librespot_requests_audio_key": true,
+      "votify_vorbis_decrypts_aes": true
+    },
+    "inspection_seconds": 0.22,
+    "audio_requests": 0,
+    "account_tier": "unknown, no authenticated session",
+    "decision": "STOP: required protected-audio key/decryption paths outside owner boundary"
+  },
+  "musicdl_harness": "AST-extracted exact selected provider methods; packaging utilities only supplied by harness; no default client initialization/fallback",
+  "limits": {
+    "seconds_per_track": 60,
+    "requests_per_track": 6,
+    "request_connect_seconds": 5,
+    "request_read_seconds": 10,
+    "audio_bytes": 25000000,
+    "metadata_bytes": 1000000
+  },
+  "musicdl_results": [
+    {
+      "provider_method": "_parsewithmusicfabapi",
+      "spotify_track_id": "0IrFAuYmzjMY3pwEwifk7S",
+      "expected": {
+        "id": "0IrFAuYmzjMY3pwEwifk7S",
+        "rank": 1,
+        "title": "West SidE",
+        "credits": [
+          {
+            "id": "6XsyaCX2jJLaS82vJoiiWi",
+            "name": "HesamTiem"
+          },
+          {
+            "id": "2ZgLpNVB2qQTifvz3l8xIY",
+            "name": "Tiem"
+          }
+        ],
+        "album_id": "6RlbbqO6RIjqLyvuKajnUV",
+        "playable": true,
+        "album_type": "album",
+        "album_title": "Ay",
+        "artwork_url": "https://i.scdn.co/image/ab67616d00001e025566e182b5b94c4e3f5dc4a9",
+        "disc_number": 1,
+        "spotify_url": "https://open.spotify.com/track/0IrFAuYmzjMY3pwEwifk7S",
+        "release_date": "2026-08-11",
+        "track_number": 10,
+        "album_artists": [
+          "HesamTiem"
+        ],
+        "duration_seconds": 187.8
+      },
+      "account_tier": "unknown; unauthenticated intermediary",
+      "source_origin": "intermediary; direct Spotify origin unproven",
+      "quality_requested": "musicfab: provider default; spotsaver: MP3 format, unspecified bitrate",
+      "conversion": "none locally; intermediary conversion unknown",
+      "state": "blocked",
+      "failure_category": "ReadTimeout",
+      "bytes_obtained": 0,
+      "quality_obtained": null,
+      "codec": null,
+      "container": null,
+      "bitrate": null,
+      "sample_rate": null,
+      "channels": null,
+      "duration": null,
+      "full_decode_passed": null,
+      "acquisition_seconds": 12.51,
+      "requests": [
+        {
+          "domain": "musicfab.io",
+          "method": "POST",
+          "http_status": 200,
+          "bytes": 397,
+          "seconds": 2.151
+        },
+        {
+          "domain": "cdn-spotify.zm.io.vn",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "provider_method": "_parsewithmusicfabapi",
+      "spotify_track_id": "0nOTYCGtkJttIajOpwniMr",
+      "expected": {
+        "id": "0nOTYCGtkJttIajOpwniMr",
+        "rank": 1,
+        "title": "YND",
+        "credits": [
+          {
+            "id": "4hdsAoRTkGU11DynAg7iTw",
+            "name": "poobon"
+          },
+          {
+            "id": "4L42EENVSu2ZE8cwhVVeh8",
+            "name": "Mamazi"
+          }
+        ],
+        "album_id": "6lAaEZjYAfQYAfPlauFPeu",
+        "playable": true,
+        "album_type": "single",
+        "album_title": "YND",
+        "artwork_url": "https://i.scdn.co/image/ab67616d00001e02b5d4fd22f7097d2a7aee8251",
+        "disc_number": 1,
+        "spotify_url": "https://open.spotify.com/track/0nOTYCGtkJttIajOpwniMr",
+        "release_date": "2023-08-09",
+        "track_number": 1,
+        "album_artists": [
+          "poobon",
+          "Mamazi"
+        ],
+        "duration_seconds": 137.579
+      },
+      "account_tier": "unknown; unauthenticated intermediary",
+      "source_origin": "intermediary; direct Spotify origin unproven",
+      "quality_requested": "musicfab: provider default; spotsaver: MP3 format, unspecified bitrate",
+      "conversion": "none locally; intermediary conversion unknown",
+      "state": "not_attempted_shared_blocker",
+      "blocker": "ReadTimeout",
+      "acquisition_seconds": null,
+      "requests": []
+    },
+    {
+      "provider_method": "_parsewithmusicfabapi",
+      "spotify_track_id": "3QmYSZE5mYQTSklmQhh4cA",
+      "expected": {
+        "id": "3QmYSZE5mYQTSklmQhh4cA",
+        "rank": 1,
+        "title": "Khastam",
+        "credits": [
+          {
+            "id": "3VzZOmXc8pZRfNxoiliE1A",
+            "name": "Sajad Shahi"
+          },
+          {
+            "id": "2D66FABcMx1DcjVtrVAeHL",
+            "name": "Ashkan Kagan"
+          }
+        ],
+        "album_id": "0IEHU9cxixoNviJ5G5Uht4",
+        "playable": true,
+        "album_type": "single",
+        "album_title": "Khastam",
+        "artwork_url": "https://i.scdn.co/image/ab67616d00001e02dc822800f235096874aa20c8",
+        "disc_number": 1,
+        "spotify_url": "https://open.spotify.com/track/3QmYSZE5mYQTSklmQhh4cA",
+        "release_date": "2026-06-26",
+        "track_number": 1,
+        "album_artists": [
+          "Sajad Shahi",
+          "Ashkan Kagan"
+        ],
+        "duration_seconds": 199.171
+      },
+      "account_tier": "unknown; unauthenticated intermediary",
+      "source_origin": "intermediary; direct Spotify origin unproven",
+      "quality_requested": "musicfab: provider default; spotsaver: MP3 format, unspecified bitrate",
+      "conversion": "none locally; intermediary conversion unknown",
+      "state": "not_attempted_shared_blocker",
+      "blocker": "ReadTimeout",
+      "acquisition_seconds": null,
+      "requests": []
+    },
+    {
+      "provider_method": "_parsewithmusicfabapi",
+      "spotify_track_id": "3yhTL64et9hrK0JjN5r811",
+      "expected": {
+        "title": "Yadegarit",
+        "duration_seconds": 193.17,
+        "credits": [
+          {
+            "name": "Amin Tijay"
+          },
+          {
+            "name": "Lil Deafo"
+          },
+          {
+            "name": "!Leo"
+          },
+          {
+            "name": "Neemski"
+          }
+        ],
+        "album_title": "Pellezterari",
+        "release_date": "2026-10-05"
+      },
+      "account_tier": "unknown; unauthenticated intermediary",
+      "source_origin": "intermediary; direct Spotify origin unproven",
+      "quality_requested": "musicfab: provider default; spotsaver: MP3 format, unspecified bitrate",
+      "conversion": "none locally; intermediary conversion unknown",
+      "state": "not_attempted_shared_blocker",
+      "blocker": "ReadTimeout",
+      "acquisition_seconds": null,
+      "requests": []
+    },
+    {
+      "provider_method": "_parsewithspotsaverapi",
+      "spotify_track_id": "0IrFAuYmzjMY3pwEwifk7S",
+      "expected": {
+        "id": "0IrFAuYmzjMY3pwEwifk7S",
+        "rank": 1,
+        "title": "West SidE",
+        "credits": [
+          {
+            "id": "6XsyaCX2jJLaS82vJoiiWi",
+            "name": "HesamTiem"
+          },
+          {
+            "id": "2ZgLpNVB2qQTifvz3l8xIY",
+            "name": "Tiem"
+          }
+        ],
+        "album_id": "6RlbbqO6RIjqLyvuKajnUV",
+        "playable": true,
+        "album_type": "album",
+        "album_title": "Ay",
+        "artwork_url": "https://i.scdn.co/image/ab67616d00001e025566e182b5b94c4e3f5dc4a9",
+        "disc_number": 1,
+        "spotify_url": "https://open.spotify.com/track/0IrFAuYmzjMY3pwEwifk7S",
+        "release_date": "2026-08-11",
+        "track_number": 10,
+        "album_artists": [
+          "HesamTiem"
+        ],
+        "duration_seconds": 187.8
+      },
+      "account_tier": "unknown; unauthenticated intermediary",
+      "source_origin": "video-match intermediary; NOT demonstrated direct Spotify audio",
+      "quality_requested": "MP3 format; no bitrate selected by client for this provider",
+      "conversion": "none locally; intermediary conversion unknown",
+      "state": "file_obtained_identity_requires_review",
+      "bytes": 7524310,
+      "sha256": "c1ff99b4bbdaee799475587a8ca1a67fd9d09ba5cd0b7c59980a3017f1adfba2",
+      "provider_title": "West SidE",
+      "provider_artist": "HesamTiem, Tiem",
+      "provider_album": "Ay",
+      "container": "mp3",
+      "codec": "mp3",
+      "bitrate": 320000,
+      "sample_rate": "44100",
+      "channels": 2,
+      "duration": 188.10775,
+      "complete_duration": true,
+      "full_decode_passed": true,
+      "embedded_identity_tags": {},
+      "native_quality": "unknown",
+      "identity_verified": false,
+      "acquisition_seconds": 13.176,
+      "requests": [
+        {
+          "domain": "spotsaver.net",
+          "method": "GET",
+          "http_status": 200,
+          "bytes": 314,
+          "seconds": 0.148
+        },
+        {
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "http_status": 200,
+          "bytes": 40,
+          "seconds": 0.051
+        },
+        {
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "http_status": 200,
+          "bytes": 802,
+          "seconds": 0.657
+        },
+        {
+          "domain": "yt1s-worker-4.dlsrv.online",
+          "method": "GET",
+          "http_status": 302,
+          "redirect_domain": "yt1s-worker-4.dlsrv.online"
+        },
+        {
+          "domain": "yt1s-worker-4.dlsrv.online",
+          "method": "GET",
+          "http_status": 200,
+          "bytes": 7524310,
+          "seconds": 10.274
+        }
+      ],
+      "identity_assessment": "metadata/duration compatible; exact recording/version not established"
+    },
+    {
+      "provider_method": "_parsewithspotsaverapi",
+      "spotify_track_id": "0nOTYCGtkJttIajOpwniMr",
+      "expected": {
+        "id": "0nOTYCGtkJttIajOpwniMr",
+        "rank": 1,
+        "title": "YND",
+        "credits": [
+          {
+            "id": "4hdsAoRTkGU11DynAg7iTw",
+            "name": "poobon"
+          },
+          {
+            "id": "4L42EENVSu2ZE8cwhVVeh8",
+            "name": "Mamazi"
+          }
+        ],
+        "album_id": "6lAaEZjYAfQYAfPlauFPeu",
+        "playable": true,
+        "album_type": "single",
+        "album_title": "YND",
+        "artwork_url": "https://i.scdn.co/image/ab67616d00001e02b5d4fd22f7097d2a7aee8251",
+        "disc_number": 1,
+        "spotify_url": "https://open.spotify.com/track/0nOTYCGtkJttIajOpwniMr",
+        "release_date": "2023-08-09",
+        "track_number": 1,
+        "album_artists": [
+          "poobon",
+          "Mamazi"
+        ],
+        "duration_seconds": 137.579
+      },
+      "account_tier": "unknown; unauthenticated intermediary",
+      "source_origin": "video-match intermediary; NOT demonstrated direct Spotify audio",
+      "quality_requested": "MP3 format; no bitrate selected by client for this provider",
+      "conversion": "none locally; intermediary conversion unknown",
+      "state": "file_obtained_identity_requires_review",
+      "bytes": 5508702,
+      "sha256": "2ac815e9bc25b3cfc190b3bcc5d619d015274c3bdb5c9541471358a809fa2c01",
+      "provider_title": "YND",
+      "provider_artist": "poobon, Mamazi",
+      "provider_album": "YND",
+      "container": "mp3",
+      "codec": "mp3",
+      "bitrate": 320000,
+      "sample_rate": "44100",
+      "channels": 2,
+      "duration": 137.71755,
+      "complete_duration": true,
+      "full_decode_passed": true,
+      "embedded_identity_tags": {},
+      "native_quality": "unknown",
+      "identity_verified": false,
+      "acquisition_seconds": 4.384,
+      "requests": [
+        {
+          "domain": "spotsaver.net",
+          "method": "GET",
+          "http_status": 200,
+          "bytes": 307,
+          "seconds": 1.03
+        },
+        {
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "http_status": 200,
+          "bytes": 40,
+          "seconds": 0.564
+        },
+        {
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "http_status": 200,
+          "bytes": 770,
+          "seconds": 0.463
+        },
+        {
+          "domain": "yt1s-worker-2.dlsrv.online",
+          "method": "GET",
+          "http_status": 302,
+          "redirect_domain": "yt1s-worker-2.dlsrv.online"
+        },
+        {
+          "domain": "yt1s-worker-2.dlsrv.online",
+          "method": "GET",
+          "http_status": 200,
+          "bytes": 5508702,
+          "seconds": 0.59
+        }
+      ],
+      "identity_assessment": "metadata/duration compatible; exact recording/version not established"
+    },
+    {
+      "provider_method": "_parsewithspotsaverapi",
+      "spotify_track_id": "3QmYSZE5mYQTSklmQhh4cA",
+      "expected": {
+        "id": "3QmYSZE5mYQTSklmQhh4cA",
+        "rank": 1,
+        "title": "Khastam",
+        "credits": [
+          {
+            "id": "3VzZOmXc8pZRfNxoiliE1A",
+            "name": "Sajad Shahi"
+          },
+          {
+            "id": "2D66FABcMx1DcjVtrVAeHL",
+            "name": "Ashkan Kagan"
+          }
+        ],
+        "album_id": "0IEHU9cxixoNviJ5G5Uht4",
+        "playable": true,
+        "album_type": "single",
+        "album_title": "Khastam",
+        "artwork_url": "https://i.scdn.co/image/ab67616d00001e02dc822800f235096874aa20c8",
+        "disc_number": 1,
+        "spotify_url": "https://open.spotify.com/track/3QmYSZE5mYQTSklmQhh4cA",
+        "release_date": "2026-06-26",
+        "track_number": 1,
+        "album_artists": [
+          "Sajad Shahi",
+          "Ashkan Kagan"
+        ],
+        "duration_seconds": 199.171
+      },
+      "account_tier": "unknown; unauthenticated intermediary",
+      "source_origin": "video-match intermediary; NOT demonstrated direct Spotify audio",
+      "quality_requested": "MP3 format; no bitrate selected by client for this provider",
+      "conversion": "none locally; intermediary conversion unknown",
+      "state": "file_obtained_identity_requires_review",
+      "bytes": 7951673,
+      "sha256": "e58053d7327f82e21aa7aa4d8a1ac6f2d0eda2004bde960321e206d459fc4963",
+      "provider_title": "Khastam",
+      "provider_artist": "Sajad Shahi, Ashkan Kagan",
+      "provider_album": "Khastam",
+      "container": "mp3",
+      "codec": "mp3",
+      "bitrate": 320000,
+      "sample_rate": "44100",
+      "channels": 2,
+      "duration": 198.791825,
+      "complete_duration": true,
+      "full_decode_passed": true,
+      "embedded_identity_tags": {},
+      "native_quality": "unknown",
+      "identity_verified": false,
+      "acquisition_seconds": 9.692,
+      "requests": [
+        {
+          "domain": "spotsaver.net",
+          "method": "GET",
+          "http_status": 200,
+          "bytes": 322,
+          "seconds": 0.497
+        },
+        {
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "http_status": 200,
+          "bytes": 40,
+          "seconds": 4.048
+        },
+        {
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "http_status": 200,
+          "bytes": 813,
+          "seconds": 0.586
+        },
+        {
+          "domain": "yt1s-worker-2.dlsrv.online",
+          "method": "GET",
+          "http_status": 302,
+          "redirect_domain": "yt1s-worker-2.dlsrv.online"
+        },
+        {
+          "domain": "yt1s-worker-2.dlsrv.online",
+          "method": "GET",
+          "http_status": 200,
+          "bytes": 7951673,
+          "seconds": 1.871
+        }
+      ],
+      "identity_assessment": "metadata/duration compatible; exact recording/version not established"
+    },
+    {
+      "provider_method": "_parsewithspotsaverapi",
+      "spotify_track_id": "3yhTL64et9hrK0JjN5r811",
+      "expected": {
+        "title": "Yadegarit",
+        "duration_seconds": 193.17,
+        "credits": [
+          {
+            "name": "Amin Tijay"
+          },
+          {
+            "name": "Lil Deafo"
+          },
+          {
+            "name": "!Leo"
+          },
+          {
+            "name": "Neemski"
+          }
+        ],
+        "album_title": "Pellezterari",
+        "release_date": "2026-10-05"
+      },
+      "account_tier": "unknown; unauthenticated intermediary",
+      "source_origin": "video-match intermediary; NOT demonstrated direct Spotify audio",
+      "quality_requested": "MP3 format; no bitrate selected by client for this provider",
+      "conversion": "none locally; intermediary conversion unknown",
+      "state": "file_obtained_identity_requires_review",
+      "bytes": 6324767,
+      "sha256": "2925629c452ddcad2aef2687dde9c5c441f51304f873eb2119317c2941bf02b9",
+      "provider_title": "Yadegarit",
+      "provider_artist": "Amin Tijay, Lil Deafo, !Leo, Neemski",
+      "provider_album": "Pellezterari",
+      "container": "mp3",
+      "codec": "mp3",
+      "bitrate": 320000,
+      "sample_rate": "44100",
+      "channels": 2,
+      "duration": 158.119175,
+      "complete_duration": false,
+      "full_decode_passed": true,
+      "embedded_identity_tags": {},
+      "native_quality": "unknown",
+      "identity_verified": false,
+      "acquisition_seconds": 4.224,
+      "requests": [
+        {
+          "domain": "spotsaver.net",
+          "method": "GET",
+          "http_status": 200,
+          "bytes": 335,
+          "seconds": 0.165
+        },
+        {
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "http_status": 200,
+          "bytes": 40,
+          "seconds": 0.05
+        },
+        {
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "http_status": 200,
+          "bytes": 797,
+          "seconds": 0.493
+        },
+        {
+          "domain": "yt1s-worker-2.dlsrv.online",
+          "method": "GET",
+          "http_status": 302,
+          "redirect_domain": "yt1s-worker-2.dlsrv.online"
+        },
+        {
+          "domain": "yt1s-worker-2.dlsrv.online",
+          "method": "GET",
+          "http_status": 200,
+          "bytes": 6324767,
+          "seconds": 1.728
+        }
+      ],
+      "identity_assessment": "REJECT: incomplete or mismatched recording (158.119 seconds vs 193.170 expected)"
+    }
+  ],
+  "preliminary_spotsaver_redirect_boundary": {
+    "provider_method": "_parsewithspotsaverapi",
+    "spotify_track_id": "0IrFAuYmzjMY3pwEwifk7S",
+    "expected": {
+      "id": "0IrFAuYmzjMY3pwEwifk7S",
+      "rank": 1,
+      "title": "West SidE",
+      "credits": [
+        {
+          "id": "6XsyaCX2jJLaS82vJoiiWi",
+          "name": "HesamTiem"
+        },
+        {
+          "id": "2ZgLpNVB2qQTifvz3l8xIY",
+          "name": "Tiem"
+        }
+      ],
+      "album_id": "6RlbbqO6RIjqLyvuKajnUV",
+      "playable": true,
+      "album_type": "album",
+      "album_title": "Ay",
+      "artwork_url": "https://i.scdn.co/image/ab67616d00001e025566e182b5b94c4e3f5dc4a9",
+      "disc_number": 1,
+      "spotify_url": "https://open.spotify.com/track/0IrFAuYmzjMY3pwEwifk7S",
+      "release_date": "2026-08-11",
+      "track_number": 10,
+      "album_artists": [
+        "HesamTiem"
+      ],
+      "duration_seconds": 187.8
+    },
+    "account_tier": "unknown; unauthenticated intermediary",
+    "source_origin": "intermediary; direct Spotify origin unproven",
+    "quality_requested": "musicfab: provider default; spotsaver: MP3 format, unspecified bitrate",
+    "conversion": "none locally; intermediary conversion unknown",
+    "state": "blocked",
+    "failure_category": "BudgetExceeded",
+    "bytes_obtained": 0,
+    "quality_obtained": null,
+    "codec": null,
+    "container": null,
+    "bitrate": null,
+    "sample_rate": null,
+    "channels": null,
+    "duration": null,
+    "full_decode_passed": null,
+    "acquisition_seconds": 1.929,
+    "requests": [
+      {
+        "domain": "spotsaver.net",
+        "method": "GET",
+        "http_status": 200,
+        "bytes": 314,
+        "seconds": 0.365
+      },
+      {
+        "domain": "spotsaver.net",
+        "method": "POST",
+        "http_status": 200,
+        "bytes": 40,
+        "seconds": 0.563
+      },
+      {
+        "domain": "spotsaver.net",
+        "method": "POST",
+        "http_status": 200,
+        "bytes": 802,
+        "seconds": 0.579
+      },
+      {
+        "domain": "yt1s-worker-5.dlsrv.online",
+        "method": "GET",
+        "http_status": 302
+      }
+    ]
+  },
+  "followup_identity_metadata": [
+    {
+      "spotify_track_id": "0IrFAuYmzjMY3pwEwifk7S",
+      "provider_http": 403,
+      "metadata_failure": "HTTPError",
+      "seconds": 0.133
+    },
+    {
+      "spotify_track_id": "0nOTYCGtkJttIajOpwniMr",
+      "provider_http": 403,
+      "metadata_failure": "HTTPError",
+      "seconds": 0.052
+    },
+    {
+      "spotify_track_id": "3QmYSZE5mYQTSklmQhh4cA",
+      "provider_http": 403,
+      "metadata_failure": "HTTPError",
+      "seconds": 0.054
+    },
+    {
+      "spotify_track_id": "3yhTL64et9hrK0JjN5r811",
+      "provider_http": 403,
+      "metadata_failure": "HTTPError",
+      "seconds": 0.041
+    }
+  ],
+  "production_before": {
+    "paused": true,
+    "active_verified_spotify": 83,
+    "baselines": 84,
+    "collection_rows": 155,
+    "collection_slots": 166,
+    "publications": 41,
+    "publication_attempts": 105,
+    "media_candidates": 201,
+    "media_attempts": 51,
+    "downstream_jobs": 0,
+    "bridge": false,
+    "publication_worker": false,
+    "telegram_live": false,
+    "telegram_mode": "disabled"
+  },
+  "production_after": {
+    "paused": true,
+    "active_verified_spotify": 83,
+    "baselines": 84,
+    "collection_rows": 155,
+    "collection_slots": 166,
+    "publications": 41,
+    "publication_attempts": 105,
+    "media_candidates": 201,
+    "media_attempts": 51,
+    "downstream_jobs": 0,
+    "bridge": false,
+    "publication_worker": false,
+    "telegram_live": false,
+    "telegram_mode": "disabled"
+  },
+  "production_state_matches": true,
+  "cleanup": {
+    "timestamp": "2026-10-05T09:35:48.976431+00:00",
+    "deleted_media_files": [
+      "3yhTL64et9hrK0JjN5r811-spotsaver.mp3",
+      "3QmYSZE5mYQTSklmQhh4cA-spotsaver.mp3",
+      "0IrFAuYmzjMY3pwEwifk7S-spotsaver.mp3",
+      "0nOTYCGtkJttIajOpwniMr-spotsaver.mp3"
+    ],
+    "deleted_media_bytes": 27309452,
+    "remaining_trial_media_files": 0,
+    "source_checkouts_removed": [
+      "zotify",
+      "votify",
+      "librespot",
+      "musicdl"
+    ],
+    "trial_credentials_created": 0,
+    "trial_containers_remaining": 0,
+    "protected_sessions_preserved": "none found or created",
+    "production_volumes_touched": false
+  },
+  "integration_decision": "none qualifies for direct Spotify adapter; intermediary files require independent recording/version/source verification",
+  "network_requests": {
+    "musicfab": 2,
+    "spotsaver_initial_redirect_limited": 4,
+    "spotsaver_final": 20,
+    "identity_followup": 4,
+    "total_provider_http_requests": 30,
+    "spotify_audio_requests": 0,
+    "spotify_login_attempts": 0
+  },
+  "notes": [
+    "Initial bridge-network preflight failed before HTTP because host IPv4 forwarding is disabled. Host network used for bounded public-only requests without runtime/config changes.",
+    "Followup metadata-only harness omitted provider browser headers and returned four HTTP 403 responses; it is not evidence of file-provider unavailability. It should have stopped at the first shared failure. No further retries were performed.",
+    "No local media downloads, Telegram calls, application builds, tests or production writes in this trial."
+  ]
+}
