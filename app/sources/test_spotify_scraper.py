@@ -12,7 +12,7 @@ from releases.services import ingest_source_item, resolve_review
 
 from .models import Artist, ArtistSource, BaselineRun, SourceItem
 from .services import baseline_source, poll_due_sources, poll_source
-from .spotify_scraper import SpotifyMetadataError, SpotifyScraperDiscovery, ValidatedTransport
+from .spotify_scraper import SpotifyMetadataError, SpotifyScraperDiscovery, ValidatedTransport, _credit_id
 
 
 ARTIST_ID = "5F0BGBdSL945Bzxrq8aGbn"
@@ -33,7 +33,8 @@ def request_url(offset):
 class DiscographyIntegrityTests(SimpleTestCase):
     def test_release_detail_requires_complete_track_list(self):
         album_id = "3" * 22
-        artist = SimpleNamespace(name="Sijal")
+        from spotify_scraper.models.common import ArtistRef
+        artist = ArtistRef(name='Sijal', uri='spotify:artist:'+ARTIST_ID, id='')
         track = SimpleNamespace(id="4" * 22, name="Full work", duration_ms=180000, artists=[artist])
         album = SimpleNamespace(id=album_id, album_type="single", artists=[artist], total_tracks=2,
                                 tracks=[track], release_date=None, name="Full work")
@@ -51,6 +52,13 @@ class DiscographyIntegrityTests(SimpleTestCase):
         result = discovery.fetch_item(None, item)
         self.assertEqual(result["metadata"]["track_count"], 1)
         self.assertEqual(result["metadata"]["tracks"][0]["duration_seconds"], 180)
+        self.assertEqual(result['metadata']['tracks'][0]['artist_ids'],[ARTIST_ID])
+        self.assertEqual(result['metadata']['artist_ids'],[ARTIST_ID])
+
+    def test_native_credit_id_uri_conflicts_fail_without_guessing(self):
+        with self.assertRaisesRegex(SpotifyMetadataError,'conflict'):
+            _credit_id(SimpleNamespace(id='A'*22,uri='spotify:artist:'+'B'*22))
+        self.assertEqual(_credit_id(SimpleNamespace(id='',uri='spotify:artist:not-an-id')), '')
 
     def test_complete_two_pages_and_exact_group_total(self):
         base = Mock()
