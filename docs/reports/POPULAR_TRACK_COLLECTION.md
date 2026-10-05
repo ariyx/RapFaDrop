@@ -1,13 +1,14 @@
 # Popular-track archive collection
 
-The latest focused caption changes and current confirmed-message count are in
-[FINAL_AUDIO_CAPTIONS.md](FINAL_AUDIO_CAPTIONS.md). The original
+The latest bounded acquisition results, current coverage and remaining blockers
+are in [POPULAR_TRACK_ACQUISITION.md](POPULAR_TRACK_ACQUISITION.md). The
 [166-slot CSV](data/popular_track_selections.csv) and
-[155-native-row CSV](data/popular_track_publications.csv) retain their initial
-2026-10-04 observation; their nine-post outcome is historical. The continuation
-added production messages and reconciled Be Mula before the owner stopped it for
-the final caption task. The narrative below describes the initial caption/search
-defaults, not the final linked-heading policy. The collection remains paused.
+[155-native-row CSV](data/popular_track_publications.csv) now reflect the
+2026-10-05 server state: 42 unique messages, 45 satisfied native rows, 110 pending.
+Original frozen selection timestamps remain unchanged. Final captions are described
+in [FINAL_AUDIO_CAPTIONS.md](FINAL_AUDIO_CAPTIONS.md). The narrative below records
+the initial nine-post outcome and original caption/search defaults; the collection
+is paused and future-release publication stays OFF.
 
 The owner authorizes only the initial two-slot Popular collection in production
 `-1004311149640` (`@RapFaDrop`). Automatic future discovery publication stays OFF.

@@ -17,7 +17,9 @@ Shared 403/429/authentication challenges stop that provider for the current run
 while other providers remain eligible. The existing native MP3/AAC downloader,
 eleven-field tag/artwork checks, full decode and collection-only durable gateway
 remain authoritative. No intermediary downloader or future-release activation
-is added. Execution evidence will be recorded in the acquisition report.
+is added. The bounded server continuation published message 47 and reconciled
+two alternate IDs into existing posts; native YouTube acquisition remains blocked
+by a login challenge. See [observed acquisition results, checks and commands](reports/POPULAR_TRACK_ACQUISITION.md).
 
 The continuation uses compact audio captions selected by publication context:
 Fave for this frozen collection, Drop for a standalone release, LP Drop/EP Drop

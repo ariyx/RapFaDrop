@@ -1,5 +1,34 @@
 # Project status and handoff
 
+Updated: 2026-10-05 (bounded Popular collection acquisition continuation).
+Tested, pushed and deployed application **`2c8de05810e06fa577afa17fa9c07ce2c34a5133`**:
+**208 application + eight backup tests**, eight new focused regressions, checks,
+migrations/drift and health passed on the server. Added independently corroborated
+Tiem SoundCloud acquisition identity; improved bounded catalogs/searches and
+collaborator matching/provider isolation. New production **message 47**, Taghsire
+Mane: complete native AAC 160 kb/s, no conversion, eleven tags/artwork/full decode
+and Telegram byte readback passed. Mituni Mage and Highway reused **20/26** with
+evidenced alternate IDs; no old post changed or duplicated, no quality upgrade.
+Frozen **83 artists / 166 slots / 155 native rows** preserved; **152 canonical**,
+**45 native rows / 51 slots satisfied / 42 unique messages**, **110 pending**.
+Twelve artists complete, 27 partial, 44 unserved. Forty-seven native rows lack
+corroborated credited profiles; 63 lack a bounded confident complete match and
+record the shared YouTube login challenge. Native YouTube acquisition is blocked,
+not demonstrated. One 30-second preview and one uncertain-credit candidate rejected.
+Protected predeploy backup restored 43 tables and uploaded as **82/83**; all prior
+records/baselines/reviews/publications preserved. **83 active verified Spotify
+sources / 84 baselines / 4,126 items / two reviews / zero downstream jobs**.
+Collection paused, acquisition one-shot inactive. Discovery and daily backups
+remain active; bridge, ordinary publication and publication worker remain OFF.
+Removed 99 confirmed media/artwork files and disposable test DB/Redis/runner and
+source/probe directories; production posts/backups retained. Historical selection
+timestamps remain separate from this processing trial; no live latency claim.
+[Acquisition report](reports/POPULAR_TRACK_ACQUISITION.md),
+[current slots](reports/data/popular_track_selections.csv),
+[current native recordings](reports/data/popular_track_publications.csv),
+[safe evidence](reports/data/popular_acquisition_evidence.json).
+Stop before automatic future-release activation. Older checkpoints are historical.
+
 Updated: 2026-10-05 (isolated Spotify audio feasibility trial). No direct Spotify
 acquisition qualified: pinned Zotify/Votify require protected-audio key/decryption
 paths outside the owner's boundary, and no saved account session was found.

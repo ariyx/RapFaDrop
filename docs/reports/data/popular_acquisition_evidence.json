@@ -1,0 +1,347 @@
+{
+  "generated_at": "2026-10-05T10:17:40.530090+00:00",
+  "application_sha": "2c8de05810e06fa577afa17fa9c07ce2c34a5133",
+  "collection": "initial-popular-20261004",
+  "paused": true,
+  "artists": 83,
+  "artist_coverage": {
+    "partial": 27,
+    "complete": 12,
+    "none": 44
+  },
+  "slots": 166,
+  "satisfied_slots": 51,
+  "native_rows": 155,
+  "canonical_rows": 152,
+  "published_native_rows": 45,
+  "unique_publications": 42,
+  "pending": 110,
+  "pending_groups": {
+    "No bounded confident match; YouTube login challenge": 63,
+    "Missing independently verified credited profile": 47
+  },
+  "new_posts": [
+    {
+      "spotify_id": "4dg45KS6u6MmE0rpiiuASt",
+      "title": "Taghsire Mane",
+      "message_id": 47,
+      "provider": "yt-dlp",
+      "source_url": "https://soundcloud.com/justiem/taghsire-mane",
+      "source_facts": {
+        "sha256": "d823810e84d72a08c0ee74adfed9833fc000b67338193de3ea5849a185f4e6b9",
+        "channels": 2,
+        "codec_name": "aac",
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "sample_rate_hz": 44100,
+        "file_size_bytes": 4096545,
+        "duration_seconds": 203.035283,
+        "audio_bitrate_bps": 160000,
+        "audio_stream_count": 1,
+        "format_bitrate_bps": 161412,
+        "measured_bitrate_bps": 161412
+      },
+      "delivered_facts": {
+        "sha256": "818a28c2095cf1de3151ff25b9009a2ffe3de85890f040edd5e85d62cc556f92",
+        "file_size_bytes": 4121770,
+        "duration_seconds": 203.035283,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_bitrate_bps": 162406,
+        "measured_bitrate_bps": 162406,
+        "codec_name": "aac",
+        "audio_bitrate_bps": 160000,
+        "sample_rate_hz": 44100,
+        "channels": 2,
+        "audio_stream_count": 1
+      },
+      "validation": {
+        "status": "valid",
+        "complete": true,
+        "full_decode": "passed",
+        "audio_stream_present": true
+      },
+      "preparation": {
+        "format": "MP4",
+        "artwork": {
+          "state": "embedded",
+          "width": 300,
+          "format": "JPEG",
+          "height": 300,
+          "mime_type": "image/jpeg",
+          "size_bytes": 19293
+        },
+        "readback": {
+          "title_matches": true,
+          "artwork_read_back": true,
+          "main_artists_match": true,
+          "album_suffix_matches": true,
+          "channel_fields_read_back": true
+        },
+        "channel_tag": "@RapFaDrop",
+        "mapped_fields": [
+          "title",
+          "main_artist",
+          "album",
+          "track_number",
+          "disc_number",
+          "release_date",
+          "album_artist_suffix",
+          "album_suffix",
+          "author_url",
+          "comments",
+          "composers",
+          "conductors",
+          "copyright",
+          "encoded_by",
+          "initial_key",
+          "publisher",
+          "subtitle"
+        ],
+        "unsupported_fields": [],
+        "channel_policy_version": 2
+      },
+      "conversion": "none requested",
+      "provider_timings": {
+        "acquisition_seconds": 4.031,
+        "provider_probe_seconds": 2.65,
+        "provider_duration_seconds": 203.032,
+        "validation_and_preparation_seconds": 0.152
+      },
+      "processing_timings": {
+        "upload_seconds": 61.847,
+        "media_total_seconds": 15.827,
+        "end_to_end_processing_seconds": 77.674,
+        "last_acquisition_attempt_seconds": 15.827
+      },
+      "telegram_readback": {
+        "bytes": 4121770,
+        "sha256": "818a28c2095cf1de3151ff25b9009a2ffe3de85890f040edd5e85d62cc556f92",
+        "status": "passed",
+        "prepared_sha256": "818a28c2095cf1de3151ff25b9009a2ffe3de85890f040edd5e85d62cc556f92"
+      },
+      "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Fave</b></a>\n› <a href=\"https://open.spotify.com/track/4dg45KS6u6MmE0rpiiuASt\">Spotify</a> · <a href=\"https://soundcloud.com/justiem/taghsire-mane\">SoundCloud</a>",
+      "matching": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": false,
+              "entries": 50,
+              "seconds": 2.561,
+              "bounded_to": 50
+            },
+            "acquisition_source_id": 28
+          },
+          {
+            "catalog": {
+              "cache": false,
+              "entries": 50,
+              "seconds": 2.552,
+              "bounded_to": 50
+            },
+            "acquisition_source_id": 63
+          },
+          {
+            "id": "2367906905",
+            "title": "Taghsire Mane",
+            "matched": true,
+            "duration": 203.032,
+            "credits_matched": true,
+            "acquisition_source_id": 63
+          }
+        ],
+        "reason": "Verified official native uploader/channel, complete recording/version and duration",
+        "provider_probes": 1
+      }
+    }
+  ],
+  "new_attempts": [
+    {
+      "id": 106,
+      "operation": "send_audio",
+      "state": "succeeded",
+      "message_id": 47,
+      "caption_text": "Fave\n› Spotify · SoundCloud",
+      "caption_entities": [
+        {
+          "url": "https://t.me/RapFaDrop",
+          "type": "text_link",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "type": "bold",
+          "length": 4,
+          "offset": 0
+        },
+        {
+          "url": "https://open.spotify.com/track/4dg45KS6u6MmE0rpiiuASt",
+          "type": "text_link",
+          "length": 7,
+          "offset": 7
+        },
+        {
+          "url": "https://soundcloud.com/justiem/taghsire-mane",
+          "type": "text_link",
+          "length": 10,
+          "offset": 17
+        }
+      ]
+    }
+  ],
+  "new_attempt_states": {
+    "succeeded": 1
+  },
+  "new_aliases": [
+    {
+      "spotify_id": "6zctI4eibSmLYcdCm3WNjb",
+      "title": "Mituni Mage",
+      "canonical_id": "2Ty7bGT5io8tYoW8is7OeD",
+      "message_id": 20
+    },
+    {
+      "spotify_id": "4SkeTCe5fvWK7GLptQyM8a",
+      "title": "Highway",
+      "canonical_id": "0xJGuS0MYvyvzZnarcvhm8",
+      "message_id": 26
+    }
+  ],
+  "source_counts": {
+    "soundcloud": 33,
+    "youtube": 30
+  },
+  "active_verified_spotify": 83,
+  "baselines": 84,
+  "items": 4126,
+  "reviews": 2,
+  "bridge": false,
+  "ordinary_publication": false,
+  "publication_worker": false,
+  "downstream_jobs": 0,
+  "preservation": {
+    "frozen_collection": {
+      "original_rows": 1,
+      "current_rows": 1,
+      "changes": []
+    },
+    "frozen_recordings": {
+      "original_rows": 155,
+      "current_rows": 155,
+      "changes": []
+    },
+    "slots": {
+      "original_rows": 166,
+      "current_rows": 166,
+      "changes": []
+    },
+    "selections": {
+      "original_rows": 83,
+      "current_rows": 83,
+      "changes": []
+    },
+    "artists": {
+      "original_rows": 83,
+      "current_rows": 83,
+      "changes": []
+    },
+    "source_identities_and_baselines": {
+      "original_rows": 131,
+      "current_rows": 131,
+      "changes": []
+    },
+    "baseline_runs": {
+      "original_rows": 84,
+      "current_rows": 84,
+      "changes": []
+    },
+    "existing_items": {
+      "original_rows": 4125,
+      "current_rows": 4126,
+      "changes": []
+    },
+    "existing_reviews": {
+      "original_rows": 2,
+      "current_rows": 2,
+      "changes": []
+    },
+    "old_publications": {
+      "original_rows": 41,
+      "current_rows": 42,
+      "changes": []
+    },
+    "caption_templates": {
+      "original_rows": 4,
+      "current_rows": 4,
+      "changes": []
+    },
+    "downstream_jobs": {
+      "original_rows": 0,
+      "current_rows": 0,
+      "changes": []
+    }
+  },
+  "request_evidence": {
+    "attempted_recordings": 111,
+    "catalog_invocations": 40,
+    "catalog_seconds_summed": 107.977,
+    "new_successful_search_cache_entries": 39,
+    "recorded_matching_probe_invocations": 6,
+    "rejection_reasons": {
+      "unmatched": 2
+    },
+    "measurement_note": "Application extractor invocations/cache evidence, not an HTTP request count. Extractors may issue multiple requests; failed searches are not cached."
+  },
+  "backup": {
+    "artifact": "rapfadrop-20261005T100713Z-0af0486e.tar.age",
+    "utc": "20261005T100713Z",
+    "application_sha": "452c6196fbda4f96f6b9d6624e17ea1c677a5643",
+    "sha256": "c307205546e73c2ebf092bca83ef582dfe5b622f29cda7bc719db532e06e6a11",
+    "bytes": 1434136,
+    "restore_verified": true,
+    "restore_utc": "2026-10-05T10:07:40.400456+00:00",
+    "restored_tables": 43,
+    "upload": "complete",
+    "message_ids": [
+      82,
+      83
+    ]
+  },
+  "cleanup": {
+    "removed_confirmed_media_files": 99,
+    "alias_rows_skipped_without_independent_readback": [
+      "6zctI4eibSmLYcdCm3WNjb",
+      "7MayY1yz6a5FDx757hMn0x",
+      "4SkeTCe5fvWK7GLptQyM8a"
+    ],
+    "production_messages_deleted": 0,
+    "isolated_database_redis_runner_removed": true,
+    "isolated_probe_directory_removed": true,
+    "exact_test_build_directory_removed": true
+  },
+  "real_provider_checks": [
+    {
+      "platform": "youtube",
+      "spotify_id": "4dg45KS6u6MmE0rpiiuASt",
+      "url": "https://www.youtube.com/watch?v=-otaF5BEt30",
+      "state": "blocked",
+      "seconds": 3.973,
+      "error": "yt-dlp failed (1): ERROR: [youtube] -otaF5BEt30: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See [redacted-url] for how to manually pass cookies. Also see [redacted-url] for tips on effectively exporting YouTube cookies"
+    },
+    {
+      "platform": "soundcloud",
+      "spotify_id": "4dg45KS6u6MmE0rpiiuASt",
+      "url": "https://soundcloud.com/justiem/taghsire-mane",
+      "state": "downloaded",
+      "seconds": 11.715,
+      "bytes": 4096545,
+      "codec": "aac",
+      "duration_obtained": "203.035283",
+      "bitrate": "160000",
+      "full_decode": true,
+      "evidence": {
+        "extractor": "Soundcloud",
+        "format_count": 4,
+        "uploader_id": "951055312",
+        "uploader_url": "https://soundcloud.com/justiem"
+      }
+    }
+  ]
+}
