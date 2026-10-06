@@ -129,6 +129,24 @@ class PublicationFixtures:
 
 
 class PublicationTests(PublicationFixtures, TestCase):
+    def test_fresh_spotify_identity_keeps_verified_soundcloud_caption_link(self):
+        candidate = self.candidate()
+        match = candidate.source_match
+        match.source_item.platform = 'spotify'
+        match.source_item.canonical_url = 'https://open.spotify.com/track/' + 'A' * 22
+        match.source_item.save()
+        match.matching_method = 'fresh_official_track'
+        match.evidence = {'official_metadata': {'artists': [self.artist.official_name]}}
+        match.save()
+        candidate.provenance = {'acquisition_platform': 'soundcloud',
+            'source_url': 'https://soundcloud.com/m4fixture/verified-recording'}
+        candidate.save()
+        pub = reserve_audio(candidate, self.target)
+        self.assertIn('Spotify</a>', pub.caption_html)
+        self.assertIn('SoundCloud</a>', pub.caption_html)
+        self.assertEqual(pub.context['soundcloud_url'], candidate.provenance['source_url'])
+        self.assertEqual(pub.context['spotify_url'], match.source_item.canonical_url)
+
     def test_pending_attempt_exists_before_gateway_and_duplicate_is_inert(self):
         candidate = self.candidate()
         original_execute = self.gateway.execute

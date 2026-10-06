@@ -94,6 +94,10 @@ def _audio_context(candidate, channel):
     context = {"title": track.official_title, "artists": list(track.artist_credits.order_by("position", "pk").values_list("artist__official_name", flat=True)), "release_type": release.release_type, "channel_target": channel.target}
     if candidate.source_match.matching_method == 'fresh_official_track':
         context['artists'] = candidate.source_match.evidence['official_metadata']['artists']
+        # Fresh identity stays Spotify-authoritative; the independently verified
+        # acquisition URL is nevertheless an available related platform link.
+        if candidate.provenance.get('acquisition_platform') == 'soundcloud':
+            context['soundcloud_url'] = safe_url(candidate.provenance.get('source_url'))
     version = track.edition if track.edition != "original" else release.edition
     if version in {"instrumental", "reissue", "deluxe"}:
         context["version_type"] = version
