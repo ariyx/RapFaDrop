@@ -12,6 +12,19 @@ host timer is independent of Celery/publication. Archive config files contain
 secrets and stay encrypted; the recovery identity is separate and must be saved
 independently by the owner. No production restore was authorized or run as a drill.
 
+## Current fresh production runtime (2026-10-06; supersedes historical OFF gates)
+
+Exact application/runtime evidence is in [STATUS.md](STATUS.md). Production Compose
+uses the four historical files below followed by protected `fresh-production`,
+`fresh-independent` and `fresh-intermediary` overlays, in the order recorded in the
+root-only backup config. All Compose files must also be included in `protected_files`
+for encrypted recovery. Fresh bridge is ON; media has no bot credential and cannot
+send; scoped publisher verifies exact bot/chat. Popular remains paused. Only the
+media service enables independent recording and Spotsaver acquisition. Use the
+protected complete config for every operation; omit no overlay. Exact-tested deploy
+must perform backup/restore-drill/upload before checkout/migration/restart.
+[Current configuration and preservation](reports/FRESH_INTERMEDIARY_AUTOMATION.md).
+
 ## Current discovery-only production override (2026-10-04)
 
 Production application/operations is `a1a47841d7feded2caa50db0d7ee27b5c83e4688` after the encrypted-backup/defaults task. All current production Compose operations must include the protected **fourth** overlay, in this order:

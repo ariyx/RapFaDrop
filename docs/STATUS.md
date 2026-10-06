@@ -1,5 +1,38 @@
 # Project status and handoff
 
+Updated **2026-10-06T16:38:08.273316+00:00**, owner-approved intermediary automation. Exact server-tested,
+pushed/deployed application **`7bf07060c4ddcf7496c8ffe369420505d13242e6`**; **259 application + nine backup tests**,
+migrations/system/drift/health passed. All **83/83** active Spotify sources retain
+45-second staggered polling and three latest scheduled successes. Fresh bridge,
+media and scoped production publication **ON/unpaused**; Popular stays paused.
+
+Original acquisition runs first, then protected media-only **Spotsaver fallback ON
+for all 83**, including artists without a registered acquisition profile. Owner
+accepts unknown original encoding and omitted output/video binding for complete
+otherwise-matched audio. Wrong version/credits, incomplete audio or uncertain send
+remain held. No native320/directSpotify claim, no access-control bypass. Original
+captions, metadata policy, frozen selections and historical baselines preserved.
+
+Approved Tataloo + Hassan Baba sample published: introduction **77**, audio **78**.
+MP3 **320,000 bit/s / 44.1 kHz stereo / 854.151825 s**, original encoding unknown.
+New adapter's real isolated full media replay reached READY in **9.771 s**,
+with official artwork/tags/full decode; replay and post-deployment publication
+recovery added zero attempts/messages. Upload/live detection latency unmeasured;
+Telegram byte readback exceeds hosted20MB limit. **33 intermediary mismatch held**;
+earlier complete SoundCloud acquisition is separate successful evidence.
+
+**83 approved / 83 sources / 84 baselines / 4,152 items / 73 confirmed messages /
+zero uncertain sends**; acquisition profiles **75/83 / 92 rows**. Protected restored
+backups uploaded through **114/115**, 47 tables. Recovery archive now includes both
+media-only overlays. Critical preserved table hashes match predeploy. Disposable
+media/build/DB/Redis removed; only confirmed candidate234 temporary production media
+removed. Music posts/backups/protected sessions retained. Runs independently on the
+server; no owner computer required. [Full report](reports/FRESH_INTERMEDIARY_AUTOMATION.md),
+[safe evidence](reports/data/fresh_intermediary_automation_evidence.json),
+[83-row coverage](reports/data/fresh_audio_source_coverage.csv).
+
+Earlier entries below are historical checkpoints and superseded holds.
+
 Updated **2026-10-06T15:39:45.731746+00:00**, roster-wide fresh automation. Exact tested/pushed/deployed
 application **`b430247332d00397d0a45a01c7695f3fd51a0492`**, **250 application + nine backup tests**, migrations/checks/
 drift/health passed on the server. **83/83** discovery sources poll at staggered

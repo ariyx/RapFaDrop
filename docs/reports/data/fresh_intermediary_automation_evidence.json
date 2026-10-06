@@ -1,0 +1,2441 @@
+{
+  "generated_at": "2026-10-06T16:38:08.273316+00:00",
+  "tested_deployed_application_sha": "7bf07060c4ddcf7496c8ffe369420505d13242e6",
+  "application_tests": 259,
+  "backup_tests": 9,
+  "runtime": {
+    "added_protected_paths": [
+      "/var/lib/rapfadrop-operations/fresh-independent.compose.json",
+      "/var/lib/rapfadrop-operations/fresh-intermediary.compose.json"
+    ],
+    "health": {
+      "database": "ok",
+      "status": "ok"
+    },
+    "media_switches": "43 objects imported automatically (use -v 2 for details).\n\n{\"FRESH_SPOTSAVER_ENABLED\": true, \"FRESH_INDEPENDENT_UPLOADERS_ENABLED\": true, \"FRESH_PIPELINE_ENABLED\": true, \"SPOTIFY_MEDIA_BRIDGE_ENABLED\": true, \"TELEGRAM_MODE\": \"disabled\", \"TELEGRAM_LIVE_ENABLED\": false, \"PUBLICATION_WORKER_ENABLED\": false}",
+    "overlay": "/var/lib/rapfadrop-operations/fresh-intermediary.compose.json",
+    "post_configuration_backup": {
+      "artifact": "/var/backups/rapfadrop/encrypted/rapfadrop-20261006T162906Z-888a24db.tar.age",
+      "message_ids": [
+        114,
+        115
+      ],
+      "restore_verified": true,
+      "restored_tables": 47,
+      "upload": "complete"
+    },
+    "scope": "All eligible fresh recordings; original acquisition precedes public intermediary; paused archive unchanged",
+    "sha": "7bf07060c4ddcf7496c8ffe369420505d13242e6",
+    "utc": "2026-10-06T16:29:05Z"
+  },
+  "final": {
+    "utc": "2026-10-06T16:38:08.273316+00:00",
+    "approved_artists": 83,
+    "active_verified_spotify": 83,
+    "three_latest_successful_sources": 83,
+    "baselines": 84,
+    "source_items": 4152,
+    "with_acquisition_profile": 75,
+    "acquisition_profile_rows": 92,
+    "published_messages": 73,
+    "uncertain_sends": 0,
+    "fresh_paused": false,
+    "popular_paused": true,
+    "popular_recordings": 155,
+    "popular_slots": 166,
+    "sources": [
+      {
+        "artist": "021kid",
+        "source_id": 196,
+        "spotify_id": "578d6XzxI0bCSi49dK0Qpx",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:56.033476+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:06.621639+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:14.676561+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Ali Ardavan",
+        "source_id": 154,
+        "spotify_id": "1j0dFZXmMgFlDAcjFh490M",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:42.684576+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:52.734506+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:00.844350+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Ali Geramy",
+        "source_id": 176,
+        "spotify_id": "5C2k7gNXFOiW09K3nCjBmq",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:48.450779+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:59.284668+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:07.353315+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Ali Sorena",
+        "source_id": 138,
+        "spotify_id": "1gNqCEatbX4cKskpTzyAsI",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:37.037551+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:47.937248+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:56.134836+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Alipasha",
+        "source_id": 199,
+        "spotify_id": "3uVb2GNMjiwv3talHFUvC1",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:56.853714+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:07.459270+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:15.446381+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Alireza Jj",
+        "source_id": 136,
+        "spotify_id": "3tecdksDTajgP8xxkuDgyJ",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:36.607126+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:46.981768+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:55.735765+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Amin Tijay",
+        "source_id": 5,
+        "spotify_id": "3JS9sHeI06RtolBR5s5O0L",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:18.748410+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:28.212113+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:38.766135+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Amir Khalvat",
+        "source_id": 145,
+        "spotify_id": "3mEVURCsHml1RKlcYjRyiy",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:39.235754+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:49.848187+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:57.639889+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Amir Ribar",
+        "source_id": 168,
+        "spotify_id": "1pi0dvF0ZMfD1d1KdR2r21",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:46.139878+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:56.948034+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:04.907134+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Amir Tataloo",
+        "source_id": 53,
+        "spotify_id": "5CEosSs2y4M9THNGI6mej8",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:34.232852+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:44.462794+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:53.352739+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Arman Miladi",
+        "source_id": 180,
+        "spotify_id": "3eqSr81gcNym9KLon3xcRR",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:49.752321+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:01.045874+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:08.912812+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Armin Zareei",
+        "source_id": 149,
+        "spotify_id": "4jUdmo1MCAWV2zEGc1uoEK",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:41.054585+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:50.892463+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:58.523263+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Arown",
+        "source_id": 185,
+        "spotify_id": "428w7JnH39SnN1ZejXhPmE",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:52.349484+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:03.174363+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:10.906480+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Arta",
+        "source_id": 25,
+        "spotify_id": "6gPKjPIXbBBnuLyLEq79Sz",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:23.668555+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:33.313616+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:43.350202+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Ashna",
+        "source_id": 178,
+        "spotify_id": "5Z0flsrz7Q8xJ2arSoYetY",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:49.435260+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:00.717152+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:08.300203+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Bahram",
+        "source_id": 131,
+        "spotify_id": "57LWeRc7ybAWTsS2vS1GA7",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:35.651859+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:46.091912+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:54.572982+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Bamdad",
+        "source_id": 155,
+        "spotify_id": "28PKM2pUlv1CXnc98XFVrY",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:43.009684+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:53.011908+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:01.194345+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Behzad Leito",
+        "source_id": 33,
+        "spotify_id": "4zNEj5bkHE0kNSpfIwgdvu",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:25.565856+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:35.710061+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:45.304972+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Canis",
+        "source_id": 29,
+        "spotify_id": "6OPdGHW0QD6WknWX2tlzJm",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:24.551382+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:34.243587+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:44.149018+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Catchybeatz",
+        "source_id": 152,
+        "spotify_id": "25JIQIFASUvrcnzFL9CQhZ",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:42.028570+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:52.199004+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:00.071553+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Chvrsi",
+        "source_id": 21,
+        "spotify_id": "7Hj58arwOvp6exTny9r5Ie",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:22.648344+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:32.312893+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:42.223024+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Dalu",
+        "source_id": 167,
+        "spotify_id": "0BX4QfYgm05DzBJyA6hqVJ",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:45.914190+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:56.662187+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:04.311072+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Daniyal",
+        "source_id": 160,
+        "spotify_id": "0bRZzB4e6Yj3B64Rcbs1vd",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:44.659276+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:54.600699+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:02.414571+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Dariu$h",
+        "source_id": 156,
+        "spotify_id": "3HQedAYh7K5YW4MD108gP3",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:43.404221+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:53.269683+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:01.431648+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Dorcci",
+        "source_id": 17,
+        "spotify_id": "6jj9lOTeZC28LkPoXK9hiT",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:21.442928+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:30.805442+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:41.143807+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Emad Ghavidel",
+        "source_id": 147,
+        "spotify_id": "32AFrGu19C0cGtRkgzJDAb",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:39.641474+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:50.154787+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:57.860978+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Erfan",
+        "source_id": 51,
+        "spotify_id": "1yPzb9mqugowOfUs2vIOgL",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:30.333948+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:40.554500+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:49.950339+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Eycin",
+        "source_id": 165,
+        "spotify_id": "3jXjY8STCMtS1T6d7xdw0r",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:45.549989+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:56.310295+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:03.690646+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Fadaei",
+        "source_id": 39,
+        "spotify_id": "5aWL79DpD45MzDMwCTZqsN",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:27.402834+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:37.128891+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:46.723246+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Gdaal",
+        "source_id": 143,
+        "spotify_id": "7mGDv3CYlPghTIWzE6tOpv",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:38.629470+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:49.457438+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:57.253391+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Hamid Sefat",
+        "source_id": 153,
+        "spotify_id": "0hnMiXDRQxJYr0TuSpCuiI",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:42.321500+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:52.471559+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:00.400024+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Heliyom",
+        "source_id": 182,
+        "spotify_id": "5GS60wuvILuGWpx9rMvRTQ",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:51.406303+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:01.922060+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:09.663297+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Hesam Tiem",
+        "source_id": 3,
+        "spotify_id": "6XsyaCX2jJLaS82vJoiiWi",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:38:08.029896+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:18.199258+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:27.974772+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Hichkas",
+        "source_id": 42,
+        "spotify_id": "2X90kCLyxyPeJ5nynJGbvT",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:27.950523+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:37.836155+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:47.261588+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Hiphopologist",
+        "source_id": 19,
+        "spotify_id": "45YMrIBH74j8e2wNlRSSdK",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:22.163322+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:31.459425+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:41.660726+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Ho3ein",
+        "source_id": 48,
+        "spotify_id": "5vVveQB8n4kETe67waTS3t",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:29.187069+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:39.311317+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:48.955699+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Hoomaan",
+        "source_id": 13,
+        "spotify_id": "6UJS43T8NPhmWmmpFY0hzP",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:20.172107+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:30.001080+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:40.374215+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Hossein Tiem",
+        "source_id": 1,
+        "spotify_id": "2ZgLpNVB2qQTifvz3l8xIY",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:38:07.138457+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:38:07.506865+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:17.661324+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:27.713907+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Isam",
+        "source_id": 184,
+        "spotify_id": "2oJHjkrwOU6fFBoDiW1jDP",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:52.022280+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:02.848155+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:10.569892+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Koorosh Wantons",
+        "source_id": 27,
+        "spotify_id": "1UjD9VWeqDDlDSvNlnFTdl",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:24.274999+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:33.813024+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:43.751312+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Mamazi",
+        "source_id": 7,
+        "spotify_id": "4L42EENVSu2ZE8cwhVVeh8",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:19.140064+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:28.978141+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:39.333124+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Masin",
+        "source_id": 171,
+        "spotify_id": "0QKP5an5PwgDyG0QPsLRxe",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:46.689121+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:57.582259+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:05.385774+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Maslak",
+        "source_id": 188,
+        "spotify_id": "6ZWZCww4so7LacgTJiFTWb",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:53.335750+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:04.171875+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:12.182026+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Matin Fattahi",
+        "source_id": 194,
+        "spotify_id": "4ymFcVI8Yr4vK8xx2ybmLI",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:55.564547+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:06.132308+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:14.125294+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Mehrad Hidden",
+        "source_id": 56,
+        "spotify_id": "0jCVTRvQkILbJvpviTpvd1",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:35.380956+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:45.733843+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:54.305440+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Mehyad",
+        "source_id": 198,
+        "spotify_id": "2uGqYbaqHFEiKFOwfW0mUG",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:56.336127+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:06.915210+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:14.998721+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Naaji",
+        "source_id": 174,
+        "spotify_id": "0RUqk7JT0uRkJSL2VNytz2",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:48.134928+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:58.964285+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:06.763266+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Nazli Mcfian",
+        "source_id": 192,
+        "spotify_id": "5tLaq6yrpvEpoKyLoTbHoD",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:54.422246+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:05.536454+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:13.475534+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Octave",
+        "source_id": 186,
+        "spotify_id": "78rQak8MeKSOo0smoQOSVE",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:52.926120+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:03.539047+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:11.720493+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Parsa",
+        "source_id": 191,
+        "spotify_id": "34T7RZbXeBGkGRQEjKMRmE",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:54.213375+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:05.224109+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:13.152030+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Parsalip",
+        "source_id": 157,
+        "spotify_id": "3HdBTStjnFIoDKFSUQ0V1H",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:43.772373+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:53.769557+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:01.829256+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Poori",
+        "source_id": 23,
+        "spotify_id": "5uEEhLt2ETeApnvs40MOxk",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:23.023114+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:32.757261+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:42.654082+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Pouriya Adroit",
+        "source_id": 202,
+        "spotify_id": "7lH1vL9VXRSTutpZ0JOyim",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:57.920280+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:08.616683+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:16.538680+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Putak",
+        "source_id": 158,
+        "spotify_id": "1VURARf1CD5wkFgIexChyq",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:44.094715+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:54.286897+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:02.176958+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Quf",
+        "source_id": 137,
+        "spotify_id": "1LyLFeSDfvcGc8K6caTl05",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:36.800358+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:47.177360+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:55.927196+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Raha",
+        "source_id": 193,
+        "spotify_id": "0e6D1UNkt16eApxJuq0HaF",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:54.819564+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:05.844554+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:13.724395+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Reza Pishro",
+        "source_id": 46,
+        "spotify_id": "0u4qrFczDmAsJesHPgbnru",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:28.976926+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:38.992700+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:48.614566+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Saaren",
+        "source_id": 181,
+        "spotify_id": "2VdBGJO1rhGtMucV91hkhk",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:50.104664+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:01.542172+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:09.318945+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sadegh",
+        "source_id": 140,
+        "spotify_id": "1PgsdK1Ll4oK28g6KLPOg1",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:37.413275+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:48.278865+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:56.413132+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Safir",
+        "source_id": 164,
+        "spotify_id": "5UvGzlSJuUhWwH6NojEKy2",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:45.306242+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:55.921940+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:03.380149+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sajad Shahi",
+        "source_id": 9,
+        "spotify_id": "3VzZOmXc8pZRfNxoiliE1A",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:19.480338+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:29.225029+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:39.591883+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Saman Wilson",
+        "source_id": 135,
+        "spotify_id": "2CwNkCPsqVs4jRRpFJxR3H",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:36.289144+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:46.647182+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:55.377882+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sami Low",
+        "source_id": 162,
+        "spotify_id": "4mST4sikQtpiH5dIkRxaCT",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:45.008079+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:54.925459+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:02.844620+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sepehr Khalse",
+        "source_id": 35,
+        "spotify_id": "2SFwcduI9cdZsG6UxnBm3C",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:26.515935+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:36.253604+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:45.955800+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Shahin Najafi",
+        "source_id": 133,
+        "spotify_id": "1W5u8Bz2yimyuuI8QNYsNO",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:35.965292+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:46.422354+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:55.120115+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Shapur",
+        "source_id": 170,
+        "spotify_id": "6kbLiMnkNZHlvMpTv5iK9h",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:46.445045+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:57.236949+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:05.119611+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Shayan Yo",
+        "source_id": 189,
+        "spotify_id": "1auD6S9qViY72nLUvLrL6a",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:53.623535+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:04.594371+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:12.564692+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Shayea",
+        "source_id": 37,
+        "spotify_id": "3QNGoF6VzVNnkpjJDT3NHq",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:27.079448+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:36.624546+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:46.427976+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sijal",
+        "source_id": 31,
+        "spotify_id": "5F0BGBdSL945Bzxrq8aGbn",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:25.152346+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:35.205293+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:44.864144+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sina Mafee",
+        "source_id": 151,
+        "spotify_id": "7sqnywamVUfDallF46rrkv",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:41.748310+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:51.768192+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:59.437515+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sina Sae",
+        "source_id": 40,
+        "spotify_id": "5er043agmHdVZkWTxL0Lpk",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:27.718080+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:37.576433+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:47.090033+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sinazza",
+        "source_id": 11,
+        "spotify_id": "2su0Z5gmtSRUreY11ocP8M",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:19.777701+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:29.450591+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:39.954267+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sogand",
+        "source_id": 142,
+        "spotify_id": "2mGkJsyXC8byI83UHSO4w1",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:37.786384+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:48.684954+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:56.660200+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Sohrab Mj",
+        "source_id": 54,
+        "spotify_id": "2B4DnBz9uzJN5nPgLEHCt7",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:34.641341+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:45.074250+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:53.825279+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "The Don",
+        "source_id": 183,
+        "spotify_id": "4rBWAKUMmLkl685zvk0LBH",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:51.621256+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:02.204761+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:09.971450+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Tlkhoon",
+        "source_id": 201,
+        "spotify_id": "7rLK6i7WTUayoYIaudyxD7",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:57.192470+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:07.929126+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:15.846342+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Tohi",
+        "source_id": 49,
+        "spotify_id": "7pBXdJN9S9N9nNifjPixET",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:29.630908+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:39.925046+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:49.588601+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Vinak",
+        "source_id": 15,
+        "spotify_id": "1sKlyO3CCEvjeTN6Uck39S",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:20.904373+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:30.557860+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:40.916174+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "XWHISKY",
+        "source_id": 177,
+        "spotify_id": "4TO3iG7Rd36IKRcMVvPi2U",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:49.037084+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:00.513091+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:07.706711+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Yas",
+        "source_id": 44,
+        "spotify_id": "7b8pXheEOc28fyFJnQzqmL",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:28.275678+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:38.240852+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:47.680173+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Young Sudden",
+        "source_id": 173,
+        "spotify_id": "0PGOS7VHyBpbxRhWgO4tZB",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:47.032375+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:58.259006+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:05.886857+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "Zakhmi",
+        "source_id": 150,
+        "spotify_id": "4jE3X9cADx45YcmBiteecQ",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:41.258157+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:51.452653+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:58.769867+00:00"
+          }
+        ]
+      },
+      {
+        "artist": "poobon",
+        "source_id": 148,
+        "spotify_id": "4hdsAoRTkGU11DynAg7iTw",
+        "poll_interval_seconds": 45,
+        "last_success_at": "2026-10-06 16:37:17.141232+00:00",
+        "three_latest_successes": true,
+        "latest_polls": [
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:37:40.637424+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:36:50.621472+00:00"
+          },
+          {
+            "event_type": "poll_succeeded",
+            "occurred_at": "2026-10-06 16:35:58.203617+00:00"
+          }
+        ]
+      }
+    ],
+    "verified_target": "-1004311149640",
+    "verified_chat_username": "RapFaDrop",
+    "verified_bot_id": 8697681226,
+    "publication_replay_added_attempts": 0,
+    "publications": [
+      {
+        "publication_id": 72,
+        "message_id": 77,
+        "message_url": "https://t.me/RapFaDrop/77",
+        "kind": "album_intro",
+        "state": "published",
+        "published_at": "2026-10-06 15:58:14.842326+00:00",
+        "caption_html": "<b>Mano Khoda Shoma Hame</b>\nEP · Amir Tataloo × Hassan Baba\n\n<a href=\"https://open.spotify.com/album/2Q9azs6CaUEkqZtTYYCTZl\">Spotify</a>\n\nt.me/RapFaDrop",
+        "response_caption": "Mano Khoda Shoma Hame\nEP · Amir Tataloo × Hassan Baba\n\nSpotify\n\nt.me/RapFaDrop",
+        "caption_entities": [
+          {
+            "type": "bold",
+            "length": 21,
+            "offset": 0
+          },
+          {
+            "url": "https://open.spotify.com/album/2Q9azs6CaUEkqZtTYYCTZl",
+            "type": "text_link",
+            "length": 7,
+            "offset": 55
+          },
+          {
+            "type": "url",
+            "length": 14,
+            "offset": 64
+          }
+        ],
+        "media": {},
+        "upload_seconds": null,
+        "upload_timing_note": "Existing attempt uses one scheduler timestamp for start/finish; wall-clock upload not instrumented"
+      },
+      {
+        "publication_id": 73,
+        "message_id": 78,
+        "message_url": "https://t.me/RapFaDrop/78",
+        "kind": "album_track_audio",
+        "state": "published",
+        "published_at": "2026-10-06 15:58:14.842326+00:00",
+        "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>EP Drop</b></a>\n› <a href=\"https://open.spotify.com/track/5sYGAU7L6JgUrkfzy9J3Yx\">Spotify</a> · <a href=\"https://t.me/RapFaDrop/77\">Album</a>",
+        "response_caption": "EP Drop\n› Spotify · Album",
+        "caption_entities": [
+          {
+            "url": "https://t.me/RapFaDrop",
+            "type": "text_link",
+            "length": 7,
+            "offset": 0
+          },
+          {
+            "type": "bold",
+            "length": 7,
+            "offset": 0
+          },
+          {
+            "url": "https://open.spotify.com/track/5sYGAU7L6JgUrkfzy9J3Yx",
+            "type": "text_link",
+            "length": 7,
+            "offset": 10
+          },
+          {
+            "url": "https://t.me/RapFaDrop/77",
+            "type": "text_link",
+            "length": 5,
+            "offset": 20
+          }
+        ],
+        "media": {
+          "title": "Mano Khoda Shoma Hame",
+          "duration": 854,
+          "file_size": 34250263,
+          "mime_type": "audio/mpeg",
+          "performer": "Amir Tataloo × Hassan Baba"
+        },
+        "upload_seconds": null,
+        "upload_timing_note": "Existing attempt uses one scheduler timestamp for start/finish; wall-clock upload not instrumented"
+      }
+    ],
+    "album_session": {
+      "id": 2,
+      "state": "complete",
+      "cursor": 1,
+      "entries": 1
+    },
+    "provider_backoff": [
+      {
+        "platform": "youtube",
+        "due_at": "2026-10-06 14:48:37.063462+00:00",
+        "reason": "yt-dlp failed (1): ERROR: [youtube] cmj7_tDeekQ: The page needs to be reloaded."
+      }
+    ],
+    "publisher_switches": {
+      "FRESH_PIPELINE_ENABLED": true,
+      "SPOTIFY_MEDIA_BRIDGE_ENABLED": true,
+      "PUBLICATION_WORKER_ENABLED": true,
+      "TELEGRAM_MODE": "production",
+      "TELEGRAM_LIVE_ENABLED": true,
+      "TELEGRAM_PRODUCTION_CHAT_ID": "-1004311149640",
+      "TELEGRAM_EXPECTED_BOT_ID": 8697681226
+    },
+    "telegram_audio_byte_readback": {
+      "state": "blocked",
+      "reason": "File exceeds hosted Bot API 20MB readback limit; preparation/full decode and durable send response verified"
+    }
+  },
+  "isolated_adapter_comparison": {
+    "results": [
+      {
+        "spotify_id": "6f8ginsFVrSDwG88elopa6",
+        "title": "Masire Dard",
+        "metadata_matched": true,
+        "probe_seconds": 5.373,
+        "probe": {
+          "selected_video_id": "9i80DyFCHTw",
+          "public_video_title": "Emad Ghavidel - \"Masire Dard\" OFFICAIL VIDEO HD",
+          "public_video_author": "EMAD GHAVIDEL",
+          "source_origin": "public intermediary; direct Spotify audio unproven",
+          "source_quality_unknown": true,
+          "duration_basis": "official Spotify expected duration; actual full file validated after download",
+          "output_video_binding": "unreported until download; owner permits omitted binding",
+          "metadata_requests": [
+            {
+              "domain": "spotsaver.net",
+              "method": "GET",
+              "http_status": 200,
+              "bytes": 314,
+              "seconds": 0.131
+            },
+            {
+              "domain": "spotsaver.net",
+              "method": "POST",
+              "http_status": 200,
+              "bytes": 40,
+              "seconds": 4.826
+            },
+            {
+              "domain": "www.youtube.com",
+              "method": "GET",
+              "http_status": 200,
+              "bytes": 861,
+              "seconds": 0.11
+            }
+          ],
+          "upstream_reference": "musicdl e5c3bd51b518642c24027921e63f482865809b61 selected Spotsaver method"
+        },
+        "total_seconds": 5.373,
+        "telegram_sends": 0
+      },
+      {
+        "spotify_id": "0GjX7igOYf7jzPtQHDss87",
+        "title": "33",
+        "state": "blocked",
+        "error": "Intermediary public video recording/version mismatch",
+        "total_seconds": 5.527,
+        "telegram_sends": 0
+      },
+      {
+        "spotify_id": "7wRd6TS0h8dpDBtzfjGdMw",
+        "title": "Bavelamko",
+        "metadata_matched": true,
+        "probe_seconds": 1.705,
+        "probe": {
+          "selected_video_id": "F_RR0fgbKMY",
+          "public_video_title": "Catchybeatz X Tm Bax X Talk Down - Bavelamko (Official Visualizer)",
+          "public_video_author": "Catchybeatz",
+          "source_origin": "public intermediary; direct Spotify audio unproven",
+          "source_quality_unknown": true,
+          "duration_basis": "official Spotify expected duration; actual full file validated after download",
+          "output_video_binding": "unreported until download; owner permits omitted binding",
+          "metadata_requests": [
+            {
+              "domain": "spotsaver.net",
+              "method": "GET",
+              "http_status": 200,
+              "bytes": 329,
+              "seconds": 0.467
+            },
+            {
+              "domain": "spotsaver.net",
+              "method": "POST",
+              "http_status": 200,
+              "bytes": 40,
+              "seconds": 1.15
+            },
+            {
+              "domain": "www.youtube.com",
+              "method": "GET",
+              "http_status": 200,
+              "bytes": 871,
+              "seconds": 0.068
+            }
+          ],
+          "upstream_reference": "musicdl e5c3bd51b518642c24027921e63f482865809b61 selected Spotsaver method"
+        },
+        "total_seconds": 1.705,
+        "telegram_sends": 0
+      },
+      {
+        "spotify_id": "5sYGAU7L6JgUrkfzy9J3Yx",
+        "title": "Mano Khoda Shoma Hame",
+        "metadata_matched": true,
+        "probe_seconds": 0.748,
+        "probe": {
+          "selected_video_id": "GdnlBtXCJDY",
+          "public_video_title": "Amir Tataloo - Mano Khoda Shoma Hame ( امیر‌تتلو‌ - من و خدا شما همه ) @HasanBabaMusic",
+          "public_video_author": "Amir Tataloo",
+          "source_origin": "public intermediary; direct Spotify audio unproven",
+          "source_quality_unknown": true,
+          "duration_basis": "official Spotify expected duration; actual full file validated after download",
+          "output_video_binding": "unreported until download; owner permits omitted binding",
+          "metadata_requests": [
+            {
+              "domain": "spotsaver.net",
+              "method": "GET",
+              "http_status": 200,
+              "bytes": 336,
+              "seconds": 0.527
+            },
+            {
+              "domain": "spotsaver.net",
+              "method": "POST",
+              "http_status": 200,
+              "bytes": 40,
+              "seconds": 0.141
+            },
+            {
+              "domain": "www.youtube.com",
+              "method": "GET",
+              "http_status": 200,
+              "bytes": 1124,
+              "seconds": 0.066
+            }
+          ],
+          "upstream_reference": "musicdl e5c3bd51b518642c24027921e63f482865809b61 selected Spotsaver method"
+        },
+        "acquisition_seconds": 4.029,
+        "facts": {
+          "sha256": "8d2d792dbed2928d3fc0e853d8eaf8038227739825781cc84a30c88bad65274c",
+          "file_size_bytes": 34166073,
+          "duration_seconds": 854.151825,
+          "format_name": "mp3",
+          "format_bitrate_bps": 320000,
+          "measured_bitrate_bps": 320000,
+          "codec_name": "mp3",
+          "audio_bitrate_bps": 320000,
+          "sample_rate_hz": 44100,
+          "channels": 2,
+          "audio_stream_count": 1
+        },
+        "full_decode": "passed",
+        "decode_seconds": 7.913,
+        "download_evidence": {
+          "provider_domains": [
+            "spotsaver.net",
+            "www.youtube.com",
+            "yt1s-worker-6.dlsrv.online"
+          ],
+          "download_requests": [
+            {
+              "domain": "spotsaver.net",
+              "method": "GET",
+              "http_status": 200,
+              "bytes": 336,
+              "seconds": 0.527
+            },
+            {
+              "domain": "spotsaver.net",
+              "method": "POST",
+              "http_status": 200,
+              "bytes": 40,
+              "seconds": 0.141
+            },
+            {
+              "domain": "www.youtube.com",
+              "method": "GET",
+              "http_status": 200,
+              "bytes": 1124,
+              "seconds": 0.066
+            },
+            {
+              "domain": "spotsaver.net",
+              "method": "POST",
+              "http_status": 200,
+              "bytes": 864,
+              "seconds": 0.864
+            },
+            {
+              "domain": "yt1s-worker-6.dlsrv.online",
+              "method": "GET",
+              "http_status": 302
+            },
+            {
+              "domain": "yt1s-worker-6.dlsrv.online",
+              "method": "GET",
+              "http_status": 200,
+              "bytes": 34166073,
+              "seconds": 2.504
+            }
+          ],
+          "resolved_video_id": null,
+          "output_video_binding": "unreported_owner_permitted",
+          "source_quality_unknown": true,
+          "conversion": "none locally; intermediary conversion unknown"
+        },
+        "total_seconds": 13.197,
+        "telegram_sends": 0
+      }
+    ],
+    "shared_stop": false
+  },
+  "isolated_full_media_flow": {
+    "utc": "2026-10-06T16:30:36.375594+00:00",
+    "spotify_id": "5sYGAU7L6JgUrkfzy9J3Yx",
+    "historical_replay": true,
+    "state": "ready",
+    "candidate_id": 1,
+    "identity_seconds": 0.335,
+    "lookup_seconds": 0.362,
+    "media_seconds": 5.356,
+    "total_seconds": 9.771,
+    "facts": {
+      "sha256": "8d2d792dbed2928d3fc0e853d8eaf8038227739825781cc84a30c88bad65274c",
+      "channels": 2,
+      "codec_name": "mp3",
+      "format_name": "mp3",
+      "sample_rate_hz": 44100,
+      "file_size_bytes": 34166073,
+      "duration_seconds": 854.151825,
+      "audio_bitrate_bps": 320000,
+      "audio_stream_count": 1,
+      "format_bitrate_bps": 320000,
+      "measured_bitrate_bps": 320000
+    },
+    "validation": {
+      "status": "valid",
+      "complete": true,
+      "audio_stream_present": true,
+      "full_decode": "passed"
+    },
+    "preparation": {
+      "format": "MP3",
+      "artwork": {
+        "state": "embedded",
+        "width": 300,
+        "format": "JPEG",
+        "height": 300,
+        "mime_type": "image/jpeg",
+        "size_bytes": 48525
+      },
+      "readback": {
+        "title_matches": true,
+        "artwork_read_back": true,
+        "main_artists_match": true,
+        "album_suffix_matches": true,
+        "channel_fields_read_back": true
+      },
+      "channel_tag": "@RapFaDrop",
+      "mapped_fields": [
+        "title",
+        "main_artist",
+        "album",
+        "track_number",
+        "disc_number",
+        "release_date",
+        "album_artist_suffix",
+        "album_suffix",
+        "author_url",
+        "comments",
+        "composers",
+        "conductors",
+        "copyright",
+        "encoded_by",
+        "initial_key",
+        "publisher",
+        "subtitle"
+      ],
+      "unsupported_fields": [],
+      "channel_policy_version": 2
+    },
+    "timings": {
+      "acquisition_seconds": 4.288,
+      "provider_probe_seconds": 0.283,
+      "provider_duration_seconds": 855.054,
+      "validation_and_preparation_seconds": 0.546
+    },
+    "intermediary_download": {
+      "conversion": "none locally; intermediary conversion unknown",
+      "provider_domains": [
+        "spotsaver.net",
+        "www.youtube.com",
+        "yt1s-worker-6.dlsrv.online"
+      ],
+      "download_requests": [
+        {
+          "bytes": 336,
+          "domain": "spotsaver.net",
+          "method": "GET",
+          "seconds": 0.058,
+          "http_status": 200
+        },
+        {
+          "bytes": 40,
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "seconds": 0.135,
+          "http_status": 200
+        },
+        {
+          "bytes": 1124,
+          "domain": "www.youtube.com",
+          "method": "GET",
+          "seconds": 0.077,
+          "http_status": 200
+        },
+        {
+          "bytes": 864,
+          "domain": "spotsaver.net",
+          "method": "POST",
+          "seconds": 0.902,
+          "http_status": 200
+        },
+        {
+          "domain": "yt1s-worker-6.dlsrv.online",
+          "method": "GET",
+          "http_status": 302
+        },
+        {
+          "bytes": 34166073,
+          "domain": "yt1s-worker-6.dlsrv.online",
+          "method": "GET",
+          "seconds": 3.095,
+          "http_status": 200
+        }
+      ],
+      "resolved_video_id": null,
+      "output_video_binding": "unreported_owner_permitted",
+      "source_quality_unknown": true
+    },
+    "source_quality_unknown": true,
+    "replay_added_attempts": 0,
+    "telegram_messages": 0,
+    "upload_seconds": null
+  },
+  "owner_approved_live_preparation": {
+    "utc": "2026-10-06T15:54:38.043170+00:00",
+    "candidate_id": 234,
+    "native_id": "5sYGAU7L6JgUrkfzy9J3Yx",
+    "state": "ready",
+    "preparation_seconds": 6.349,
+    "observed_facts": {
+      "sha256": "8d2d792dbed2928d3fc0e853d8eaf8038227739825781cc84a30c88bad65274c",
+      "channels": 2,
+      "codec_name": "mp3",
+      "format_name": "mp3",
+      "sample_rate_hz": 44100,
+      "file_size_bytes": 34166073,
+      "duration_seconds": 854.151825,
+      "audio_bitrate_bps": 320000,
+      "audio_stream_count": 1,
+      "format_bitrate_bps": 320000,
+      "measured_bitrate_bps": 320000
+    },
+    "validation": {
+      "status": "valid",
+      "complete": true,
+      "full_decode": "passed",
+      "audio_stream_present": true
+    },
+    "readback": {
+      "title_matches": true,
+      "artwork_read_back": true,
+      "main_artists_match": true,
+      "album_suffix_matches": true,
+      "channel_fields_read_back": true
+    },
+    "processing": {
+      "processed": [
+        3892
+      ],
+      "manifest": {
+        "eligible": 5,
+        "excluded": 3887,
+        "review": 1
+      }
+    }
+  },
+  "cleanup": {
+    "backup_posts_deleted": 0,
+    "compose_files_protected": true,
+    "deployed_sha": "7bf07060c4ddcf7496c8ffe369420505d13242e6",
+    "disposable_build_source_removed": true,
+    "disposable_check_database_queue_media_volumes_removed": true,
+    "disposable_media_deleted_bytes": 68332146,
+    "disposable_media_deleted_files": 2,
+    "health": {
+      "database": "ok",
+      "status": "ok"
+    },
+    "preservation_since_predeploy": {
+      "archive_collection_acquisitionsource": {
+        "count": 92,
+        "unchanged": true
+      },
+      "archive_collection_artistselection": {
+        "count": 83,
+        "unchanged": true
+      },
+      "archive_collection_collection": {
+        "count": 1,
+        "unchanged": true
+      },
+      "archive_collection_recording": {
+        "count": 155,
+        "unchanged": true
+      },
+      "archive_collection_recordingalias": {
+        "count": 3,
+        "unchanged": true
+      },
+      "archive_collection_slot": {
+        "count": 166,
+        "unchanged": true
+      },
+      "publication_captiontemplate": {
+        "count": 7,
+        "unchanged": true
+      },
+      "publication_publication": {
+        "count": 73,
+        "unchanged": true
+      },
+      "sources_artist": {
+        "count": 87,
+        "unchanged": true
+      },
+      "sources_baselinerun": {
+        "count": 84,
+        "unchanged": true
+      },
+      "sources_sourceitem": {
+        "count": 4152,
+        "unchanged": true
+      }
+    },
+    "production_posts_deleted": 0,
+    "protected_sessions_preserved": true,
+    "queues": {
+      "celery": 3,
+      "fresh-media-v1": 0,
+      "fresh-publication-v1": 0,
+      "spotify-pilot": 1
+    },
+    "utc": "2026-10-06T16:33:13Z"
+  },
+  "confirmed_production_media_cleanup": {
+    "utc": "2026-10-06T16:35:08.297956+00:00",
+    "candidate_id": 234,
+    "confirmed_message_id": 78,
+    "removed_files": 3,
+    "removed_bytes": 68464861,
+    "other_production_media_touched": false,
+    "music_posts_deleted": 0
+  },
+  "interpretation": "Historical replays measure acquisition/preparation, not live detection; intermediary origin and source encoding remain unknown; no local audio transcoding; owner accepts omitted final video binding."
+}

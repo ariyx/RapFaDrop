@@ -38,6 +38,14 @@ for an otherwise accepted recording; preserve complete playable audio, work/vers
 handling, deduplication and honest source/quality evidence. This does not establish
 native Spotify quality or authorize bypassing provider access controls.
 
+The subsequent explicit owner decision permits complete matched public intermediary
+files even when original encoding/final output binding is unreported. Prefer
+original registered providers and existing recording lookup, then the bounded
+Spotsaver fallback for every eligible fresh recording. This is an initial delivery
+policy, not proof of native320 quality or an automatic quality upgrade. Preserve
+full credits/version/duration, decoding, artwork/tag readback, album staging and
+uncertain-send safeguards. [Measured implementation](reports/FRESH_INTERMEDIARY_AUTOMATION.md).
+
 The owner expanded the allowlist to **83 identities** on 2026-10-04. The complete list and import provenance are in [`ARTIST_ROSTER.md`](ARTIST_ROSTER.md) and the normalized import manifest. New imports start disabled; adding an identity does not itself authorize polling, baselining or publication. The subsequent owner-authorized discovery rollout and correction provide verified Spotify coverage for all 83 approved artists; baseline and source activation evidence is in [`reports/SOURCE_ACTIVATION.md`](reports/SOURCE_ACTIVATION.md). The later explicitly authorized production pipeline is recorded in [`reports/FRESH_RELEASE_ACTIVATION.md`](reports/FRESH_RELEASE_ACTIVATION.md). Preserve existing curated profiles, baselines and schedules when importing. Historical initial roster below remains the source of its original 30 identities.
 
 The owner approved the following **30 artists** as the initial list. Profile links are seed candidates found from public pages; verify profile identity and recent official works at activation. Do not silently replace a missing source with a fan account. The allowlist grows through the panel. Store official display name, aliases, native profile IDs, profile URLs, verification state, enabled state, timestamps and audit history.

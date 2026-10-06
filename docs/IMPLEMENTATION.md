@@ -36,9 +36,21 @@ media workers cannot send. The exact production bot, channel and admin posting
 permission are checked before sends. The publisher can act only on durable fresh
 scope, plus a scoped caption update to an already-published prior single.
 
+The protected media-only `FRESH_SPOTSAVER_ENABLED` switch is ON for all eligible
+fresh recordings. Normal original/recording lookup precedes the public intermediary.
+The adapter uses only the pinned musicdl Spotsaver protocol, ephemeral anonymous
+cookies, fixed public host allowlist, seven-request context, 60-second ceiling and
+45MB maximum. Exact Spotify metadata/full credits/version and selected public video
+must match; explicit output contradictions fail. Original encoding and omitted
+binary/video binding remain unknown under owner policy. The media service rechecks
+the selected native video, validates actual complete bytes and reads official tags/
+artwork. No URLs carrying transport signatures or credentials enter provenance.
+Backoff/cache remains provider-specific; held candidates/attempts remain durable.
+[Adapter/live approved send evidence](reports/FRESH_INTERMEDIARY_AUTOMATION.md).
+
 Matching reuses bounded verified SoundCloud/YouTube catalogs and probes.
 Fresh catalog and negative-search caches expire at the existing discovery source
-poll interval (currently 180 seconds), rather than the archive's six-hour default.
+poll interval (currently 45 seconds), rather than the archive's six-hour default.
 This prevents an earlier catalog miss from hiding a subsequent official upload;
 Probe bounds, durable dispatch retry schedules and provider backoff remain enforced.
 Missing-file dispatch retries are capped at that same source interval instead of

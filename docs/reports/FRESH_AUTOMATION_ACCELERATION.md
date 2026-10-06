@@ -1,5 +1,9 @@
 # Automatic fresh-release acceleration and roster-wide recording fallback
 
+**Later owner-authorized update:** intermediary fallback is enabled and the approved
+Tataloo sample was published. The held status below is historical. See
+[FRESH_INTERMEDIARY_AUTOMATION.md](FRESH_INTERMEDIARY_AUTOMATION.md).
+
 Generated **2026-10-06T15:39:45.731746+00:00**. Exact server-tested, pushed and deployed application
 **`b430247332d00397d0a45a01c7695f3fd51a0492`**. Owner authorized automatic fresh publication for all 83 approved
 artists and recording-level independent uploaders. RapRelease remains a benchmark;
