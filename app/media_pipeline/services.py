@@ -209,7 +209,7 @@ def _run_provider(candidate, provider, now=None):
                     str((probe.evidence or {}).get('uploader_id')) != expected_uploader or
                     normalize_text(probe.title) != normalize_text(candidate.provenance.get('source_recording_title'))):
                 raise ProviderError('SoundCloud recording/uploader identity changed after validation', retryable=False)
-        if provider.name == "yt-dlp" and source_item.platform == "soundcloud":
+        if provider.name == "yt-dlp" and source_item.platform == "soundcloud" and not candidate.provenance.get('fresh_manifest_id'):
             from releases.normalization import normalize_text
             from releases.services import _uploader_mismatch
             recorded_uploader = source_item.metadata.get("uploader")
@@ -268,7 +268,10 @@ def _run_provider(candidate, provider, now=None):
         if artwork_url:
             art_staging = staging / "source-artwork"
             try:
-                artwork = (fetch_recorded_spotify_artwork if frozen_artwork else fetch_recorded_soundcloud_artwork)(artwork_url, art_staging)
+                from .artwork import fetch_recorded_youtube_artwork
+                platform=source_item.platform
+                fetcher=fetch_recorded_spotify_artwork if frozen_artwork and platform=='spotify' else fetch_recorded_youtube_artwork if platform=='youtube' else fetch_recorded_soundcloud_artwork
+                artwork = fetcher(artwork_url, art_staging)
                 validate_artwork(artwork)
                 artwork_state = MediaCandidate.ArtworkState.EMBEDDED
                 candidate.provenance = {**candidate.provenance, "official_artwork_source_url": _safe_evidence_url(artwork_url)}

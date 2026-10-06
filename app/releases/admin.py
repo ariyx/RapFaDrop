@@ -15,6 +15,13 @@ from .models import (
 from .services import resolve_review
 from operations.services import audit, safe_audit_json
 from .models import FreshDispatch, FreshTrack, FreshProviderBackoff
+from .models import FreshDiscoveryFeed
+
+
+@admin.register(FreshDiscoveryFeed)
+class FreshDiscoveryFeedAdmin(admin.ModelAdmin):
+    list_display=('acquisition_source','search_artist','enabled','baseline_at','last_success_at','next_poll_at','last_error')
+    readonly_fields=tuple(field.name for field in FreshDiscoveryFeed._meta.fields)
 
 
 @admin.register(FreshDispatch)

@@ -5,3 +5,9 @@ from .fresh import process_due
 @shared_task(name="releases.tasks.process_fresh_releases")
 def process_fresh_releases():
     return process_due()
+
+
+@shared_task(name='releases.tasks.poll_independent_uploads')
+def poll_independent_uploads():
+    from .feeds import poll_due_feeds
+    return poll_due_feeds()

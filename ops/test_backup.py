@@ -11,6 +11,19 @@ import backup
 
 
 class BackupTests(unittest.TestCase):
+    def test_independent_discovery_role_cannot_enable_telegram(self):
+        roles={'web':'metadata','worker':'metadata','beat':'scheduler','fresh-media':'metadata','fresh-publication':'publisher','fresh-discovery':'metadata'}
+        config={'production_services':roles,'backup_chat_id':backup.CHAT,'production_chat_id':backup.PRODUCTION_CHAT}
+        def inspect(args,**kwargs):
+            role=roles[args[-1].removeprefix('rapfadrop-').removesuffix('-1')];live=role in {'publisher','scheduler'}
+            env={'RAPFADROP_SPOTIFY_MEDIA_BRIDGE_ENABLED':'true','RAPFADROP_FRESH_PIPELINE_ENABLED':'true',
+                 'RAPFADROP_TELEGRAM_MODE':'production' if live else 'disabled','RAPFADROP_TELEGRAM_LIVE_ENABLED':'true' if live else 'false',
+                 'RAPFADROP_PUBLICATION_WORKER_ENABLED':'true' if live else 'false','RAPFADROP_TELEGRAM_PRODUCTION_CHAT_ID':backup.PRODUCTION_CHAT,
+                 'RAPFADROP_TELEGRAM_EXPECTED_BOT_ID':'8697681226'}
+            return json.dumps([{'Config':{'Env':[k+'='+v for k,v in env.items()]}}]).encode()
+        with patch.object(backup,'run',side_effect=inspect) as calls:backup.guard(config);self.assertEqual(calls.call_count,6)
+        with patch.object(backup,'run',return_value=b'[{"Config":{"Env":[]}}]'):
+            with self.assertRaises(ValueError):backup.guard(config)
     def test_production_roles_check_all_workers_and_exact_target(self):
         roles = {'web':'metadata', 'worker':'metadata', 'beat':'scheduler', 'fresh-media':'metadata', 'fresh-publication':'publisher'}
         config = {'production_services':roles, 'backup_chat_id':backup.CHAT, 'production_chat_id':backup.PRODUCTION_CHAT}

@@ -91,7 +91,8 @@ def guard(c):
     if c.get('backup_chat_id') != CHAT or c.get('backup_chat_id') == c.get('production_chat_id') or c.get('production_chat_id') != PRODUCTION_CHAT:
         raise ValueError('Dedicated backup target required; no fallback')
     roles = c.get('production_services')
-    if roles and roles != {'web':'metadata', 'worker':'metadata', 'beat':'scheduler', 'fresh-media':'metadata', 'fresh-publication':'publisher'}:
+    approved_roles={'web':'metadata', 'worker':'metadata', 'beat':'scheduler', 'fresh-media':'metadata', 'fresh-publication':'publisher'}
+    if roles and roles not in (approved_roles,{**approved_roles,'fresh-discovery':'metadata'}):
         raise ValueError('Exact approved production service roles required')
     for name in (roles or ['web', 'worker', 'beat']):
         info = json.loads(run(['docker', 'inspect', f'rapfadrop-{name}-1']))[0]

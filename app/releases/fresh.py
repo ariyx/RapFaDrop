@@ -41,6 +41,12 @@ def classify(item, *, now=None):
                 "baseline_completed_at": source.baseline_completed_at.isoformat() if source.baseline_completed_at else None}
     if item.from_baseline:
         return "excluded", "Historical baseline item", evidence
+    if item.metadata.get('feed_discovery'):
+        from .models import FreshDiscoveryFeed
+        feed=FreshDiscoveryFeed.objects.filter(pk=item.metadata.get('feed_id'),enabled=True,baseline_at__isnull=False).first()
+        if not feed or not source.enabled or source.verification!='verified' or not source.artist.enabled:
+            return 'review','Independent upload feed lacks enabled baseline authority',evidence
+        return 'eligible','Independent upload observation; exact native metadata/time required before media',evidence
     if not item.metadata.get("spotify_discovery") or item.metadata.get("archive_only"):
         return "excluded", "Archive/acquisition fact, not a discovery", evidence
     baseline = BaselineRun.objects.filter(source=source, status="complete").order_by("completed_at").first()
@@ -74,7 +80,8 @@ def classify(item, *, now=None):
 @transaction.atomic
 def build_manifest(now=None):
     """No network, downloads or sends; decisions are persisted before queueing."""
-    for item in SourceItem.objects.filter(metadata__spotify_discovery=True, freshdispatch__isnull=True).select_related("source__artist").order_by("pk"):
+    from django.db.models import Q
+    for item in SourceItem.objects.filter(Q(metadata__spotify_discovery=True)|Q(metadata__feed_discovery=True), freshdispatch__isnull=True).select_related("source__artist").order_by("pk"):
         disposition, reason, evidence = classify(item, now=now)
         FreshDispatch.objects.get_or_create(source_item=item, defaults={
             "disposition": disposition, "reason": reason, "evidence": evidence})
@@ -96,9 +103,13 @@ def validate_official(item, metadata):
     if edition_markers(item.title):
         raise ValueError("Release edition relationship requires review")
     seen = set()
+    import re
+    native_pattern = SPOTIFY_ID if item.platform=='spotify' else re.compile(r'\d{1,22}' if item.platform=='soundcloud' else r'[\w-]{11}')
+    if item.platform!='spotify' and not item.metadata.get('feed_discovery'):
+        raise ValueError('Non-Spotify dispatch requires independent upload feed evidence')
     for position, row in enumerate(tracks, 1):
         ids, names = row.get("artist_ids") or [], row.get("artist_credits") or []
-        if (row.get("position") != position or not SPOTIFY_ID.fullmatch(row.get("id", "")) or row["id"] in seen or
+        if (row.get("position") != position or not native_pattern.fullmatch(row.get("id", "")) or row["id"] in seen or
                 not row.get("title") or not row.get("duration_seconds") or float(row["duration_seconds"]) <= 0 or
                 not ids or len(ids) != len(names) or any(not SPOTIFY_ID.fullmatch(i) for i in ids)):
             raise ValueError("Incomplete ordered native track/credit/duration evidence")
@@ -118,10 +129,10 @@ def _artist(native, name):
     return Artist.objects.create(official_name=name, enabled=False)
 
 
-def _track_identity(row):
+def _track_identity(row, platform='spotify'):
     # Exact Spotify IDs and evidenced archive aliases take precedence over names.
     native = row["id"]
-    record = Recording.objects.filter(spotify_id=native).select_related("track", "canonical_alias__canonical__track").first()
+    record = Recording.objects.filter(spotify_id=native).select_related("track", "canonical_alias__canonical__track").first() if platform=='spotify' else None
     if record and record.track_id:
         track = record.canonical_alias.canonical.track if hasattr(record, "canonical_alias") else record.track
         if ({c['id'] for c in record.metadata.get('credits', [])} != set(row['artist_ids']) or
@@ -129,7 +140,7 @@ def _track_identity(row):
                 not track.duration_seconds or abs(track.duration_seconds - row["duration_seconds"]) > 5):
             raise ValueError("Stored native recording conflicts with official title/duration")
         return track
-    existing = SourceMatch.objects.filter(source_item__platform="spotify", source_item__native_item_id=native,
+    existing = SourceMatch.objects.filter(source_item__platform=platform, source_item__native_item_id=native,
         state__in=("matched", "approved", "corrected"), track__isnull=False).select_related("track").first()
     if existing:
         return existing.track
@@ -140,7 +151,7 @@ def _track_identity(row):
         if len(comparable) != 1 or not comparable[0].duration_seconds or abs(comparable[0].duration_seconds - row["duration_seconds"]) > 5:
             raise ValueError("Cross-platform same-credit/title recording is ambiguous")
         return comparable[0]
-    track, created = Track.objects.get_or_create(identity_key=hashlib.sha256(f"spotify:track:{row['id']}".encode()).hexdigest(),
+    track, created = Track.objects.get_or_create(identity_key=hashlib.sha256(f"{platform}:track:{row['id']}".encode()).hexdigest(),
         defaults={"official_title": row["title"], "normalized_title": normalize_text(row['title']), "duration_seconds": round(row["duration_seconds"])})
     if created:
         for position, artist in enumerate(artists, 1):
@@ -170,11 +181,12 @@ def materialize(dispatch, metadata, *, append=False):
     primary = [(native, name) for native, name in zip(metadata["artist_ids"], metadata["artist_credits"]) if native in common]
     if not primary:
         raise ValueError("Primary album attribution unresolved from complete credits")
-    canonical_tracks = [_track_identity(row) for row in tracks]
+    canonical_tracks = [_track_identity(row,item.platform) for row in tracks]
+    release_title=metadata.get('display_release_title') or item.title
     primary_artists = [_artist(native, name) for native, name in primary]
     same = []
     for other in CanonicalRelease.objects.filter(release_type=kind, state__in=('identified','approved')):
-        if (normalize_text(other.title) == normalize_text(item.title) and
+        if (normalize_text(other.title) == normalize_text(release_title) and
                 set(other.credited_artists.values_list('pk',flat=True)) == {a.pk for a in primary_artists} and
                 list(other.release_tracks.order_by('position').values_list('track_id',flat=True)) == [t.pk for t in canonical_tracks]):
             same.append(other)
@@ -186,9 +198,9 @@ def materialize(dispatch, metadata, *, append=False):
         release, created = same[0], False
     else:
         release, created = CanonicalRelease.objects.get_or_create(
-            identity_key=hashlib.sha256(f"spotify:release:{item.native_item_id}".encode()).hexdigest(),
-            defaults={"title": item.title, "release_type": kind, "release_date": item.source_release_at.date(), "state": "approved"})
-    if release.release_type != kind or normalize_text(release.title) != normalize_text(item.title):
+            identity_key=hashlib.sha256(f"{item.platform}:release:{item.native_item_id}".encode()).hexdigest(),
+            defaults={"title": release_title, "release_type": kind, "release_date": item.source_release_at.date(), "state": "approved"})
+    if release.release_type != kind or normalize_text(release.title) != normalize_text(release_title):
         raise ValueError("Existing native release classification conflicts")
     if created:
         for position, (native, name) in enumerate(primary, 1):
@@ -212,18 +224,19 @@ def materialize(dispatch, metadata, *, append=False):
             raise ValueError("Native release track order conflict")
         m = {"title": row["title"], "duration_seconds": row["duration_seconds"],
              "credits": [{"id": native, "name": name} for native, name in zip(row["artist_ids"], row["artist_credits"])],
-             "spotify_url": f"https://open.spotify.com/track/{row['id']}", "album_id": item.native_item_id,
-             "album_title": item.title, "album_type": metadata["album_type"], "album_artists": [name for _, name in primary],
+             "spotify_url": f"https://open.spotify.com/track/{row['id']}" if item.platform=='spotify' else '', "album_id": item.native_item_id,
+             "album_title": release_title, "album_type": metadata["album_type"], "album_artists": [name for _, name in primary],
              "artwork_url": metadata.get("artwork_url", ""), "release_date": release.release_date.isoformat(),
              "track_number": row.get("track_number") or row["position"], "disc_number": row.get("disc_number") or 1}
+        if item.platform!='spotify':m.update(discovery_platform=item.platform,discovery_url=item.canonical_url)
         ft, _ = FreshTrack.objects.get_or_create(dispatch=dispatch, position=row["position"], defaults={"track": track, "native_id": row["id"], "metadata": m})
-        child, _ = SourceItem.objects.get_or_create(platform="spotify", native_item_id=f"fresh-track:{item.native_item_id}:{row['id']}",
-            defaults={"source": item.source, "title": row["title"], "canonical_url": m["spotify_url"],
+        child, _ = SourceItem.objects.get_or_create(platform=item.platform, native_item_id=f"fresh-track:{item.native_item_id}:{row['id']}",
+            defaults={"source": item.source, "title": row["title"], "canonical_url": m["spotify_url"] or item.canonical_url,
                       "source_release_at": item.source_release_at, "first_observed_at": item.first_observed_at,
                       "metadata": {"fresh_track": True, "duration": row["duration_seconds"]}})
         SourceMatch.objects.get_or_create(source_item=child, defaults={"track": track, "release": release, "confidence": 100,
             "state": "matched", "matching_method": "fresh_official_track", "evidence": {"fresh_manifest_id": dispatch.pk,
-            "official_metadata": {"title": row["title"], "artists": row["artist_credits"], "album": item.title,
+            "official_metadata": {"title": row["title"], "artists": row["artist_credits"], "album": release_title,
                 "album_artists": m["album_artists"], "artwork_url": m["artwork_url"], "release_date": m["release_date"],
                 "track_number": m["track_number"], "disc_number": m["disc_number"]}}})
         ProcessingQueueItem.objects.get_or_create(track=track, defaults={"release": release, "due_at": timezone.now()})
@@ -307,12 +320,24 @@ def process_dispatch(dispatch, blocked):
     from sources.adapters import SpotifyAdapter
     if not dispatch.release_id:
         item = dispatch.source_item
-        detail = {"native_item_id": item.native_item_id, "metadata": dict(item.metadata), "sanitized_raw_data": {}}
-        adapter = SpotifyAdapter()
-        adapter.fetch_item(item.source, detail)
-        if not detail.get("source_release_at") or detail["source_release_at"].date() != item.source_release_at.date():
-            raise ValueError("Refreshed official release date conflicts with stored discovery")
-        dispatch = materialize(dispatch, detail["metadata"])
+        if item.metadata.get('feed_discovery'):
+            from .feeds import provider_metadata
+            from media_pipeline.providers import ProviderError
+            try:metadata=provider_metadata(item)
+            except ProviderError as exc:
+                platform=item.platform;reason=redact_diagnostic(exc)[:500]
+                if shared_blocker(reason):
+                    blocked[platform]=reason
+                    FreshProviderBackoff.objects.update_or_create(platform=platform,defaults={'due_at':timezone.now()+timedelta(minutes=15),'reason':reason})
+                dispatch.due_at=timezone.now()+timedelta(seconds=45);dispatch.reason=reason;dispatch.save(update_fields=('due_at','reason','updated_at'));return
+            dispatch = materialize(dispatch,metadata)
+        else:
+            detail = {"native_item_id": item.native_item_id, "metadata": dict(item.metadata), "sanitized_raw_data": {}}
+            adapter = SpotifyAdapter()
+            adapter.fetch_item(item.source, detail)
+            if not detail.get("source_release_at") or detail["source_release_at"].date() != item.source_release_at.date():
+                raise ValueError("Refreshed official release date conflicts with stored discovery")
+            dispatch = materialize(dispatch, detail["metadata"])
     if dispatch.tracks.exists() and all(Publication.objects.filter(track=ft.track, channel__target=settings.TELEGRAM_PRODUCTION_CHAT_ID,
                 state='published').exists() for ft in dispatch.tracks.all()):
         if dispatch.release.release_type == 'single' or AlbumSession.objects.filter(release=dispatch.release, state='complete').exists():
@@ -354,10 +379,13 @@ def process_dispatch(dispatch, blocked):
                 all_ready = False
                 continue
             acquisition_budget -= 1
-            found, evidence = find(ft, blocked_providers=blocked,
+            from .feeds import direct_candidate
+            found=direct_candidate(ft,blocked)
+            evidence={'reason':'Direct verified upload source; complete media validation required'}
+            if not found:found, evidence = find(ft, blocked_providers=blocked,
                                    cache_age=timedelta(seconds=dispatch.source_item.source.poll_interval_seconds),
                                    allow_independent=settings.FRESH_INDEPENDENT_UPLOADERS_ENABLED)
-            if not found and settings.FRESH_SPOTSAVER_ENABLED:
+            if not found and settings.FRESH_SPOTSAVER_ENABLED and ft.metadata.get('spotify_url'):
                 from media_pipeline.intermediary import find_spotsaver
                 found, fallback = find_spotsaver(ft,blocked)
                 evidence={**evidence, 'intermediary':fallback}

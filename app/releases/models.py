@@ -258,3 +258,18 @@ class FreshControl(models.Model):
     name = models.CharField(max_length=20, unique=True, default="production")
     paused = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class FreshDiscoveryFeed(models.Model):
+    """Independent upload watermark; never changes an artist's Spotify baseline."""
+    acquisition_source = models.OneToOneField('archive_collection.AcquisitionSource', on_delete=models.PROTECT, null=True)
+    search_artist = models.OneToOneField('sources.Artist', on_delete=models.PROTECT, null=True)
+    enabled = models.BooleanField(default=False)
+    baseline_at = models.DateTimeField(null=True)
+    seen_ids = models.JSONField(default=list)
+    catchup_native_ids = models.JSONField(default=list)
+    next_poll_at = models.DateTimeField(default=timezone.now)
+    last_success_at = models.DateTimeField(null=True)
+    consecutive_failures = models.PositiveIntegerField(default=0)
+    last_error = models.CharField(max_length=1000, blank=True)
+    evidence = models.JSONField(default=dict)

@@ -119,6 +119,7 @@ PUBLICATION_WORKER_ENABLED = os.environ.get("RAPFADROP_PUBLICATION_WORKER_ENABLE
 FRESH_PIPELINE_ENABLED = os.environ.get("RAPFADROP_FRESH_PIPELINE_ENABLED", "false").lower() == "true"
 FRESH_INDEPENDENT_UPLOADERS_ENABLED = os.environ.get('RAPFADROP_FRESH_INDEPENDENT_UPLOADERS_ENABLED', 'false').lower() == 'true'
 FRESH_SPOTSAVER_ENABLED = os.environ.get('RAPFADROP_FRESH_SPOTSAVER_ENABLED', 'false').lower() == 'true'
+FRESH_FEED_DISCOVERY_ENABLED = os.environ.get('RAPFADROP_FRESH_FEED_DISCOVERY_ENABLED', 'false').lower() == 'true'
 TELEGRAM_EXPECTED_BOT_ID = int(os.environ.get("RAPFADROP_TELEGRAM_EXPECTED_BOT_ID", "0"))
 PUBLICATION_ALBUM_HOLD_SECONDS = int(os.environ.get("RAPFADROP_PUBLICATION_ALBUM_HOLD_SECONDS", "900"))
 PUBLICATION_CORRECTION_DELETE_SECONDS = int(os.environ.get("RAPFADROP_PUBLICATION_CORRECTION_DELETE_SECONDS", "600"))
@@ -131,6 +132,8 @@ CELERY_TIMEZONE = "UTC"
 from .scheduling import beat_schedule
 
 CELERY_BEAT_SCHEDULE = beat_schedule(PUBLICATION_WORKER_ENABLED, TELEGRAM_LIVE_ENABLED, TELEGRAM_MODE, SPOTIFY_MEDIA_BRIDGE_ENABLED, FRESH_PIPELINE_ENABLED)
+if FRESH_FEED_DISCOVERY_ENABLED:
+    CELERY_BEAT_SCHEDULE['independent-upload-discovery']={'task':'releases.tasks.poll_independent_uploads','schedule':5.0,'options':{'queue':'fresh-discovery-v1','expires':5}}
 CELERY_TASK_ROUTES = {
     "sources.tasks.poll_due_artist_sources": {"queue": "spotify-pilot"},
     "releases.tasks.process_fresh_releases": {"queue": "fresh-media-v1"},

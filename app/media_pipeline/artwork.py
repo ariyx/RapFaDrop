@@ -17,7 +17,11 @@ def fetch_recorded_spotify_artwork(source_url, destination, timeout=20):
     return _fetch_recorded_artwork(source_url, destination, timeout, spotify=True)
 
 
-def _fetch_recorded_artwork(source_url, destination, timeout, *, spotify):
+def fetch_recorded_youtube_artwork(source_url, destination, timeout=20):
+    return _fetch_recorded_artwork(source_url, destination, timeout, spotify=False, youtube=True)
+
+
+def _fetch_recorded_artwork(source_url, destination, timeout, *, spotify, youtube=False):
     current = source_url
     session = requests.Session()
     session.trust_env = True
@@ -25,6 +29,9 @@ def _fetch_recorded_artwork(source_url, destination, timeout, *, spotify):
         for _ in range(4):
             parts = urlsplit(current)
             allowed = (parts.hostname == "i.scdn.co" and parts.path.startswith("/image/")) if spotify else (parts.hostname and parts.hostname.endswith(".sndcdn.com"))
+            if youtube:
+                import re
+                allowed = parts.hostname=='i.ytimg.com' and bool(re.fullmatch(r'/vi/[\w-]{11}/[\w.-]+',parts.path))
             if parts.scheme != "https" or not allowed or parts.username or parts.password or parts.port not in {None, 443}:
                 raise ProviderError("Recorded artwork URL is outside the approved provider CDN", retryable=False)
             response = session.get(current, timeout=timeout, stream=True, allow_redirects=False)

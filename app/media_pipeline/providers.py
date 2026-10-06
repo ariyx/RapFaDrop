@@ -103,7 +103,9 @@ class YtDlpProvider:
             uploader=str(info.get("uploader") or info.get("channel") or "")[:300],
             artwork_source_url=artwork_url,
             evidence={"extractor": str(info.get("extractor_key") or "SoundCloud"), "format_count": len(info.get("formats") or []), "uploader_id": str(info.get('uploader_id') or ''), "uploader_url": info.get('uploader_url'),
-                      "description": str(info.get('description') or '')[:6000], "artist": str(info.get('artist') or '')[:1000]},
+                      "description": str(info.get('description') or '')[:6000], "artist": str(info.get('artist') or '')[:1000],
+                      "timestamp": info.get('timestamp'), "release_timestamp": info.get('release_timestamp'),
+                      "album": info.get('album'), "track_number": info.get('track_number')},
         )
 
     def download(self, probe, destination, timeout=None):
@@ -171,8 +173,10 @@ class YouTubeProvider(YtDlpProvider):
             raise ProviderError('Live, upcoming or DRM recording is ineligible',retryable=False)
         return ProviderProbe(self.name,source_url,str(info.get('id') or ''),str(info.get('title') or ''),
             _positive_float(info.get('duration')),str(info.get('channel') or info.get('uploader') or ''),
+            artwork_source_url=(str(info.get('thumbnail') or '').split('?')[0] if urlsplit(str(info.get('thumbnail') or '')).hostname=='i.ytimg.com' else ''),
             evidence={'channel_id':info.get('channel_id'), 'channel_url':info.get('channel_url'),
                       'extractor':'YouTube', 'format_count':len(info.get('formats') or []),
+                      'timestamp':info.get('timestamp'), 'release_timestamp':info.get('release_timestamp'),
                       'description':str(info.get('description') or '')[:6000],
                       'artist':str(info.get('artist') or '')[:1000],
                       'available_audio_formats':[{'id':str(f.get('format_id') or ''),'codec':f.get('acodec'),'container':f.get('ext'),'bitrate_kbps':f.get('abr')}
