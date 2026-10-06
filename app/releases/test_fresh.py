@@ -12,6 +12,20 @@ from .fresh import build_manifest, classify, materialize, publication_scope, aut
 
 
 class FreshEligibilityTests(TestCase):
+    @override_settings(FRESH_SPOTSAVER_ENABLED=True)
+    def test_intermediary_is_automatic_only_after_original_lookup_fails(self):
+        from unittest.mock import Mock
+        from .fresh import process_dispatch
+        dispatch=FreshDispatch.objects.create(source_item=self.item,disposition='eligible',reason='fixture')
+        dispatch=materialize(dispatch,self.metadata)
+        calls=Mock()
+        with patch('archive_collection.acquisition.find',return_value=(None,{'reason':'Original unavailable'})) as original, \
+             patch('media_pipeline.intermediary.find_spotsaver',return_value=(None,{'reason':'Unavailable','checks':[]})) as intermediary:
+            calls.attach_mock(original,'original');calls.attach_mock(intermediary,'intermediary')
+            process_dispatch(dispatch,{})
+        self.assertEqual([c[0] for c in calls.mock_calls],['original','intermediary'])
+        self.assertFalse(Publication.objects.exists())
+
     @override_settings(FRESH_INDEPENDENT_UPLOADERS_ENABLED=True)
     def test_youtube_hold_allows_soundcloud_lookup_without_resetting_original_attempt(self):
         from .fresh import process_dispatch

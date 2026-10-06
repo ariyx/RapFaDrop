@@ -57,6 +57,23 @@ class FakeProvider:
 
 
 class MediaPipelineTests(TestCase):
+    @override_settings(FRESH_SPOTSAVER_ENABLED=True)
+    def test_intermediary_rechecks_selected_video_and_retains_unknown_quality(self):
+        from unittest.mock import Mock,patch
+        from .services import retry_candidate
+        self.match.matching_method='fresh_official_track'
+        self.match.evidence={'official_metadata':{'title':'Song','artists':['Artist'],'album':'Album','album_artists':['Artist']}}
+        self.match.save()
+        candidate=self._candidate('spotsaver');candidate.expected_duration_seconds=30
+        candidate.provenance={'fresh_manifest_id':1,'native_item_id':'abcdefghijk','acquisition_platform':'spotsaver',
+            'source_url':'https://open.spotify.com/track/'+'a'*22,'matched_metadata':{'title':'Song'},'source_quality_unknown':True}
+        candidate.save()
+        provider=Mock();provider.name='spotsaver';provider.can_handle.return_value=True
+        provider.probe.return_value=ProviderProbe('spotsaver',candidate.provenance['source_url'],'changedvideo','Song',30,'Artist')
+        invalid=retry_candidate(candidate,provider=provider)
+        self.assertEqual(invalid.state,'invalid');provider.download.assert_not_called()
+        self.assertIn('video changed',invalid.last_error)
+
     def test_fresh_full_file_rejects_six_seconds_missing_despite_generic_ratio(self):
         from unittest.mock import patch
         from .services import _accept_audio_file
