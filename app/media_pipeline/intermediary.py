@@ -120,7 +120,7 @@ class SpotsaverProvider:
             'source_origin':'public intermediary; direct Spotify audio unproven','source_quality_unknown':True,
             'duration_basis':'official Spotify expected duration; actual full file validated after download',
             'output_video_binding':'unreported until download; owner permits omitted binding',
-            'metadata_requests':ctx['requests'],'upstream_reference':'musicdl e5c3bd51b518642c24027921e63f482865809b61 selected Spotsaver method'})
+            'metadata_requests':list(ctx['requests']),'upstream_reference':'musicdl e5c3bd51b518642c24027921e63f482865809b61 selected Spotsaver method'})
 
     def download(self,probe,destination,timeout=None):
         cached=getattr(self._local,'context',None);self._local.context=None
