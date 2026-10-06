@@ -44,6 +44,8 @@ class SpotsaverProvider:
             start=time.monotonic();metric={'domain':parts.hostname,'method':method};ctx['requests'].append(metric)
             with requests.Session() as session:
                 session.trust_env=False
+                session.headers.update({'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36',
+                    'Referer':'https://spotsaver.net/results/','Accept':'*/*','Cache-Control':'no-cache'})
                 response=session.request(method,url,json=payload,stream=True,allow_redirects=False,
                     timeout=(min(5,max(0.1,ctx['deadline']-time.monotonic())),min(10,max(0.1,ctx['deadline']-time.monotonic()))))
                 with response:
