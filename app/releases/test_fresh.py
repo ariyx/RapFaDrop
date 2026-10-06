@@ -12,6 +12,29 @@ from .fresh import build_manifest, classify, materialize, publication_scope, aut
 
 
 class FreshEligibilityTests(TestCase):
+    @override_settings(FRESH_INDEPENDENT_UPLOADERS_ENABLED=True)
+    def test_youtube_hold_allows_soundcloud_lookup_without_resetting_original_attempt(self):
+        from .fresh import process_dispatch
+        from .models import SourceMatch
+        from media_pipeline.models import MediaCandidate
+        dispatch=FreshDispatch.objects.create(source_item=self.item,disposition='eligible',reason='fixture')
+        dispatch=materialize(dispatch,self.metadata);ft=dispatch.tracks.get()
+        match=SourceMatch.objects.get(track=ft.track,matching_method='fresh_official_track')
+        candidate=MediaCandidate.objects.create(track=ft.track,release=dispatch.release,source_match=match,
+            provider='yt-dlp-youtube',state='retry_wait',attempt_count=1,retry_due_at=timezone.now()+timezone.timedelta(minutes=15),
+            provenance={'acquisition_platform':'youtube','source_url':'https://www.youtube.com/watch?v=abcdefghijk'})
+        ft.candidate=candidate;ft.save()
+        with patch('archive_collection.acquisition.find',return_value=(None,{'reason':'No matched SC file'})) as finder:
+            process_dispatch(dispatch,{'youtube':'page reload'})
+        finder.assert_called_once()
+        self.assertTrue(finder.call_args.kwargs['allow_independent'])
+        candidate.refresh_from_db();ft.refresh_from_db()
+        self.assertEqual(candidate.state,'retry_wait')
+        self.assertEqual(candidate.attempt_count,1)
+        self.assertEqual(ft.candidate_id,candidate.pk)
+        self.assertNotIn('failed_source_urls',ft.evidence)
+        self.assertFalse(Publication.objects.exists())
+
     def test_transport_replacement_preserves_failed_attempt_and_reuses_same_identity(self):
         from types import SimpleNamespace
         from .fresh import _candidate

@@ -57,6 +57,36 @@ class FakeProvider:
 
 
 class MediaPipelineTests(TestCase):
+    def test_fresh_full_file_rejects_six_seconds_missing_despite_generic_ratio(self):
+        from unittest.mock import patch
+        from .services import _accept_audio_file
+        candidate=self._candidate('fresh-duration')
+        candidate.provenance={'fresh_manifest_id':1}
+        candidate.save()
+        attempt=MediaAttempt.objects.create(candidate=candidate,provider=candidate.provider,started_at=timezone.now())
+        facts={**probe_audio(self.low_audio),'duration_seconds':144}
+        with patch('media_pipeline.services.probe_audio',return_value=facts):
+            candidate=_accept_audio_file(candidate,attempt,self.low_audio,expected=150)
+        self.assertEqual(candidate.state,'invalid')
+        self.assertEqual(candidate.duration_comparison['status'],'fresh_recording_duration_conflict')
+        self.assertFalse(candidate.prepared_path)
+
+    def test_independent_credits_rechecked_before_download(self):
+        from unittest.mock import Mock
+        from .services import retry_candidate
+        candidate=self._candidate('yt-dlp')
+        candidate.expected_duration_seconds=30
+        candidate.provenance={'fresh_manifest_id':1,'origin_status':'independent_uploader',
+            'source_url':'https://soundcloud.com/u/song','acquisition_platform':'soundcloud',
+            'native_item_id':'55','recording_uploader_id':'123','source_recording_title':'Song',
+            'matched_credits':[{'id':'a','name':'Missing guest'}]}
+        candidate.save()
+        provider=Mock();provider.name='yt-dlp';provider.can_handle.return_value=True
+        provider.probe.return_value=ProviderProbe('yt-dlp',candidate.provenance['source_url'],'55','Song',30,'Other',evidence={'uploader_id':'123'})
+        result=retry_candidate(candidate,provider=provider)
+        self.assertEqual(result.state,'review_required')
+        provider.download.assert_not_called()
+
     @classmethod
     def setUpTestData(cls):
         cls.artist = Artist.objects.create(official_name="هیچ‌کس", aliases=["Hichkas"], enabled=True)

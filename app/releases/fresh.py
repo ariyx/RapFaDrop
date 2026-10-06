@@ -330,13 +330,17 @@ def process_dispatch(dispatch, blocked):
             candidate = manual
             ft.candidate = manual
             ft.save(update_fields=('candidate', 'updated_at'))
-        if candidate and candidate.attempt_count and candidate.state in {'invalid', 'review_required'}:
+        terminal_failure = bool(candidate and candidate.attempt_count and candidate.state in {'invalid', 'review_required'})
+        alternative_during_hold = bool(candidate and candidate.state != 'ready' and
+            candidate.provenance.get('acquisition_platform') in blocked and
+            settings.FRESH_INDEPENDENT_UPLOADERS_ENABLED and 'soundcloud' not in blocked)
+        if terminal_failure or alternative_during_hold:
             failed_url = candidate.provenance.get('source_url')
-            if failed_url:
+            if failed_url and terminal_failure:
                 ft.evidence = {**ft.evidence, 'failed_source_urls':list(dict.fromkeys(
                     [*ft.evidence.get('failed_source_urls', []), failed_url]))}
                 ft.save(update_fields=('evidence', 'updated_at'))
-                candidate = None
+            candidate = None
         if candidate is None:
             if acquisition_budget <= 0:
                 all_ready = False
