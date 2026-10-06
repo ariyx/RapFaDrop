@@ -1,5 +1,27 @@
 # Project status and handoff
 
+Updated **2026-10-06 Tehran**, fresh acquisition repair. Exact tested/pushed/deployed
+application **`741f4b1ba82bd17f9582c5b1d6a9122a467cae17`**, **231 application + nine
+backup tests**, checks/migrations/drift and health passed on the server. Fresh
+catalog/negative-search cache now follows the existing 180-second source interval;
+archive six-hour caching and provider backoff are preserved. Corroborated Mamazi
+acquisition-only profile 64 enabled full OGHDE processing: **message 76**, native
+AAC 160 kb/s, 144.056599 s, 44.1 kHz stereo, complete decode, eleven tags/artwork and
+Telegram byte readback passed. Replay added zero attempts. No caption policy changed.
+
+Tataloo remains blocked: its newly listed official SoundCloud recording is DRM
+protected; bounded owner-authenticated YouTube probe returned a page-reload error.
+No full recording acquired or publication claimed. Exact blocker is visible for
+review; the unsupported SoundCloud URL is skipped. RapRelease public preview gave
+no message history, so first-minute performance/acquisition method is unverified.
+**83 enabled verified Spotify sources / 84 baselines** and original curated records/
+history preserved; Popular remains paused, fresh bridge/media/publication ON.
+Backup restored 47 tables and uploaded as **98/99**. Three verified media/artwork
+files and disposable test environment/build source removed; production posts retained.
+[Repair report](reports/FRESH_MEDIA_MATCH_REPAIR.md),
+[safe evidence](reports/data/fresh_media_match_repair_evidence.json).
+The following checkpoint records the preceding activation and its earlier blockers.
+
 Updated: **2026-10-06 Tehran**, automatic new-release production activation.
 Exact tested/pushed/deployed application **`4226ecbc65b3def5e8b6dce32338a777b68d8e87`**:
 **229 application + nine backup tests**, migration/check/drift and health passed

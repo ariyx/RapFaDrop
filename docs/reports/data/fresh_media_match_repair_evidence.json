@@ -1,0 +1,295 @@
+{
+    "generated_at":  "2026-10-06T10:34:27.832464+00:00",
+    "deployed_sha":  "741f4b1ba82bd17f9582c5b1d6a9122a467cae17",
+    "active_verified_spotify":  83,
+    "baselines":  84,
+    "popular_paused":  true,
+    "popular_recordings":  155,
+    "popular_slots":  166,
+    "fresh_paused":  false,
+    "uncertain_sends":  0,
+    "dispatches":  [
+                       {
+                           "id":  3886,
+                           "title":  "OGHDE",
+                           "native_release":  "40O11g61vfThnoSF8FYdsq",
+                           "state":  "complete",
+                           "reason":  "All required recordings durably published/reused",
+                           "due":  "2026-10-06 10:37:21.807411+00:00",
+                           "tracks":  [
+                                          {
+                                              "native_id":  "4kt1vCDayf3LcmuI8ehcni",
+                                              "metadata":  {
+                                                               "title":  "OGHDE",
+                                                               "credits":  [
+                                                                               {
+                                                                                   "id":  "4L42EENVSu2ZE8cwhVVeh8",
+                                                                                   "name":  "Mamazi"
+                                                                               }
+                                                                           ],
+                                                               "album_id":  "40O11g61vfThnoSF8FYdsq",
+                                                               "album_type":  "single",
+                                                               "album_title":  "OGHDE",
+                                                               "artwork_url":  "https://i.scdn.co/image/ab67616d00001e02890150b58ee46cce6e3489cf",
+                                                               "disc_number":  1,
+                                                               "spotify_url":  "https://open.spotify.com/track/4kt1vCDayf3LcmuI8ehcni",
+                                                               "release_date":  "2026-10-05",
+                                                               "track_number":  1,
+                                                               "album_artists":  [
+                                                                                     "Mamazi"
+                                                                                 ],
+                                                               "duration_seconds":  144.0
+                                                           },
+                                              "acquisition":  {
+                                                                  "checks":  [
+                                                                                 {
+                                                                                     "catalog":  {
+                                                                                                     "cache":  false,
+                                                                                                     "entries":  50,
+                                                                                                     "seconds":  4.001,
+                                                                                                     "bounded_to":  50
+                                                                                                 },
+                                                                                     "acquisition_source_id":  64
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "2413259331",
+                                                                                     "title":  "OGHDE",
+                                                                                     "matched":  true,
+                                                                                     "duration":  144.046,
+                                                                                     "credits_matched":  true,
+                                                                                     "acquisition_source_id":  64
+                                                                                 }
+                                                                             ],
+                                                                  "reason":  "Verified official native uploader/channel, complete recording/version and duration",
+                                                                  "provider_probes":  1
+                                                              },
+                                              "candidate_id":  236,
+                                              "message_id":  76
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  3892,
+                           "title":  "Mano Khoda Shoma Hame",
+                           "native_release":  "2Q9azs6CaUEkqZtTYYCTZl",
+                           "state":  "pending",
+                           "reason":  "Waiting for complete matched media; album introduction withheld",
+                           "due":  "2026-10-06 12:36:59.388658+00:00",
+                           "tracks":  [
+                                          {
+                                              "native_id":  "5sYGAU7L6JgUrkfzy9J3Yx",
+                                              "metadata":  {
+                                                               "title":  "Mano Khoda Shoma Hame",
+                                                               "credits":  [
+                                                                               {
+                                                                                   "id":  "5CEosSs2y4M9THNGI6mej8",
+                                                                                   "name":  "Amir Tataloo"
+                                                                               },
+                                                                               {
+                                                                                   "id":  "1eIDlFzGjgsKzlcqqGFl7N",
+                                                                                   "name":  "Hassan Baba"
+                                                                               }
+                                                                           ],
+                                                               "album_id":  "2Q9azs6CaUEkqZtTYYCTZl",
+                                                               "album_type":  "ep",
+                                                               "album_title":  "Mano Khoda Shoma Hame",
+                                                               "artwork_url":  "https://i.scdn.co/image/ab67616d00001e0231fc1c1d6b7667c85618c932",
+                                                               "disc_number":  1,
+                                                               "spotify_url":  "https://open.spotify.com/track/5sYGAU7L6JgUrkfzy9J3Yx",
+                                                               "release_date":  "2026-10-05",
+                                                               "track_number":  1,
+                                                               "album_artists":  [
+                                                                                     "Amir Tataloo",
+                                                                                     "Hassan Baba"
+                                                                                 ],
+                                                               "duration_seconds":  855.054
+                                                           },
+                                              "acquisition":  {
+                                                                  "checks":  [
+                                                                                 {
+                                                                                     "catalog":  {
+                                                                                                     "cache":  true,
+                                                                                                     "entries":  150
+                                                                                                 },
+                                                                                     "acquisition_source_id":  62
+                                                                                 },
+                                                                                 {
+                                                                                     "catalog":  {
+                                                                                                     "cache":  true,
+                                                                                                     "entries":  50
+                                                                                                 },
+                                                                                     "acquisition_source_id":  55
+                                                                                 },
+                                                                                 {
+                                                                                     "id":  "cmj7_tDeekQ",
+                                                                                     "probe_error":  "yt-dlp failed (1): ERROR: [youtube] cmj7_tDeekQ: The page needs to be reloaded.",
+                                                                                     "acquisition_source_id":  55
+                                                                                 }
+                                                                             ],
+                                                                  "reason":  "No complete confidently matched recording in bounded verified catalogs/searches; inspect source/match evidence before manual upload.",
+                                                                  "provider_probes":  1
+                                                              },
+                                              "candidate_id":  null,
+                                              "message_id":  null
+                                          }
+                                      ]
+                       }
+                   ],
+    "posts":  [
+                  {
+                      "id":  71,
+                      "message_id":  76,
+                      "title":  "OGHDE",
+                      "kind":  "single_audio",
+                      "caption_html":  "\u003ca href=\"https://t.me/RapFaDrop\"\u003e\u003cb\u003eDrop\u003c/b\u003e\u003c/a\u003e\n› \u003ca href=\"https://open.spotify.com/track/4kt1vCDayf3LcmuI8ehcni\"\u003eSpotify\u003c/a\u003e · \u003ca href=\"https://soundcloud.com/mamazioma/oghde\"\u003eSoundCloud\u003c/a\u003e",
+                      "caption_text":  "Drop\n› Spotify · SoundCloud",
+                      "source":  {
+                                     "provider":  "yt-dlp",
+                                     "source_url":  "https://soundcloud.com/mamazioma/oghde",
+                                     "acquisition_platform":  "soundcloud",
+                                     "native_item_id":  "2413259331",
+                                     "official_profile":  "https://soundcloud.com/mamazioma",
+                                     "acquisition_source_id":  64,
+                                     "spotify_track_id":  "4kt1vCDayf3LcmuI8ehcni",
+                                     "conversion":  "none requested",
+                                     "provider_probe_seconds":  3.311,
+                                     "acquisition_seconds":  4.382,
+                                     "validation_and_preparation_seconds":  0.211
+                                 },
+                      "source_facts":  {
+                                           "sha256":  "12959865200e6067800a9343f5c8f93f1e291c5a7d0c297c5708e9f0df9da718",
+                                           "channels":  2,
+                                           "codec_name":  "aac",
+                                           "format_name":  "mov,mp4,m4a,3gp,3g2,mj2",
+                                           "sample_rate_hz":  44100,
+                                           "file_size_bytes":  2907088,
+                                           "duration_seconds":  144.056599,
+                                           "audio_bitrate_bps":  160016,
+                                           "audio_stream_count":  1,
+                                           "format_bitrate_bps":  161441,
+                                           "measured_bitrate_bps":  161441
+                                       },
+                      "validation":  {
+                                         "status":  "valid",
+                                         "complete":  true,
+                                         "full_decode":  "passed",
+                                         "audio_stream_present":  true
+                                     },
+                      "actual_tags":  {
+                                          "title_matches":  true,
+                                          "artwork_read_back":  true,
+                                          "main_artists_match":  true,
+                                          "album_suffix_matches":  true,
+                                          "channel_fields_read_back":  true
+                                      },
+                      "delivered":  {
+                                        "sha256":  "f64225fb354ae065ec9c5af6e6ede95c58bf236a598df10197a1d0e966853400",
+                                        "file_size_bytes":  2935212,
+                                        "duration_seconds":  144.056599,
+                                        "format_name":  "mov,mp4,m4a,3gp,3g2,mj2",
+                                        "format_bitrate_bps":  163003,
+                                        "measured_bitrate_bps":  163003,
+                                        "codec_name":  "aac",
+                                        "audio_bitrate_bps":  160016,
+                                        "sample_rate_hz":  44100,
+                                        "channels":  2,
+                                        "audio_stream_count":  1
+                                    },
+                      "readback":  {
+                                       "status":  "passed",
+                                       "bytes":  2935212,
+                                       "sha256":  "f64225fb354ae065ec9c5af6e6ede95c58bf236a598df10197a1d0e966853400",
+                                       "prepared_sha256":  "f64225fb354ae065ec9c5af6e6ede95c58bf236a598df10197a1d0e966853400"
+                                   },
+                      "upload_seconds":  1.79,
+                      "published_at":  "2026-10-06 10:32:51.759028+00:00"
+                  }
+              ],
+    "preservation":  {
+                         "ArtistSource":  {
+                                              "deleted":  [
+
+                                                          ],
+                                              "changed_original_ids":  [
+
+                                                                       ]
+                                          },
+                         "BaselineRun":  {
+                                             "deleted":  [
+
+                                                         ],
+                                             "changed_original_ids":  [
+
+                                                                      ]
+                                         },
+                         "SourceItem":  {
+                                            "deleted":  [
+
+                                                        ],
+                                            "changed_original_ids":  [
+
+                                                                     ]
+                                        },
+                         "Collection":  {
+                                            "deleted":  [
+
+                                                        ],
+                                            "changed_original_ids":  [
+
+                                                                     ]
+                                        },
+                         "Publication":  {
+                                             "deleted":  [
+
+                                                         ],
+                                             "changed_original_ids":  [
+
+                                                                      ]
+                                         }
+                     },
+    "completion":  {
+                       "utc":  "2026-10-06T10:44:06.613337+00:00",
+                       "message_id":  76,
+                       "replay_added_attempts":  0,
+                       "replay_preserved_message":  true,
+                       "removed_files":  [
+                                             {
+                                                 "bytes":  2907088,
+                                                 "kind":  ".m4a"
+                                             },
+                                             {
+                                                 "bytes":  2935212,
+                                                 "kind":  ".m4a"
+                                             },
+                                             {
+                                                 "bytes":  23420,
+                                                 "kind":  ""
+                                             }
+                                         ],
+                       "publication_attempts":  [
+                                                    {
+                                                        "id":  137,
+                                                        "state":  "succeeded",
+                                                        "operation":  "send_audio"
+                                                    }
+                                                ]
+                   },
+    "backup":  {
+                   "restored_tables":  47,
+                   "message_ids":  [
+                                       98,
+                                       99
+                                   ],
+                   "artifact":  "rapfadrop-20261006T103020Z-577694ff.tar.age",
+                   "upload":  "complete",
+                   "restore_verified":  true
+               },
+    "remaining_blocker":  {
+                              "youtube_probe_seconds":  47.291,
+                              "soundcloud_native_id":  "2413995774",
+                              "soundcloud_error":  "This video is DRM protected",
+                              "youtube_error":  "The page needs to be reloaded",
+                              "full_file_acquired":  false,
+                              "spotify_track_id":  "5sYGAU7L6JgUrkfzy9J3Yx"
+                          }
+}
