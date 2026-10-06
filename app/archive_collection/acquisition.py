@@ -48,7 +48,7 @@ def credits_match(probe,metadata,source):
 
 def shared_blocker(error):
     text=str(error).lower()
-    return any(marker in text for marker in ('403','429','not a bot','sign in to confirm','the page needs to be reloaded'))
+    return any(marker in text for marker in ('403','429','not a bot','sign in to confirm','the page needs to be reloaded', 'spotsaver shared', 'yt-dlp operation timed out'))
 
 
 @transaction.atomic

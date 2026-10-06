@@ -156,7 +156,7 @@ def _run_provider(candidate, provider, now=None):
         if candidate.state in {MediaCandidate.State.INVALID, MediaCandidate.State.REVIEW_REQUIRED} and candidate.attempt_count:
             return candidate
         source_item = candidate.source_match.source_item
-        source_url = candidate.provenance.get('source_url', source_item.canonical_url) if candidate.provenance.get('acquisition_platform') in {'youtube', 'soundcloud'} else source_item.canonical_url
+        source_url = candidate.provenance.get('source_url', source_item.canonical_url) if candidate.provenance.get('acquisition_platform') in {'youtube', 'soundcloud','spotsaver'} else source_item.canonical_url
         if not provider.can_handle(source_url):
             candidate.state = MediaCandidate.State.REVIEW_REQUIRED
             candidate.last_outcome = "unsupported_source"
@@ -178,7 +178,14 @@ def _run_provider(candidate, provider, now=None):
     staging = _staging_dir(candidate)
     try:
         probe_started = time.monotonic()
-        probe = provider.probe(source_url, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
+        if provider.name=='spotsaver':
+            if not settings.FRESH_SPOTSAVER_ENABLED or candidate.source_match.matching_method!='fresh_official_track':
+                raise ProviderError('Intermediary restricted to owner-enabled fresh recordings',retryable=False)
+            probe=provider.probe(source_url,timeout=40,expected=candidate.provenance.get('matched_metadata'))
+            if probe.provider_item_id!=candidate.provenance.get('native_item_id'):
+                raise ProviderError('Intermediary selected video changed after matching',retryable=False)
+        else:
+            probe = provider.probe(source_url, timeout=settings.MEDIA_DOWNLOAD_TIMEOUT_SECONDS)
         probe_seconds = round(time.monotonic() - probe_started, 3)
         if candidate.provenance.get('fresh_manifest_id') and (not probe.duration_seconds or
                 abs(probe.duration_seconds - candidate.expected_duration_seconds) > 5):
@@ -248,6 +255,9 @@ def _run_provider(candidate, provider, now=None):
             "provider_probe_seconds": probe_seconds,
             "artwork_source_url": _safe_evidence_url(probe.artwork_source_url) if probe.artwork_source_url else "",
         }
+        if provider.name=='spotsaver':
+            candidate.provenance={**candidate.provenance,'intermediary_download':result.evidence,
+                'source_quality_unknown':True,'conversion':'none locally; intermediary conversion unknown'}
         candidate.save(update_fields=("expected_duration_seconds", "provenance", "updated_at"))
         artwork = None
         artwork_state = MediaCandidate.ArtworkState.NOT_PROVIDED

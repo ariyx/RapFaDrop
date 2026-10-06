@@ -256,7 +256,7 @@ def _candidate(ft, found):
     source, row, url = found
     match = SourceMatch.objects.get(track=ft.track, release=ft.dispatch.release, matching_method="fresh_official_track",
                                    evidence__fresh_manifest_id=ft.dispatch_id)
-    provider = "yt-dlp" if source.platform == "soundcloud" else "yt-dlp-youtube"
+    provider = {'soundcloud':'yt-dlp', 'youtube':'yt-dlp-youtube', 'spotsaver':'spotsaver'}[source.platform]
     # Keep official Spotify identity as authority; independently matched transport
     # identity is rechecked by the media provider before downloading.
     candidate, _ = MediaCandidate.objects.get_or_create(track=ft.track, source_match=match, provider=provider,
@@ -272,6 +272,13 @@ def _candidate(ft, found):
             'official_profile':'','uploader_profile':source.profile_url,'recording_uploader_id':source.native_id,
             'matched_credits':ft.metadata['credits'],
             'source_quality_unknown':True,'provenance_confidence':90}
+        candidate.save(update_fields=('provenance','updated_at'))
+    if source.platform == 'spotsaver' and not candidate.attempt_count:
+        candidate.provenance={**candidate.provenance,'origin_status':'intermediary', 'source_quality_unknown':True,
+            'official_channel_id':'','official_profile':'','selected_video_id':row['id'],
+            'matched_metadata':ft.metadata,'source_origin':'public Spotsaver intermediary; direct Spotify audio unproven',
+            'owner_policy':'Original sources preferred; complete matched intermediary output permitted, original encoding may be unknown',
+            'output_video_binding':'unreported_owner_permitted','provenance_confidence':90}
         candidate.save(update_fields=('provenance','updated_at'))
     ft.candidate = candidate
     ft.save(update_fields=("candidate", "updated_at"))
@@ -333,7 +340,8 @@ def process_dispatch(dispatch, blocked):
         terminal_failure = bool(candidate and candidate.attempt_count and candidate.state in {'invalid', 'review_required'})
         alternative_during_hold = bool(candidate and candidate.state != 'ready' and
             candidate.provenance.get('acquisition_platform') in blocked and
-            settings.FRESH_INDEPENDENT_UPLOADERS_ENABLED and 'soundcloud' not in blocked)
+            ((settings.FRESH_INDEPENDENT_UPLOADERS_ENABLED and 'soundcloud' not in blocked) or
+             (settings.FRESH_SPOTSAVER_ENABLED and 'spotsaver' not in blocked)))
         if terminal_failure or alternative_during_hold:
             failed_url = candidate.provenance.get('source_url')
             if failed_url and terminal_failure:
@@ -349,6 +357,11 @@ def process_dispatch(dispatch, blocked):
             found, evidence = find(ft, blocked_providers=blocked,
                                    cache_age=timedelta(seconds=dispatch.source_item.source.poll_interval_seconds),
                                    allow_independent=settings.FRESH_INDEPENDENT_UPLOADERS_ENABLED)
+            if not found and settings.FRESH_SPOTSAVER_ENABLED:
+                from media_pipeline.intermediary import find_spotsaver
+                found, fallback = find_spotsaver(ft,blocked)
+                evidence={**evidence, 'intermediary':fallback}
+                if found:evidence['reason']=fallback['reason']
             ft.evidence = {**ft.evidence, "acquisition": evidence}
             ft.save(update_fields=("evidence", "updated_at"))
             if not found:

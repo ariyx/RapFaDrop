@@ -188,3 +188,5 @@ def _positive_float(value):
 
 
 PROVIDERS = {YtDlpProvider.name: YtDlpProvider(), YouTubeProvider.name: YouTubeProvider()}
+from .intermediary import SpotsaverProvider
+PROVIDERS[SpotsaverProvider.name] = SpotsaverProvider()
