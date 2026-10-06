@@ -29,7 +29,7 @@ class FreshWakeupTests(TestCase):
 
     def test_broker_failure_does_not_invalidate_committed_discovery(self):
         with patch('releases.tasks.process_fresh_releases.apply_async', side_effect=ConnectionError('offline')):
-            with self.assertLogs('django.db.backends.base', level='ERROR'):
+            with self.assertLogs(level='ERROR'):
                 with self.captureOnCommitCallbacks(execute=True):
                     wake_media()
 
