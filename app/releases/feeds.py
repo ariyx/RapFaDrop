@@ -1,5 +1,5 @@
 """Owner-enabled independent upload discovery, with exact upload watermarks."""
-import json,re
+import hashlib,json,re,unicodedata
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime,timedelta,timezone as utc
 from types import SimpleNamespace
@@ -160,10 +160,17 @@ def provider_metadata(item):
     # Structured additional credits and explicit featuring cannot silently disappear.
     extra=e.get('artist') or ''
     if extra and normalize_text(extra)!=normalize_text(primary.official_name):
-        for name in re.split(r'(?i)\s*(?:,|&|\bfeat\.?\b|\bft\.?\b|\bx\b)\s*',extra):
+        structured=[]
+        for name in re.split(r'(?i)\s*(?:,|&|\bfeat\.?\b|\bft\.?\b|\bx\b)\s*',unicodedata.normalize('NFKC',extra)):
+            name=name.strip()
+            if not name or len(name)>200 or any(c in name for c in '<>\n\r'):
+                raise ValueError('Structured performer credit is unresolved')
             matches=list(Artist.objects.filter(official_name__iexact=name.strip())[:2])
-            if len(matches)!=1:raise ValueError('Structured performer credit is unresolved')
-            if matches[0].official_name not in credit_names:credit_names.append(matches[0].official_name)
+            if len(matches)>1:raise ValueError('Structured performer credit is ambiguous')
+            resolved=matches[0].official_name if matches else name
+            structured.append(resolved)
+            if resolved not in credit_names:credit_names.append(resolved)
+        if primary.official_name not in structured:raise ValueError('Structured performer credits omit monitored artist')
     if re.search(r'(?i)\b(feat|ft)\.?\s',p.title):raise ValueError('Explicit featured title requires complete performer credit review')
     if source.evidence.get('identity_role','artist')=='collaborator' and normalize_text(primary.official_name) not in normalize_text(p.title+' '+extra):
         raise ValueError('Collaborator upload does not explicitly credit monitored artist')
@@ -175,7 +182,10 @@ def provider_metadata(item):
     for name in credit_names:
         title=re.sub(r'^'+re.escape(name)+r'\s*[-–—:]\s*','',title,flags=re.I)
     title=re.sub(r'(?i)\s*[\[(](?:official audio|official music video|official video|official visualizer|lyrics|lyric video)[\])]\s*',' ',title).strip()
-    artist_ids=[ArtistSource.objects.get(artist__official_name=name,platform='spotify').native_profile_id for name in credit_names]
+    artist_ids=[]
+    for name in credit_names:
+        known=ArtistSource.objects.filter(artist__official_name=name,platform='spotify').first()
+        artist_ids.append(known.native_profile_id if known else 'name:'+hashlib.sha256(normalize_text(name).encode()).hexdigest()[:32])
     item.source_release_at=uploaded;item.metadata={**item.metadata,'validated_upload_at':uploaded.isoformat(),'provider_recording_title':p.title,
         'provider_artwork_url':p.artwork_source_url,'duration':p.duration_seconds,'uploader':p.uploader}
     if source.evidence.get('discovery_search'):item.metadata.update(recording_uploader_id=actual_uploader,recording_uploader_profile=e.get('uploader_url') or '')

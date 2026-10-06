@@ -105,13 +105,14 @@ def validate_official(item, metadata):
     seen = set()
     import re
     native_pattern = SPOTIFY_ID if item.platform=='spotify' else re.compile(r'\d{1,22}' if item.platform=='soundcloud' else r'[\w-]{11}')
+    artist_pattern=SPOTIFY_ID if item.platform=='spotify' else re.compile(r'(?:[A-Za-z0-9]{22}|name:[a-f0-9]{32})')
     if item.platform!='spotify' and not item.metadata.get('feed_discovery'):
         raise ValueError('Non-Spotify dispatch requires independent upload feed evidence')
     for position, row in enumerate(tracks, 1):
         ids, names = row.get("artist_ids") or [], row.get("artist_credits") or []
         if (row.get("position") != position or not native_pattern.fullmatch(row.get("id", "")) or row["id"] in seen or
                 not row.get("title") or not row.get("duration_seconds") or float(row["duration_seconds"]) <= 0 or
-                not ids or len(ids) != len(names) or any(not SPOTIFY_ID.fullmatch(i) for i in ids)):
+                not ids or len(ids) != len(names) or any(not artist_pattern.fullmatch(i) for i in ids)):
             raise ValueError("Incomplete ordered native track/credit/duration evidence")
         if edition_markers(row["title"]):
             raise ValueError("Track edition relationship requires review")

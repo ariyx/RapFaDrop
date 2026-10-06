@@ -68,3 +68,18 @@ class IndependentFeedTests(TestCase):
         with patch.object(PROVIDERS['yt-dlp'],'probe',return_value=self.probe()):m=provider_metadata(item)
         m['tracks'][0]['id']='z'*22
         with self.assertRaisesRegex(ValueError,'Incomplete ordered'):validate_official(item,m)
+    def test_fullwidth_structured_guest_credits_are_preserved_without_fake_spotify_identity(self):
+        item=self.new_item();p=self.probe()
+        from dataclasses import replace
+        p=replace(p,evidence={**p.evidence,'artist':'Verified artist， Guest Singer'})
+        with patch.object(PROVIDERS['yt-dlp'],'probe',return_value=p):m=provider_metadata(item)
+        d=materialize(item.freshdispatch,m)
+        self.assertEqual(d.tracks.get().metadata['credits'][1]['name'],'Guest Singer')
+        self.assertTrue(d.tracks.get().metadata['credits'][1]['id'].startswith('name:'))
+        self.assertFalse(Artist.objects.get(official_name='Guest Singer').enabled)
+    def test_structured_artist_cannot_be_inferred_from_uploader_when_omitted(self):
+        item=self.new_item();p=self.probe()
+        from dataclasses import replace
+        p=replace(p,evidence={**p.evidence,'artist':'Different Artist'})
+        with patch.object(PROVIDERS['yt-dlp'],'probe',return_value=p):
+            with self.assertRaisesRegex(ValueError,'omit monitored'):provider_metadata(item)
