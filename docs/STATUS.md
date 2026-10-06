@@ -1,5 +1,15 @@
 # Project status and handoff
 
+**Known discovery gap, 2026-10-06:** owner-reported Hiphopologist **Bache Mardom**
+is present on the registered public SoundCloud acquisition profile (2413998492),
+but absent from the supported Spotify adapter's current complete78-release response.
+No SourceItem/dispatch exists. SoundCloud discovery remains disabled/unverified;
+acquisition fallback ON for83 artists does not independently discover pre-Spotify
+uploads. All83 Spotify pollers are healthy. Broader platform discovery is required
+before claiming automatic coverage of every new upload. Read-only diagnosis,
+no source activation/baseline/media/publication mutation or deployment.
+[Exact evidence](reports/BACHE_MARDOM_DISCOVERY_GAP.md).
+
 Updated **2026-10-06T16:38:08.273316+00:00**, owner-approved intermediary automation. Exact server-tested,
 pushed/deployed application **`7bf07060c4ddcf7496c8ffe369420505d13242e6`**; **259 application + nine backup tests**,
 migrations/system/drift/health passed. All **83/83** active Spotify sources retain
