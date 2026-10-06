@@ -12,6 +12,17 @@ The initial new-release channel must not automatically backfill historical track
 
 ## 2. Artist allowlist and source profiles
 
+The owner's 2026-10-06 instruction requires autonomous discovery across the whole
+approved roster, including uploads preceding Spotify catalog arrival. Independent
+verified SoundCloud/YouTube feeds therefore join Spotify discovery; artists without
+registered upload profiles use explicitly labelled bounded public search. Initial
+watermarks exclude historical uploads except an explicitly authorized native-ID
+catch-up. Original-first acquisition may use otherwise matched complete intermediary
+or independent audio without proving official origin. This is not exhaustive
+catalog coverage or a guarantee of instantaneous delivery; uncertainty about the
+recording/version, incomplete audio and unresolved sends remain visible holds.
+[Measured rollout and remaining limits](reports/MULTIPLATFORM_FRESH_DISCOVERY.md).
+
 The owner's final 2026-10-05 audio-caption decision is a bold heading linked to
 https://t.me/RapFaDrop (Fave for the frozen Popular collection, Drop for new
 standalone audio, LP Drop/EP Drop for album-session tracks). A second line starts

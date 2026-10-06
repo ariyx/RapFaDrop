@@ -1,5 +1,11 @@
 # Bache Mardom: missed pre-Spotify discovery
 
+Historical diagnosis. The owner-authorized recording subsequently published as
+[message79](https://t.me/RapFaDrop/79); independent discovery was partially rolled
+out, with an unresolved RSS correction/check/connectivity blocker. See
+[dated follow-up](MULTIPLATFORM_FRESH_DISCOVERY.md). Do not read the initial
+no-dispatch observation below as the current Bache Mardom publication state.
+
 Observed on the server **2026-10-06**, following owner report
 https://t.me/RapRelease/17716. Running application
 `7bf07060c4ddcf7496c8ffe369420505d13242e6`.

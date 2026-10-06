@@ -1,0 +1,94 @@
+{
+  "utc": "2026-10-06T18:22:16.441131+00:00",
+  "tested_deployed_sha": "3f2720daa91da4ef534248957769e5a074ef23ad",
+  "verified_chat_id": "-1004311149640",
+  "verified_username": "RapFaDrop",
+  "message_id": 79,
+  "message_url": "https://t.me/RapFaDrop/79",
+  "published_at": "2026-10-06 18:19:45.081619+00:00",
+  "caption_html": "<a href=\"https://t.me/RapFaDrop\"><b>Drop</b></a>\n\u203a <a href=\"https://soundcloud.com/hiphopologistsoroush/bachemardom\">SoundCloud</a>",
+  "telegram_media": {
+    "title": "Bache Mardom",
+    "duration": 332,
+    "file_size": 7303607,
+    "mime_type": "audio/mp4",
+    "performer": "Hiphopologist \u00d7 Erfan \u00d7 Sorry Bahar"
+  },
+  "facts": {
+    "sha256": "207149935fe5d551cdec4822451d6662a18c907fda99d80a2be38db5c69148d0",
+    "channels": 2,
+    "codec_name": "aac",
+    "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+    "sample_rate_hz": 44100,
+    "file_size_bytes": 6711161,
+    "duration_seconds": 332.64907,
+    "audio_bitrate_bps": 160000,
+    "audio_stream_count": 1,
+    "format_bitrate_bps": 161399,
+    "measured_bitrate_bps": 161399
+  },
+  "validation": {
+    "status": "valid",
+    "complete": true,
+    "full_decode": "passed",
+    "audio_stream_present": true
+  },
+  "preparation": {
+    "format": "MP4",
+    "artwork": {
+      "state": "embedded",
+      "width": 1080,
+      "format": "JPEG",
+      "height": 1080,
+      "mime_type": "image/jpeg",
+      "size_bytes": 583873
+    },
+    "readback": {
+      "title_matches": true,
+      "artwork_read_back": true,
+      "main_artists_match": true,
+      "album_suffix_matches": true,
+      "channel_fields_read_back": true
+    },
+    "channel_tag": "@RapFaDrop",
+    "mapped_fields": [
+      "title",
+      "main_artist",
+      "album",
+      "track_number",
+      "disc_number",
+      "release_date",
+      "album_artist_suffix",
+      "album_suffix",
+      "author_url",
+      "comments",
+      "composers",
+      "conductors",
+      "copyright",
+      "encoded_by",
+      "initial_key",
+      "publisher",
+      "subtitle"
+    ],
+    "unsupported_fields": [],
+    "channel_policy_version": 2
+  },
+  "timings": {
+    "acquisition_seconds": 5.254,
+    "provider_probe_seconds": 3.39,
+    "provider_duration_seconds": 332.627,
+    "validation_and_preparation_seconds": 0.423
+  },
+  "publication_replay_added_attempts": 0,
+  "telegram_byte_readback_sha256_matches": true,
+  "readback_seconds": 0.371,
+  "uncertain_sends": 0,
+  "upload_wall_seconds": null,
+  "note": "Historical owner-authorized catch-up; not measured live detection latency. Global independent discovery remains OFF.",
+  "cleanup": {
+    "utc": "2026-10-06T18:27:34.648016+00:00",
+    "production_temporary_files_removed": 3,
+    "telegram_post_retained": true,
+    "audit_and_database_records_retained": true
+  }
+}

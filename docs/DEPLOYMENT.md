@@ -25,6 +25,18 @@ protected complete config for every operation; omit no overlay. Exact-tested dep
 must perform backup/restore-drill/upload before checkout/migration/restart.
 [Current configuration and preservation](reports/FRESH_INTERMEDIARY_AUTOMATION.md).
 
+The independent upload rollout adds the protected eighth
+`/var/lib/rapfadrop-operations/fresh-discovery.compose.json` overlay after these
+seven files, and adds `fresh-discovery: metadata` to the exact protected service
+roles. Include the new overlay in both `compose_files` and `protected_files` in
+the root-only backup config. Discovery has no media/session/bot mounts and keeps
+Telegram/live/publication switches disabled. Enable the discovery flag only in
+beat and this worker; preserve existing media/publisher roles and the paused archive.
+Use the complete protected config, verified backup/restore/upload and an exact
+server-tested SHA for future deployment or configuration changes. First-watermark
+and scheduled provider evidence is separate from Spotify source baselines.
+[Rollout evidence](reports/MULTIPLATFORM_FRESH_DISCOVERY.md).
+
 ## Current discovery-only production override (2026-10-04)
 
 Production application/operations is `a1a47841d7feded2caa50db0d7ee27b5c83e4688` after the encrypted-backup/defaults task. All current production Compose operations must include the protected **fourth** overlay, in this order:

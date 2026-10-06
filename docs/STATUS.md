@@ -1,5 +1,50 @@
 # Project status and handoff
 
+**Partial independent-discovery rollout, 2026-10-06; NOT complete roster-wide
+instant publication.** Tested/pushed/deployed application
+`2e13f38bcac6fe437ccf2751d7b082fd2a8bbe1c` passed271 application tests and10 backup
+tests, migrations/system/drift/health. Owner-authorized **Bache Mardom** published
+to verified production chat-1004311149640 as [message79](https://t.me/RapFaDrop/79).
+Complete SoundCloud AAC160/44.1kHz stereo332.649s, full decode, complete three-person
+credits, actual tags/artwork and prepared-file Telegram byte readback passed.
+Replay added0 attempts/messages; three temporary media/artwork files removed.
+The actual post and durable audit remain. This historical catch-up is not measured
+live-release detection latency or native320 evidence.
+
+At2026-10-06T18:49:35Z, credential-free independent discovery was enabled on the
+server: **100 feeds (92 verified acquisition-profile feeds for75 artists plus8
+bounded public searches)**, queue`fresh-discovery-v1`, alongside unchanged83
+Spotify sources. Fresh bridge/media/scoped publisher remainON; Popular paused.
+First-watermark jobs do not backfill history.84 original baselines and frozen
+155 recordings/166 slots matched protected snapshots. Both predeployment and
+preconfiguration encrypted backups restored48 tables and uploaded successfully.
+
+Last collected scheduled snapshot **2026-10-06T18:53:20.219078Z**:83 Spotify
+sources' three latest polls succeeded;37 independent feeds had first watermarks,
+**zero feeds yet had three successful polls**. Maximum feed success age265.252s:
+the initial two-reader/six-feed batches did not establish fast roster-wide coverage.
+YouTube RSS was incorrectly rejected because its root channel ID omits`UC`, while
+the author URL and entry IDs preserve the full canonical identity. Do not confuse
+this adapter defect with incorrect registered artist identities.
+
+Generic RSS identity/Shorts guards and capped configurable concurrency were pushed
+as **`b2627b0ea71687e70a55063955aed978e8bf5683`**, but the273-test server run logged
+at least4 errors before SSH/banner and health-read timeouts prevented retrieval
+of their tracebacks/final result. **This candidate is NOT verified/deployed.**
+Exact-SHA deployment/configuration continuations are gated on successful checks
+and restored/uploaded backup; do not manually bypass them. Offline exact-parser
+fixture checks passed, but are not a substitute for the server suite. Retrieve
+`rss-final/full-tests.log` under the protected task directory, diagnose the actual
+errors, then finish exact testing/deployment, bounded faster-worker adjustment
+and at least three scheduled outcomes. Do not declare every approved artist's
+independent discovery successful from flags. Current health/restarts after the
+connection loss cannot be asserted. Disposable checks remain for diagnosis.
+
+[Recording, implementation and remaining limits](reports/MULTIPLATFORM_FRESH_DISCOVERY.md),
+[safe publication evidence](reports/data/bache_mardom_publication_evidence.json).
+
+Historical diagnosis and checkpoints below retain their original dates.
+
 **Known discovery gap, 2026-10-06:** owner-reported Hiphopologist **Bache Mardom**
 is present on the registered public SoundCloud acquisition profile (2413998492),
 but absent from the supported Spotify adapter's current complete78-release response.

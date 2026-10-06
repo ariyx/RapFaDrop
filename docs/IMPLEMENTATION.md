@@ -3,6 +3,35 @@
 Status: **Owner-authorized automatic new-release processing and production publication are active on the server, independently of the paused Popular collection.** Current evidence and SHAs are in `STATUS.md`; historical milestone sections below retain their original observations.
 Repository: `https://github.com/ariyx/RapFaDrop.git` (documentation-only at the checkpoint in [`STATUS.md`](STATUS.md); verify current Git state).
 
+## Independent upload discovery (2026-10-06 Tehran)
+
+Rollout checkpoint: the initially deployed version uses two readers/six feeds.
+The canonical YouTube RSS correction and capped configurable concurrency described
+below are pushed candidate behavior, **not verified/deployed**, while its server
+suite has unresolved errors and SSH is unavailable. See STATUS.md before operations.
+
+`FreshDiscoveryFeed` adds exact-time upload watermarks without changing existing
+Spotify baselines or activating/resetting historical ArtistSource rows. Reuse
+verified AcquisitionSource profiles; keep artist search feeds explicitly separate.
+SoundCloud reads bounded upload windows; YouTube reads public RSS with canonical
+author/entry identity checks, allowing the observed root ID without its UC prefix.
+Shorts carry a review marker and cannot become an automatic full recording.
+The feed SourceItem keeps real transport/platform/native identity while the existing
+verified Spotify source FK identifies artist authority. Exact upload time, full
+credits and native recording identity must pass before normal complete media
+validation/tagging and scoped publication. Shared collaborator profiles require
+explicit artist evidence before claiming an upload. Review approval wakes the
+existing media queue once; provider/metadata blockers remain durable and visible.
+
+The protected credential-free `fresh-discovery` worker consumes only
+`fresh-discovery-v1`; beat enables its five-second tick. Success reschedules each
+feed45 seconds later. Concurrency is configurable and capped at4; batch size is
+bounded to three times concurrency, with a minimum6. Queue/provider time can exceed
+the desired per-feed cadence and must be measured. Isolated discovery-provider
+backoff and upload watermarks survive restart. No default queue, frozen archive
+selection or historical baseline is consumed/reset by this handoff.
+[Actual recording/publication, checks and observations](reports/MULTIPLATFORM_FRESH_DISCOVERY.md).
+
 ## Automatic post-baseline production dispatch (2026-10-06 Tehran)
 
 The owner's explicit activation instruction supersedes historical OFF gates below.
