@@ -327,7 +327,8 @@ def process_dispatch(dispatch, blocked):
                 all_ready = False
                 continue
             acquisition_budget -= 1
-            found, evidence = find(ft, blocked_providers=blocked)
+            found, evidence = find(ft, blocked_providers=blocked,
+                                   cache_age=timedelta(seconds=dispatch.source_item.source.poll_interval_seconds))
             ft.evidence = {**ft.evidence, "acquisition": evidence}
             ft.save(update_fields=("evidence", "updated_at"))
             if not found:

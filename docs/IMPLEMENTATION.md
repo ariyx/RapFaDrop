@@ -26,8 +26,12 @@ media workers cannot send. The exact production bot, channel and admin posting
 permission are checked before sends. The publisher can act only on durable fresh
 scope, plus a scoped caption update to an already-published prior single.
 
-Matching reuses bounded verified SoundCloud/YouTube catalogs and probes. A shared
-authentication/403/429 failure creates persistent, provider-specific 15-minute
+Matching reuses bounded verified SoundCloud/YouTube catalogs and probes.
+Fresh catalog and negative-search caches expire at the existing discovery source
+poll interval (currently 180 seconds), rather than the archive's six-hour default.
+This prevents an earlier catalog miss from hiding a subsequent official upload;
+Probe bounds, durable dispatch retry schedules and provider backoff remain enforced.
+A shared authentication/403/429 failure creates persistent, provider-specific 15-minute
 backoff and an actionable admin audit/dashboard alert. Missing profiles or uncertain
 complete recordings remain visible as manual-review candidates. Downloads retain
 native compressed quality; official Spotify credits/artwork and all eleven channel

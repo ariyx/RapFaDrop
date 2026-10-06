@@ -82,10 +82,10 @@ def safe_row(row):
     return out
 
 
-def catalog(source,provider,*,expand=False):
+def catalog(source,provider,*,expand=False,cache_age=timedelta(hours=6)):
     if source.retry_due_at and source.retry_due_at>timezone.now():
         return source.catalog,{'cache':True,'backoff':True,'error':source.last_error}
-    if not expand and source.catalog_checked_at and source.catalog_checked_at>timezone.now()-timedelta(hours=6):
+    if not expand and source.catalog_checked_at and source.catalog_checked_at>timezone.now()-cache_age:
         return source.catalog,{'cache':True,'entries':len(source.catalog)}
     url=source.profile_url if source.platform=='soundcloud' else source.profile_url+'/videos'
     start=time.monotonic()
@@ -108,7 +108,7 @@ def catalog(source,provider,*,expand=False):
         return source.catalog,{'cache':bool(source.catalog),'error':source.last_error,'seconds':round(time.monotonic()-start,3)}
 
 
-def find(recording,*,blocked_providers=None):
+def find(recording,*,blocked_providers=None,cache_age=timedelta(hours=6)):
     from .services import identity_matches
     m=recording.metadata
     sources=list(AcquisitionSource.objects.filter(artist__sources__platform='spotify',artist__sources__native_profile_id__in=[c['id'] for c in m['credits']]).distinct())
@@ -121,7 +121,7 @@ def find(recording,*,blocked_providers=None):
         if source.evidence.get('scope_recordings') and recording.spotify_id not in source.evidence['scope_recordings']:
             continue
         provider=YtDlpProvider() if source.platform=='soundcloud' else YouTubeProvider()
-        rows,metrics=catalog(source,provider);checks.append({'acquisition_source_id':source.pk,'catalog':metrics})
+        rows,metrics=catalog(source,provider,cache_age=cache_age);checks.append({'acquisition_source_id':source.pk,'catalog':metrics})
         if metrics.get('error') and shared_blocker(metrics['error']):
             blocked_providers[source.platform]=metrics['error']
             continue
@@ -137,7 +137,7 @@ def find(recording,*,blocked_providers=None):
         # Reuse exact stable results on retry; search only if a direct catalog failed.
         if not candidates and not metrics.get('backoff'):
             cache=recording.evidence.get('provider_search_cache',{}).get(str(source.pk))
-            if cache and cache.get('checked_at') and timezone.now()-timezone.datetime.fromisoformat(cache['checked_at'])<timedelta(hours=6):
+            if cache and cache.get('checked_at') and timezone.now()-timezone.datetime.fromisoformat(cache['checked_at'])<cache_age:
                 search=cache['rows']
             else:
                 try:

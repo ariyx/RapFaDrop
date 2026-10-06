@@ -1,4 +1,5 @@
 import json
+from datetime import timedelta
 from unittest.mock import patch
 from django.test import TestCase
 from django.utils import timezone
@@ -94,3 +95,34 @@ class AcquisitionCompletionTests(TestCase):
             found,evidence=find(r)
             self.assertIsNone(found);self.assertIn('manual identity review',evidence['reason'])
             p.download.assert_not_called()
+
+    def test_fresh_cache_refresh_finds_new_upload_without_changing_archive_default(self):
+        r=self.select();s=self.make_source(rows=[{'id':'old','title':'Other'}])
+        s.catalog_checked_at=timezone.now()-timedelta(minutes=4)
+        s.save(update_fields=('catalog_checked_at',))
+        r.evidence={'provider_search_cache':{str(s.pk):{'checked_at':s.catalog_checked_at.isoformat(),'rows':[]}}}
+        r.save(update_fields=('evidence',))
+        with patch('archive_collection.acquisition.YtDlpProvider') as make:
+            p=make.return_value;p.can_handle.return_value=True
+            p._run.return_value=json.dumps({'entries':[{'id':'new','title':'Song','url':'https://soundcloud.com/artist/song'}]})
+            p.probe.return_value=ProviderProbe('yt-dlp','url','new','Song',180,'Artist',evidence={'uploader_id':'123'})
+            self.assertIsNone(find(r)[0]);p._run.assert_not_called()
+            self.assertEqual(find(r,cache_age=timedelta(seconds=180))[0][0].pk,s.pk)
+            self.assertEqual(p._run.call_count,1)
+            find(r,cache_age=timedelta(seconds=180));self.assertEqual(p._run.call_count,1)
+
+    def test_fresh_negative_search_expires_but_provider_backoff_remains(self):
+        r=self.select();s=self.make_source()
+        r.evidence={'provider_search_cache':{str(s.pk):{'checked_at':(timezone.now()-timedelta(minutes=4)).isoformat(),'rows':[]}}}
+        r.save(update_fields=('evidence',))
+        with patch('archive_collection.acquisition.YtDlpProvider') as make:
+            p=make.return_value;p.can_handle.return_value=True
+            p._run.return_value=json.dumps({'entries':[{'id':'new','title':'Song','url':'https://soundcloud.com/artist/song'}]})
+            p.probe.return_value=ProviderProbe('yt-dlp','url','new','Song',180,'Artist',evidence={'uploader_id':'123'})
+            self.assertIsNone(find(r)[0]);p._run.assert_not_called()
+            self.assertIsNotNone(find(r,cache_age=timedelta(seconds=180))[0])
+            self.assertIn('scsearch20:Artist Song',p._run.call_args.args[0])
+            s.retry_due_at=timezone.now()+timedelta(minutes=15);s.save(update_fields=('retry_due_at',))
+            p.reset_mock()
+            self.assertIsNone(find(r,cache_age=timedelta(seconds=180))[0])
+            p._run.assert_not_called();p.probe.assert_not_called()

@@ -100,8 +100,9 @@ class FreshEligibilityTests(TestCase):
                 ft.candidate=candidate
                 ft.save()
         with patch('releases.fresh.verified_ready', side_effect=lambda c:c), patch('archive_collection.acquisition.find',
-                return_value=(None,{'reason':'Complete audio unavailable'})):
+                return_value=(None,{'reason':'Complete audio unavailable'})) as finder:
             process_dispatch(dispatch,{})
+        self.assertEqual(finder.call_args.kwargs['cache_age'],timedelta(seconds=self.source.poll_interval_seconds))
         dispatch.refresh_from_db()
         self.assertEqual(dispatch.attempts,0)
         self.assertLess((dispatch.due_at-timezone.now()).total_seconds(),61)
