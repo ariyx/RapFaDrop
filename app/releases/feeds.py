@@ -70,6 +70,11 @@ def poll_feed(feed,*,reader=list_uploads,now=None):
         created=0
         for row in rows:
             if row['id'] in known or (bootstrap and row['id'] not in feed.catchup_native_ids):continue
+            # A producer/collaborator account can serve several approved artists.
+            # Do not claim another artist's upload under the first feed polled.
+            if source.evidence.get('identity_role')=='collaborator' and not re.search(
+                r'(?<!\w)'+re.escape(normalize_text(source.artist.official_name))+r'(?!\w)',normalize_text(row['title'])):
+                continue
             published=datetime.fromisoformat(row['published_at'].replace('Z','+00:00')) if row.get('published_at') else None
             if published and published<=feed.baseline_at and row['id'] not in feed.catchup_native_ids:continue
             item,new=SourceItem.objects.get_or_create(platform=source.platform,native_item_id=row['id'],defaults={

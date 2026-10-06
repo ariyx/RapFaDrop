@@ -11,6 +11,21 @@ from .fresh import materialize,validate_official
 
 
 class IndependentFeedTests(TestCase):
+    def test_shared_collaborator_profile_does_not_claim_another_artists_upload(self):
+        self.source.evidence={'identity_role':'collaborator'};self.source.save()
+        self.bootstrap()
+        other=Artist.objects.create(official_name='Other artist',enabled=True)
+        ArtistSource.objects.create(artist=other,platform='spotify',native_profile_id='b'*22,enabled=True,verification='verified')
+        shared=AcquisitionSource.objects.create(artist=other,platform='soundcloud',native_id=self.source.native_id,
+            profile_url=self.source.profile_url,evidence={'identity_role':'collaborator'},verified_at=self.now)
+        second=FreshDiscoveryFeed.objects.create(acquisition_source=shared,enabled=True)
+        poll_feed(second,reader=lambda source:[self.row],now=self.now-timedelta(hours=1))
+        row={**self.row,'id':'789','title':'Other artist - New recording'}
+        poll_feed(self.feed,reader=lambda source:[row,self.row],now=self.now)
+        self.assertFalse(SourceItem.objects.filter(native_item_id='789').exists())
+        poll_feed(second,reader=lambda source:[row,self.row],now=self.now)
+        self.assertEqual(SourceItem.objects.get(native_item_id='789').source.artist_id,other.pk)
+        self.assertEqual(FreshDispatch.objects.count(),1)
     def test_search_watch_is_explicit_and_rejects_upload_without_performer_evidence(self):
         feed=FreshDiscoveryFeed.objects.create(search_artist=self.artist,enabled=True)
         poll_feed(feed,reader=lambda source:[self.row],now=self.now-timedelta(hours=1))
