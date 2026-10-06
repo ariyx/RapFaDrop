@@ -170,6 +170,15 @@ Candidate template variables: `title`, `artists`, `features`, `release_type`, `m
 - Current owner branding uses all eleven configurable fields: subtitle/comments/publisher/encoded_by/copyright/composers/conductors/initial_key contain `@RapFaDrop`; album_artist_suffix and album_suffix append ` | @RapFaDrop`; author_url is `https://t.me/RapFaDrop`. Official track title/main artists, numbering and artwork are retained. MP4 subtitle/publisher/conductor/key/author URL use UTF-8 iTunes freeform atoms. Archive captions omit title/artist rows. Owner-authorized retagging edits the same existing archive messages from retained complete originals; uncertain outcomes require reconciliation. The policy remains panel-editable.
 - Prefer a complete matched source MP3 near 320kbps unless known to be a lossy transcode; fall back immediately to available complete compressed audio (including AAC/M4A near 160kbps). Nominal bitrate does not prove authenticity or perceptual superiority. No ordinary WAV/FLAC delivery or automatic lossless conversion. Cross-codec quality cannot be established by comparing bitrate; genuine later improvements use the same Telegram message. No speculative acquisition integration is authorized.
 
+Owner clarification, 2026-10-06: automatic fresh acquisition applies to all 83
+approved artists. A public independent uploader may supply a complete recording
+when every official track credit, title/version, stable native identity and duration
+match. This does not verify the uploader as an artist's official account. Record
+the uncertainty of pre-upload encoding; do not claim native 320 quality or a
+quality upgrade from nominal bitrate alone. No preview, wrong version, DRM or
+account entitlement bypass. Measured successful 45-second discovery cadence is
+staggered across all sources; preserve independent provider holds and retry limits.
+
 ## 7. Admin panel and observability
 
 Provide artist/profile management, source verification, caption/tag template preview and editing, queue and error views, publication links, configurable correction-reply deletion, manual media upload, suspicious-item decisions and metrics. Separate password accounts have equal admin access. Another admin may reset a password, with actor and change logged. Telegram review notifications include reasons and approve/reject/correct paths; one uncertain item must not block unrelated releases.

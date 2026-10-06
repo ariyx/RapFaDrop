@@ -45,13 +45,28 @@ Missing-file dispatch retries are capped at that same source interval instead of
 growing to hours. Individual candidate retry holds and provider backoff continue
 to govern network access; unexpected processing exceptions retain exponential backoff.
 A shared authentication/403/429 or YouTube page-reload failure creates persistent, provider-specific 15-minute
-backoff and an actionable admin audit/dashboard alert. Missing profiles or uncertain
+  backoff and an actionable admin audit/dashboard alert. Missing profiles or uncertain
+  complete recordings remain visible as manual-review candidates.
 Collaborator acquisition profiles carry an explicit identity role and cannot
 implicitly establish the monitored artist's credit: every recording credit
 must be present in independently probed title/description/artist evidence.
-complete recordings remain visible as manual-review candidates. Downloads retain
+  Downloads retain
 native compressed quality; official Spotify credits/artwork and all eleven channel
 fields are checked by tag readback and full FFmpeg decoding before publication.
+
+Owner-enabled fresh fallback can search up to ten public SoundCloud recordings,
+within the existing six-probe acquisition budget, without registering an artist
+profile. Every Spotify track credit, title/version, native recording/uploader ID
+and duration must match; uploader official status and upstream encoding remain
+explicitly unknown. Recheck identity and credits immediately before downloading,
+reject fresh full files more than five seconds short, and require tag/artwork
+readback and full decode before publication. Never label nominal 320 kb/s with
+unknown source quality as an upgrade. Archive acquisition keeps its prior policy.
+Distinct fresh transport candidates have a durable identity hash; failed attempts
+remain visible when another recording source is tried. An isolated YouTube hold
+does not prevent the permitted SoundCloud fallback or reset the held attempt.
+Rollback of this schema change uses the protected database backup when multiple
+transport candidates exist; do not reverse the constraint onto duplicate transports.
 All required unpublished album tracks must be prepared before an introduction.
 Existing ordered session progress, prior-single reuse, 15-minute failure hold,
 uncertain-send reconciliation and same-message correction behavior are reused.

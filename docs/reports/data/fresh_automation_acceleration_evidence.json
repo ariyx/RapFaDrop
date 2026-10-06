@@ -1,0 +1,839 @@
+{
+  "generated_at": "2026-10-06T15:39:45.731746+00:00",
+  "tested_deployed_application_sha": "b430247332d00397d0a45a01c7695f3fd51a0492",
+  "full_application_tests": 250,
+  "backup_tests": 9,
+  "final": {
+    "utc": "2026-10-06T15:38:43.441096+00:00",
+    "approved_artists": 83,
+    "active_verified_spotify": 83,
+    "with_acquisition_profile": 75,
+    "acquisition_profile_rows": 92,
+    "baselines": 84,
+    "source_items": 4152,
+    "published_messages": 71,
+    "uncertain_sends": 0,
+    "fresh_paused": false,
+    "popular_paused": true,
+    "popular_native": 155,
+    "popular_slots": 166,
+    "preservation": {
+      "Artist": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "ArtistSource": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "BaselineRun": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "SourceItem": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "Collection": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "Recording": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "ArtistSelection": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "Slot": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "RecordingAlias": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "Publication": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      },
+      "CaptionTemplate": {
+        "deleted": [],
+        "unplanned_changed_original_ids": []
+      }
+    },
+    "pending_dispatches": [
+      {
+        "id": 3892,
+        "source_item__title": "Mano Khoda Shoma Hame",
+        "attempts": 199,
+        "due_at": "2026-10-06 15:39:27.830573+00:00",
+        "reason": "Waiting for complete matched media; album introduction withheld"
+      }
+    ],
+    "provider_backoff": [
+      {
+        "platform": "youtube",
+        "due_at": "2026-10-06 14:48:37.063462+00:00",
+        "reason": "yt-dlp failed (1): ERROR: [youtube] cmj7_tDeekQ: The page needs to be reloaded."
+      }
+    ],
+    "publisher_switches": {
+      "FRESH_PIPELINE_ENABLED": true,
+      "SPOTIFY_MEDIA_BRIDGE_ENABLED": true,
+      "PUBLICATION_WORKER_ENABLED": true,
+      "TELEGRAM_MODE": "production",
+      "TELEGRAM_LIVE_ENABLED": true,
+      "TELEGRAM_PRODUCTION_CHAT_ID": "-1004311149640",
+      "TELEGRAM_EXPECTED_BOT_ID": 8697681226
+    }
+  },
+  "runtime": {
+    "sha": "b430247332d00397d0a45a01c7695f3fd51a0492",
+    "utc": "2026-10-06T15:37:56Z",
+    "overlay": "/var/lib/rapfadrop-operations/fresh-independent.compose.json",
+    "media_switches": "43 objects imported automatically (use -v 2 for details).\n\n{\"FRESH_INDEPENDENT_UPLOADERS_ENABLED\": true, \"FRESH_PIPELINE_ENABLED\": true, \"SPOTIFY_MEDIA_BRIDGE_ENABLED\": true, \"TELEGRAM_MODE\": \"disabled\", \"TELEGRAM_LIVE_ENABLED\": false, \"PUBLICATION_WORKER_ENABLED\": false}",
+    "health": {
+      "status": "ok",
+      "database": "ok"
+    },
+    "verified_prechange_backup": "/var/backups/rapfadrop/encrypted/rapfadrop-20261006T153608Z-4a41bf98.tar.age",
+    "scope": "All eligible fresh recordings, no artist allowlist; archive policy unchanged",
+    "production_posts_deleted": 0
+  },
+  "cleanup": {
+    "deployed_sha": "b430247332d00397d0a45a01c7695f3fd51a0492",
+    "health": {
+      "status": "ok",
+      "database": "ok"
+    },
+    "backup": {
+      "utc": "20261006T153608Z",
+      "restore_verified": true,
+      "restored_tables": 47,
+      "upload": "complete"
+    },
+    "backup_message_ids": [
+      106,
+      107
+    ],
+    "queues": {
+      "spotify-pilot": 0,
+      "fresh-media-v1": 0,
+      "fresh-publication-v1": 0,
+      "celery": 3
+    },
+    "trial_media_deleted_bytes": 34166073,
+    "trial_media_deleted_files": 1,
+    "global_media_deleted_bytes": 32630252,
+    "global_media_deleted_files": 9,
+    "global_media_remaining_files": 0,
+    "disposable_source_removed": true,
+    "disposable_check_environment_removed": true,
+    "trial_media_remaining": 0,
+    "production_posts_deleted": 0,
+    "backup_posts_deleted": 0,
+    "protected_sessions_preserved": true
+  },
+  "polling_pilot": {
+    "utc": "2026-10-06T11:49:39.808731+00:00",
+    "since": "2026-10-06T11:46:49.754039+00:00",
+    "sources_with_three_successes": 83,
+    "rate_or_access_error": false,
+    "request_count": 656,
+    "failed_polls": 0
+  },
+  "latest_polling": {
+    "utc": "2026-10-06T15:39:45.731746+00:00",
+    "all_sources": 83,
+    "latest_three_successful_sources": 83
+  },
+  "new_profiles": [
+    {
+      "artist": "Ali Ardavan",
+      "id": 133,
+      "native_id": "862684240",
+      "identity_role": "artist",
+      "matches": 3,
+      "created": true
+    },
+    {
+      "artist": "Ali Geramy",
+      "id": 134,
+      "native_id": "87676594",
+      "identity_role": "artist",
+      "matches": 11,
+      "created": true
+    },
+    {
+      "artist": "Amir Khalvat",
+      "id": 135,
+      "native_id": "36968486",
+      "identity_role": "artist",
+      "matches": 8,
+      "created": true
+    },
+    {
+      "artist": "Armin Zareei",
+      "id": 136,
+      "native_id": "1243326202",
+      "identity_role": "artist",
+      "matches": 13,
+      "created": true
+    },
+    {
+      "artist": "Arown",
+      "id": 137,
+      "native_id": "641511045",
+      "identity_role": "artist",
+      "matches": 9,
+      "created": true
+    },
+    {
+      "artist": "Bamdad",
+      "id": 138,
+      "native_id": "9565983",
+      "identity_role": "artist",
+      "matches": 10,
+      "created": true
+    },
+    {
+      "artist": "Dalu",
+      "id": 139,
+      "native_id": "885841621",
+      "identity_role": "artist",
+      "matches": 15,
+      "created": true
+    },
+    {
+      "artist": "Dariu$h",
+      "id": 140,
+      "native_id": "17904155",
+      "identity_role": "collaborator",
+      "matches": 14,
+      "created": true
+    },
+    {
+      "artist": "Fadaei",
+      "id": 141,
+      "native_id": "2621158",
+      "identity_role": "collaborator",
+      "matches": 12,
+      "created": true
+    },
+    {
+      "artist": "Hamid Sefat",
+      "id": 142,
+      "native_id": "1194167896",
+      "identity_role": "artist",
+      "matches": 11,
+      "created": true
+    },
+    {
+      "artist": "Heliyom",
+      "id": 143,
+      "native_id": "89771443",
+      "identity_role": "artist",
+      "matches": 5,
+      "created": true
+    },
+    {
+      "artist": "Isam",
+      "id": 144,
+      "native_id": "78546681",
+      "identity_role": "artist",
+      "matches": 6,
+      "created": true
+    },
+    {
+      "artist": "Maslak",
+      "id": 145,
+      "native_id": "68840385",
+      "identity_role": "artist",
+      "matches": 5,
+      "created": true
+    },
+    {
+      "artist": "Mehyad",
+      "id": 146,
+      "native_id": "1080635485",
+      "identity_role": "artist",
+      "matches": 11,
+      "created": true
+    },
+    {
+      "artist": "Parsa",
+      "id": 147,
+      "native_id": "881083729",
+      "identity_role": "collaborator",
+      "matches": 2,
+      "created": true
+    },
+    {
+      "artist": "Parsalip",
+      "id": 148,
+      "native_id": "118565384",
+      "identity_role": "artist",
+      "matches": 6,
+      "created": true
+    },
+    {
+      "artist": "Safir",
+      "id": 149,
+      "native_id": "1016216608",
+      "identity_role": "artist",
+      "matches": 9,
+      "created": true
+    },
+    {
+      "artist": "Shapur",
+      "id": 150,
+      "native_id": "2621158",
+      "identity_role": "collaborator",
+      "matches": 2,
+      "created": true
+    },
+    {
+      "artist": "Sina Mafee",
+      "id": 151,
+      "native_id": "65987820",
+      "identity_role": "artist",
+      "matches": 7,
+      "created": true
+    },
+    {
+      "artist": "Tlkhoon",
+      "id": 152,
+      "native_id": "969015769",
+      "identity_role": "artist",
+      "matches": 10,
+      "created": true
+    }
+  ],
+  "remaining_profile_blockers": {
+    "Arman Miladi": "arman-miladi native account: two own uploads, only one independent Spotify work match; alternate collaborator account also only one match. Profile identity not established.",
+    "Catchybeatz": "catchybeatz account has no own uploads; collaborator accounts supplied only one independently matched work each. Individual Bavelamko recording succeeded in isolated fallback; this does not verify a profile.",
+    "Ho3ein": "ho3ein guessed account returned a different display identity and zero own works; alternate account had one unmatched work. FarsiChart profile references a different Spotify artist ID; listed YouTube channel not activated. Individual 33 recording succeeded in isolated fallback.",
+    "Quf": "qufam has three own uploads but no independent checked Spotify catalog/LP match; bounded collaborator catalog provided no Quf matches. This is a corroboration limitation, not absence of albums.",
+    "Saman Wilson": "samanwilson native account has one own upload and one independent work match; another guessed group handle resolved to a different identity. Profile identity not established.",
+    "The Don": "thedonofficial resolved to Don with ten unrelated uploads and zero independent matches; thedonmusic had no own uploads.",
+    "XWHISKY": "xwhisky has no own uploads; each checked collaborator profile supplied only one independently matched work.",
+    "Zakhmi": "zakhmiofficial had one unmatched upload; zakhmi had no own uploads."
+  },
+  "isolated_public_soundcloud_trials": {
+    "results": [
+      {
+        "spotify_id": "6f8ginsFVrSDwG88elopa6",
+        "title": "Masire Dard",
+        "credits": [
+          {
+            "id": "32AFrGu19C0cGtRkgzJDAb",
+            "name": "Emad Ghavidel"
+          }
+        ],
+        "expected_duration": 329.874,
+        "historical_replay": true,
+        "search_matching_seconds": 10.365,
+        "matching": {
+          "checks": [
+            {
+              "id": "302994214",
+              "uploader_id": "99527067",
+              "title": "Emad Ghavidel - Masire Dard",
+              "duration": 329.92,
+              "matched": true,
+              "origin_status": "independent_uploader",
+              "official_uploader_verified": false
+            }
+          ],
+          "provider_probes": 1
+        },
+        "source_url": "https://soundcloud.com/ghavidelemad/emad-ghavidel-masire-dard",
+        "native_id": "302994214",
+        "uploader_id": "99527067",
+        "origin": "SoundCloud public independent uploader; upstream original encoding unknown",
+        "identity_recheck_seconds": 5.618,
+        "acquisition_seconds": 11.242,
+        "ffprobe_seconds": 0.81,
+        "facts": {
+          "sha256": "c1332dd946b713037a053596ac79ab1af7bad6eb91f9ebdad8774509b5370490",
+          "file_size_bytes": 6656623,
+          "duration_seconds": 329.932336,
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "format_bitrate_bps": 161405,
+          "measured_bitrate_bps": 161406,
+          "codec_name": "aac",
+          "audio_bitrate_bps": 160000,
+          "sample_rate_hz": 44100,
+          "channels": 2,
+          "audio_stream_count": 1
+        },
+        "full_decode_seconds": 2.033,
+        "full_decode": "passed",
+        "preparation": {
+          "channel_policy_version": 2,
+          "format": "MP4",
+          "channel_tag": "@RapFaDrop",
+          "mapped_fields": [
+            "title",
+            "main_artist",
+            "album",
+            "track_number",
+            "disc_number",
+            "release_date",
+            "album_artist_suffix",
+            "album_suffix",
+            "author_url",
+            "comments",
+            "composers",
+            "conductors",
+            "copyright",
+            "encoded_by",
+            "initial_key",
+            "publisher",
+            "subtitle"
+          ],
+          "unsupported_fields": [],
+          "artwork": {
+            "state": "embedded",
+            "format": "JPEG",
+            "mime_type": "image/jpeg",
+            "width": 300,
+            "height": 300,
+            "size_bytes": 40105
+          },
+          "readback": {
+            "title_matches": true,
+            "main_artists_match": true,
+            "album_suffix_matches": true,
+            "channel_fields_read_back": true,
+            "artwork_read_back": true
+          }
+        },
+        "preparation_seconds": 0.281,
+        "state": "complete_decoded_tagged",
+        "conversion": "none locally; native SoundCloud transport retained; original pre-upload encoding unknown",
+        "upload_seconds": null,
+        "telegram_sends": 0,
+        "total_seconds": 30.35,
+        "provider_subprocesses": [
+          {
+            "kind": "search",
+            "seconds": 4.89
+          },
+          {
+            "kind": "probe",
+            "seconds": 5.22
+          },
+          {
+            "kind": "probe",
+            "seconds": 5.617
+          },
+          {
+            "kind": "download",
+            "seconds": 11.238
+          }
+        ]
+      },
+      {
+        "spotify_id": "0GjX7igOYf7jzPtQHDss87",
+        "title": "33",
+        "credits": [
+          {
+            "id": "3DU50uTJPCGLaMjVS5y8Cu",
+            "name": "EpiCure"
+          },
+          {
+            "id": "5vVveQB8n4kETe67waTS3t",
+            "name": "Ho3ein"
+          }
+        ],
+        "expected_duration": 237.357,
+        "historical_replay": true,
+        "search_matching_seconds": 11.412,
+        "matching": {
+          "checks": [
+            {
+              "id": "2108846895",
+              "uploader_id": "1152176164",
+              "title": "Ho3ein X EpiCure - 33",
+              "duration": 237.808,
+              "matched": true,
+              "origin_status": "independent_uploader",
+              "official_uploader_verified": false
+            }
+          ],
+          "provider_probes": 1
+        },
+        "source_url": "https://soundcloud.com/epicure-ogepic/ho3ein-x-epicure-33",
+        "native_id": "2108846895",
+        "uploader_id": "1152176164",
+        "origin": "SoundCloud public independent uploader; upstream original encoding unknown",
+        "identity_recheck_seconds": 5.536,
+        "acquisition_seconds": 7.174,
+        "ffprobe_seconds": 0.292,
+        "facts": {
+          "sha256": "4c31e0a65b57bce5a58b460ea99aaecbc4f4e7dfad94ff61182d4dcb63b9a8df",
+          "file_size_bytes": 4798221,
+          "duration_seconds": 237.818776,
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "format_bitrate_bps": 161407,
+          "measured_bitrate_bps": 161408,
+          "codec_name": "aac",
+          "audio_bitrate_bps": 160000,
+          "sample_rate_hz": 44100,
+          "channels": 2,
+          "audio_stream_count": 1
+        },
+        "full_decode_seconds": 1.226,
+        "full_decode": "passed",
+        "preparation": {
+          "channel_policy_version": 2,
+          "format": "MP4",
+          "channel_tag": "@RapFaDrop",
+          "mapped_fields": [
+            "title",
+            "main_artist",
+            "album",
+            "track_number",
+            "disc_number",
+            "release_date",
+            "album_artist_suffix",
+            "album_suffix",
+            "author_url",
+            "comments",
+            "composers",
+            "conductors",
+            "copyright",
+            "encoded_by",
+            "initial_key",
+            "publisher",
+            "subtitle"
+          ],
+          "unsupported_fields": [],
+          "artwork": {
+            "state": "embedded",
+            "format": "JPEG",
+            "mime_type": "image/jpeg",
+            "width": 300,
+            "height": 300,
+            "size_bytes": 45244
+          },
+          "readback": {
+            "title_matches": true,
+            "main_artists_match": true,
+            "album_suffix_matches": true,
+            "channel_fields_read_back": true,
+            "artwork_read_back": true
+          }
+        },
+        "preparation_seconds": 0.161,
+        "state": "complete_decoded_tagged",
+        "conversion": "none locally; native SoundCloud transport retained; original pre-upload encoding unknown",
+        "upload_seconds": null,
+        "telegram_sends": 0,
+        "total_seconds": 25.802,
+        "provider_subprocesses": [
+          {
+            "kind": "search",
+            "seconds": 5.961
+          },
+          {
+            "kind": "probe",
+            "seconds": 5.442
+          },
+          {
+            "kind": "probe",
+            "seconds": 5.536
+          },
+          {
+            "kind": "download",
+            "seconds": 7.171
+          }
+        ]
+      },
+      {
+        "spotify_id": "7wRd6TS0h8dpDBtzfjGdMw",
+        "title": "Bavelamko",
+        "credits": [
+          {
+            "id": "25JIQIFASUvrcnzFL9CQhZ",
+            "name": "Catchybeatz"
+          },
+          {
+            "id": "0RN2n6EdV90CQmfhfxqv0f",
+            "name": "TM Bax"
+          },
+          {
+            "id": "5G5qhrIOQpVBSCLdMUAdqV",
+            "name": "Talk Down"
+          }
+        ],
+        "expected_duration": 232.888,
+        "historical_replay": true,
+        "search_matching_seconds": 11.22,
+        "matching": {
+          "checks": [
+            {
+              "id": "1820997735",
+              "uploader_id": "1025842978",
+              "title": "Catchybeatz X Tm Bax X Talk Down - Bavelamko (Official Audio)",
+              "duration": 232.935,
+              "matched": true,
+              "origin_status": "independent_uploader",
+              "official_uploader_verified": false
+            }
+          ],
+          "provider_probes": 1
+        },
+        "source_url": "https://soundcloud.com/tiktaak-sr/catchybeatz-x-tm-bax-x-talk-down-bavelamko-official-audio",
+        "native_id": "1820997735",
+        "uploader_id": "1025842978",
+        "origin": "SoundCloud public independent uploader; upstream original encoding unknown",
+        "identity_recheck_seconds": 5.912,
+        "acquisition_seconds": 6.902,
+        "ffprobe_seconds": 0.21,
+        "facts": {
+          "sha256": "7be6483911ef745815ea388747862e546d4cd76ad77da47f9708687e7275e371",
+          "file_size_bytes": 4699847,
+          "duration_seconds": 232.942585,
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "format_bitrate_bps": 161407,
+          "measured_bitrate_bps": 161408,
+          "codec_name": "aac",
+          "audio_bitrate_bps": 160000,
+          "sample_rate_hz": 44100,
+          "channels": 2,
+          "audio_stream_count": 1
+        },
+        "full_decode_seconds": 1.385,
+        "full_decode": "passed",
+        "preparation": {
+          "channel_policy_version": 2,
+          "format": "MP4",
+          "channel_tag": "@RapFaDrop",
+          "mapped_fields": [
+            "title",
+            "main_artist",
+            "album",
+            "track_number",
+            "disc_number",
+            "release_date",
+            "album_artist_suffix",
+            "album_suffix",
+            "author_url",
+            "comments",
+            "composers",
+            "conductors",
+            "copyright",
+            "encoded_by",
+            "initial_key",
+            "publisher",
+            "subtitle"
+          ],
+          "unsupported_fields": [],
+          "artwork": {
+            "state": "embedded",
+            "format": "JPEG",
+            "mime_type": "image/jpeg",
+            "width": 300,
+            "height": 300,
+            "size_bytes": 64368
+          },
+          "readback": {
+            "title_matches": true,
+            "main_artists_match": true,
+            "album_suffix_matches": true,
+            "channel_fields_read_back": true,
+            "artwork_read_back": true
+          }
+        },
+        "preparation_seconds": 0.105,
+        "state": "complete_decoded_tagged",
+        "conversion": "none locally; native SoundCloud transport retained; original pre-upload encoding unknown",
+        "upload_seconds": null,
+        "telegram_sends": 0,
+        "total_seconds": 25.733,
+        "provider_subprocesses": [
+          {
+            "kind": "search",
+            "seconds": 5.504
+          },
+          {
+            "kind": "probe",
+            "seconds": 5.707
+          },
+          {
+            "kind": "probe",
+            "seconds": 5.911
+          },
+          {
+            "kind": "download",
+            "seconds": 6.901
+          }
+        ]
+      }
+    ],
+    "production_db_access": false,
+    "telegram_sends": 0,
+    "shared_holds": {}
+  },
+  "isolated_full_media_flow": {
+    "spotify_id": "0GjX7igOYf7jzPtQHDss87",
+    "candidate_id": 1,
+    "state": "ready",
+    "historical_replay": true,
+    "database_port": "55433",
+    "identity_seconds": 0.387,
+    "lookup_seconds": 13.645,
+    "media_processing_seconds": 16.905,
+    "total_seconds": 32.432,
+    "facts": {
+      "sha256": "4c31e0a65b57bce5a58b460ea99aaecbc4f4e7dfad94ff61182d4dcb63b9a8df",
+      "channels": 2,
+      "codec_name": "aac",
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "sample_rate_hz": 44100,
+      "file_size_bytes": 4798221,
+      "duration_seconds": 237.818776,
+      "audio_bitrate_bps": 160000,
+      "audio_stream_count": 1,
+      "format_bitrate_bps": 161407,
+      "measured_bitrate_bps": 161408
+    },
+    "validation": {
+      "status": "valid",
+      "complete": true,
+      "audio_stream_present": true,
+      "full_decode": "passed"
+    },
+    "preparation": {
+      "format": "MP4",
+      "artwork": {
+        "state": "embedded",
+        "width": 300,
+        "format": "JPEG",
+        "height": 300,
+        "mime_type": "image/jpeg",
+        "size_bytes": 45244
+      },
+      "readback": {
+        "title_matches": true,
+        "artwork_read_back": true,
+        "main_artists_match": true,
+        "album_suffix_matches": true,
+        "channel_fields_read_back": true
+      },
+      "channel_tag": "@RapFaDrop",
+      "mapped_fields": [
+        "title",
+        "main_artist",
+        "album",
+        "track_number",
+        "disc_number",
+        "release_date",
+        "album_artist_suffix",
+        "album_suffix",
+        "author_url",
+        "comments",
+        "composers",
+        "conductors",
+        "copyright",
+        "encoded_by",
+        "initial_key",
+        "publisher",
+        "subtitle"
+      ],
+      "unsupported_fields": [],
+      "channel_policy_version": 2
+    },
+    "timings": {
+      "acquisition_seconds": 9.94,
+      "provider_probe_seconds": 6.488,
+      "provider_duration_seconds": 237.808,
+      "validation_and_preparation_seconds": 0.254
+    },
+    "replay_added_attempts": 0,
+    "telegram_messages": 0,
+    "upload_seconds": null,
+    "matching": {
+      "checks": [
+        {
+          "id": "2108846895",
+          "uploader_id": "1152176164",
+          "title": "Ho3ein X EpiCure - 33",
+          "duration": 237.808,
+          "matched": true,
+          "origin_status": "independent_uploader",
+          "official_uploader_verified": false
+        }
+      ],
+      "provider_probes": 1
+    }
+  },
+  "pending_review_summary": [
+    {
+      "native_id": "5sYGAU7L6JgUrkfzy9J3Yx",
+      "title": "Mano Khoda Shoma Hame",
+      "candidate_id": null,
+      "latest_acquisition": {
+        "checks": [
+          {
+            "catalog": {
+              "cache": false,
+              "entries": 50,
+              "seconds": 3.668,
+              "bounded_to": 50
+            },
+            "acquisition_source_id": 62
+          },
+          {
+            "catalog": {
+              "cache": false,
+              "entries": 50,
+              "seconds": 3.387,
+              "bounded_to": 50
+            },
+            "acquisition_source_id": 55
+          },
+          {
+            "id": "cmj7_tDeekQ",
+            "probe_error": "yt-dlp operation timed out after 30 seconds",
+            "acquisition_source_id": 55
+          }
+        ],
+        "reason": "No complete confidently matched recording in bounded catalogs/searches; inspect source/match evidence before manual upload.",
+        "provider_probes": 1
+      },
+      "historical_intermediary_evidence": {
+        "bytes": 34166073,
+        "codec": "mp3",
+        "sha256": "8d2d792dbed2928d3fc0e853d8eaf8038227739825781cc84a30c88bad65274c",
+        "bitrate": 320000,
+        "channels": 2,
+        "decision": "Metadata-supported title/uploader match and complete decoding established. Native input quality and final output-to-video binding are unreported by the intermediary. Isolated sample only; not approved for production, no native 320 claim.",
+        "duration": 854.151825,
+        "conversion": "none locally; intermediary conversion unknown",
+        "observed_at": "2026-10-06T12:09:55.676549+00:00",
+        "sample_rate": "44100",
+        "source_origin": "intermediary; direct Spotify origin unproven",
+        "native_quality": "unknown",
+        "spotify_track_id": "5sYGAU7L6JgUrkfzy9J3Yx",
+        "complete_duration": true,
+        "resolved_video_id": null,
+        "selected_video_id": "GdnlBtXCJDY",
+        "full_decode_passed": true,
+        "acquisition_seconds": 10.027,
+        "direct_player_status": "LOGIN_REQUIRED",
+        "production_published": false,
+        "independent_video_metadata": {
+          "title": "Amir Tataloo - Mano Khoda Shoma Hame ( امیر‌تتلو‌ - من و خدا شما همه ) @HasanBabaMusic",
+          "author_url": "https://www.youtube.com/@AmirTataloo",
+          "author_name": "Amir Tataloo"
+        }
+      }
+    }
+  ],
+  "request_accounting": "Three comparison samples: 12 provider subprocesses (search, probe, recheck, download), plus 3 recorded artwork fetches. Underlying extractor HTTP request count not instrumented. Full-media-flow replay adds one search, match probe, recheck and download plus artwork; no Telegram. Earlier registry metadata checks: 110 bounded search/account/catalog operations plus 8 independent official-link page checks. Intermediary: 10 bounded HTTP requests across two isolated attempts."
+}

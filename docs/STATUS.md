@@ -1,5 +1,41 @@
 # Project status and handoff
 
+Updated **2026-10-06T15:39:45.731746+00:00**, roster-wide fresh automation. Exact tested/pushed/deployed
+application **`b430247332d00397d0a45a01c7695f3fd51a0492`**, **250 application + nine backup tests**, migrations/checks/
+drift/health passed on the server. **83/83** discovery sources poll at staggered
+45-second cadence; all 83 have three latest successful scheduled outcomes.
+Commit-triggered media/publication handoff, 10-second discovery tick, 15-second
+media recovery and independent provider holds are active.
+
+Acquisition registry: **75/83 artists / 92 associated profiles**; eight profile
+gaps have exact evidence in the refreshed [83-row CSV](reports/data/fresh_audio_source_coverage.csv).
+Owner-enabled **recording-level public SoundCloud fallback applies to all 83**,
+including those eight, without claiming artist-profile verification. Full credits,
+title/version/native identity/duration, complete decode and real tag/art readback
+are required. Failed transport alternatives preserve attempts; YouTube hold can
+continue via SoundCloud. Archive/frozen Popular policy unchanged and paused.
+
+Server samples **Masire Dard**, **33** and **Bavelamko** all acquired complete native
+AAC/M4A **160 kb/s, 44.1 kHz stereo**, decoded/tagged/art readback successfully in
+25.733–30.350 seconds. Real isolated **33** media pipeline reached durable READY,
+32.432 seconds; replay added zero attempts. **No Telegram send in these trials**;
+upload/end-to-end release detection is unmeasured. No native 320 or all-artist
+first-minute guarantee. Tataloo's pending release remains review-visible: official
+SoundCloud DRM, unsuccessful protected YouTube access; intermediary complete nominal
+320 sample lacks final output identity/encoding provenance and was not published.
+
+**83 approved / 83 enabled verified sources / 84 baselines / 4,152 items / 71
+confirmed message records / zero uncertain sends**. Original curated, baseline,
+historical/frozen/caption/publication records preserved. Fresh bridge/media/scoped
+production publication **ON/unpaused**, exact bot/target verified; media cannot send.
+Protected media-only independent-uploader overlay enabled after restored/uploaded
+backup **106/107**, 47 tables. All disposable media/check DB/Redis/volumes/build
+source removed; production posts/backups and protected sessions retained.
+[Full report](reports/FRESH_AUTOMATION_ACCELERATION.md),
+[safe evidence](reports/data/fresh_automation_acceleration_evidence.json).
+
+The following entries are historical checkpoints and earlier blockers.
+
 Updated **2026-10-06, 14:47 Tehran**, owner clarified RapRelease is a speed/coverage
 benchmark, not a source to copy. Exact tested/pushed/deployed application
 **`5823944e08a840739e9f10e5b75236d4c082231a`**; **232 application + nine backup
