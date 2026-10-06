@@ -108,6 +108,28 @@ class FreshEligibilityTests(TestCase):
         self.assertLess((dispatch.due_at-timezone.now()).total_seconds(),61)
         self.assertFalse(Publication.objects.exists())
 
+    @override_settings(FRESH_PIPELINE_ENABLED=True, SPOTIFY_MEDIA_BRIDGE_ENABLED=True,
+                       TELEGRAM_PRODUCTION_CHAT_ID='-1004311149640')
+    def test_fully_prepared_single_wakes_publisher_after_durable_staging(self):
+        from .fresh import process_dispatch
+        from .models import SourceMatch
+        from media_pipeline.models import MediaCandidate
+        d = materialize(FreshDispatch.objects.create(source_item=self.item, disposition='eligible'), self.metadata)
+        ft = d.tracks.get()
+        match = SourceMatch.objects.get(track=ft.track, matching_method='fresh_official_track')
+        ft.candidate = MediaCandidate.objects.create(track=ft.track, release=d.release, source_match=match,
+            provider='manual', state='ready')
+        ft.save()
+        def stage(candidate, target):
+            return Publication.objects.create(channel=PublicationChannel.objects.get_or_create(target=target)[0],
+                identity_key='fresh-fixture', track=candidate.track, candidate=candidate, kind='single_audio')
+        with patch('releases.fresh.verified_ready', side_effect=lambda c:c), patch('releases.fresh.reserve_audio', side_effect=stage), patch('publication.tasks.process_due_publications.apply_async') as wake:
+            with self.captureOnCommitCallbacks(execute=True):
+                process_dispatch(d, {})
+                self.assertTrue(Publication.objects.exists())
+                wake.assert_not_called()
+            wake.assert_called_once_with(queue='fresh-publication-v1', expires=60)
+
     def test_incomplete_or_duplicate_order_is_review(self):
         self.metadata['track_count'] = 2
         with self.assertRaisesRegex(ValueError, 'Complete'):
@@ -194,8 +216,11 @@ class FreshEligibilityTests(TestCase):
         from .services import resolve_review
         match = SourceMatch.objects.create(source_item=self.item, state='review_required', matching_method='spotify_release_id_review')
         review = ReviewItem.objects.create(source_item=self.item, source_match=match, category='low_confidence', reason='Check native release')
-        resolve_review(review, 'approve', resolution='Checked complete official native identity')
-        resolve_review(review, 'approve', resolution='Checked complete official native identity')
+        with patch('releases.tasks.process_fresh_releases.apply_async') as wake:
+            with self.captureOnCommitCallbacks(execute=True):
+                resolve_review(review, 'approve', resolution='Checked complete official native identity')
+                resolve_review(review, 'approve', resolution='Checked complete official native identity')
+            wake.assert_called_once_with(queue='fresh-media-v1', expires=60)
         dispatch = FreshDispatch.objects.get()
         self.assertEqual(dispatch.disposition,'eligible')
         materialize(dispatch,self.metadata)

@@ -152,6 +152,9 @@ def poll_source(source, adapter=None, now=None):
             source.last_error_at = None
             source.save(update_fields=("last_success_at", "next_poll_at", "consecutive_failures", "last_error", "last_error_at", "updated_at"))
             SourceAuditEvent.objects.create(source=source, artist=source.artist, event_type="poll_succeeded", detail={"items": len(items), "created": created_count, "provider_probe": getattr(adapter, "last_probe", None)})
+            if new_ids and created_count:
+                from releases.wakeups import wake_media
+                wake_media()
         return "success"
     except Exception as exc:
         record_source_failure(source, exc, now=now, provider_probe=getattr(adapter, "last_probe", None))

@@ -380,11 +380,14 @@ def process_dispatch(dispatch, blocked):
     # A not-yet-available recording is not a failed provider operation. Revisit it
     # at the source cadence; candidate retry_due_at and provider backoff still
     # prevent network retries while their independent holds are active.
-    delay = 60 if dispatch.attempts == 0 else min(60 * 2 ** min(dispatch.attempts, 8),
+    delay = 15 if dispatch.attempts == 0 else min(60 * 2 ** min(dispatch.attempts, 8),
                                                  dispatch.source_item.source.poll_interval_seconds)
     dispatch.due_at = timezone.now() + timedelta(seconds=delay)
     dispatch.reason = "Publication staged" if all_ready else "Waiting for complete matched media; album introduction withheld"
     dispatch.save(update_fields=("attempts", "due_at", "reason", "updated_at"))
+    if all_ready:
+        from .wakeups import wake_publication
+        wake_publication()
 
 
 def ensure_review_candidate(ft, reason):

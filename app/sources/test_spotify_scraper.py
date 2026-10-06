@@ -163,6 +163,29 @@ class SpotifyPollingTests(TestCase):
         self.assertEqual(fake.calls, 0)
         self.assertEqual(SourceItem.objects.filter(source=self.source).count(), 1)
 
+    @override_settings(FRESH_PIPELINE_ENABLED=True, SPOTIFY_MEDIA_BRIDGE_ENABLED=True)
+    def test_new_validated_discovery_wakes_media_once_and_replay_does_not(self):
+        with patch('releases.tasks.process_fresh_releases.apply_async') as wake:
+            with self.captureOnCommitCallbacks(execute=True):
+                baseline_source(self.source, adapter=FakeSpotify([self.first]))
+            wake.assert_not_called()
+            fake = FakeSpotify([self.first, self.second])
+            with self.captureOnCommitCallbacks(execute=True):
+                self.assertEqual(poll_source(self.source, adapter=fake), 'success')
+                wake.assert_not_called()
+            wake.assert_called_once_with(queue='fresh-media-v1', expires=60)
+            with self.captureOnCommitCallbacks(execute=True):
+                self.assertEqual(poll_source(self.source, adapter=fake), 'success')
+            self.assertEqual(wake.call_count, 1)
+
+    @override_settings(FRESH_PIPELINE_ENABLED=True, SPOTIFY_MEDIA_BRIDGE_ENABLED=True)
+    def test_failed_discovery_never_wakes_media(self):
+        baseline_source(self.source, adapter=FakeSpotify([self.first]))
+        with patch('releases.tasks.process_fresh_releases.apply_async') as wake:
+            with self.captureOnCommitCallbacks(execute=True):
+                self.assertEqual(poll_source(self.source, adapter=FakeSpotify([], fail=True)), 'failed')
+            wake.assert_not_called()
+
     def test_failed_baseline_and_later_poll_preserve_snapshot_and_success_cursor(self):
         bad = FakeSpotify([], fail=True)
         with self.assertRaises(SpotifyMetadataError):

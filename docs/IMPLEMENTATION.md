@@ -15,10 +15,20 @@ relationships without changing frozen `Recording` or `Slot` selections. Native
 Spotify identities and evidenced aliases are preferred; complete-credit/title/
 duration relationships may reuse a canonical recording or shared release.
 
-`releases.tasks.process_fresh_releases` runs every 60 seconds on `fresh-media-v1`.
+Validated newly observed Spotify IDs wake media immediately after transaction
+commit on `fresh-media-v1`; eligible review approvals use the same handoff.
+Complete single/album staging wakes the credential-isolated publisher after
+commit on `fresh-publication-v1`. Broker failures do not invalidate committed
+discovery: durable dispatch/publication rows and periodic recovery remain authoritative.
+Metadata scheduling ticks every ten seconds, fresh media recovery every fifteen
+seconds; stale scheduling envelopes expire rather than accumulate behind a slow
+provider. Successful incremental album preparation resumes after fifteen seconds.
+These are queue timings, not a guarantee of upstream availability or release latency.
+`releases.tasks.process_fresh_releases` recovers every fifteen seconds on `fresh-media-v1`.
 The metadata worker consumes only `spotify-pilot`; publication recovery runs every
-30 seconds on `fresh-publication-v1`. Discovery scheduling and existing per-source
-intervals are unchanged. No worker consumes the dormant default `celery` queue.
+30 seconds on `fresh-publication-v1`. Per-source cadence is an operational setting;
+changes require measured request volume, staggered scheduling and preserved
+provider backoff. No worker consumes the dormant default `celery` queue.
 The media worker has protected owner YouTube cookies and Deno, but no bot credential.
 The publisher has a private bot-token file, but no provider cookie. Only publisher
 and scheduler roles enable production/live/publication flags; web and metadata/
@@ -34,8 +44,11 @@ Probe bounds, durable dispatch retry schedules and provider backoff remain enfor
 Missing-file dispatch retries are capped at that same source interval instead of
 growing to hours. Individual candidate retry holds and provider backoff continue
 to govern network access; unexpected processing exceptions retain exponential backoff.
-A shared authentication/403/429 failure creates persistent, provider-specific 15-minute
+A shared authentication/403/429 or YouTube page-reload failure creates persistent, provider-specific 15-minute
 backoff and an actionable admin audit/dashboard alert. Missing profiles or uncertain
+Collaborator acquisition profiles carry an explicit identity role and cannot
+implicitly establish the monitored artist's credit: every recording credit
+must be present in independently probed title/description/artist evidence.
 complete recordings remain visible as manual-review candidates. Downloads retain
 native compressed quality; official Spotify credits/artwork and all eleven channel
 fields are checked by tag readback and full FFmpeg decoding before publication.

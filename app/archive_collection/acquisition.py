@@ -35,7 +35,7 @@ def credits_match(probe,metadata,source):
     evidence=probe.evidence or {}
     text=normalize_text(' '.join([probe.title,probe.uploader,evidence.get('description',''),evidence.get('artist','')]))
     for credit in metadata['credits']:
-        if credit['id'] in native_ids:
+        if credit['id'] in native_ids and source.evidence.get('identity_role', 'artist') == 'artist':
             continue
         name=normalize_text(credit['name'])
         if not name or not (re.search(r'(?<!\w)'+re.escape(name)+r'(?!\w)',text) or
@@ -46,7 +46,7 @@ def credits_match(probe,metadata,source):
 
 def shared_blocker(error):
     text=str(error).lower()
-    return any(marker in text for marker in ('403','429','not a bot','sign in to confirm'))
+    return any(marker in text for marker in ('403','429','not a bot','sign in to confirm','the page needs to be reloaded'))
 
 
 @transaction.atomic

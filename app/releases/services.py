@@ -361,7 +361,7 @@ def ingest_source_item(source_item, now=None):
 
 @transaction.atomic
 def resolve_review(review_item, action, actor=None, *, release=None, track=None, resolution="", now=None):
-    """Audited, idempotent admin decision API. No action starts processing."""
+    """Audited, idempotent decision; eligible fresh approvals wake media after commit."""
     now = now or timezone.now()
     # Avoid a nullable outer join to source_match in PostgreSQL FOR UPDATE.
     review = ReviewItem.objects.select_for_update().select_related("source_item").get(pk=review_item.pk)
@@ -433,6 +433,9 @@ def resolve_review(review_item, action, actor=None, *, release=None, track=None,
                     dispatch, _ = FreshDispatch.objects.get_or_create(source_item=review.source_item)
                     dispatch.disposition, dispatch.reason, dispatch.evidence = disposition, reason, evidence
                     dispatch.save()
+                    if disposition == 'eligible':
+                        from .wakeups import wake_media
+                        wake_media()
                 else:
                     from .spotify_bridge import bridge_approved_review
                     queue_ids = bridge_approved_review(review, match, resolution=resolution, now=now)

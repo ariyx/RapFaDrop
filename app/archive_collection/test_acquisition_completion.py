@@ -14,6 +14,19 @@ class AcquisitionCompletionTests(TestCase):
     setUp=fixtures.CollectionTests.setUp
     select=fixtures.CollectionTests.select
 
+    def test_youtube_shared_page_reload_failure_holds_provider(self):
+        from .acquisition import shared_blocker
+        self.assertTrue(shared_blocker('YouTube: The page needs to be reloaded.'))
+        self.assertFalse(shared_blocker('No matching complete recording available'))
+
+    def test_collaborator_profile_does_not_implicitly_prove_artist_credit(self):
+        source = self.make_source()
+        source.evidence = {'identity_role':'collaborator'}
+        p = ProviderProbe('yt-dlp', 'url', '123', 'Song', 180, 'Producer', evidence={})
+        self.assertFalse(credits_match(p, metadata(), source))
+        p = ProviderProbe('yt-dlp', 'url', '123', 'Artist - Song', 180, 'Producer', evidence={})
+        self.assertTrue(credits_match(p, metadata(), source))
+
     def make_source(self,platform='soundcloud',native='123',rows=None):
         return AcquisitionSource.objects.create(artist=self.artist,platform=platform,native_id=native,
             profile_url='https://soundcloud.com/artist' if platform=='soundcloud' else 'https://www.youtube.com/channel/'+native,
