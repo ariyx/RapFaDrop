@@ -84,7 +84,8 @@ class MediaPipelineTests(TestCase):
         provider=Mock();provider.name='yt-dlp';provider.can_handle.return_value=True
         provider.probe.return_value=ProviderProbe('yt-dlp',candidate.provenance['source_url'],'55','Song',30,'Other',evidence={'uploader_id':'123'})
         result=retry_candidate(candidate,provider=provider)
-        self.assertEqual(result.state,'review_required')
+        self.assertEqual(result.state,'invalid')
+        self.assertIn('credits changed',result.last_error)
         provider.download.assert_not_called()
 
     @classmethod
