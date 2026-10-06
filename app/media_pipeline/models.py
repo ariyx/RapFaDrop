@@ -31,6 +31,7 @@ class MediaCandidate(models.Model):
     release = models.ForeignKey("releases.CanonicalRelease", on_delete=models.PROTECT, related_name="media_candidates")
     source_match = models.ForeignKey("releases.SourceMatch", on_delete=models.PROTECT, related_name="media_candidates")
     provider = models.CharField(max_length=32)
+    transport_identity = models.CharField(max_length=64, blank=True, default='')
     state = models.CharField(max_length=20, choices=State.choices, default=State.CANDIDATE, db_index=True)
     preparation_state = models.CharField(max_length=12, choices=PreparationState.choices, default=PreparationState.PENDING)
     artwork_state = models.CharField(max_length=16, choices=ArtworkState.choices, default=ArtworkState.NOT_PROVIDED)
@@ -58,7 +59,7 @@ class MediaCandidate(models.Model):
     class Meta:
         ordering = ("-created_at", "pk")
         constraints = [
-            models.UniqueConstraint(fields=("track", "source_match", "provider"), condition=~models.Q(provider="manual"), name="media_candidate_identity_uniq"),
+            models.UniqueConstraint(fields=("track", "source_match", "provider", "transport_identity"), condition=~models.Q(provider="manual"), name="media_candidate_identity_uniq"),
         ]
         indexes = [models.Index(fields=("track", "state"), name="media_cand_track_state_idx")]
 

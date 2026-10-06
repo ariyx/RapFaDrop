@@ -88,7 +88,7 @@ def request_candidate(queue_item, provider_name=None, *, provider_instance=None)
         source_item = match.source_item
         if not provider.can_handle(source_item.canonical_url):
             candidate, _ = MediaCandidate.objects.get_or_create(
-                track=queue.track, release=queue.release, source_match=match, provider=provider_name,
+                track=queue.track, release=queue.release, source_match=match, provider=provider_name, transport_identity='',
                 defaults={
                     "expected_duration_seconds": _source_duration(source_item),
                     "state": MediaCandidate.State.REVIEW_REQUIRED,
@@ -100,14 +100,14 @@ def request_candidate(queue_item, provider_name=None, *, provider_instance=None)
             return candidate
         try:
             candidate, created = MediaCandidate.objects.get_or_create(
-                track=queue.track, release=queue.release, source_match=match, provider=provider_name,
+                track=queue.track, release=queue.release, source_match=match, provider=provider_name, transport_identity='',
                 defaults={
                     "expected_duration_seconds": _source_duration(source_item),
                     "provenance": _provenance(source_item, match, provider_name),
                 },
             )
         except IntegrityError:
-            candidate = MediaCandidate.objects.get(track=queue.track, source_match=match, provider=provider_name)
+            candidate = MediaCandidate.objects.get(track=queue.track, source_match=match, provider=provider_name, transport_identity='')
             created = False
         if created:
             MediaAuditEvent.objects.create(candidate=candidate, action="candidate_created", detail={"queue_item_id": queue.pk, "source_item_id": source_item.pk})

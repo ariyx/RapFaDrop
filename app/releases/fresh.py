@@ -252,6 +252,7 @@ def refresh_completed_album(dispatch):
 
 
 def _candidate(ft, found):
+    import hashlib
     source, row, url = found
     match = SourceMatch.objects.get(track=ft.track, release=ft.dispatch.release, matching_method="fresh_official_track",
                                    evidence__fresh_manifest_id=ft.dispatch_id)
@@ -259,7 +260,7 @@ def _candidate(ft, found):
     # Keep official Spotify identity as authority; independently matched transport
     # identity is rechecked by the media provider before downloading.
     candidate, _ = MediaCandidate.objects.get_or_create(track=ft.track, source_match=match, provider=provider,
-        provenance__native_item_id=str(row['id']), provenance__source_url=url, defaults={
+        transport_identity=hashlib.sha256((str(row['id'])+'\n'+url).encode()).hexdigest(), defaults={
         "release": ft.dispatch.release, "expected_duration_seconds": ft.metadata["duration_seconds"], "provenance": {
             "provider": provider, "source_url": url, "acquisition_platform": source.platform,
             "native_item_id": str(row["id"]), "source_recording_title": row["title"],
