@@ -31,6 +31,9 @@ Fresh catalog and negative-search caches expire at the existing discovery source
 poll interval (currently 180 seconds), rather than the archive's six-hour default.
 This prevents an earlier catalog miss from hiding a subsequent official upload;
 Probe bounds, durable dispatch retry schedules and provider backoff remain enforced.
+Missing-file dispatch retries are capped at that same source interval instead of
+growing to hours. Individual candidate retry holds and provider backoff continue
+to govern network access; unexpected processing exceptions retain exponential backoff.
 A shared authentication/403/429 failure creates persistent, provider-specific 15-minute
 backoff and an actionable admin audit/dashboard alert. Missing profiles or uncertain
 complete recordings remain visible as manual-review candidates. Downloads retain

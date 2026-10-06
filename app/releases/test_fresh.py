@@ -117,6 +117,23 @@ class FreshEligibilityTests(TestCase):
         with self.assertRaisesRegex(ValueError, 'ordered'):
             validate_official(self.item, self.metadata)
 
+    def test_waiting_for_recording_does_not_turn_into_hours_of_dispatch_delay(self):
+        from .fresh import process_dispatch
+        from .models import FreshProviderBackoff
+        self.source.poll_interval_seconds=180
+        self.source.save(update_fields=('poll_interval_seconds',))
+        d=FreshDispatch.objects.create(source_item=self.item, disposition='eligible', reason='fixture', attempts=9)
+        d=materialize(d,self.metadata)
+        with patch('archive_collection.acquisition.find',return_value=(None,{'reason':'Recording not available yet'})) as finder:
+            process_dispatch(d,{'youtube':'Sign in to confirm you are not a bot'})
+        d.refresh_from_db()
+        self.assertEqual(d.attempts,10)
+        self.assertLessEqual((d.due_at-timezone.now()).total_seconds(),180)
+        self.assertGreater((d.due_at-timezone.now()).total_seconds(),175)
+        self.assertIn('youtube',finder.call_args.kwargs['blocked_providers'])
+        self.assertGreater((FreshProviderBackoff.objects.get(platform='youtube').due_at-timezone.now()).total_seconds(),895)
+        self.assertFalse(Publication.objects.exists())
+
     def test_album_primary_and_featured_credits_use_every_track(self):
         self.metadata.update(album_type='album', track_count=2, artist_ids=['A'*22, 'D'*22],
             artist_credits=['Verified artist','Guest'])

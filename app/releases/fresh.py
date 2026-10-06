@@ -377,7 +377,12 @@ def process_dispatch(dispatch, blocked):
     # Successful incremental preparation is progress, not a provider failure.
     # Do not exponentially delay remaining album tracks while files are arriving.
     dispatch.attempts = 0 if all_ready or ready_after > ready_before else dispatch.attempts + 1
-    dispatch.due_at = timezone.now() + timedelta(seconds=60 if dispatch.attempts == 0 else min(60 * 2 ** min(dispatch.attempts, 8), 21600))
+    # A not-yet-available recording is not a failed provider operation. Revisit it
+    # at the source cadence; candidate retry_due_at and provider backoff still
+    # prevent network retries while their independent holds are active.
+    delay = 60 if dispatch.attempts == 0 else min(60 * 2 ** min(dispatch.attempts, 8),
+                                                 dispatch.source_item.source.poll_interval_seconds)
+    dispatch.due_at = timezone.now() + timedelta(seconds=delay)
     dispatch.reason = "Publication staged" if all_ready else "Waiting for complete matched media; album introduction withheld"
     dispatch.save(update_fields=("attempts", "due_at", "reason", "updated_at"))
 
