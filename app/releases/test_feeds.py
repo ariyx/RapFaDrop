@@ -1,16 +1,39 @@
 from datetime import timedelta
-from unittest.mock import patch
+from unittest.mock import patch,MagicMock
 from django.test import TestCase
 from django.utils import timezone
 from sources.models import Artist,ArtistSource,SourceItem
 from archive_collection.models import AcquisitionSource
 from media_pipeline.providers import ProviderProbe,PROVIDERS
 from .models import FreshDiscoveryFeed,FreshDispatch
-from .feeds import poll_feed,provider_metadata,validate_feed_boundary
+from .feeds import poll_feed,provider_metadata,validate_feed_boundary,list_uploads
 from .fresh import materialize,validate_official
 
 
 class IndependentFeedTests(TestCase):
+    def test_youtube_root_id_without_uc_requires_exact_author_and_entry_identity(self):
+        source=AcquisitionSource.objects.create(artist=self.artist,platform='youtube',native_id='UC'+'A'*22,
+            profile_url='https://www.youtube.com/channel/UC'+'A'*22,verified_at=self.now)
+        xml=('<feed xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://www.youtube.com/xml/schemas/2015">'
+            '<yt:channelId>'+('A'*22)+'</yt:channelId><author><uri>'+source.profile_url+'</uri></author>'
+            '<entry><yt:channelId>'+source.native_id+'</yt:channelId><yt:videoId>'+('v'*11)+'</yt:videoId>'
+            '<title>Recording</title><published>2026-10-06T18:00:00Z</published>'
+            '<link href="https://www.youtube.com/shorts/'+('v'*11)+'"/></entry></feed>')
+        response=MagicMock();response.__enter__.return_value=response
+        response.iter_content.return_value=[xml.encode()]
+        with patch('releases.feeds.requests.get',return_value=response):rows=list_uploads(source)
+        self.assertEqual(rows[0]['id'],'v'*11);self.assertTrue(rows[0]['is_short'])
+        response.iter_content.return_value=[xml.replace(source.profile_url,source.profile_url+'wrong').encode()]
+        with patch('releases.feeds.requests.get',return_value=response):
+            with self.assertRaisesRegex(ValueError,'feed channel mismatch'):list_uploads(source)
+        response.iter_content.return_value=[xml.replace('<yt:channelId>'+source.native_id,'<yt:channelId>UC'+'B'*22).encode()]
+        with patch('releases.feeds.requests.get',return_value=response):
+            with self.assertRaisesRegex(ValueError,'entry channel mismatch'):list_uploads(source)
+    def test_short_video_remains_visible_for_review_without_audio_probe(self):
+        item=self.new_item();item.metadata['discovered_short']=True;item.save()
+        with patch.object(PROVIDERS['yt-dlp'],'probe') as probe:
+            with self.assertRaisesRegex(ValueError,'Short-form'):provider_metadata(item)
+        probe.assert_not_called();self.assertTrue(FreshDispatch.objects.filter(source_item=item).exists())
     def test_shared_collaborator_profile_does_not_claim_another_artists_upload(self):
         self.source.evidence={'identity_role':'collaborator'};self.source.save()
         self.bootstrap()

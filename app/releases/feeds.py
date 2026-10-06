@@ -36,10 +36,16 @@ def list_uploads(source):
                 if len(data)>256000:raise ValueError('Video feed exceeds bounded size')
         if b'<!DOCTYPE' in data:raise ValueError('Invalid video feed XML')
         root=ElementTree.fromstring(data);ns={'a':'http://www.w3.org/2005/Atom','yt':'http://www.youtube.com/xml/schemas/2015'}
-        if root.findtext('yt:channelId',namespaces=ns)!=source.native_id:raise ValueError('Video feed channel mismatch')
+        native=root.findtext('yt:channelId',namespaces=ns)
+        if (native not in (source.native_id,source.native_id[2:]) or
+            root.findtext('a:author/a:uri',namespaces=ns)!='https://www.youtube.com/channel/'+source.native_id):
+            raise ValueError('Video feed channel mismatch')
+        entries=root.findall('a:entry',ns)
+        if any(e.findtext('yt:channelId',namespaces=ns)!=source.native_id for e in entries):raise ValueError('Video entry channel mismatch')
         rows=[{'id':e.findtext('yt:videoId',namespaces=ns),'title':e.findtext('a:title',namespaces=ns),
             'url':'https://www.youtube.com/watch?v='+str(e.findtext('yt:videoId',namespaces=ns)),
-            'published_at':e.findtext('a:published',namespaces=ns)} for e in root.findall('a:entry',ns)]
+            'published_at':e.findtext('a:published',namespaces=ns),
+            'is_short':any('/shorts/' in link.get('href','') for link in e.findall('a:link',ns))} for e in entries]
     elif source.platform=='soundcloud':
         search=source.evidence.get('discovery_search')
         url='scsearch10:'+source.artist.official_name if search else source.profile_url.rstrip('/')+'/tracks'
@@ -80,7 +86,8 @@ def poll_feed(feed,*,reader=list_uploads,now=None):
             item,new=SourceItem.objects.get_or_create(platform=source.platform,native_item_id=row['id'],defaults={
                 'source':root,'title':row['title'],'canonical_url':row['url'],'source_release_at':published,'first_observed_at':now,
                 'metadata':{'feed_discovery':True,'feed_id':feed.pk,'feed_native_id':source.native_id,
-                    'discovery_profile':source.profile_url,'catchup_authorized':row['id'] in feed.catchup_native_ids}})
+                    'discovery_profile':source.profile_url,'discovered_short':bool(row.get('is_short')),
+                    'catchup_authorized':row['id'] in feed.catchup_native_ids}})
             if new:
                 FreshDispatch.objects.create(source_item=item,disposition='eligible',reason='Independent verified upload feed; exact metadata and freshness must pass before media')
                 created+=1
@@ -119,8 +126,9 @@ def poll_due_feeds():
         cursor.execute('SELECT pg_try_advisory_lock(728319433)')
         if not cursor.fetchone()[0]:return {'busy':True}
     try:
-        ids=list(FreshDiscoveryFeed.objects.filter(enabled=True,next_poll_at__lte=timezone.now()).order_by('next_poll_at','pk').values_list('pk',flat=True)[:6])
-        with ThreadPoolExecutor(max_workers=2) as pool:return dict(zip(ids,pool.map(_poll_one,ids)))
+        concurrency=max(1,min(int(settings.FRESH_FEED_DISCOVERY_CONCURRENCY),4))
+        ids=list(FreshDiscoveryFeed.objects.filter(enabled=True,next_poll_at__lte=timezone.now()).order_by('next_poll_at','pk').values_list('pk',flat=True)[:max(6,concurrency*3)])
+        with ThreadPoolExecutor(max_workers=concurrency) as pool:return dict(zip(ids,pool.map(_poll_one,ids)))
     finally:
         with connection.cursor() as cursor:cursor.execute('SELECT pg_advisory_unlock(728319433)')
 
@@ -136,6 +144,7 @@ def validate_feed_boundary(item,feed,uploaded):
 
 
 def provider_metadata(item):
+    if item.metadata.get('discovered_short'):raise ValueError('Short-form video requires complete recording review; not an automatic full-audio candidate')
     feed=FreshDiscoveryFeed.objects.select_related('acquisition_source__artist','search_artist').get(pk=item.metadata['feed_id']);source=feed_source(feed)
     hold=FreshProviderBackoff.objects.filter(platform=source.platform,due_at__gt=timezone.now()).first()
     if hold:raise ProviderError('Recording provider hold active')
