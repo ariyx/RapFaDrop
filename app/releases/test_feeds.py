@@ -11,6 +11,16 @@ from .fresh import materialize,validate_official
 
 
 class IndependentFeedTests(TestCase):
+    def test_search_watch_is_explicit_and_rejects_upload_without_performer_evidence(self):
+        feed=FreshDiscoveryFeed.objects.create(search_artist=self.artist,enabled=True)
+        poll_feed(feed,reader=lambda source:[self.row],now=self.now-timedelta(hours=1))
+        poll_feed(feed,reader=lambda source:[{**self.row,'id':'789'}],now=self.now)
+        item=SourceItem.objects.get(native_item_id='789');p=self.probe()
+        from dataclasses import replace
+        with patch.object(PROVIDERS['yt-dlp'],'probe',return_value=replace(p,uploader='Unrelated uploader')):
+            with self.assertRaisesRegex(ValueError,'explicit performer'):provider_metadata(item)
+        with patch.object(PROVIDERS['yt-dlp'],'probe',return_value=p):m=provider_metadata(item)
+        self.assertEqual(m['artist_credits'],['Verified artist'])
     def setUp(self):
         self.now=timezone.now();self.artist=Artist.objects.create(official_name='Verified artist',enabled=True)
         self.root=ArtistSource.objects.create(artist=self.artist,platform='spotify',native_profile_id='a'*22,enabled=True,verification='verified')

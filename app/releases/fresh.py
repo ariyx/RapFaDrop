@@ -479,6 +479,11 @@ def process_due():
             except ValueError as exc:
                 row.disposition, row.reason = "review", str(exc)[:500]
                 row.save(update_fields=("disposition", "reason", "updated_at"))
+                if row.source_item.metadata.get('feed_discovery'):
+                    match,_=SourceMatch.objects.get_or_create(source_item=row.source_item,defaults={
+                        'matching_method':'independent_upload_review','state':'review_required'})
+                    ReviewItem.objects.get_or_create(source_item=row.source_item,defaults={
+                        'source_match':match,'category':'manual','reason':row.reason,'evidence':row.source_item.metadata})
             except Exception as exc:
                 row.attempts += 1
                 row.due_at = now + timedelta(seconds=min(60 * 2 ** min(row.attempts, 8), 21600))

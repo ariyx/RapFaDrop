@@ -404,7 +404,7 @@ def resolve_review(review_item, action, actor=None, *, release=None, track=None,
         match.track = track
         match.confidence = 100
     elif action == "approve" and match.release_id is None and not (
-        settings.SPOTIFY_MEDIA_BRIDGE_ENABLED and review.source_item.metadata.get("spotify_discovery")
+        settings.SPOTIFY_MEDIA_BRIDGE_ENABLED and (review.source_item.metadata.get("spotify_discovery") or review.source_item.metadata.get('feed_discovery'))
     ):
         raise ValueError("Review needs a corrected canonical release before approval")
     match.state = {"approve": SourceMatch.State.APPROVED, "reject": SourceMatch.State.REJECTED, "correct": SourceMatch.State.CORRECTED}[action]
@@ -424,7 +424,7 @@ def resolve_review(review_item, action, actor=None, *, release=None, track=None,
     queue = None
     queue_ids = []
     if action in {"approve", "correct"}:
-        if review.source_item.metadata.get("spotify_discovery"):
+        if review.source_item.metadata.get("spotify_discovery") or review.source_item.metadata.get('feed_discovery'):
             if settings.SPOTIFY_MEDIA_BRIDGE_ENABLED:
                 if settings.FRESH_PIPELINE_ENABLED:
                     from .fresh import classify
