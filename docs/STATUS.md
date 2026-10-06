@@ -1,5 +1,32 @@
 # Project status and handoff
 
+Updated **2026-10-06, 14:47 Tehran**, owner clarified RapRelease is a speed/coverage
+benchmark, not a source to copy. Exact tested/pushed/deployed application
+**`5823944e08a840739e9f10e5b75236d4c082231a`**; **232 application + nine backup
+tests**, checks/migrations/drift and health passed on the server. Fixed normal
+missing-file dispatch waits growing to 4 h 16 min: now capped at the unchanged
+180-second source cadence, with candidate/provider holds and exception backoff
+preserved. Existing pending Tataloo wait was bounded after the protected backup.
+
+Authoritative audio coverage was only **47/83 registered artist profiles**. Eight
+curated SoundCloud identities were verified against native responses and independent
+Spotify catalogs, excluding reposts, and registered for acquisition only. Now
+**55/83 artists / 72 profiles**; **28 remain uncovered**, with each exact registry
+blocker in the [83-row coverage CSV](reports/data/fresh_audio_source_coverage.csv).
+Registered profiles do not imply every recording is accessible. **First-minute
+publication for all artists remains unimplemented/unmeasured**; discovery intervals
+are still three minutes, and Tataloo's provider-access blocker remains unresolved.
+
+**83 approved / 83 verified enabled Spotify sources / 84 baselines / 4,152 items**,
+curated records, frozen Popular selections and old publications preserved. All 83
+sources have three latest successful polls. Popular paused; fresh pipeline ON;
+**71 confirmed messages**, zero uncertain sends. No new music post from this repair.
+Backup restored 47 tables and uploaded as **100/101**. Disposable test environment,
+build source and unused Telegram forward-reader were removed; no RapRelease audio
+downloaded, no owner Telegram session created. [Repair report](reports/FRESH_SPEED_REPAIR.md),
+[safe evidence](reports/data/fresh_speed_repair_evidence.json).
+Broader missing-profile searches and faster measured discovery remain unfinished.
+
 Updated **2026-10-06 Tehran**, fresh acquisition repair. Exact tested/pushed/deployed
 application **`741f4b1ba82bd17f9582c5b1d6a9122a467cae17`**, **231 application + nine
 backup tests**, checks/migrations/drift and health passed on the server. Fresh

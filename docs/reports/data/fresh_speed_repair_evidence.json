@@ -1,0 +1,1077 @@
+{
+  "final": {
+    "generated_at": "2026-10-06T11:17:01.103270+00:00",
+    "application_sha": "5823944e08a840739e9f10e5b75236d4c082231a",
+    "approved_artists": 83,
+    "active_verified_spotify": 83,
+    "baselines": 84,
+    "source_items": 4152,
+    "acquisition_profiles": 72,
+    "publication_records": 71,
+    "published_messages": 71,
+    "uncertain": 0,
+    "fresh_paused": false,
+    "popular_paused": true,
+    "popular_native": 155,
+    "popular_slots": 166,
+    "preservation": {
+      "Artist": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "ArtistSource": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "BaselineRun": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "SourceItem": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "Collection": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "Recording": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "ArtistSelection": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "Slot": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "RecordingAlias": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "Publication": {
+        "deleted": [],
+        "changed_original_ids": []
+      },
+      "CaptionTemplate": {
+        "deleted": [],
+        "changed_original_ids": []
+      }
+    },
+    "pending_dispatches": [
+      {
+        "id": 3892,
+        "source_item__title": "Mano Khoda Shoma Hame",
+        "attempts": 8,
+        "due_at": "2026-10-06 11:19:02.248117+00:00",
+        "reason": "Waiting for complete matched media; album introduction withheld"
+      }
+    ]
+  },
+  "registration": {
+    "utc": "2026-10-06T11:12:12.784720+00:00",
+    "registered": [
+      {
+        "artist": "Amir Ribar",
+        "acquisition_source_id": 65,
+        "native_id": "390602913",
+        "own_catalog_matches": 8,
+        "soundcloud_verified_badge": true
+      },
+      {
+        "artist": "Daniyal",
+        "acquisition_source_id": 66,
+        "native_id": "1012712815",
+        "own_catalog_matches": 8,
+        "soundcloud_verified_badge": false
+      },
+      {
+        "artist": "Hoomaan",
+        "acquisition_source_id": 67,
+        "native_id": "1077202399",
+        "own_catalog_matches": 6,
+        "soundcloud_verified_badge": true
+      },
+      {
+        "artist": "Koorosh Wantons",
+        "acquisition_source_id": 68,
+        "native_id": "965886115",
+        "own_catalog_matches": 2,
+        "soundcloud_verified_badge": true
+      },
+      {
+        "artist": "Poori",
+        "acquisition_source_id": 69,
+        "native_id": "562526439",
+        "own_catalog_matches": 10,
+        "soundcloud_verified_badge": true
+      },
+      {
+        "artist": "Sina Sae",
+        "acquisition_source_id": 70,
+        "native_id": "998861116",
+        "own_catalog_matches": 7,
+        "soundcloud_verified_badge": false
+      },
+      {
+        "artist": "Sinazza",
+        "acquisition_source_id": 71,
+        "native_id": "353838752",
+        "own_catalog_matches": 5,
+        "soundcloud_verified_badge": true
+      },
+      {
+        "artist": "Sohrab Mj",
+        "acquisition_source_id": 72,
+        "native_id": "1191957625",
+        "own_catalog_matches": 5,
+        "soundcloud_verified_badge": false
+      }
+    ],
+    "bounded_existing_retry_holds": [
+      {
+        "id": 3892,
+        "previous_due": "2026-10-06 12:36:59.388658+00:00",
+        "new_due": "2026-10-06 11:15:12.772789+00:00"
+      }
+    ],
+    "source_schedules_changed": false
+  },
+  "deployment_backup_cleanup": {
+    "deployed_sha": "5823944e08a840739e9f10e5b75236d4c082231a",
+    "health": {
+      "status": "ok",
+      "database": "ok"
+    },
+    "backup": {
+      "utc": "20261006T110800Z",
+      "restore_verified": true,
+      "restored_tables": 47,
+      "upload": "complete"
+    },
+    "backup_message_ids": [
+      100,
+      101
+    ],
+    "disposable_source_removed": true
+  },
+  "bounded_source_identity_probes": [
+    {
+      "artist": "Amir Ribar",
+      "spotify_source_id": 168,
+      "seed_source_id": 169,
+      "profile_url": "https://soundcloud.com/realribar",
+      "native_user": {
+        "id": 390602913,
+        "username": "Amir Ribar",
+        "permalink": "realribar",
+        "verified": true
+      },
+      "recent_tracks": [
+        {
+          "id": "2407682100",
+          "title": "JIGH [prod by ARSHI X CR4ZY]",
+          "url": "https://soundcloud.com/user-373707094/jigh-prod-arshi-x-cr4zy",
+          "duration": null
+        },
+        {
+          "id": "2404031883",
+          "title": "Feeling Dead [Prod By Marshal x Tehrooni x Agna x Erfawn]",
+          "url": "https://soundcloud.com/realribar/feeling-dead",
+          "duration": null
+        },
+        {
+          "id": "2393644386",
+          "title": "Ke Chi Akhe [Prod By keyvan X marshall]",
+          "url": "https://soundcloud.com/realribar/ke-chi-akhe-prod-by-keyvan-x",
+          "duration": null
+        },
+        {
+          "id": "2384270835",
+          "title": "MEIMBF (Feat. Amir Ribar) [Prod. EsuBeat, Xanax]",
+          "url": "https://soundcloud.com/hat3f/05-meimbf",
+          "duration": null
+        },
+        {
+          "id": "2364881732",
+          "title": "Vaghte Raftane",
+          "url": "https://soundcloud.com/realribar/vaghte-raftane",
+          "duration": null
+        },
+        {
+          "id": "2354680832",
+          "title": "Remontada",
+          "url": "https://soundcloud.com/realribar/remontada",
+          "duration": null
+        },
+        {
+          "id": "2345051138",
+          "title": "Refigh Nime Raah [Prod By x keyvan x prodap x rooh]",
+          "url": "https://soundcloud.com/realribar/refigh-nime-raah-prod-by-x",
+          "duration": null
+        },
+        {
+          "id": "2323651661",
+          "title": "Bi Raahe [Prod. Tehraan x 30Ber x Kalixflame]",
+          "url": "https://soundcloud.com/realribar/bi-raahe",
+          "duration": null
+        },
+        {
+          "id": "2239455686",
+          "title": "Labriz [Prod. Agna, Marshall, Erfawn, Beatkori]",
+          "url": "https://soundcloud.com/realribar/labriz-prod-prodbyagna-prodbymarshall-prodbyerfawn-beatkori",
+          "duration": null
+        },
+        {
+          "id": "2203241175",
+          "title": "Cheragh Khamoosh [Prod. Arshi, M3hdicr4zy, Saman Sadeghi]",
+          "url": "https://soundcloud.com/realribar/cheragh-khamoosh",
+          "duration": null
+        }
+      ],
+      "exact_catalog_title_matches": [
+        {
+          "soundcloud_id": "2404031883",
+          "title": "Feeling Dead [Prod By Marshal x Tehrooni x Agna x Erfawn]",
+          "spotify_release_title": "Feeling Dead"
+        },
+        {
+          "soundcloud_id": "2393644386",
+          "title": "Ke Chi Akhe [Prod By keyvan X marshall]",
+          "spotify_release_title": "Ke Chi Akhe"
+        },
+        {
+          "soundcloud_id": "2364881732",
+          "title": "Vaghte Raftane",
+          "spotify_release_title": "Vaghte Raftane"
+        },
+        {
+          "soundcloud_id": "2354680832",
+          "title": "Remontada",
+          "spotify_release_title": "Remontada"
+        },
+        {
+          "soundcloud_id": "2345051138",
+          "title": "Refigh Nime Raah [Prod By x keyvan x prodap x rooh]",
+          "spotify_release_title": "Refigh Nime Raah"
+        },
+        {
+          "soundcloud_id": "2323651661",
+          "title": "Bi Raahe [Prod. Tehraan x 30Ber x Kalixflame]",
+          "spotify_release_title": "Bi Raahe"
+        },
+        {
+          "soundcloud_id": "2239455686",
+          "title": "Labriz [Prod. Agna, Marshall, Erfawn, Beatkori]",
+          "spotify_release_title": "Labriz"
+        },
+        {
+          "soundcloud_id": "2203241175",
+          "title": "Cheragh Khamoosh [Prod. Arshi, M3hdicr4zy, Saman Sadeghi]",
+          "spotify_release_title": "Cheragh Khamoosh"
+        }
+      ],
+      "identity_review_needed": false,
+      "seconds": 0.182,
+      "catalog_seconds": 3.418
+    },
+    {
+      "artist": "Daniyal",
+      "spotify_source_id": 160,
+      "seed_source_id": 161,
+      "profile_url": "https://soundcloud.com/daniyal_official",
+      "native_user": {
+        "id": 1012712815,
+        "username": "Daniyal",
+        "permalink": "daniyal_official",
+        "verified": false
+      },
+      "recent_tracks": [
+        {
+          "id": "2411963079",
+          "title": "ADHD",
+          "url": "https://soundcloud.com/daniyal_official/adhd",
+          "duration": null
+        },
+        {
+          "id": "2393843085",
+          "title": "Bipolar",
+          "url": "https://soundcloud.com/piidar/bipolar",
+          "duration": null
+        },
+        {
+          "id": "2273748131",
+          "title": "Dashte Laleh",
+          "url": "https://soundcloud.com/daniyal_official/dashte_laleh",
+          "duration": null
+        },
+        {
+          "id": "2239457168",
+          "title": "2GHOTBI2",
+          "url": "https://soundcloud.com/daniyal_official/2ghotbi2",
+          "duration": null
+        },
+        {
+          "id": "2235070955",
+          "title": "SHAYATINE SORKH (Prod. by Radpro)",
+          "url": "https://soundcloud.com/daniyal_official/shayatine-sorkh",
+          "duration": null
+        },
+        {
+          "id": "2229124364",
+          "title": "CHAKI 2 (Prod. by Radpro)",
+          "url": "https://soundcloud.com/daniyal_official/chaki-2",
+          "duration": null
+        },
+        {
+          "id": "2166799719",
+          "title": "BABOOW (Prod. by Radpro)",
+          "url": "https://soundcloud.com/daniyal_official/baboow",
+          "duration": null
+        },
+        {
+          "id": "2033485876",
+          "title": "DRUG",
+          "url": "https://soundcloud.com/daniyal_official/drug",
+          "duration": null
+        },
+        {
+          "id": "2002599651",
+          "title": "Easy",
+          "url": "https://soundcloud.com/daniyal_official/easy",
+          "duration": null
+        },
+        {
+          "id": "1876574439",
+          "title": "2 Ghotbi (Prod. by Radpro)",
+          "url": "https://soundcloud.com/daniyal_official/2-ghotbi-prod-by-radpro",
+          "duration": null
+        }
+      ],
+      "exact_catalog_title_matches": [
+        {
+          "soundcloud_id": "2411963079",
+          "title": "ADHD",
+          "spotify_release_title": "ADHD"
+        },
+        {
+          "soundcloud_id": "2393843085",
+          "title": "Bipolar",
+          "spotify_release_title": "Bipolar"
+        },
+        {
+          "soundcloud_id": "2273748131",
+          "title": "Dashte Laleh",
+          "spotify_release_title": "Dashte Laleh"
+        },
+        {
+          "soundcloud_id": "2235070955",
+          "title": "SHAYATINE SORKH (Prod. by Radpro)",
+          "spotify_release_title": "Shayatine Sorkh"
+        },
+        {
+          "soundcloud_id": "2229124364",
+          "title": "CHAKI 2 (Prod. by Radpro)",
+          "spotify_release_title": "Chaki 2"
+        },
+        {
+          "soundcloud_id": "2166799719",
+          "title": "BABOOW (Prod. by Radpro)",
+          "spotify_release_title": "BABOOW"
+        },
+        {
+          "soundcloud_id": "2033485876",
+          "title": "DRUG",
+          "spotify_release_title": "DRUG"
+        },
+        {
+          "soundcloud_id": "2002599651",
+          "title": "Easy",
+          "spotify_release_title": "Easy"
+        },
+        {
+          "soundcloud_id": "1876574439",
+          "title": "2 Ghotbi (Prod. by Radpro)",
+          "spotify_release_title": "2 Ghotbi"
+        }
+      ],
+      "identity_review_needed": false,
+      "seconds": 0.17,
+      "catalog_seconds": 3.205
+    },
+    {
+      "artist": "Hoomaan",
+      "spotify_source_id": 13,
+      "seed_source_id": 14,
+      "profile_url": "https://soundcloud.com/hoomaanxx",
+      "native_user": {
+        "id": 1077202399,
+        "username": "Hoomaan",
+        "permalink": "hoomaanxx",
+        "verified": true
+      },
+      "recent_tracks": [
+        {
+          "id": "2383842291",
+          "title": "Khatere",
+          "url": "https://soundcloud.com/hoomaanxx/khatere-1",
+          "duration": null
+        },
+        {
+          "id": "2378318168",
+          "title": "Khatere",
+          "url": "https://soundcloud.com/hoomaanxx/khatere",
+          "duration": null
+        },
+        {
+          "id": "2339064317",
+          "title": "Goor",
+          "url": "https://soundcloud.com/hoomaanxx/hoomaan-goor",
+          "duration": null
+        },
+        {
+          "id": "2383844442",
+          "title": "Goor",
+          "url": "https://soundcloud.com/hoomaanxx/goor",
+          "duration": null
+        },
+        {
+          "id": "2383843629",
+          "title": "Ghosse Nakhor Girl",
+          "url": "https://soundcloud.com/hoomaanxx/ghosse-nakhor-girl-1",
+          "duration": null
+        },
+        {
+          "id": "2383842687",
+          "title": "Sooz",
+          "url": "https://soundcloud.com/hoomaanxx/sooz-1",
+          "duration": null
+        },
+        {
+          "id": "2383842594",
+          "title": "Fxxkin' Distance",
+          "url": "https://soundcloud.com/hoomaanxx/fxxkin-distance-1",
+          "duration": null
+        },
+        {
+          "id": "2285543175",
+          "title": "Sooz",
+          "url": "https://soundcloud.com/hoomaanxx/sets/sooz-3",
+          "duration": null
+        },
+        {
+          "id": "1985499559",
+          "title": "Fxxkin’ Distance",
+          "url": "https://soundcloud.com/hoomaanxx/fxxkin-distance",
+          "duration": null
+        },
+        {
+          "id": "1985499551",
+          "title": "Ghosse Nakhor Girl",
+          "url": "https://soundcloud.com/hoomaanxx/ghosse-nakhor-girl",
+          "duration": null
+        }
+      ],
+      "exact_catalog_title_matches": [
+        {
+          "soundcloud_id": "2383842291",
+          "title": "Khatere",
+          "spotify_release_title": "Khatere"
+        },
+        {
+          "soundcloud_id": "2378318168",
+          "title": "Khatere",
+          "spotify_release_title": "Khatere"
+        },
+        {
+          "soundcloud_id": "2339064317",
+          "title": "Goor",
+          "spotify_release_title": "Goor"
+        },
+        {
+          "soundcloud_id": "2383844442",
+          "title": "Goor",
+          "spotify_release_title": "Goor"
+        },
+        {
+          "soundcloud_id": "2383842687",
+          "title": "Sooz",
+          "spotify_release_title": "SOOZ"
+        },
+        {
+          "soundcloud_id": "2285543175",
+          "title": "Sooz",
+          "spotify_release_title": "SOOZ"
+        }
+      ],
+      "identity_review_needed": false,
+      "seconds": 0.151,
+      "catalog_seconds": 3.548
+    },
+    {
+      "artist": "Koorosh Wantons",
+      "spotify_source_id": 27,
+      "seed_source_id": 28,
+      "profile_url": "https://soundcloud.com/koorowsh420",
+      "native_user": {
+        "id": 965886115,
+        "username": "Koorosh",
+        "permalink": "koorowsh420",
+        "verified": true
+      },
+      "recent_tracks": [
+        {
+          "id": "2411998626",
+          "title": "SPHERE",
+          "url": "https://soundcloud.com/koorowsh420/sphere",
+          "duration": null
+        },
+        {
+          "id": "2409916776",
+          "title": "NKAR",
+          "url": "https://soundcloud.com/arownxx/nkar",
+          "duration": null
+        },
+        {
+          "id": "2403027531",
+          "title": "BAD FAAZ",
+          "url": "https://soundcloud.com/sajadshahi/bad-faaz",
+          "duration": null
+        },
+        {
+          "id": "2401405140",
+          "title": "LITTLE BOY",
+          "url": "https://soundcloud.com/koorowsh420/little-boy",
+          "duration": null
+        },
+        {
+          "id": "2394234738",
+          "title": "CHANTA ?",
+          "url": "https://soundcloud.com/koorowsh420/chanta",
+          "duration": null
+        },
+        {
+          "id": "2393029449",
+          "title": "CATALAN",
+          "url": "https://soundcloud.com/koorowsh420/catalan",
+          "duration": null
+        },
+        {
+          "id": "2386581084",
+          "title": "NORM BITCH",
+          "url": "https://soundcloud.com/user-305318834/norm-bitch",
+          "duration": null
+        },
+        {
+          "id": "2378346386",
+          "title": "LEAVE",
+          "url": "https://soundcloud.com/arownxx/leave",
+          "duration": null
+        },
+        {
+          "id": "2375290361",
+          "title": "Fiancée",
+          "url": "https://soundcloud.com/koorowsh420/fiancee",
+          "duration": null
+        },
+        {
+          "id": "2355649238",
+          "title": "GEEK",
+          "url": "https://soundcloud.com/arownxx/geek",
+          "duration": null
+        }
+      ],
+      "exact_catalog_title_matches": [
+        {
+          "soundcloud_id": "2394234738",
+          "title": "CHANTA ?",
+          "spotify_release_title": "CHANTA?"
+        },
+        {
+          "soundcloud_id": "2375290361",
+          "title": "Fiancée",
+          "spotify_release_title": "Fiancée"
+        }
+      ],
+      "identity_review_needed": true,
+      "seconds": 0.177,
+      "catalog_seconds": 3.31
+    },
+    {
+      "artist": "Poori",
+      "spotify_source_id": 23,
+      "seed_source_id": 24,
+      "profile_url": "https://soundcloud.com/godpoori",
+      "native_user": {
+        "id": 562526439,
+        "username": "Poori",
+        "permalink": "godpoori",
+        "verified": true
+      },
+      "recent_tracks": [
+        {
+          "id": "2399669253",
+          "title": "Bidarim Shabaa",
+          "url": "https://soundcloud.com/godpoori/bidarim-shabaa",
+          "duration": null
+        },
+        {
+          "id": "2377899452",
+          "title": "Tighe Tize Zaman",
+          "url": "https://soundcloud.com/godpoori/tighe-tize-zaman",
+          "duration": null
+        },
+        {
+          "id": "2375499968",
+          "title": "Baraye To",
+          "url": "https://soundcloud.com/godpoori/baraye-to",
+          "duration": null
+        },
+        {
+          "id": "2351653382",
+          "title": "Be Zendegi Etebar Ni II",
+          "url": "https://soundcloud.com/godpoori/be-zendegi-etebar-ni-ii",
+          "duration": null
+        },
+        {
+          "id": "2341649945",
+          "title": "Sarpaa",
+          "url": "https://soundcloud.com/godpoori/sarpaa",
+          "duration": null
+        },
+        {
+          "id": "2225610824",
+          "title": "Untitled III",
+          "url": "https://soundcloud.com/godpoori/untitled-lll",
+          "duration": null
+        },
+        {
+          "id": "2219210306",
+          "title": "BANG BANG",
+          "url": "https://soundcloud.com/godpoori/bang-bang",
+          "duration": null
+        },
+        {
+          "id": "2205218639",
+          "title": "Nafahmidam",
+          "url": "https://soundcloud.com/godpoori/nafahmidam",
+          "duration": null
+        },
+        {
+          "id": "2190897771",
+          "title": "Doshmanamo Dus Daram",
+          "url": "https://soundcloud.com/godpoori/ddd",
+          "duration": null
+        },
+        {
+          "id": "2168121243",
+          "title": "Bezan Zang Bem",
+          "url": "https://soundcloud.com/godpoori/bzb",
+          "duration": null
+        }
+      ],
+      "exact_catalog_title_matches": [
+        {
+          "soundcloud_id": "2399669253",
+          "title": "Bidarim Shabaa",
+          "spotify_release_title": "Bidarim Shabaa"
+        },
+        {
+          "soundcloud_id": "2377899452",
+          "title": "Tighe Tize Zaman",
+          "spotify_release_title": "Tighe Tize Zaman"
+        },
+        {
+          "soundcloud_id": "2375499968",
+          "title": "Baraye To",
+          "spotify_release_title": "Baraye To"
+        },
+        {
+          "soundcloud_id": "2351653382",
+          "title": "Be Zendegi Etebar Ni II",
+          "spotify_release_title": "Be Zendegi Etebar Ni II"
+        },
+        {
+          "soundcloud_id": "2341649945",
+          "title": "Sarpaa",
+          "spotify_release_title": "Sarpaa"
+        },
+        {
+          "soundcloud_id": "2225610824",
+          "title": "Untitled III",
+          "spotify_release_title": "Untitled III"
+        },
+        {
+          "soundcloud_id": "2219210306",
+          "title": "BANG BANG",
+          "spotify_release_title": "BANG BANG"
+        },
+        {
+          "soundcloud_id": "2205218639",
+          "title": "Nafahmidam",
+          "spotify_release_title": "Nafahmidam"
+        },
+        {
+          "soundcloud_id": "2190897771",
+          "title": "Doshmanamo Dus Daram",
+          "spotify_release_title": "Doshmanamo Dus Daram"
+        },
+        {
+          "soundcloud_id": "2168121243",
+          "title": "Bezan Zang Bem",
+          "spotify_release_title": "Bezan Zang Bem"
+        }
+      ],
+      "identity_review_needed": false,
+      "seconds": 0.186,
+      "catalog_seconds": 3.415
+    },
+    {
+      "artist": "Sina Sae",
+      "spotify_source_id": 40,
+      "seed_source_id": 41,
+      "profile_url": "https://soundcloud.com/sinasae",
+      "native_user": {
+        "id": 998861116,
+        "username": "Sina Sae",
+        "permalink": "sinasae",
+        "verified": false
+      },
+      "recent_tracks": [
+        {
+          "id": "2377334531",
+          "title": "Metropolitan",
+          "url": "https://soundcloud.com/sinasae/metropolitan",
+          "duration": null
+        },
+        {
+          "id": "2377341047",
+          "title": "Carnival Series Episode 2",
+          "url": "https://soundcloud.com/sinasae/carnival-series-episode-2",
+          "duration": null
+        },
+        {
+          "id": "2377339208",
+          "title": "Carnival Series Episode 1",
+          "url": "https://soundcloud.com/sinasae/carnival-series-episode-1",
+          "duration": null
+        },
+        {
+          "id": "2279958869",
+          "title": "Carnival Series Episode 1",
+          "url": "https://soundcloud.com/sinasae/sets/carnival-series-episode-1",
+          "duration": null
+        },
+        {
+          "id": "2140810719",
+          "title": "Carnival Statement",
+          "url": "https://soundcloud.com/sinasae/carnival-statement",
+          "duration": null
+        },
+        {
+          "id": "2100269616",
+          "title": "Rose",
+          "url": "https://soundcloud.com/sinasae/rose",
+          "duration": null
+        },
+        {
+          "id": "2100267936",
+          "title": "Khabarat",
+          "url": "https://soundcloud.com/sinasae/khabarat",
+          "duration": null
+        },
+        {
+          "id": "2100265446",
+          "title": "Yademoon Namoone",
+          "url": "https://soundcloud.com/sinasae/yademoon-namoone",
+          "duration": null
+        },
+        {
+          "id": "2100264489",
+          "title": "Deja vu",
+          "url": "https://soundcloud.com/sinasae/deja-vu",
+          "duration": null
+        },
+        {
+          "id": "2025052881",
+          "title": "Deja vu",
+          "url": "https://soundcloud.com/sinasae/sets/deja-vu-98801047",
+          "duration": null
+        }
+      ],
+      "exact_catalog_title_matches": [
+        {
+          "soundcloud_id": "2377334531",
+          "title": "Metropolitan",
+          "spotify_release_title": "Metropolitan"
+        },
+        {
+          "soundcloud_id": "2377341047",
+          "title": "Carnival Series Episode 2",
+          "spotify_release_title": "Carnival Series Episode 2"
+        },
+        {
+          "soundcloud_id": "2377339208",
+          "title": "Carnival Series Episode 1",
+          "spotify_release_title": "Carnival Series Episode 1"
+        },
+        {
+          "soundcloud_id": "2279958869",
+          "title": "Carnival Series Episode 1",
+          "spotify_release_title": "Carnival Series Episode 1"
+        },
+        {
+          "soundcloud_id": "2140810719",
+          "title": "Carnival Statement",
+          "spotify_release_title": "Carnival Statement"
+        },
+        {
+          "soundcloud_id": "2100264489",
+          "title": "Deja vu",
+          "spotify_release_title": "Deja vu"
+        },
+        {
+          "soundcloud_id": "2025052881",
+          "title": "Deja vu",
+          "spotify_release_title": "Deja vu"
+        }
+      ],
+      "identity_review_needed": false,
+      "seconds": 0.197,
+      "catalog_seconds": 3.484
+    },
+    {
+      "artist": "Sinazza",
+      "spotify_source_id": 11,
+      "seed_source_id": 12,
+      "profile_url": "https://soundcloud.com/sinazza",
+      "native_user": {
+        "id": 353838752,
+        "username": "Sinazza",
+        "permalink": "sinazza",
+        "verified": true
+      },
+      "recent_tracks": [
+        {
+          "id": "2361971564",
+          "title": "Oxy [Prod. Arsam]",
+          "url": "https://soundcloud.com/sinazza/oxy",
+          "duration": null
+        },
+        {
+          "id": "2155173588",
+          "title": "HUH",
+          "url": "https://soundcloud.com/sinazza/huh",
+          "duration": null
+        },
+        {
+          "id": "2155173060",
+          "title": "Hall of Fame",
+          "url": "https://soundcloud.com/sinazza/hall-of-fame",
+          "duration": null
+        },
+        {
+          "id": "2104253709",
+          "title": "Mikham Bishtar",
+          "url": "https://soundcloud.com/sinazza/mikham-bishtar",
+          "duration": null
+        },
+        {
+          "id": "2037773340",
+          "title": "Dashtam Fekr Mikardam Be To",
+          "url": "https://soundcloud.com/sinazza/dashtam-fekr-mikardam-be-to",
+          "duration": null
+        },
+        {
+          "id": "2017947645",
+          "title": "Deldadeh",
+          "url": "https://soundcloud.com/hiphopologistsoroush/deldadeh",
+          "duration": null
+        },
+        {
+          "id": "2017889001",
+          "title": "Alan Kojayi",
+          "url": "https://soundcloud.com/hiphopologistsoroush/alan-kojayi",
+          "duration": null
+        },
+        {
+          "id": "2014867687",
+          "title": "Ni Moodam (Ft. Sinazza)",
+          "url": "https://soundcloud.com/youngsudden/ni-moodam-ft-sinazza",
+          "duration": null
+        },
+        {
+          "id": "1998437955",
+          "title": "Move On",
+          "url": "https://soundcloud.com/ashkankagan/43c08e0b-d5a7-4330-b80e-01d1c85de66e",
+          "duration": null
+        },
+        {
+          "id": "1989352899",
+          "title": "Bruce Wayne",
+          "url": "https://soundcloud.com/sinazza/bruce-wayne",
+          "duration": null
+        }
+      ],
+      "exact_catalog_title_matches": [
+        {
+          "soundcloud_id": "2361971564",
+          "title": "Oxy [Prod. Arsam]",
+          "spotify_release_title": "Oxy"
+        },
+        {
+          "soundcloud_id": "2155173588",
+          "title": "HUH",
+          "spotify_release_title": "HUH"
+        },
+        {
+          "soundcloud_id": "2155173060",
+          "title": "Hall of Fame",
+          "spotify_release_title": "Hall of Fame"
+        },
+        {
+          "soundcloud_id": "2104253709",
+          "title": "Mikham Bishtar",
+          "spotify_release_title": "Mikham Bishtar"
+        },
+        {
+          "soundcloud_id": "2037773340",
+          "title": "Dashtam Fekr Mikardam Be To",
+          "spotify_release_title": "Dashtam Fekr Mikardam Be To"
+        },
+        {
+          "soundcloud_id": "2017947645",
+          "title": "Deldadeh",
+          "spotify_release_title": "Deldadeh"
+        },
+        {
+          "soundcloud_id": "2017889001",
+          "title": "Alan Kojayi",
+          "spotify_release_title": "Alan Kojayi"
+        },
+        {
+          "soundcloud_id": "1998437955",
+          "title": "Move On",
+          "spotify_release_title": "Move On"
+        }
+      ],
+      "identity_review_needed": false,
+      "seconds": 0.161,
+      "catalog_seconds": 2.869
+    },
+    {
+      "artist": "Sohrab Mj",
+      "spotify_source_id": 54,
+      "seed_source_id": 55,
+      "profile_url": "https://soundcloud.com/mjsohrab",
+      "native_user": {
+        "id": 1191957625,
+        "username": "Sohrab Mj",
+        "permalink": "mjsohrab",
+        "verified": false
+      },
+      "recent_tracks": [
+        {
+          "id": "2155713213",
+          "title": "Ye JA Dige",
+          "url": "https://soundcloud.com/mjsohrab/ye-ja-dige-1",
+          "duration": null
+        },
+        {
+          "id": "2087216676",
+          "title": "Ye Ja Dige",
+          "url": "https://soundcloud.com/mjsohrab/ye-ja-dige",
+          "duration": null
+        },
+        {
+          "id": "2034430492",
+          "title": "Sohrab Mj x Amir Dva - Na Ni Ok",
+          "url": "https://soundcloud.com/mjsohrab/sohrab-mj-x-amir-diva-na-ni-ok",
+          "duration": null
+        },
+        {
+          "id": "2214993110",
+          "title": "Na Ni Ok",
+          "url": "https://soundcloud.com/mjsohrab/na-ni-ok",
+          "duration": null
+        },
+        {
+          "id": "1988931767",
+          "title": "Zanboor",
+          "url": "https://soundcloud.com/herosina/zanboor",
+          "duration": null
+        },
+        {
+          "id": "1991405947",
+          "title": "Wikipedia [Prod. Hassan Baba]",
+          "url": "https://soundcloud.com/mjsohrab/wikipedia-prod-hassan-baba",
+          "duration": null
+        },
+        {
+          "id": "1852072905",
+          "title": "Chaghi Tochi?",
+          "url": "https://soundcloud.com/mjsohrab/chaghi-tochi-1",
+          "duration": null
+        },
+        {
+          "id": "1852068996",
+          "title": "Jens Joore (Ft. Catchybeatz)",
+          "url": "https://soundcloud.com/mjsohrab/jens-joore-1",
+          "duration": null
+        },
+        {
+          "id": "1852063389",
+          "title": "Hanoo Zendam (Ft. Shayan Eshraghi)",
+          "url": "https://soundcloud.com/mjsohrab/hanoo-zendam-2",
+          "duration": null
+        },
+        {
+          "id": "1852060959",
+          "title": "Hanooz (Ft. Tataloo)",
+          "url": "https://soundcloud.com/mjsohrab/hanooz-1",
+          "duration": null
+        }
+      ],
+      "exact_catalog_title_matches": [
+        {
+          "soundcloud_id": "2155713213",
+          "title": "Ye JA Dige",
+          "spotify_release_title": "Ye JA Dige"
+        },
+        {
+          "soundcloud_id": "2087216676",
+          "title": "Ye Ja Dige",
+          "spotify_release_title": "Ye JA Dige"
+        },
+        {
+          "soundcloud_id": "2214993110",
+          "title": "Na Ni Ok",
+          "spotify_release_title": "Na Ni Ok"
+        },
+        {
+          "soundcloud_id": "1991405947",
+          "title": "Wikipedia [Prod. Hassan Baba]",
+          "spotify_release_title": "Wikipedia"
+        },
+        {
+          "soundcloud_id": "1852072905",
+          "title": "Chaghi Tochi?",
+          "spotify_release_title": "Chaghi Tochi?"
+        }
+      ],
+      "identity_review_needed": false,
+      "seconds": 0.153,
+      "catalog_seconds": 3.223
+    }
+  ],
+  "polling_audit": {
+    "generated_at": "2026-10-06T11:12:17.829356+00:00",
+    "sources_with_three_recorded_successful_outcomes": 83
+  },
+  "owner_clarification": "RapRelease is a speed/coverage benchmark, not an audio source to copy. Official origin need not be certain; complete audio, honest provenance, recording/version handling and deduplication still apply.",
+  "raprelease_copying_stopped": true,
+  "telegram_audio_downloaded": false,
+  "temporary_reader_removed": true
+}

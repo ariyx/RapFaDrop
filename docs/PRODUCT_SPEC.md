@@ -32,6 +32,11 @@ also authorizes automatic post-baseline new-release publication independently of
 the paused archive. Ambiguous catalog additions and incomplete audio remain held;
 historical archive selections do not become fresh-release dispatch authority.
 See [current activation](reports/FRESH_RELEASE_ACTIVATION.md).
+On 2026-10-06 the owner clarified that RapRelease is a speed/coverage benchmark,
+not a request to copy its posts. Perfectly certain official origin is not required
+for an otherwise accepted recording; preserve complete playable audio, work/version
+handling, deduplication and honest source/quality evidence. This does not establish
+native Spotify quality or authorize bypassing provider access controls.
 
 The owner expanded the allowlist to **83 identities** on 2026-10-04. The complete list and import provenance are in [`ARTIST_ROSTER.md`](ARTIST_ROSTER.md) and the normalized import manifest. New imports start disabled; adding an identity does not itself authorize polling, baselining or publication. The subsequent owner-authorized discovery rollout and correction provide verified Spotify coverage for all 83 approved artists; baseline and source activation evidence is in [`reports/SOURCE_ACTIVATION.md`](reports/SOURCE_ACTIVATION.md). The later explicitly authorized production pipeline is recorded in [`reports/FRESH_RELEASE_ACTIVATION.md`](reports/FRESH_RELEASE_ACTIVATION.md). Preserve existing curated profiles, baselines and schedules when importing. Historical initial roster below remains the source of its original 30 identities.
 
