@@ -100,12 +100,13 @@ def quality_rank(facts, provenance=None):
     # Actual measured bytes/duration take precedence over provider-advertised rates.
     provenance = provenance or {}
     rate = int(facts.get("audio_bitrate_bps") or facts.get("measured_bitrate_bps") or 0)
-    preferred = facts.get("codec_name") == "mp3" and 300000 <= rate <= 340000 and not provenance.get("transcoded_from_lossy")
+    preferred = facts.get("codec_name") == "mp3" and 300000 <= rate <= 340000 and not provenance.get("transcoded_from_lossy") and not provenance.get('source_quality_unknown')
     return {
         "delivery_tier": 2 if preferred else 1 if delivery_eligible(facts) else 0,
         "codec_name": facts.get("codec_name", ""),
         "audio_bitrate_bps": rate,
         "transcoded_from_lossy": bool(provenance.get("transcoded_from_lossy")),
+        "source_quality_unknown": bool(provenance.get('source_quality_unknown')),
         "measured_bitrate_bps": int(facts.get("measured_bitrate_bps") or 0),
         "sample_rate_hz": int(facts.get("sample_rate_hz") or 0),
         "channels": int(facts.get("channels") or 0),
@@ -124,7 +125,7 @@ def quality_key(rank):
 
 
 def quality_improved(new, old):
-    if new.get("transcoded_from_lossy"):
+    if new.get("transcoded_from_lossy") or new.get('source_quality_unknown'):
         return False
     if new.get("delivery_tier", 1) != old.get("delivery_tier", 1):
         return new.get("delivery_tier", 1) > old.get("delivery_tier", 1)

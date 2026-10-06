@@ -1,6 +1,7 @@
 """Bounded official-source catalogs. Acquisition identities never enable discovery."""
 import json,re,time
 from datetime import timedelta
+from types import SimpleNamespace
 from urllib.parse import urlsplit
 from django.db import transaction
 from django.utils import timezone
@@ -31,7 +32,8 @@ def title_matches(title,metadata):
 
 def credits_match(probe,metadata,source):
     """A verified uploader identifies that artist, not every collaborator."""
-    native_ids=set(source.artist.sources.filter(platform='spotify').values_list('native_profile_id',flat=True))
+    native_ids=(set(source.artist.sources.filter(platform='spotify').values_list('native_profile_id',flat=True))
+                if source.evidence.get('identity_role', 'artist') == 'artist' else set())
     evidence=probe.evidence or {}
     text=normalize_text(' '.join([probe.title,probe.uploader,evidence.get('description',''),evidence.get('artist','')]))
     for credit in metadata['credits']:
@@ -108,7 +110,7 @@ def catalog(source,provider,*,expand=False,cache_age=timedelta(hours=6)):
         return source.catalog,{'cache':bool(source.catalog),'error':source.last_error,'seconds':round(time.monotonic()-start,3)}
 
 
-def find(recording,*,blocked_providers=None,cache_age=timedelta(hours=6)):
+def find(recording,*,blocked_providers=None,cache_age=timedelta(hours=6),allow_independent=False):
     from .services import identity_matches
     m=recording.metadata
     sources=list(AcquisitionSource.objects.filter(artist__sources__platform='spotify',artist__sources__native_profile_id__in=[c['id'] for c in m['credits']]).distinct())
@@ -192,9 +194,68 @@ def find(recording,*,blocked_providers=None,cache_age=timedelta(hours=6)):
                     source.last_error=redact_diagnostic(exc);source.retry_due_at=timezone.now()+timedelta(minutes=15)
                     source.save(update_fields=('last_error','retry_due_at'))
                     break
-    reason='No complete confidently matched recording in bounded verified catalogs/searches; inspect source/match evidence before manual upload.' if sources else 'No corroborated credited acquisition profile yet; independent official links are required.'
+    if allow_independent and budget > 0 and 'soundcloud' not in blocked_providers:
+        found, independent = find_independent_soundcloud(recording, budget=budget, cache_age=cache_age,
+                                                        blocked_providers=blocked_providers)
+        checks.extend(independent['checks'])
+        budget -= independent['provider_probes']
+        if found:
+            return found, {'checks':checks,'reason':'Recording-level independent uploader: explicit full credits/title/version/duration matched; official uploader status unverified', 'provider_probes':6-budget}
+    reason='No complete confidently matched recording in bounded catalogs/searches; inspect source/match evidence before manual upload.' if sources or allow_independent else 'No corroborated credited acquisition profile yet; independent official links are required.'
     if blocked_providers and sources:
         reason+=' Provider access blocked: '+ '; '.join(platform+': '+error for platform,error in blocked_providers.items())
     elif any(c.get('credits_matched') is False or c.get('review_reason') for c in checks):
         reason+=' Candidate collaborator credits or music-video mix remain unverified; manual identity review required.'
     return None,{'checks':checks,'provider_probes':6-budget,'reason':reason}
+
+
+def find_independent_soundcloud(recording, *, budget=6, cache_age=timedelta(minutes=1), blocked_providers=None):
+    """Owner-enabled recording lookup; never verifies/activates an artist profile."""
+    m=recording.metadata; provider=YtDlpProvider(); checks=[]; probes=0
+    blocked_providers=blocked_providers if blocked_providers is not None else {}
+    if budget <= 0 or 'soundcloud' in blocked_providers:
+        return None, {'checks':checks,'provider_probes':0}
+    cache=recording.evidence.get('independent_soundcloud_search',{})
+    if cache.get('checked_at') and timezone.now()-timezone.datetime.fromisoformat(cache['checked_at'])<cache_age:
+        rows=cache.get('rows',[])
+    else:
+        query=' '.join(c['name'] for c in m['credits'])+' '+m['title']
+        try:
+            raw=json.loads(provider._run(['--socket-timeout','10','--skip-download','--flat-playlist','--dump-single-json',
+                                          '--playlist-end','10','--','scsearch10:'+query],30))
+            rows=[safe_row(r) for r in (raw.get('entries') or [])[:10] if isinstance(r,dict)]
+            recording.evidence={**recording.evidence,'independent_soundcloud_search':{'checked_at':timezone.now().isoformat(),'rows':rows}}
+            recording.save(update_fields=('evidence','updated_at'))
+        except Exception as exc:
+            error=redact_diagnostic(exc);checks.append({'independent_search_error':error})
+            if shared_blocker(exc):blocked_providers['soundcloud']=error
+            return None, {'checks':checks,'provider_probes':0}
+    for row in rows:
+        if probes>=budget:break
+        url=row.get('webpage_url') or row.get('url') or ''
+        if url in recording.evidence.get('failed_source_urls',[]) or not provider.can_handle(url) or not title_matches(row.get('title'),m):continue
+        # Unknown editions cannot become the selected recording because of duration.
+        if re.search(r'\b(?:cover|demo|leak(?:ed)?|preview|teaser|slowed|sped[ -]?up|music video)\b|کاور|دمو|لو\s*رفته',row.get('title',''),re.I):
+            checks.append({'id':row.get('id'),'review_reason':'Independent candidate has an uncorroborated version/preview annotation'});continue
+        probes+=1
+        try:
+            probe=provider.probe(url,timeout=30);e=probe.evidence or {};native=str(e.get('uploader_id') or '')
+            profile=e.get('uploader_url') or '';parts=urlsplit(profile)
+            valid=bool(native.isdigit() and str(row.get('id'))==probe.provider_item_id and
+                       parts.scheme=='https' and parts.hostname=='soundcloud.com' and re.fullmatch(r'/[\w-]+',parts.path) and
+                       urlsplit(url).path.strip('/').split('/')[0].lower()==parts.path.strip('/').lower() and
+                       title_matches(probe.title,m) and probe.duration_seconds and abs(probe.duration_seconds-m['duration_seconds'])<=5)
+            source=SimpleNamespace(pk=None,platform='soundcloud',native_id=native,profile_url=profile,
+                                   evidence={'identity_role':'independent_uploader'},artist=None)
+            valid &= credits_match(probe,m,source)
+            if re.search(r'\b(?:cover|demo|leak(?:ed)?|preview|teaser|slowed|sped[ -]?up|music video)\b|کاور|دمو|لو\s*رفته',probe.title,re.I):valid=False
+            checks.append({'id':probe.provider_item_id,'uploader_id':native,'title':probe.title,'duration':probe.duration_seconds,
+                           'matched':bool(valid),'origin_status':'independent_uploader','official_uploader_verified':False})
+            if valid:
+                actual={**row,'id':probe.provider_item_id,'title':probe.title,'duration':probe.duration_seconds,
+                        'uploader':probe.uploader,'uploader_url':profile,'uploader_id':native}
+                return (source,actual,url), {'checks':checks,'provider_probes':probes}
+        except Exception as exc:
+            error=redact_diagnostic(exc);checks.append({'id':row.get('id'),'probe_error':error})
+            if shared_blocker(exc):blocked_providers['soundcloud']=error;break
+    return None, {'checks':checks,'provider_probes':probes}

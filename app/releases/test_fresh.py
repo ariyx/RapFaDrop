@@ -12,6 +12,27 @@ from .fresh import build_manifest, classify, materialize, publication_scope, aut
 
 
 class FreshEligibilityTests(TestCase):
+    def test_transport_replacement_preserves_failed_attempt_and_reuses_same_identity(self):
+        from types import SimpleNamespace
+        from .fresh import _candidate
+        from media_pipeline.models import MediaCandidate
+        dispatch=FreshDispatch.objects.create(source_item=self.item, disposition='eligible',reason='fixture')
+        dispatch=materialize(dispatch,self.metadata)
+        ft=dispatch.tracks.get()
+        source=SimpleNamespace(pk=None,platform='soundcloud',native_id='123',profile_url='https://soundcloud.com/u',
+            evidence={'identity_role':'independent_uploader'})
+        first=_candidate(ft,(source,{'id':'1','title':'Verified artist - New recording'},'https://soundcloud.com/u/one'))
+        first.state='invalid';first.attempt_count=1;first.save()
+        second=_candidate(ft,(source,{'id':'2','title':'Verified artist - New recording'},'https://soundcloud.com/u/two'))
+        replay=_candidate(ft,(source,{'id':'2','title':'Verified artist - New recording'},'https://soundcloud.com/u/two'))
+        self.assertNotEqual(first.pk,second.pk)
+        self.assertEqual(second.pk,replay.pk)
+        self.assertEqual(second.provenance['matched_credits'],ft.metadata['credits'])
+        first.refresh_from_db()
+        self.assertEqual(first.attempt_count,1)
+        self.assertEqual(first.state,'invalid')
+        self.assertEqual(MediaCandidate.objects.count(),2)
+
     def setUp(self):
         self.now = timezone.now()
         self.artist = Artist.objects.create(official_name='Verified artist', enabled=True)

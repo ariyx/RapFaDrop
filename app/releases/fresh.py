@@ -258,13 +258,20 @@ def _candidate(ft, found):
     provider = "yt-dlp" if source.platform == "soundcloud" else "yt-dlp-youtube"
     # Keep official Spotify identity as authority; independently matched transport
     # identity is rechecked by the media provider before downloading.
-    candidate, _ = MediaCandidate.objects.get_or_create(track=ft.track, source_match=match, provider=provider, defaults={
+    candidate, _ = MediaCandidate.objects.get_or_create(track=ft.track, source_match=match, provider=provider,
+        provenance__native_item_id=str(row['id']), provenance__source_url=url, defaults={
         "release": ft.dispatch.release, "expected_duration_seconds": ft.metadata["duration_seconds"], "provenance": {
             "provider": provider, "source_url": url, "acquisition_platform": source.platform,
             "native_item_id": str(row["id"]), "source_recording_title": row["title"],
             "official_channel_id": source.native_id, "official_profile": source.profile_url,
             "acquisition_source_id": source.pk, "spotify_track_id": ft.native_id,
             "fresh_manifest_id": ft.dispatch_id, "conversion": "none requested", "provenance_confidence": 95}})
+    if source.evidence.get('identity_role') == 'independent_uploader' and not candidate.attempt_count:
+        candidate.provenance={**candidate.provenance,'origin_status':'independent_uploader',
+            'official_profile':'','uploader_profile':source.profile_url,'recording_uploader_id':source.native_id,
+            'matched_credits':ft.metadata['credits'],
+            'source_quality_unknown':True,'provenance_confidence':90}
+        candidate.save(update_fields=('provenance','updated_at'))
     ft.candidate = candidate
     ft.save(update_fields=("candidate", "updated_at"))
     return candidate
@@ -322,13 +329,21 @@ def process_dispatch(dispatch, blocked):
             candidate = manual
             ft.candidate = manual
             ft.save(update_fields=('candidate', 'updated_at'))
+        if candidate and candidate.attempt_count and candidate.state in {'invalid', 'review_required'}:
+            failed_url = candidate.provenance.get('source_url')
+            if failed_url:
+                ft.evidence = {**ft.evidence, 'failed_source_urls':list(dict.fromkeys(
+                    [*ft.evidence.get('failed_source_urls', []), failed_url]))}
+                ft.save(update_fields=('evidence', 'updated_at'))
+                candidate = None
         if candidate is None:
             if acquisition_budget <= 0:
                 all_ready = False
                 continue
             acquisition_budget -= 1
             found, evidence = find(ft, blocked_providers=blocked,
-                                   cache_age=timedelta(seconds=dispatch.source_item.source.poll_interval_seconds))
+                                   cache_age=timedelta(seconds=dispatch.source_item.source.poll_interval_seconds),
+                                   allow_independent=settings.FRESH_INDEPENDENT_UPLOADERS_ENABLED)
             ft.evidence = {**ft.evidence, "acquisition": evidence}
             ft.save(update_fields=("evidence", "updated_at"))
             if not found:

@@ -186,9 +186,20 @@ def _run_provider(candidate, provider, now=None):
         if candidate.provenance.get('fresh_manifest_id') and provider.name == 'yt-dlp':
             from releases.normalization import normalize_text
             from archive_collection.models import AcquisitionSource
-            identity = AcquisitionSource.objects.get(pk=candidate.provenance['acquisition_source_id'])
+            if candidate.provenance.get('origin_status') == 'independent_uploader':
+                expected_uploader = str(candidate.provenance.get('recording_uploader_id') or '')
+                if not expected_uploader.isdigit():
+                    raise ProviderError('Independent recording requires a stable native uploader identity', retryable=False)
+                from types import SimpleNamespace
+                from archive_collection.acquisition import credits_match
+                credits = candidate.provenance.get('matched_credits')
+                if not credits or not credits_match(probe, {'credits':credits}, SimpleNamespace(
+                        evidence={'identity_role':'independent_uploader'})):
+                    raise ProviderError('Independent recording credits changed after matching', retryable=False)
+            else:
+                expected_uploader = AcquisitionSource.objects.get(pk=candidate.provenance['acquisition_source_id']).native_id
             if (probe.provider_item_id != candidate.provenance.get('native_item_id') or
-                    str((probe.evidence or {}).get('uploader_id')) != identity.native_id or
+                    str((probe.evidence or {}).get('uploader_id')) != expected_uploader or
                     normalize_text(probe.title) != normalize_text(candidate.provenance.get('source_recording_title'))):
                 raise ProviderError('SoundCloud recording/uploader identity changed after validation', retryable=False)
         if provider.name == "yt-dlp" and source_item.platform == "soundcloud":
@@ -342,6 +353,9 @@ def _accept_audio_file(candidate, attempt, source_path, *, expected, artwork_pat
         raise MediaValidationError("Candidate file extension is not permitted")
     facts = probe_audio(source_path)
     comparison, duration_status = compare_duration(facts["duration_seconds"], expected)
+    if candidate.provenance.get('fresh_manifest_id') and expected and abs(facts['duration_seconds'] - expected) > 5:
+        comparison = {**comparison, 'status':'fresh_recording_duration_conflict'}
+        duration_status = 'invalid' if facts['duration_seconds'] < expected - 5 else 'review_required'
     if expected and not candidate.expected_duration_seconds:
         MediaCandidate.objects.filter(pk=candidate.pk, expected_duration_seconds__isnull=True).update(expected_duration_seconds=expected)
     if duration_status == "invalid":
