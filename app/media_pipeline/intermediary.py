@@ -9,6 +9,7 @@ import json
 import re
 import socket
 import time
+import threading
 from pathlib import Path
 from urllib.parse import urlsplit, urljoin
 
@@ -21,6 +22,9 @@ from .providers import ProviderError, ProviderProbe, DownloadResult
 class SpotsaverProvider:
     name='spotsaver'
 
+    def __init__(self):
+        self._local=threading.local()
+
     def can_handle(self,url):
         p=urlsplit(url or '')
         return bool(p.scheme=='https' and p.hostname=='open.spotify.com' and
@@ -28,7 +32,7 @@ class SpotsaverProvider:
                     not p.query and not p.fragment and re.fullmatch(r'/track/[A-Za-z0-9]{22}',p.path))
 
     def _context(self,timeout):
-        return {'deadline':time.monotonic()+min(int(timeout or 60),60),'requests':[]}
+        return {'deadline':time.monotonic()+min(int(timeout or 60),60),'requests':[], 'cookies':requests.cookies.RequestsCookieJar()}
 
     def _request(self,ctx,method,url,*,payload=None,binary=False):
         if len(ctx['requests'])>=7 or time.monotonic()>=ctx['deadline']:
@@ -44,6 +48,7 @@ class SpotsaverProvider:
             start=time.monotonic();metric={'domain':parts.hostname,'method':method};ctx['requests'].append(metric)
             with requests.Session() as session:
                 session.trust_env=False
+                session.cookies=ctx['cookies']
                 session.headers.update({'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36',
                     'Referer':'https://spotsaver.net/results/','Accept':'*/*','Cache-Control':'no-cache'})
                 response=session.request(method,url,json=payload,stream=True,allow_redirects=False,
@@ -109,6 +114,7 @@ class SpotsaverProvider:
             except (ValueError,TypeError):raise ProviderError('Intermediary duration metadata malformed',retryable=False) from None
             if not 0<duration or abs(duration-expected['duration_seconds'])>5:
                 raise ProviderError('Intermediary duration metadata mismatch',retryable=False)
+        self._local.context=(url,video,ctx)
         return ProviderProbe(self.name,url,video,title,expected['duration_seconds'],artists,evidence={
             'selected_video_id':video,'public_video_title':public['title'],'public_video_author':public.get('author_name'),
             'source_origin':'public intermediary; direct Spotify audio unproven','source_quality_unknown':True,
@@ -117,7 +123,8 @@ class SpotsaverProvider:
             'metadata_requests':ctx['requests'],'upstream_reference':'musicdl e5c3bd51b518642c24027921e63f482865809b61 selected Spotsaver method'})
 
     def download(self,probe,destination,timeout=None):
-        ctx=self._context(timeout)
+        cached=getattr(self._local,'context',None);self._local.context=None
+        ctx=cached[2] if cached and cached[:2]==(probe.source_url,probe.provider_item_id) else self._context(timeout)
         result=self._request(ctx,'POST','https://spotsaver.net/api/download/',payload={
             'videoId':probe.provider_item_id,'candidateIds':[],'format':'mp3','title':probe.title+' - '+probe.uploader})
         resolved=result.get('videoId') or result.get('video_id')
