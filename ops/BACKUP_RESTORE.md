@@ -10,9 +10,12 @@ sudo cat /var/lib/rapfadrop-secrets/backup.agekey
 ```
 
 Protected configuration: `/var/lib/rapfadrop-operations/backup.json`. It specifies
-all four ordered Compose files, explicit protected file paths, identity path,
-backup directory, dedicated backup chat and credential file. No music settings
-are enabled. No chat fallback exists. Only chat `-1004475982526` is permitted;
+the ordered Compose files, explicit protected file paths, identity path,
+backup directory, dedicated backup chat and credential file. Current production
+configuration has a fifth protected `fresh-production.compose.yaml` overlay and
+explicit roles: web/worker/fresh-media metadata, beat scheduler, fresh-publication
+publisher. Only the publisher has the protected music bot credential. Backup
+transport is independent: no chat fallback exists. Only chat `-1004475982526` is permitted;
 production `-1004311149640` is rejected. Backup documents are labeled BACKUP and
 must not be removed by test-message cleanup.
 
@@ -25,7 +28,8 @@ python3 /opt/rapfadrop/ops/backup.py restore-drill /var/backups/rapfadrop/encryp
 python3 /opt/rapfadrop/ops/backup.py retention
 ```
 
-`create` briefly stops web, worker and beat, captures a consistent PostgreSQL
+`create` briefly stops all configured services (currently web, worker, beat,
+fresh-media and fresh-publication), captures a consistent PostgreSQL
 custom dump and schema/table content hashes, migration/runtime/SHA manifest,
 checksums, required protected configs and this guide. Services resume before
 encryption/upload: no database transaction stays open during either. No audio,
@@ -67,7 +71,7 @@ python3 /opt/rapfadrop/ops/deploy.py TESTED_SHA --tested-marker ROOT_ONLY_TEST_M
 ```
 
 This refuses a dirty checkout or mismatched marker, creates/restores/uploads an
-encrypted recovery point, then deploys only that SHA with all four overlays,
+encrypted recovery point, then deploys only that SHA with all configured overlays,
 applies migrations/default versioning and verifies health/safety. The marker
 must be written only after server checks of that exact commit. A daily backup
 cannot race this deployment. Deployment failures retain the archive and require
@@ -78,7 +82,7 @@ operator inspection; there is no automatic destructive rollback.
 Never use production recovery for a drill. First save the archive/identity off
 the server, deploy the archive's exact application SHA using the backup-before-
 deploy procedure, and review archived protected configuration in isolation.
-Keep bridge, media and publication OFF. The command requires an explicit phrase,
+Pause fresh processing/publication before recovery. The command requires an explicit phrase,
 checks an isolated restore, creates/checks a fresh pre-restore backup, stops web,
 workers and beat, recreates the production DB, restores and compares it. It leaves
 services stopped even on success. Recovery after failure uses the reported
@@ -95,12 +99,31 @@ restore protected files from the decrypted archive to their recorded paths
 PostgreSQL/Redis containers only, restore the dump, then compare manifest counts/
 schema/content. Copying archived configs is deliberately not automatic. Re-run
 Django migration/check and inspect all safety switches before starting web and
-metadata worker/beat with all four overlays. Never replay a Redis queue dump.
+the configured roles with all protected overlays, initially durably paused.
+Recheck the exact bot/channel/session and reconcile uncertainty before explicitly
+resuming publication. Never replay a Redis queue dump.
 PostgreSQL contains pending/retry/uncertain publication identities; file paths
 may refer to missing disposable audio. Reacquire or manually prepare through the
 validated pipeline after explicit authorization, reconcile uncertain Telegram
 sends first, and rebuild tasks from durable due states rather than blind sends.
 Published message history remains in the DB; no bulk audio is backed up daily.
+
+The production overlay, private music bot file and worker cookie copy are included
+only inside encrypted backups. They must retain private permissions after restore.
+The reproducible Deno executable is not archived: provision the official Deno 2.5.0
+runtime at `/var/lib/rapfadrop-operations/youtube-auth/runtime/deno`; observed SHA256
+`b12e779eed2736a84cce7f405ae0d976bd85cb6feb33d6ea603fd4367ff19e56`.
+The application pins yt-dlp 2026.8.19 and yt-dlp-ejs 0.8.0. Verify the restored
+session privately; expiration does not justify anonymous fallback or bypass.
+
+```sh
+python3 /opt/rapfadrop/ops/control_fresh.py status
+python3 /opt/rapfadrop/ops/control_fresh.py pause
+python3 /opt/rapfadrop/ops/control_fresh.py resume
+```
+
+These root/server commands preserve queues/history and do not resume the Popular
+collection. Resume checks the exact production bot/channel and posting permission.
 
 The archive includes its checksummed standalone `backup.py` so that recovery
 does not depend on an older application SHA having this tool in Git. Initial

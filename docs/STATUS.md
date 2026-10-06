@@ -1,5 +1,52 @@
 # Project status and handoff
 
+Updated: **2026-10-06 Tehran**, automatic new-release production activation.
+Exact tested/pushed/deployed application **`4226ecbc65b3def5e8b6dce32338a777b68d8e87`**:
+**229 application + nine backup tests**, migration/check/drift and health passed
+on the server. Owner-authorized fresh bridge, media worker and scoped production
+publisher are **ON**, with unchanged 180-second source intervals, 60-second discovery/
+fresh dispatch ticks and 30-second publication recovery. Workers use separate
+`spotify-pilot`, `fresh-media-v1`, `fresh-publication-v1` queues; the dormant default
+queue remains unconsumed. Protected owner YouTube session is available only to media;
+the exact verified music bot/channel credential is restricted to the publisher.
+
+**Joft 6 message 60; Pellezterari introduction 61 + all 13 ordered tracks 62–74**
+were published automatically. Masin's **GHASAB KALAMAT message 75** was also genuinely
+discovered and sent automatically **95.835 seconds after the recorded observation**;
+this is processing time, not unknown release-to-detection latency. All 15 native SoundCloud AAC/M4A recordings, about
+160 kb/s / 44.1 kHz stereo, passed duration/version, full decoding, eleven tags,
+artwork and Telegram byte/hash readback. No conversion, duplicate or uncertain send.
+The actual ArtistRef empty-ID/native-URI adapter defect was fixed and rechecked
+before acquisition; genuine identity thresholds were preserved. Final verified
+SoundCloud-link context fix corrected captions 60/75 in place, preserving audio/
+message identities and owner templates/policy; caption replay added zero attempts.
+
+Catch-up initially 3 eligible / 3,887 historical exclusions / one review; subsequent
+real discovery added Mano Khoda Shoma Hame and GHASAB KALAMAT, now **5 eligible /
+3,887 excluded / one review**. Joft 6, Pellezterari and GHASAB KALAMAT are complete. OGHDE lacks a corroborated acquisition
+profile; the Tataloo EP has no accepted complete file after a bounded YouTube probe
+timeout. Both remain visible with retries, without blocking other releases. HAHAAA
+remains freshness review because its release day overlaps the baseline.
+
+**83 approved artists / 83 active verified Spotify sources / 84 baselines** remain
+intact; original 4,133 items and curated records preserved, current 4,152 items.
+Four disabled contributors were added, without expanding the approved roster.
+Popular remains **paused: 54 unique posts / 98 pending**, frozen 83/166/155 and 152
+canonical identities preserved. Total publication records are 70 (54 original +
+16 new). A graceful fresh-worker restart preserved exact durable state; overnight
+polling/replay and final service health passed. Historical observation-to-send
+times include disabled waiting and are not live-release detection latency.
+
+Five protected backups were restore-verified and uploaded as dedicated backup
+receipts **86–93 and 96/97**; final predeploy restore covered 47 tables. After readback,
+45 confirmed media/artwork files (~106.2 MB), isolated test DB/Redis/runner and two
+test source directories were removed; production posts, volumes and backups retained.
+Automatic new-release publication continues on the server without the owner's
+computer. This documentation-only handoff does not require another deployment.
+[Activation report and status/pause/resume commands](reports/FRESH_RELEASE_ACTIVATION.md),
+[safe evidence](reports/data/fresh_release_activation_evidence.json).
+Older OFF checkpoints below are historical and superseded by this explicit activation.
+
 Updated: 2026-10-05T12:13:16.778776Z (authenticated YouTube continuation snapshot).
 Tested/pushed/deployed **`74a4c7c43a829018784f4c45728d0838ab2aa9e5`**, **65 related
 tests**, checks and drift passed; no repeated full suite. Owner's private session

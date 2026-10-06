@@ -27,9 +27,13 @@ audio defaults migrate idempotently; custom conflicts remain visible.
 
 Verified acquisition identities are separate from enabled discovery sources.
 This owner-authorized frozen archive may acquire and publish validated recordings
-through its scoped explicit CLI; automatic future-release publication remains OFF.
+through its scoped explicit CLI. The subsequent 2026-10-06 Tehran owner instruction
+also authorizes automatic post-baseline new-release publication independently of
+the paused archive. Ambiguous catalog additions and incomplete audio remain held;
+historical archive selections do not become fresh-release dispatch authority.
+See [current activation](reports/FRESH_RELEASE_ACTIVATION.md).
 
-The owner expanded the allowlist to **83 identities** on 2026-10-04. The complete list and import provenance are in [`ARTIST_ROSTER.md`](ARTIST_ROSTER.md) and the normalized import manifest. New imports start disabled; adding an identity does not itself authorize polling, baselining or publication. The subsequent owner-authorized discovery rollout and correction now provide verified Spotify coverage for all 83 approved artists; current baseline, activation and scheduled evidence is in [`reports/SOURCE_ACTIVATION.md`](reports/SOURCE_ACTIVATION.md). Bridge, media processing and production publication remain OFF. Preserve existing curated profiles, activation and schedules when importing. Historical initial roster below remains the source of its original 30 identities.
+The owner expanded the allowlist to **83 identities** on 2026-10-04. The complete list and import provenance are in [`ARTIST_ROSTER.md`](ARTIST_ROSTER.md) and the normalized import manifest. New imports start disabled; adding an identity does not itself authorize polling, baselining or publication. The subsequent owner-authorized discovery rollout and correction provide verified Spotify coverage for all 83 approved artists; baseline and source activation evidence is in [`reports/SOURCE_ACTIVATION.md`](reports/SOURCE_ACTIVATION.md). The later explicitly authorized production pipeline is recorded in [`reports/FRESH_RELEASE_ACTIVATION.md`](reports/FRESH_RELEASE_ACTIVATION.md). Preserve existing curated profiles, baselines and schedules when importing. Historical initial roster below remains the source of its original 30 identities.
 
 The owner approved the following **30 artists** as the initial list. Profile links are seed candidates found from public pages; verify profile identity and recent official works at activation. Do not silently replace a missing source with a fan account. The allowlist grows through the panel. Store official display name, aliases, native profile IDs, profile URLs, verification state, enabled state, timestamps and audit history.
 

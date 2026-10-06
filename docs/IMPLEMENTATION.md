@@ -1,7 +1,52 @@
 # RapFaDrop — implementation guide for coding agents
 
-Status: **83-identity discovery, owner inventory, recoverable encrypted backups and owner caption/tag/quality defaults implemented; bridge and production publication remain OFF.** Current evidence and SHAs are in `STATUS.md`; historical milestone sections below retain their original observations.
+Status: **Owner-authorized automatic new-release processing and production publication are active on the server, independently of the paused Popular collection.** Current evidence and SHAs are in `STATUS.md`; historical milestone sections below retain their original observations.
 Repository: `https://github.com/ariyx/RapFaDrop.git` (documentation-only at the checkpoint in [`STATUS.md`](STATUS.md); verify current Git state).
+
+## Automatic post-baseline production dispatch (2026-10-06 Tehran)
+
+The owner's explicit activation instruction supersedes historical OFF gates below.
+`FreshDispatch` records catch-up classification before queueing. It requires a
+successful source baseline, a later observation and an official release day
+strictly after the baseline day. Historical catalog additions are excluded;
+same-day precision, unresolved versions and conflicting identities remain review.
+`FreshTrack` persists native IDs, complete ordered credits and candidate/publication
+relationships without changing frozen `Recording` or `Slot` selections. Native
+Spotify identities and evidenced aliases are preferred; complete-credit/title/
+duration relationships may reuse a canonical recording or shared release.
+
+`releases.tasks.process_fresh_releases` runs every 60 seconds on `fresh-media-v1`.
+The metadata worker consumes only `spotify-pilot`; publication recovery runs every
+30 seconds on `fresh-publication-v1`. Discovery scheduling and existing per-source
+intervals are unchanged. No worker consumes the dormant default `celery` queue.
+The media worker has protected owner YouTube cookies and Deno, but no bot credential.
+The publisher has a private bot-token file, but no provider cookie. Only publisher
+and scheduler roles enable production/live/publication flags; web and metadata/
+media workers cannot send. The exact production bot, channel and admin posting
+permission are checked before sends. The publisher can act only on durable fresh
+scope, plus a scoped caption update to an already-published prior single.
+
+Matching reuses bounded verified SoundCloud/YouTube catalogs and probes. A shared
+authentication/403/429 failure creates persistent, provider-specific 15-minute
+backoff and an actionable admin audit/dashboard alert. Missing profiles or uncertain
+complete recordings remain visible as manual-review candidates. Downloads retain
+native compressed quality; official Spotify credits/artwork and all eleven channel
+fields are checked by tag readback and full FFmpeg decoding before publication.
+All required unpublished album tracks must be prepared before an introduction.
+Existing ordered session progress, prior-single reuse, 15-minute failure hold,
+uncertain-send reconciliation and same-message correction behavior are reused.
+Completed albums are refreshed at their existing source interval; only verified
+appended native tracks can become independent posts with the confirmed Album link.
+Reordering/version changes require review. No automatic unbounded quality hunt is added.
+
+Durable `FreshControl` pause stops fresh acquisition/publication without purging
+queues or touching discovery, the Popular backlog or message history. Backups and
+deployment now validate all five role-specific services, quiesce them for consistent
+snapshots, restore-check and upload before deployment, then restore runtime roles.
+The real Spotify SDK returned track `ArtistRef.id` empty with a valid native
+`spotify:artist:...` URI. The adapter now validates that URI, rejecting conflicting
+IDs, rather than using display-name guesses. A real SDK regression fixture covers
+this observed defect. See [activation evidence and operating commands](reports/FRESH_RELEASE_ACTIVATION.md).
 The owner-authorized initial Popular archive is a separate explicit collection:
 frozen two-slot artist selections, unique stable recording identities, bounded
 official-source acquisition and a collection-only production gateway. It does
