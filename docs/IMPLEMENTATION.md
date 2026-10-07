@@ -5,12 +5,13 @@ Repository: `https://github.com/ariyx/RapFaDrop.git` (documentation-only at the 
 
 ## Independent upload discovery (2026-10-06 Tehran)
 
-Rollout checkpoint: the initially deployed version uses two readers/six feeds.
-The canonical YouTube RSS correction and capped configurable concurrency described
-below passed the2026-10-07 server retest (273 application and10 backup tests),
-but are **not deployed**. Docker inspection of beat blocked the initial deployment
-safety guard; the operation and waiting continuations were cancelled before any
-production checkout/configuration change. See STATUS.md before operations.
+Current rollout: d8e0165 is tested/deployed with four readers/twelve-feed batches.
+All100 feeds have watermarks and at least three successful scheduled polls;
+83 artists have a successful independent feed. Generic SoundCloud handle comparison
+ignores case only after exact native-account verification; foreign accounts remain
+rejected. Docker was recovered with live-restore; protected postchecks completed.
+Observed cycle ages can exceed three minutes. See STATUS.md and
+[recovery evidence](reports/DOCKER_RECOVERY.md) for actual timings and limitations.
 
 `FreshDiscoveryFeed` adds exact-time upload watermarks without changing existing
 Spotify baselines or activating/resetting historical ArtistSource rows. Reuse

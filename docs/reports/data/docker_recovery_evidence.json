@@ -1,0 +1,122 @@
+{
+  "utc": "2026-10-07T18:09:55.696087+00:00",
+  "approved_artists": 83,
+  "active_spotify": 83,
+  "baselines": 84,
+  "feed_count": 100,
+  "baselined_feeds": 100,
+  "feeds_with_three_successes": 100,
+  "artists_with_successful_independent_feed": 83,
+  "spotify_three_latest_successes": 83,
+  "maximum_feed_success_age_seconds": 202.735146,
+  "uncertain_sends": 0,
+  "popular_paused": true,
+  "popular_recordings": 155,
+  "popular_slots": 166,
+  "fresh_paused": false,
+  "bache_message_id": 79,
+  "application_sha": "d8e016595a5a0ef36c8f8dd1389deafa8485db81",
+  "full_application_tests": 274,
+  "application_test_seconds": 158.729,
+  "focused_feed_tests": 15,
+  "focused_test_seconds": 1.105,
+  "backup_tests": 10,
+  "backup_test_seconds": 0.109,
+  "native_soundcloud_id": "9300066",
+  "soundcloud_bounded_window": 20,
+  "soundcloud_live_check_seconds": 9.365,
+  "live_check_audio_downloads": 0,
+  "live_check_telegram_calls": 0,
+  "predeploy_backup_message_ids": [
+    126,
+    127
+  ],
+  "docker_version": "29.1.3",
+  "live_restore_enabled": true,
+  "original_daemon_pid": 2458420,
+  "recovered_daemon_pid": 3072065,
+  "all_eight_container_task_pids_preserved_during_daemon_recovery": true,
+  "discovery_readers": 4,
+  "discovery_max_batch": 12,
+  "discovery_memory_limit_mib": 512,
+  "discovery_cpu_limit": 1.0,
+  "postconfiguration_backup": {
+    "application_sha": "d8e016595a5a0ef36c8f8dd1389deafa8485db81",
+    "artifact": "/var/backups/rapfadrop/encrypted/rapfadrop-20261007T144123Z-b7d0f856.tar.age",
+    "compose_overlay_count": 8,
+    "daemon_config_protected": true,
+    "message_ids": [
+      128,
+      129
+    ],
+    "restore_verified": true,
+    "restored_tables": 48,
+    "upload": "complete",
+    "utc": "2026-10-07T14:42:42.281993+00:00"
+  },
+  "autonomous_message_82": {
+    "message_id": 82,
+    "message_url": "https://t.me/RapFaDrop/82",
+    "state": "published",
+    "published_at": "2026-10-07 15:30:35.356830+00:00",
+    "track": "Ki Eshgho Yade Man Dad",
+    "artists": [
+      "The Don"
+    ],
+    "provider": "spotsaver",
+    "media_facts": {
+      "format_name": "mp3",
+      "codec_name": "mp3",
+      "audio_bitrate_bps": 320000,
+      "sample_rate_hz": 44100,
+      "channels": 2,
+      "duration_seconds": 310.2302,
+      "file_size_bytes": 12409208
+    },
+    "expected_duration_seconds": 310.595,
+    "validation_state": "ready",
+    "duration_comparison": {
+      "status": "match",
+      "observed_ratio": 0.9988,
+      "expected_seconds": 310.595,
+      "observed_seconds": 310.23,
+      "tolerance_seconds": 15.53,
+      "difference_seconds": -0.365
+    },
+    "artwork_state": "embedded",
+    "validation": {
+      "status": "valid",
+      "complete": true,
+      "full_decode": "passed",
+      "audio_stream_present": true
+    },
+    "preparation_readback": {
+      "title_matches": true,
+      "artwork_read_back": true,
+      "main_artists_match": true,
+      "album_suffix_matches": true,
+      "channel_fields_read_back": true
+    },
+    "acquisition_seconds": 3.572,
+    "preparation_seconds": 0.514,
+    "publication_attempts": [
+      {
+        "operation": "send_audio",
+        "state": "succeeded",
+        "started_at": "2026-10-07 15:30:35.356830+00:00",
+        "finished_at": "2026-10-07 15:30:35.356830+00:00"
+      }
+    ],
+    "source_platform": "spotify",
+    "source_native_id": "2Hm1tVjQVG3MUdXiGvXXsd",
+    "source_url": "https://open.spotify.com/album/2Hm1tVjQVG3MUdXiGvXXsd",
+    "source_first_observed_at": "2026-10-07 15:29:51.025676+00:00",
+    "source_release_at": "2026-10-07 00:00:00+00:00",
+    "independent_feed": false,
+    "source_seen_to_publication_seconds": 44.331,
+    "dispatch_state": "complete",
+    "upload_request_seconds": null,
+    "upload_timing_note": "Attempt timestamps coincide; do not interpret this as a zero-duration upload.",
+    "original_encoding_provenance": "unknown; measured MP3 output bitrate is not proof of native Spotify audio"
+  }
+}

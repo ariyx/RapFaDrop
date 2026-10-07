@@ -1,5 +1,13 @@
 # Independent fresh discovery and owner-authorized Bache Mardom catch-up
 
+**Superseding2026-10-07 checkpoint:** Docker recovered; exact d8e0165 is tested and
+deployed. All100 feeds have at least three successful polls, covering83 artists;
+83 Spotify sources/84 baselines are preserved. Measured autonomous The Don
+message82 took44.331s from first server observation to publication, with complete
+MP3320 supplied by an intermediary. This is not upstream detection latency or
+proof of native Spotify quality. Actual polling ages can exceed three minutes.
+[Completed repair, verification and limits](DOCKER_RECOVERY.md).
+
 Evidence date: **2026-10-06**. This closes the implementation gap identified in
 [the preceding diagnosis](BACHE_MARDOM_DISCOVERY_GAP.md). It does not establish
 exhaustive upstream coverage or guaranteed first-minute publication.

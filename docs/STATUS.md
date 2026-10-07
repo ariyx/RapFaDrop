@@ -1,5 +1,41 @@
 # Project status and handoff
 
+**Docker recovered and corrected discovery deployed,2026-10-07.** Exact application
+`d8e016595a5a0ef36c8f8dd1389deafa8485db81` passed274 application/15 focused-feed/
+10 backup tests and is deployed. Protected postchecks, runtime source/image
+verification and HTTP/database health passed. Both deploy commands initially
+reported a Docker error after service recreation; separately completed checks
+and original receipts are documented, not disguised as clean command successes.
+Docker's container-exit/output-stream wait blocked beat inspection. Enabling
+confirmed live-restore and restarting only dockerd preserved all eight task PIDs;
+inspection works again. Protected daemon configuration is backed up.
+
+YouTube RSS identity correction is active. Generic SoundCloud handle comparison
+also accepts the verified account's lowercase URLs, preserving exact native IDs
+and rejecting other accounts.83 artists/83 Spotify sources/84 original baselines
+remain; all83 sources' latest three polls succeeded. All100 independent feeds
+have watermarks and at least three successful scheduled polls; no listed feed
+errors. Every approved artist has a successful independent feed.92 profile feeds
+cover75 artists;8 others use explicitly bounded public search. This does not prove
+exhaustive release coverage. Four readers/12-feed batches run at512MiB/1CPU.
+Observed polling ages can exceed three minutes;45s configuration is not a
+guaranteed full-roster or release-detection latency.
+
+Owner-reported autonomous [message82](https://t.me/RapFaDrop/82), The Don —
+Ki Eshgho Yade Man Dad, took44.331s from first Spotify observation to successful
+publication. Complete intermediary MP3320/44.1kHz stereo310.230s, full decode,
+actual tags/artwork readback passed. Acquisition3.572s/preparation0.514s;
+upload/upstream release-detection latency unmeasured. Original encoding unknown.
+No resend/edit was needed. Fresh remains enabled/unpaused; Popular155 recordings/
+166 slots remains paused and protected table hashes match; uncertain music sends0.
+Final encrypted backup restored48 tables/uploaded128/129, including all eight
+overlays and daemon config. Disposable checks removed; music/backup posts preserved.
+[Repair and actual limits](reports/DOCKER_RECOVERY.md),
+[83-row coverage](reports/data/fresh_discovery_coverage.csv),
+[safe evidence](reports/data/docker_recovery_evidence.json).
+
+Earlier checkpoints below retain their original observations.
+
 **Server retest, 2026-10-07; correction tested but NOT deployed.** SSH returned.
 Exact candidate `b2627b0ea71687e70a55063955aed978e8bf5683` passed all273
 application tests in146.258s, including14 independent-feed tests separately

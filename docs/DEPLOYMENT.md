@@ -1,5 +1,14 @@
 # Deployment and verification
 
+2026-10-07 recovery: Docker29.1.3 live-restore is enabled in protected
+`/etc/docker/daemon.json`, now included in encrypted backups. It was confirmed
+before restarting only dockerd; all eight container task PIDs were preserved.
+Current deployed application is d8e0165, with all six service images verified.
+The exact deploy commands reported post-recreation Docker failures; protected
+postchecks were completed separately and original error receipts retained.
+Do not infer clean deployment from a checked-out SHA or running containers alone.
+[Recovery/postcheck/backup details](reports/DOCKER_RECOVERY.md).
+
 ## Recoverable encrypted backup and exact tested deployment
 
 Current recovery commands and isolated/explicit production restore guidance are
