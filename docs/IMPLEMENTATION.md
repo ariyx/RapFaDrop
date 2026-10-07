@@ -7,8 +7,10 @@ Repository: `https://github.com/ariyx/RapFaDrop.git` (documentation-only at the 
 
 Rollout checkpoint: the initially deployed version uses two readers/six feeds.
 The canonical YouTube RSS correction and capped configurable concurrency described
-below are pushed candidate behavior, **not verified/deployed**, while its server
-suite has unresolved errors and SSH is unavailable. See STATUS.md before operations.
+below passed the2026-10-07 server retest (273 application and10 backup tests),
+but are **not deployed**. Docker inspection of beat blocked the initial deployment
+safety guard; the operation and waiting continuations were cancelled before any
+production checkout/configuration change. See STATUS.md before operations.
 
 `FreshDiscoveryFeed` adds exact-time upload watermarks without changing existing
 Spotify baselines or activating/resetting historical ArtistSource rows. Reuse

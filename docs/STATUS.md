@@ -1,5 +1,32 @@
 # Project status and handoff
 
+**Server retest, 2026-10-07; correction tested but NOT deployed.** SSH returned.
+Exact candidate `b2627b0ea71687e70a55063955aed978e8bf5683` passed all273
+application tests in146.258s, including14 independent-feed tests separately
+in1.006s;10 backup tests passed in0.089s. System/migration/drift checks passed.
+The previous isolated runner reported `OOMKilled=true` and never produced a
+complete test summary. Its memory limit was raised from384MiB to768MiB for this
+retest; this does not establish the cause of each previously logged error.
+Actual registered YouTube RSS returned15 entries in0.262s, including8 marked
+Shorts. Isolated repeated review approval woke continuation exactly once.
+No audio acquisition or Telegram requests occurred in these live checks.
+
+Production read-only snapshot at2026-10-07T13:48:47Z retained83 active Spotify
+sources,84 baselines, fresh processing unpaused, Bache Mardom message79 and zero
+uncertain sends. Deployed application remains
+`2e13f38bcac6fe437ccf2751d7b082fd2a8bbe1c`; HTTP/database health was OK again
+after the deployment operation was cancelled. The documented deployment stopped
+at its initial safety guard: `docker inspect rapfadrop-beat-1` hung before backup
+creation or production stop/checkout. Its operation and waiting configuration/
+monitor continuations were explicitly stopped. No delayed rollout is pending.
+The faster worker and corrected production RSS behavior remain unverified.
+Disposable `rfd-fresh-check` containers/database/queue were removed; follow-up
+project-label checks found no remaining containers or volumes. No production
+volumes, music posts or backup messages were removed. Resolve Docker inspection
+before repeating the normal restore-verified backup/deploy procedure.
+
+Earlier2026-10-06 checkpoints below retain their original observations.
+
 **Partial independent-discovery rollout, 2026-10-06; NOT complete roster-wide
 instant publication.** Tested/pushed/deployed application
 `2e13f38bcac6fe437ccf2751d7b082fd2a8bbe1c` passed271 application tests and10 backup

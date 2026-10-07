@@ -4,6 +4,43 @@ Evidence date: **2026-10-06**. This closes the implementation gap identified in
 [the preceding diagnosis](BACHE_MARDOM_DISCOVERY_GAP.md). It does not establish
 exhaustive upstream coverage or guaranteed first-minute publication.
 
+## Server retest on2026-10-07
+
+This checkpoint supersedes the unavailable-SSH/unverified-test state below;
+the2026-10-06 activation measurements remain historical evidence.
+Exact candidate **b2627b0ea71687e70a55063955aed978e8bf5683** passed **273 application
+tests in146.258s**, **14 focused feed tests in1.006s**, and **10 backup tests
+in0.089s** on the isolated server environment. System check, migration check and
+migration drift check passed. The previous runner had `OOMKilled=true`, no running
+test process and no final test summary. Raising only its disposable memory limit
+from384MiB to768MiB allowed the retest to complete; individual earlier errors were
+not diagnosed from missing tracebacks.
+
+The real registered Alipasha RSS returned15 entries in0.262s;8 Shorts were marked.
+Repeated isolated review approval woke processing exactly once. These checks made
+zero media downloads and zero Telegram calls. Unit tests used their normal
+synthetic media fixtures; this is not a fresh full-audio acquisition/publication
+test or measured live-release detection latency.
+
+At2026-10-07T13:48:47Z, read-only production evidence showed83 active Spotify
+sources,84 historical baselines, unpaused fresh processing, completed Bache Mardom
+dispatch/message79 and zero uncertain sends. Its web/database health returned OK
+after the cancelled deployment attempt. No new Telegram test messages were created.
+
+The application remains **2e13f38bcac6fe437ccf2751d7b082fd2a8bbe1c**.
+The normal exact-SHA deployment was attempted but its initial backup safety guard
+hung on `docker inspect rapfadrop-beat-1`, before archive creation, production
+service stop or checkout. The deployment and waiting configuration/monitor units
+were explicitly cancelled, so no delayed deployment is queued. The proposed
+4-reader/12-feed worker adjustment was not applied. Restore-verified postactivation
+backup and three-round corrected-feed measurements remain outstanding. Do not
+bypass the guard or equate passing tests with deployed global coverage.
+
+The isolated `rfd-fresh-check` runner, PostgreSQL and Redis were removed with its
+scoped Compose cleanup. Follow-up project-label checks found no remaining test
+containers or volumes. Production volumes/posts/backups were preserved. Protected
+server logs retain the test summary; credentials and media are not committed.
+
 ## Implemented behavior
 
 Spotify remains a complete-catalog metadata discovery source for all83 approved
