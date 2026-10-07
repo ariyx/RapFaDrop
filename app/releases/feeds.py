@@ -59,7 +59,7 @@ def list_uploads(source):
         p=urlsplit(r['url'] or '')
         valid=(source.platform=='youtube' and re.fullmatch(r'[\w-]{11}',r['id']) and r['url']=='https://www.youtube.com/watch?v='+r['id'])
         valid|=(source.platform=='soundcloud' and r['id'].isdigit() and p.scheme=='https' and p.hostname=='soundcloud.com' and
-            (source.evidence.get('discovery_search') or p.path.startswith(urlsplit(source.profile_url).path.rstrip('/')+'/')) and len(p.path.strip('/').split('/'))==2 and not p.query and not p.fragment)
+            (source.evidence.get('discovery_search') or p.path.casefold().startswith(urlsplit(source.profile_url).path.rstrip('/').casefold()+'/')) and len(p.path.strip('/').split('/'))==2 and not p.query and not p.fragment)
         if not valid or not r['title']:raise ValueError('Upload URL/native/title outside verified feed')
     return rows
 

@@ -1,3 +1,4 @@
+import json
 from datetime import timedelta
 from unittest.mock import patch,MagicMock
 from django.test import TestCase
@@ -11,6 +12,21 @@ from .fresh import materialize,validate_official
 
 
 class IndependentFeedTests(TestCase):
+    def test_soundcloud_handle_case_preserves_native_account_boundary(self):
+        self.source.profile_url='https://soundcloud.com/ArtistMusic'
+        self.source.save()
+        raw={'id':self.source.native_id,'entries':[{'id':'123','title':'Recording',
+            'webpage_url':'https://soundcloud.com/artistmusic/recording'}]}
+        with patch.object(PROVIDERS['yt-dlp'],'_run',return_value=json.dumps(raw)):
+            self.assertEqual(list_uploads(self.source)[0]['id'],'123')
+        raw['entries'][0]['webpage_url']='https://soundcloud.com/anotherartist/recording'
+        with patch.object(PROVIDERS['yt-dlp'],'_run',return_value=json.dumps(raw)):
+            with self.assertRaisesRegex(ValueError,'outside verified feed'):list_uploads(self.source)
+        raw['entries'][0]['webpage_url']='https://soundcloud.com/artistmusic/recording'
+        raw['id']='999999999'
+        with patch.object(PROVIDERS['yt-dlp'],'_run',return_value=json.dumps(raw)):
+            with self.assertRaisesRegex(ValueError,'account identity mismatch'):list_uploads(self.source)
+
     def test_youtube_root_id_without_uc_requires_exact_author_and_entry_identity(self):
         source=AcquisitionSource.objects.create(artist=self.artist,platform='youtube',native_id='UC'+'A'*22,
             profile_url='https://www.youtube.com/channel/UC'+'A'*22,verified_at=self.now)
